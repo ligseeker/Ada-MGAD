@@ -1,0 +1,23 @@
+# Ignore large local datasets, but keep the tiny artifact smoke-test sample.
+data/*
+!data/examples/
+data/examples/*
+!data/examples/msds_tiny/
+data/examples/msds_tiny/*
+!data/examples/msds_tiny/pre/
+!data/examples/msds_tiny/save/
+data/examples/msds_tiny/pre/*
+data/examples/msds_tiny/save/*
+!data/examples/msds_tiny/pre/trace_path.pkl
+!data/examples/msds_tiny/save/dataset.pkl
+result/
+
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+__pycache__/
+*.pyc
+
+*.log
+.env
