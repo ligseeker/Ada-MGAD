@@ -207,6 +207,9 @@ def parse_cli_args():
     parser.add_argument('--out', default=None, help='Output JSON path.')
     parser.add_argument('--max_windows', type=int, default=0,
                         help='Limit test windows for a smoke run (0 = all).')
+    parser.add_argument('--localizer_path', action='append', default=[],
+                        help='Dir with localizer.pt/config.json/features_test.npz '
+                             '(from util/train_rca.py). Repeatable.')
     return parser.parse_args()
 
 
@@ -291,6 +294,25 @@ def main():
         test_pos = {idx: pos for pos, idx in enumerate(test_indices)}
         eval_pos = [test_pos[i] for i in eval_indices]
         methods['detector'] = methods['detector'][eval_pos]
+
+    for loc_dir in cli.localizer_path:
+        with open(os.path.join(loc_dir, 'config.json')) as f:
+            loc_cfg = json.load(f)
+        from src.rca.localize import Localizer
+        localizer = Localizer(groups=loc_cfg['groups'], hidden=loc_cfg['hidden'])
+        localizer.load_state_dict(torch.load(os.path.join(loc_dir, 'localizer.pt'),
+                                             map_location='cpu'))
+        localizer.eval()
+        cache = np.load(os.path.join(loc_dir, 'features_test.npz'))
+        mean = np.asarray(loc_cfg['feature_mean'], dtype=np.float32)
+        std = np.asarray(loc_cfg['feature_std'], dtype=np.float32)
+        norm = (cache['feats'] - mean) / std
+        with torch.no_grad():
+            all_scores = localizer(torch.tensor(norm)).numpy()
+        win_pos = {int(w): pos for pos, w in enumerate(cache['windows'])}
+        rows = [win_pos[i] for i in eval_indices]
+        tag = ''.join(g[0].upper() for g in loc_cfg['groups'])
+        methods[f'localizer[{tag}]'] = all_scores[rows]
 
     results = {name: evaluate_method(name, scores, eval_labels, eval_types, fault_types)
                for name, scores in methods.items()}

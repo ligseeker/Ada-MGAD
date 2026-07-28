@@ -116,7 +116,7 @@ class MyModel(nn.Module):
 		self._graph_cache_hits += 1
 		return self._cached_edge_weights, self._cached_graph_reg_loss
 
-	def forward(self, x, evaluate=False, global_step=None, compute_contrast=True, return_eval_aux=False):
+	def forward(self, x, evaluate=False, global_step=None, compute_contrast=True, return_eval_aux=False, return_full_rec=False):
 		x_node, d_node = self.node_emb(x['data_node'])
 		x_edge, d_edge = self.egde_emb(x['data_edge'])
 		x_log, d_log = self.log_emb(x['data_log'])
@@ -142,10 +142,13 @@ class MyModel(nn.Module):
 		rec = torch.concat([rec_node, rec_log, rec_edge], dim=-1)
 
 		if evaluate:
+			rec_full = rec if return_full_rec else None
 			rec = rec[:, -1].squeeze()
 			rec_score = torch.sum(rec, dim=-1)
 			cls_result = torch.softmax(self.show(rec), dim=-1)
 			if return_eval_aux:
+				if return_full_rec:
+					return cls_result, x['groundtruth_cls'], rec_score, rec_full
 				return cls_result, x['groundtruth_cls'], rec_score
 			return cls_result, x['groundtruth_cls']
 		else:
