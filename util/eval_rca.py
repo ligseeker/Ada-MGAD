@@ -312,7 +312,8 @@ def main():
         win_pos = {int(w): pos for pos, w in enumerate(cache['windows'])}
         rows = [win_pos[i] for i in eval_indices]
         tag = ''.join(g[0].upper() for g in loc_cfg['groups'])
-        methods[f'localizer[{tag}]'] = all_scores[rows]
+        name = f"loc[{tag}]@{os.path.basename(loc_dir.rstrip('/')).split('-seed')[-1]}"
+        methods[name] = all_scores[rows]
 
     results = {name: evaluate_method(name, scores, eval_labels, eval_types, fault_types)
                for name, scores in methods.items()}
