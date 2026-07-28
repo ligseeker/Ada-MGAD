@@ -97,16 +97,25 @@ def load_rca_labels(data_path):
 
 @torch.no_grad()
 def detector_scores(system, dataset, indices, batch_size):
-    """Fused per-node anomaly scores of the frozen detector."""
+    """Fused per-node anomaly scores of the frozen detector.
+
+    The model precomputes edge indices for a fixed batch_size, so the final
+    partial batch is padded with repeated samples and truncated afterwards.
+    """
     subset = [dataset[i] for i in indices]
     loader = DataLoader(subset, batch_size=batch_size, shuffle=False,
                         drop_last=False, num_workers=0)
     cls_list, rec_list = [], []
     for batch in loader:
+        cur_size = len(next(iter(batch.values())))
+        if cur_size < batch_size:
+            pad = batch_size - cur_size
+            batch = {k: torch.cat([v] + [v[:1]] * pad, dim=0)
+                     for k, v in batch.items()}
         batch = system.input2device(batch, system.use_gpu)
         cls_result, _, rec_score = system.model(batch, evaluate=True, return_eval_aux=True)
-        cls_list.append(cls_result.cpu())
-        rec_list.append(rec_score.cpu())
+        cls_list.append(cls_result[:cur_size].cpu())
+        rec_list.append(rec_score[:cur_size].cpu())
     cls_probs = torch.cat(cls_list, dim=0)[..., 1]          # [M, N]
     rec = torch.cat(rec_list, dim=0)                        # [M, N]
 
