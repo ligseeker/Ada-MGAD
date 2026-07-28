@@ -33,7 +33,7 @@ if PROJECT_ROOT not in sys.path:
 from util.runtime_config import DATASET_PROFILES
 from util.eval_rca import reconstruct_end_timestamps, load_rca_labels
 from src.rca.evidence import build_call_graph, extract_features
-from src.rca.localize import Localizer
+from src.rca.localize import build_localizer
 from src.rca.rank_loss import listwise_ce
 import util.util as util
 
@@ -55,6 +55,9 @@ def parse_cli_args():
     parser.add_argument('--lr', type=float, default=1e-3)
     parser.add_argument('--batch_size', type=int, default=256)
     parser.add_argument('--hidden', type=int, default=32)
+    parser.add_argument('--arch', default='mlp', choices=['mlp', 'setattn'])
+    parser.add_argument('--d_model', type=int, default=64)
+    parser.add_argument('--num_layers', type=int, default=2)
     parser.add_argument('--reuse_features', default=None,
                         help='Dir with cached features_train.npz/features_test.npz; '
                              'skips detector loading and feature extraction.')
@@ -164,7 +167,9 @@ def main():
     y_val = torch.tensor(labels[val_idx], dtype=torch.long)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    localizer = Localizer(groups=groups, hidden=cli.hidden).to(device)
+    localizer = build_localizer(cli.arch, groups, hidden=cli.hidden,
+                                d_model=cli.d_model, num_layers=cli.num_layers,
+                                num_nodes=args['num_nodes']).to(device)
     optimizer = torch.optim.Adam(localizer.parameters(), lr=cli.lr)
     loader = DataLoader(TensorDataset(x_tr, y_tr), batch_size=cli.batch_size,
                         shuffle=True, drop_last=False)
@@ -200,7 +205,8 @@ def main():
             break
 
     torch.save(best['state'], os.path.join(cli.out_dir, 'localizer.pt'))
-    config = {'groups': list(groups), 'hidden': cli.hidden,
+    config = {'groups': list(groups), 'arch': cli.arch, 'hidden': cli.hidden,
+              'd_model': cli.d_model, 'num_layers': cli.num_layers,
               'label_budget': cli.label_budget, 'seed': cli.seed,
               'feature_mean': mean.tolist(), 'feature_std': std.tolist(),
               'val_hr1': best['hr1'], 'best_epoch': best['epoch'],

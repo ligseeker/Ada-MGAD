@@ -298,8 +298,11 @@ def main():
     for loc_dir in cli.localizer_path:
         with open(os.path.join(loc_dir, 'config.json')) as f:
             loc_cfg = json.load(f)
-        from src.rca.localize import Localizer
-        localizer = Localizer(groups=loc_cfg['groups'], hidden=loc_cfg['hidden'])
+        from src.rca.localize import build_localizer
+        localizer = build_localizer(
+            loc_cfg.get('arch', 'mlp'), loc_cfg['groups'],
+            hidden=loc_cfg.get('hidden', 32), d_model=loc_cfg.get('d_model', 64),
+            num_layers=loc_cfg.get('num_layers', 2))
         localizer.load_state_dict(torch.load(os.path.join(loc_dir, 'localizer.pt'),
                                              map_location='cpu'))
         localizer.eval()
@@ -312,7 +315,8 @@ def main():
         win_pos = {int(w): pos for pos, w in enumerate(cache['windows'])}
         rows = [win_pos[i] for i in eval_indices]
         tag = ''.join(g[0].upper() for g in loc_cfg['groups'])
-        name = f"loc[{tag}]@{os.path.basename(loc_dir.rstrip('/')).split('-seed')[-1]}"
+        arch = {'mlp': '', 'setattn': 'sa'}.get(loc_cfg.get('arch', 'mlp'), '??')
+        name = f"loc[{arch}{tag}]@{os.path.basename(loc_dir.rstrip('/')).split('-seed')[-1]}"
         methods[name] = all_scores[rows]
 
     results = {name: evaluate_method(name, scores, eval_labels, eval_types, fault_types)
