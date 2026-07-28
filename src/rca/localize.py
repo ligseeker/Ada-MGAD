@@ -46,10 +46,14 @@ class SetAttentionLocalizer(nn.Module):
     """
 
     def __init__(self, groups=('anomaly', 'propagation', 'temporal'),
-                 d_model=64, nhead=4, num_layers=2, num_nodes=10, dropout=0.1):
+                 d_model=64, nhead=4, num_layers=2, num_nodes=10, dropout=0.1,
+                 residual=False):
         super().__init__()
         self.groups = tuple(groups)
         self.idx = feature_indices(self.groups)
+        self.residual = residual and 'a_fused' in [FEATURE_NAMES[i] for i in self.idx]
+        self.a_fused_pos = (self.idx.index(FEATURE_NAMES.index('a_fused'))
+                            if self.residual else None)
         self.in_proj = nn.Linear(len(self.idx), d_model)
         self.node_emb = nn.Parameter(torch.randn(num_nodes, d_model) * 0.02)
         layer = nn.TransformerEncoderLayer(
@@ -60,9 +64,13 @@ class SetAttentionLocalizer(nn.Module):
 
     def forward(self, feats):
         """feats: [B, N, len(FEATURE_NAMES)] -> scores [B, N]."""
-        h = self.in_proj(feats[..., self.idx]) + self.node_emb[None, :, :]
+        x = feats[..., self.idx]
+        h = self.in_proj(x) + self.node_emb[None, :, :]
         h = self.encoder(h)
-        return self.head(h).squeeze(-1)
+        scores = self.head(h).squeeze(-1)
+        if self.residual:
+            scores = scores + x[..., self.a_fused_pos]
+        return scores
 
     def config(self):
         return {'groups': list(self.groups), 'd_model': self.in_proj.out_features,
@@ -76,5 +84,6 @@ def build_localizer(arch, groups, **kwargs):
         return SetAttentionLocalizer(
             groups=groups, d_model=kwargs.get('d_model', 64),
             nhead=kwargs.get('nhead', 4), num_layers=kwargs.get('num_layers', 2),
-            num_nodes=kwargs.get('num_nodes', 10))
+            num_nodes=kwargs.get('num_nodes', 10),
+            residual=kwargs.get('residual', False))
     raise ValueError(f'unknown arch: {arch}')

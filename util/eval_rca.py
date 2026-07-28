@@ -302,7 +302,8 @@ def main():
         localizer = build_localizer(
             loc_cfg.get('arch', 'mlp'), loc_cfg['groups'],
             hidden=loc_cfg.get('hidden', 32), d_model=loc_cfg.get('d_model', 64),
-            num_layers=loc_cfg.get('num_layers', 2))
+            num_layers=loc_cfg.get('num_layers', 2),
+            residual=loc_cfg.get('residual', False))
         localizer.load_state_dict(torch.load(os.path.join(loc_dir, 'localizer.pt'),
                                              map_location='cpu'))
         localizer.eval()
@@ -314,9 +315,9 @@ def main():
             all_scores = localizer(torch.tensor(norm)).numpy()
         win_pos = {int(w): pos for pos, w in enumerate(cache['windows'])}
         rows = [win_pos[i] for i in eval_indices]
-        tag = ''.join(g[0].upper() for g in loc_cfg['groups'])
-        arch = {'mlp': '', 'setattn': 'sa'}.get(loc_cfg.get('arch', 'mlp'), '??')
-        name = f"loc[{arch}{tag}]@{os.path.basename(loc_dir.rstrip('/')).split('-seed')[-1]}"
+        base = os.path.basename(loc_dir.rstrip('/')).replace('rca-', '')
+        variant, _, seed = base.rpartition('-seed')
+        name = f'loc[{variant}]@{seed}'
         methods[name] = all_scores[rows]
 
     results = {name: evaluate_method(name, scores, eval_labels, eval_types, fault_types)

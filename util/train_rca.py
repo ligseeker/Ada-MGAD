@@ -23,6 +23,7 @@ import os
 import sys
 
 import numpy as np
+import pandas as pd
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
@@ -56,6 +57,10 @@ def parse_cli_args():
     parser.add_argument('--batch_size', type=int, default=256)
     parser.add_argument('--hidden', type=int, default=32)
     parser.add_argument('--arch', default='mlp', choices=['mlp', 'setattn'])
+    parser.add_argument('--residual', action='store_true',
+                        help='Anchor scores to the a_fused anomaly evidence (residual ranking).')
+    parser.add_argument('--balanced', action='store_true',
+                        help='Weight the loss of each window inversely to its fault-type frequency.')
     parser.add_argument('--d_model', type=int, default=64)
     parser.add_argument('--num_layers', type=int, default=2)
     parser.add_argument('--reuse_features', default=None,
@@ -166,12 +171,21 @@ def main():
     x_val = torch.tensor(norm[val_idx], dtype=torch.float32)
     y_val = torch.tensor(labels[val_idx], dtype=torch.long)
 
+    if cli.balanced:
+        tr_types = np.asarray(train_types)[tr_idx]
+        freq = pd.Series(tr_types).value_counts()
+        w_tr = torch.tensor((1.0 / freq[tr_types].values).astype(np.float32))
+        w_tr = w_tr * (len(w_tr) / w_tr.sum())
+        logger.info('Type-balanced loss; type frequencies: %s', dict(freq))
+    else:
+        w_tr = torch.ones(len(tr_idx), dtype=torch.float32)
+
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     localizer = build_localizer(cli.arch, groups, hidden=cli.hidden,
                                 d_model=cli.d_model, num_layers=cli.num_layers,
-                                num_nodes=args['num_nodes']).to(device)
+                                num_nodes=args['num_nodes'], residual=cli.residual).to(device)
     optimizer = torch.optim.Adam(localizer.parameters(), lr=cli.lr)
-    loader = DataLoader(TensorDataset(x_tr, y_tr), batch_size=cli.batch_size,
+    loader = DataLoader(TensorDataset(x_tr, y_tr, w_tr), batch_size=cli.batch_size,
                         shuffle=True, drop_last=False)
 
     best = {'hr1': -1.0, 'epoch': -1}
@@ -179,9 +193,9 @@ def main():
     for epoch in range(cli.epochs):
         localizer.train()
         total_loss = 0.0
-        for xb, yb in loader:
-            xb, yb = xb.to(device), yb.to(device)
-            loss = listwise_ce(localizer(xb), yb)
+        for xb, yb, wb in loader:
+            xb, yb, wb = xb.to(device), yb.to(device), wb.to(device)
+            loss = listwise_ce(localizer(xb), yb, sample_weight=wb)
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -207,6 +221,7 @@ def main():
     torch.save(best['state'], os.path.join(cli.out_dir, 'localizer.pt'))
     config = {'groups': list(groups), 'arch': cli.arch, 'hidden': cli.hidden,
               'd_model': cli.d_model, 'num_layers': cli.num_layers,
+              'residual': cli.residual, 'balanced': cli.balanced,
               'label_budget': cli.label_budget, 'seed': cli.seed,
               'feature_mean': mean.tolist(), 'feature_std': std.tolist(),
               'val_hr1': best['hr1'], 'best_epoch': best['epoch'],
