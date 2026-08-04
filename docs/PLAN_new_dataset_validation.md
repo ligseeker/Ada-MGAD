@@ -55,9 +55,11 @@ Ada-MGAD 已在 GAIA、MSDS 上完成验证。本计划将其扩展到三个新�
 
 | 任务 | 状态 | 产出 |
 |------|:----:|------|
-| 2.1 新建 `util/SN/`（constant/parser/pre/data），复用 MSTGAD 修正后的预处理逻辑 | [ ] | 代码 |
-| 2.2 注册 `DATASET_PROFILES`，支持实验级划分 | [ ] | 代码 |
-| 2.3 训练与评估，记录指标 | [ ] | 结果 |
+| 2.1 新建 `util/SN/`（constant/parser/pre/data），复用 MSTGAD 修正后的预处理逻辑 | [x] | 代码 |
+| 2.2 注册 `DATASET_PROFILES`，支持实验级划分 | [x] | 代码 |
+| 2.3 训练与评估，记录指标 | [~] | 结果 |
+
+设计要点见 4.2。
 
 ### Phase 3: Nezha-OnlineBoutique 适配 [ ]
 
@@ -101,7 +103,27 @@ Ada-MGAD 已在 GAIA、MSDS 上完成验证。本计划将其扩展到三个新�
 
 **结论**：移植到 Ada-MGAD 时必须采用——逐实验预处理与归一化（统计量只来自训练实验）、不跨实验边界滑窗、实验级划分、逐实验 trace 对齐校验。划分方式与模态消融对照改在 Ada-MGAD 侧进行（MSTGAD 单次训练 25–50 分钟，其流水线即将被替换，继续在其上做大规模对照性价比低）。
 
+### 4.2 SN 移植设计（Phase 2）
+
+遵循 Ada-MGAD 既有管线（参照 `util/MSDS/` 与 `util/GAIA/`）：
+
+1. **预处理 `util/SN/pre_SN.py`**（逐实验、输出到 `data/SN-pre/`）
+   - metric：12 服务×7 KPI 宽表；**逐实验 robust z-score（median/MAD）**，杜绝跨实验统计量污染；缺失秒 ffill。
+   - log：logs.json → Drain3（全数据集共享 miner，模板 ID 跨实验一致）→ (templateid, Hostname, @timestamp)。日志时间戳为 UTC+8 本地时间，本机 mktime 即对齐 epoch。
+   - trace：Jaeger spans.json → (cmbd_id, fatherpod, stats=operationName, end_time, duration)。**逐实验时钟对齐**：以"故障标签序列 × trace duration 总和序列"互相关（np.correlate）估计 trace-metric 时钟偏移，峰值不可信时回退"首 span 对齐实验起点"启发式；损坏的 spans.json（实验 2）则该实验 trace 特征为零。
+   - label：fault JSON 精确窗口 [start, start+duration]；`nginx-thrift` 等不在 12 服务内的容器跳过；no-fault 实验全零。
+   - graph：静态拓扑 `SN_EDGES`（Eadro Info 类）对称二值邻接 (12,12)。
+   - 拼接：按实验顺序拼接时间轴（相对偏移），同时保存 `bounds.pkl`（每个实验的起止行、名称、是否含故障）。
+2. **数据加载 `util/SN/data_SN.py`**（process_mode='dict'，仿 GAIA 自动回填维度）
+   - 滑窗**仅在单个实验内部**，绝不跨实验边界；窗口标签取窗口最后一秒（与 MSDS 协议一致）；mask 全部为已知（SN 有全量标注）。
+   - log 计数按模板全局 min-max；trace 逐实验 log1p 后除以 (mean×10+eps)；stats 词表在预处理时固定并保存，raw_edge 由 Process 回填。
+   - 每个窗口记录 experiment_id；Process 按 `args['test_experiment']`（故障实验序号，默认 -1）生成 `train_indices`/`test_indices`：测试=该故障实验全部窗口，训练=其余实验（含 no-fault）。LOEO = 依次跑 4 折（脚本 `scripts/run_sn_loeo.sh`）。
+3. **runtime 改动**：`build_dataloaders` 优先使用 `processed.train_indices/test_indices`（Subset），无则回退时序 70/30（GAIA/MSDS 不受影响）。
+4. **profile 'sn'**：num_nodes=12, raw_node=7, feature_node/edge=8, feature_log=32, batch_size=32, epochs=80, patience=10, abnormal_weight=20, window=10, step=1；其余超参对齐 msds。
+5. **验证**：预处理产物形状与对齐抽查（故障窗口内 span 数、metric 异常可见性）；2-epoch CPU smoke 通过后才上 GPU 训练。
+
 ## 5. 进度日志
 
 - 2026-08-05: 完成拷问会话，敲定 D1–D9 决策；建立 CONTEXT.md；创建本计划文档。
 - 2026-08-05: SN 首轮数据级诊断完成（信号存在、逐点检测天然上限 F1≈0.24–0.33、多实验拼接为崩坏主因）；详见 4.1。
+- 2026-08-05: 解压 SN 3 个 no-fault 实验；SN 适配实现完成（util/SN、runtime 实验级划分、sn profile、LOEO 脚本），预处理对齐诊断全部通过（offset≈28800s，互相关+日志率双重估计），CPU 冒烟 2 epoch 通过。

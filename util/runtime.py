@@ -5,7 +5,7 @@ import warnings
 
 import util.train as train
 import util.util as util
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Subset
 
 from util.runtime_config import DATASET_PROFILES, RUNTIME_OVERRIDE_KEYS, resolve_args
 
@@ -51,6 +51,13 @@ def build_dataloaders(processed, args):
     }
     if args["num_workers"] > 0:
         loader_kwargs["persistent_workers"] = args["persistent_workers"]
+
+    train_indices = getattr(processed, "train_indices", None)
+    test_indices = getattr(processed, "test_indices", None)
+    if train_indices is not None and test_indices is not None and len(train_indices) and len(test_indices):
+        train_dl = DataLoader(Subset(processed.dataset, list(train_indices)), shuffle=True, **loader_kwargs)
+        test_dl = DataLoader(Subset(processed.dataset, list(test_indices)), shuffle=False, **loader_kwargs)
+        return train_dl, test_dl
 
     split_idx = int(len(processed.dataset) * 0.7)
     train_dl = DataLoader(processed.dataset[:split_idx], shuffle=True, **loader_kwargs)
