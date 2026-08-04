@@ -2,7 +2,7 @@
 
 > 本文档是 RCA 研究项目的**持久化开发计划 + 实验日志**。每完成一个计划步骤或一轮实验，必须同步更新本文档（状态、结果、下一步）。新对话接手时：**先读本文件，再读 `CONTEXT.md`（术语与决策共识），然后按"下一步"继续推进**。
 
-最后更新：2026-07-28（setattn + E1/E2 实验完成后）
+最后更新：2026-08-04（第 4 步标签效率曲线完成后）
 
 ---
 
@@ -25,8 +25,8 @@
 | 1 | 切 `rca` 分支；`util/GAIA/build_rca_labels.py` 生成 `label_rca.csv` + 统计报告 | ✅ 完成 |
 | 2 | `util/eval_rca.py` 评估框架 + 零成本基线（检测分数直接排序） | ✅ 完成 |
 | 3 | 三证据定位模块（`src/rca/`）+ 消融 | ✅ 首轮完成（结论见 §4） |
-| 4 | 标签效率曲线实验（兼检验"P/T 证据在低标签机制下有价值"假设） | ⬜ **下一步** |
-| 5 | Baseline：启发式（已有）、DiagFusion（已有 GAIA 适配）、Eadro（需写 GAIA 适配器） | ⬜ 待做 |
+| 4 | 标签效率曲线实验（兼检验"P/T 证据在低标签机制下有价值"假设） | ✅ 完成（结论见 §4） |
+| 5 | Baseline：启发式（已有）、DiagFusion（已有 GAIA 适配）、Eadro（需写 GAIA 适配器） | ⬜ **下一步** |
 | 6 | 主表 + 消融 + 标签效率曲线出图；论文分析小节（难类型拆解、孪生混淆分析） | ⬜ 待做 |
 
 ## 3. 关键资产与路径
@@ -38,6 +38,8 @@
 | 冻结检测器 checkpoint | `/home/zhangll24/project_2/MultimodalAD/MSTGAD-dynamic/result_old/MSTGAD-GAIA-save-c4b9704e-1773605775`（`my_f1_stage.ckpt`，与 Ada-MGAD `MyModel` state dict 完全兼容） |
 | 特征缓存 | `result/rca-APT-seed42/features_{train,test}.npz`（复用：`--reuse_features`） |
 | 实验结果 | `result/rca-eval-*.json`（仓库 `result/` 目录） |
+| 标签效率聚合 | `result/rca-eval-budget.json` + `result/rca-budget-agg.json`（本地，gitignored）|
+| 聚合脚本 | `util/aggregate_budget.py`（按预算聚合 macro/per-type 指标，第 6 步出图复用） |
 | 训练好的 localizer | `result/rca-{config}-seed{42..46}/`（config.json + localizer.pt） |
 
 数据规模：`label_rca.csv` 单根因窗口 23184 + multi-root 4314（主实验排除）；测试段单根因 7569（login 4773 / memory 2387 / access denied 286 / file moving 123）。
@@ -84,18 +86,37 @@
 
 **v2 补验：E1 残差排序 / E2 类型平衡（各 5 种子）**：均为中性（±0.001），memory 退化非训练分布问题。**放弃这两个方向**。
 
+### 第 4 步：标签效率曲线（commit `待填`）
+
+saA vs saAP vs saAPT × 标签预算 {0.1, 0.25, 0.5, 1.0} × 3 种子（42/43/44），复用 `rca-APT-seed42` 特征缓存，`util/aggregate_budget.py` 按预算聚合（n_labeled：1558 / 3893 / 7787 / 15575）。
+
+**macro HR@1（mean ± std over 3 seeds）**：
+
+| budget | saA | saAP | saAPT |
+|---|---|---|---|
+| 0.1 | 0.9533±.0006 | 0.9498±.0054 | 0.9501±.0047 |
+| 0.25 | 0.9520±.0023 | 0.9545±.0004 | 0.9535±.0010 |
+| 0.5 | 0.9536±.0012 | 0.9536±.0004 | 0.9532±.0002 |
+| 1.0 | 0.9534±.0003 | 0.9536±.0006 | 0.9536±.0004 |
+
+login HR@1 稳定在 ~0.87、memory ~0.945，与 macro 同构。
+
+**结论**：
+1. **saA 的标签效率曲线基本平坦**：10% 预算（1558 窗口）即达 100% 性能（0.9533 vs 0.9534）。定位模块容量小 + 冻结检测器的异常证据高度信息化 → 极低标签即饱和。
+2. **"P/T 在低标签提供归纳偏置"假设未证实**：10% 时 saAP/saAPT 反而略差（-0.003）且方差大 ~9×（±0.005 vs ±0.0006，受 b0.1 saAP seed42 的 val/train 不稳定拖累）；25% 时 saAP 略优 0.0025 仍在噪声内。与 §4 的 50% 结论一致：**P/T 贡献在任何标签预算下 ≈ 0**。
+3. **贡献框定**：跨节点比较重排（setattn on anomaly evidence）为主贡献；P/T 消融如实报告（三个预算梯度均中性）。
+- 新增 `util/aggregate_budget.py`；产物 `result/rca-eval-budget.json` + `result/rca-budget-agg.json`（本地，gitignored）。
+
 ### 当前结论与最优候选
-- 最优：saA（0.9540）≈ saAPT（0.9534），差异不显著。
-- 论文叙事倾向："冻结多模态检测器 + 跨节点比较重排模块"；P/T 证据的价值待第 4 步低标签实验裁决。
+- 最优：saA（macro HR@1 0.9536±.0012 @ b0.5），与 saAPT 无显著差异。
+- 论文叙事：**"冻结多模态检测器 + 跨节点比较重排模块"**，附**极高标签效率**（10% 预算即饱和）作为卖点；P/T 消融在 50% 主表与标签效率曲线上均如实报告为中性。
 
-## 5. 下一步行动（第 4 步，已获用户确认方向）
+## 5. 下一步行动（第 5 步）
 
-**标签效率曲线实验**：saA vs saAP vs saAPT × 标签预算 {0.1, 0.25, 0.5, 1.0} × 3 种子（42/43/44）。
-- 命令模板：`python util/train_rca.py --model_path $CK --data_path $DP --dataset_path $DS --out_dir result/rca-<tag>-b<budget>-seed<s> --groups <...> --arch setattn --label_budget <budget> --seed <s> --reuse_features result/rca-APT-seed42`
-- 评估：`python util/eval_rca.py ... --localizer_path <每个 out_dir> --out result/rca-eval-budget.json`，再按预算聚合 macro HR@1/MRR 画曲线。
-- 假设：P/T 先验结构在低标签（10%）时提供归纳偏置（saAP/saAPT > saA）；若仍中性，则贡献框定为跨节点比较重排，P/T 消融如实报告。
-
-后续（第 5、6 步）：Eadro GAIA 适配器（`project_2/baselines/Eadro-GAIA/` 或仓库 `baselines/`）、DiagFusion 复跑（`baselines.zip` 内已有 GAIA 适配版）、主表出图。
+**Baseline 补齐与主表**：
+- **Eadro GAIA 适配器**（需写 GAIA 数据适配器；`project_2/baselines/Eadro-GAIA/` 或仓库 `baselines/`）。
+- **DiagFusion 复跑**（`baselines.zip` 内已有 GAIA 适配版），确认宏 per-type 协议下与启发式/检测分数排序可比。
+- 之后进入第 6 步：主表 + 消融 + 标签效率曲线出图（复用 `util/aggregate_budget.py` 数据），论文分析小节（难类型拆解、mob1↔mob2 孪生混淆分析）。
 
 ## 6. 已知陷阱（不要重蹈）
 
