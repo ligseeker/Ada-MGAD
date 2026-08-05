@@ -61,12 +61,12 @@ Ada-MGAD 已在 GAIA、MSDS 上完成验证。本计划将其扩展到三个新�
 
 设计要点见 4.2。
 
-### Phase 3: Nezha-OnlineBoutique 适配 [ ]
+### Phase 3: Nezha-OnlineBoutique 适配 [~]
 
 | 任务 | 状态 | 产出 |
 |------|:----:|------|
-| 3.1 新建 `util/Nezha/`：日志-Trace 解耦、离散窗口对齐、dependency.csv 构图、fault_list 标签 | [ ] | 代码 |
-| 3.2 训练与评估 | [ ] | 结果 |
+| 3.1 新建 `util/Nezha/`：日志-Trace 解耦、离散窗口对齐、dependency.csv 构图、fault_list 标签 | [x] | 代码 |
+| 3.2 训练与评估 | [~] | 结果 |
 
 ### Phase 4: TT 适配（部分实验） [ ]
 
@@ -139,9 +139,27 @@ Ada-MGAD 已在 GAIA、MSDS 上完成验证。本计划将其扩展到三个新�
 - 平均 F1≈0.48 显著高于平凡鲁棒 z 检测器上限（≈0.24–0.33），模型确实在学习跨实验泛化的故障模式。
 - Recall 0.35 为主要短板，与 SN 逐点信号天然上限一致（4.1 F2）；折间 AUC 波动大（0.56–0.82），反映 4 个实验故障服务/类型组合差异大、样本量小。
 
+### 4.4 Nezha-OnlineBoutique 适配设计（Phase 3）
+
+数据事实（勘察报告）：metric 为全天连续 60s 采样（08-22 03:51–23:59 共 1210 点，08-23 11:59–23:59 共 721 点，22 KPI/10 pod）；log/trace 仅存在于故障注入附近的 2 分钟窗口文件（[HH:MM-1, HH:MM+1)，相邻重叠 1 分钟），construct_data 另有单个基线窗口（08-22 03:51、08-23 17:00，与 rca 窗口恰好衔接）；fault_list 每天 24/32 个故障、5 种类型，只有注入时刻没有持续时长——**标签窗口定为 [inject_timestamp, inject_timestamp+120s)**（与数据采集的"注入后 2 分钟"窗口一致）；dependency.csv 提供服务级静态调用图。
+
+设计（全部仿 SN 适配）：
+1. **预处理 `util/Nezha/pre_Nezha.py`**（逐天、输出 `data/Nezha-pre/`）
+   - 节点=10 个服务（pod 名去掉末尾两段哈希映射到服务名；productcatalog pod 两天不同名但服务名一致）。
+   - metric：选 8 个 KPI——CpuUsageRate(%)、MemoryUsageRate(%)、SyscallRead、SyscallWrite、NetworkReceiveBytes、NetworkTransmitBytes、PodServerLatencyP99(s)、PodSuccessRate(%)（前 6 个覆盖 cpu/network 类故障，后 2 个覆盖 return/exception 类故障）；**逐天 robust z-score**。
+   - log：rca_data + construct_data 的全部窗口文件合并，按 (TimeUnixNano, PodName, SpanID) 去重（相邻窗口重叠 1 分钟）；Drain3 全数据集共享 miner；按 (服务, 60s 桶) 计数。
+   - trace：窗口文件合并，按 SpanID 去重；span→服务，父 span→父服务（同文件内 SpanID 索引，ParentID=root 无父）；按 (src, dst, OperationName, 60s 桶) 聚合 duration 和，跳过自环。
+   - label：(T, 10)，故障窗口 [inject, inject+120) 与 60s 桶有交叠即标 1。
+   - graph：dependency.csv 对称化 (10,10)。
+   - bounds.pkl 按天两条记录；stats_vocab.pkl 固定 OperationName 词表。
+2. **数据加载 `util/Nezha/data_Nezha.py`**：滑窗只在单天内部（window=10，即 10 分钟上下文，step=1）；窗口标签取最后一个时间点；log 全局 min-max、trace 逐天 log1p+/(mean×10+eps)；复用 SN 的 train/test_indices 机制，`test_experiment` 参数解释为天序号（0=08-22, 1=08-23），测试=整天窗口、训练=另一天。
+3. **profile 'nezha'**：num_nodes=10, raw_node=8, feature_node/edge=8, feature_log=32, log_len=256, window=10, step=1, batch_size=32, epochs=60, patience=10, abnormal_weight=50（异常点占比约 0.4–0.8%，比 SN 更不平衡）；其余对齐 sn。
+4. **运行**：两天互换做 2 折（train 08-22/test 08-23 与反向），脚本 `scripts/run_nezha_ob.sh`。
+
 ## 5. 进度日志
 
 - 2026-08-05: 完成拷问会话，敲定 D1–D9 决策；建立 CONTEXT.md；创建本计划文档。
 - 2026-08-05: SN 首轮数据级诊断完成（信号存在、逐点检测天然上限 F1≈0.24–0.33、多实验拼接为崩坏主因）；详见 4.1。
 - 2026-08-05: 解压 SN 3 个 no-fault 实验；SN 适配实现完成（util/SN、runtime 实验级划分、sn profile、LOEO 脚本），预处理对齐诊断全部通过（offset≈28800s，互相关+日志率双重估计），CPU 冒烟 2 epoch 通过。
 - 2026-08-05: SN LOEO 四折训练完成：均值 P=0.783 R=0.354 AUC=0.698 F1=0.479（详见 4.3）；确认逐实验预处理+实验级划分修复了多实验崩坏问题。
+- 2026-08-05: Nezha-OB 适配实现完成并通过校验与 CPU 冒烟。实现中发现：trace Duration 列实为微秒；adservice 08-22 TimeStamp 列损坏（按 Time 列重建）；相邻窗口文件重复 span 约 4 倍（按 SpanID 去重）；120s 标签窗口跨 3 个分钟桶，label 非零 72/95（08-22/08-23）。
