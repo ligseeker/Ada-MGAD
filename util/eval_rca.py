@@ -210,6 +210,12 @@ def parse_cli_args():
     parser.add_argument('--localizer_path', action='append', default=[],
                         help='Dir with localizer.pt/config.json/features_test.npz '
                              '(from util/train_rca.py). Repeatable.')
+    parser.add_argument('--external_scores', action='append', default=[],
+                        help='name:path.npz of an external baseline. The npz must '
+                             'contain window_ids (dataset window indices) plus a '
+                             '[n, num_nodes] "scores" matrix (higher = more likely '
+                             'root cause) or a "ranks" matrix (1-based positions; '
+                             'converted to scores = num_nodes - rank). Repeatable.')
     return parser.parse_args()
 
 
@@ -319,6 +325,21 @@ def main():
         variant, _, seed = base.rpartition('-seed')
         name = f'loc[{variant}]@{seed}'
         methods[name] = all_scores[rows]
+
+    for spec in cli.external_scores:
+        name, _, path = spec.partition(':')
+        with np.load(path) as z:
+            ext_windows = np.asarray(z['window_ids'])
+            if 'scores' in z:
+                ext = np.asarray(z['scores'], dtype=np.float64)
+            elif 'ranks' in z:
+                ext = len(GAIA_SERVICES) - np.asarray(z['ranks'], dtype=np.float64)
+            else:
+                raise ValueError(f'{path}: expected "scores" or "ranks" arrays')
+        assert ext.shape[1] == len(GAIA_SERVICES), ext.shape
+        win_pos = {int(w): pos for pos, w in enumerate(ext_windows)}
+        rows = [win_pos[i] for i in eval_indices]
+        methods[name] = ext[rows]
 
     results = {name: evaluate_method(name, scores, eval_labels, eval_types, fault_types)
                for name, scores in methods.items()}
