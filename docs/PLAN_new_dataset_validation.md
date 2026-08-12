@@ -34,7 +34,7 @@ Ada-MGAD 已在 GAIA、MSDS 上完成验证。本计划将其扩展到三个新�
 | D3 | 工作流 | 先在 MSTGAD 现有 SN 适配上诊断，定位根因后再移植到 Ada-MGAD-exp |
 | D4 | 划分策略 | 实验级划分（SN 留一交叉验证；TT/Nezha 按实验约 7/3） |
 | D5 | 标签语义 | 精确故障窗口 [start, start+duration]，不加缓冲 |
-| D6 | TT 内存 | 先在部分实验上验证；后续内存到位再扩全量 |
+| D6 | TT 内存 | 原子集验证；**2026-08-05 更正：内存已扩至 150GB，改为全量 11 实验** |
 | D7 | 基线 | 只跑 Ada-MGAD，基线数字引用论文 |
 | D8 | 工程 | 本文档为总计划，进度同步更新；每任务完成后 commit |
 | D9 | subagent 分工 | 主对话设计方案；关键任务 subagent 用 Qwen3.8-Max，其余 Qwen3.7-Plus（effort=auto）。注：Agent 工具无模型参数，尽量经 Workflow 的 model 选项实现，不可行时主对话执行并记录 |
@@ -68,12 +68,12 @@ Ada-MGAD 已在 GAIA、MSDS 上完成验证。本计划将其扩展到三个新�
 | 3.1 新建 `util/Nezha/`：日志-Trace 解耦、离散窗口对齐、dependency.csv 构图、fault_list 标签 | [x] | 代码 |
 | 3.2 训练与评估 | [~] | 结果 |
 
-### Phase 4: TT 适配（部分实验） [ ]
+### Phase 4: TT 适配（全量，内存已扩至 150GB） [~]
 
 | 任务 | 状态 | 产出 |
 |------|:----:|------|
-| 4.1 新建 `util/TT/`：逐实验流式预处理，先选部分实验 | [ ] | 代码 |
-| 4.2 训练与评估 | [ ] | 结果 |
+| 4.1 新建 `util/TT/`：复用 MSTGAD TT-pre 中间产物，逐实验流式预处理 + 惰性窗口加载 | [~] | 代码 |
+| 4.2 训练与评估（9 折 LOEO） | [ ] | 结果 |
 
 ### Phase 5: 汇总 [ ]
 
@@ -155,6 +155,23 @@ Ada-MGAD 已在 GAIA、MSDS 上完成验证。本计划将其扩展到三个新�
 2. **数据加载 `util/Nezha/data_Nezha.py`**：滑窗只在单天内部（window=10，即 10 分钟上下文，step=1）；窗口标签取最后一个时间点；log 全局 min-max、trace 逐天 log1p+/(mean×10+eps)；复用 SN 的 train/test_indices 机制，`test_experiment` 参数解释为天序号（0=08-22, 1=08-23），测试=整天窗口、训练=另一天。
 3. **profile 'nezha'**：num_nodes=10, raw_node=8, feature_node/edge=8, feature_log=32, log_len=256, window=10, step=1, batch_size=32, epochs=60, patience=10, abnormal_weight=50（异常点占比约 0.4–0.8%，比 SN 更不平衡）；其余对齐 sn。
 4. **运行**：两天互换做 2 折（train 08-22/test 08-23 与反向），脚本 `scripts/run_nezha_ob.sh`。
+
+### 4.5 TT 适配设计（Phase 4，全量）
+
+> 2026-08-05 更正：机器内存已扩至 150GB，TT 改为全量 11 个实验（9 故障 + 2 无故障，共 ~74k 秒），D6 的子集限制解除。
+
+数据事实：MSTGAD 已生成逐实验中间产物（`MSTGAD/data/TT-pre/<exp>/`：metric 已 min-max、log 为**逐实验独立** Drain3 模板、trace 为原始 trace 时钟未对齐、label 正确 (T,27)）。**关键发现**：每个实验的 spans.json 是 Jaeger 累积转储（各实验 trace 最早 span 同为 1650115502，远早于实验开始），trace-min 启发式完全不可用，必须用故障标签互相关估计逐实验偏移并把 span 裁剪到实验时间轴内。TT 故障 9×600s/实验，标签信号强，适合互相关。
+
+设计：
+1. **预处理 `util/TT/pre_TT.py`**：输入为 MSTGAD TT-pre 中间产物（**不重读原始 spans.json**；逐实验流式处理，任一时刻只驻留一个实验的数据）：
+   - metric：从原始数据集逐服务 CSV 重建（小文件），逐实验 robust z-score；
+   - log：逐实验读 TT-pre log.csv 的 Payload 列，用全数据集共享 Drain3 miner 重挖（统一模板 ID），@timestamp 沿用（已与 metric 时钟对齐）；
+   - trace：逐实验读 TT-pre trace.csv，以"故障标签×span duration 和"互相关估计偏移、裁剪到实验轴；无故障实验无标签，用 span 活动率与 metric 活动量互相关或首 span 启发式兜底；
+   - label：沿用 TT-pre label.pkl 逐实验段；bounds.pkl 记录 11 段；
+   - graph：TT_EDGES 静态拓扑对称化 (27,27)。
+2. **数据加载 `util/TT/data_TT.py`**：**惰性窗口数据集**（__len__/__getitem__ 按需切窗，不物化全部窗口——全量约 74k 窗口，物化 pkl 将超百 GB；基础张量驻留内存约 12–15 GB，150 GB 内存下安全）；边界感知、标签取窗口最后一秒、log 全局 min-max、trace 逐实验 log1p+/(mean×10+eps)、stats 词表取全量频次 top-40；train/test_indices 按 test_experiment（留出的故障实验序号 0..8，支持负索引）。
+3. **profile 'tt'**：num_nodes=27, raw_node=7, feature_node/edge=8, feature_log=32, log_len=256, window=10, step=1, batch_size=16, epochs=50, patience=8, abnormal_weight=30（点级异常率 ~3.1%）；num_workers=2。
+4. **运行**：`scripts/run_tt_loeo.sh` 对 9 个故障实验做 LOEO（每折训练=其余 8 个故障实验+2 个无故障实验，测试=留出实验）。
 
 ## 5. 进度日志
 

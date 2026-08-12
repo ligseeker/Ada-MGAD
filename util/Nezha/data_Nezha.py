@@ -5,7 +5,9 @@ import pickle
 import numpy as np
 import pandas as pd
 
-from util.Nezha.constant import NEZHA_SERVICE2NID, NEZHA_NUM_NODES
+from util.Nezha.constant import (
+    NEZHA_SERVICE2NID, NEZHA_NUM_NODES, LOG_LEVELS, NUM_LEVEL_CHANNELS,
+)
 
 
 def read_graph(data_dir):
@@ -35,6 +37,17 @@ class Process:
         if not os.path.exists(bounds_path):
             raise FileNotFoundError(f"{bounds_path} not found; run util/Nezha/pre_Nezha.py first")
         self.bounds = pickle.load(open(bounds_path, 'rb'))
+
+        # Log feature width = K template counts + [ERROR, WARNING, INFO, total].
+        templates_path = os.path.join(self.rawdata_path, 'log_templates.csv')
+        if not os.path.exists(templates_path):
+            raise FileNotFoundError(f"{templates_path} not found; run util/Nezha/pre_Nezha.py first")
+        self.num_templates = int(pd.read_csv(templates_path).shape[0])
+        self.log_len = self.num_templates + NUM_LEVEL_CHANNELS
+        if self.log_len != args['log_len']:
+            logging.info("Nezha log_len auto-aligned: %d templates + %d level channels -> log_len=%d",
+                         self.num_templates, NUM_LEVEL_CHANNELS, self.log_len)
+        args['log_len'] = self.log_len
 
         dataset_file = os.path.join(self.dataset_path, 'dataset.pkl')
         if os.path.exists(dataset_file):
@@ -76,7 +89,7 @@ class Process:
         self.set['mask'] = np.eye(3)[label_int]
 
         metric = pd.read_csv(os.path.join(self.rawdata_path, 'metric.csv'), sep=',')
-        metric_values = metric.drop(columns=['now']).values.astype(np.float32)
+        metric_values = metric.drop(columns=['now', 'time_epoch', 'time']).values.astype(np.float32)
         assert len(metric_values) == T_total, f"metric rows {len(metric_values)} != {T_total}"
         metric_full = metric_values.reshape(T_total, self.num_node, -1)
         self.set['metric'] = metric_full
@@ -85,22 +98,42 @@ class Process:
         self.set['trace'] = self._load_traces(T_total)
 
     def _load_logs(self, T_total):
-        log_full = np.zeros((T_total, self.num_node, self.log_len), dtype=np.float32)
+        K = self.num_templates
+        width = self.log_len  # K + NUM_LEVEL_CHANNELS
+        log_full = np.zeros((T_total, self.num_node, width), dtype=np.float32)
         log = pd.read_csv(os.path.join(self.rawdata_path, 'log.csv'), sep=',')
         if len(log):
             host_idx = log['Hostname'].map(NEZHA_SERVICE2NID)
             tid = log['templateid'].astype(int) - 1
             ts = log['@timestamp'].astype(int)
-            valid = host_idx.notna() & (tid >= 0) & (tid < self.log_len) & (ts >= 0) & (ts < T_total)
-            np.add.at(log_full, (ts[valid].values, host_idx[valid].values.astype(int), tid[valid].values), 1)
+            base_valid = host_idx.notna() & (ts >= 0) & (ts < T_total)
+
+            tmpl_valid = base_valid & (tid >= 0) & (tid < K)
+            np.add.at(log_full, (ts[tmpl_valid].values,
+                                 host_idx[tmpl_valid].values.astype(int),
+                                 tid[tmpl_valid].values), 1)
+
+            total_ch = K + len(LOG_LEVELS)
+            np.add.at(log_full, (ts[base_valid].values,
+                                 host_idx[base_valid].values.astype(int),
+                                 np.full(int(base_valid.sum()), total_ch, dtype=int)), 1)
+
+            levels = log['level'].fillna('').astype(str).values
+            for i, level in enumerate(LOG_LEVELS):
+                lvl_valid = base_valid & (levels == level)
+                if lvl_valid.any():
+                    np.add.at(log_full, (ts[lvl_valid].values,
+                                         host_idx[lvl_valid].values.astype(int),
+                                         np.full(int(lvl_valid.sum()), K + i, dtype=int)), 1)
 
         sec_max = log_full.max(axis=1)
         max_record = sec_max.max(axis=0)
         present = log_full.sum(axis=(1, 2)) > 0
-        min_record = sec_max.min(axis=0) if present.all() else np.zeros(self.log_len)
+        min_record = sec_max.min(axis=0) if present.all() else np.zeros(width)
         dis = max_record - min_record + 1e-6
         log_full = (log_full - min_record) / dis
-        logging.info(f"Log data: {len(log)} rows, present minutes {int(present.sum())}/{T_total}")
+        logging.info(f"Log data: {len(log)} rows, {K} templates + {NUM_LEVEL_CHANNELS} level channels, "
+                     f"present minutes {int(present.sum())}/{T_total}")
         return np.nan_to_num(log_full).astype(np.float32)
 
     def _load_traces(self, T_total):
