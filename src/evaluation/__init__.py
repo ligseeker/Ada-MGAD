@@ -8,12 +8,14 @@ from .evaluator import (
     validate_ranking,
 )
 from .metrics import average_at_k, hit_at_k, reciprocal_rank
+from .reporting import evaluate_ranking_report
 
 __all__ = [
     "CaseEvaluation",
     "EvaluationSummary",
     "average_at_k",
     "evaluate_rankings",
+    "evaluate_ranking_report",
     "hit_at_k",
     "predict_rankings",
     "reciprocal_rank",

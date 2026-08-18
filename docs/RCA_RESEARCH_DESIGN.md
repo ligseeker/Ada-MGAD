@@ -2,7 +2,7 @@
 
 > 决策状态：**用户已确认，作为当前研究基线冻结**  
 > 冻结来源：参考对话 `6a82610b-1ca8-83ea-8662-6c1d7a91cb72`  
-> 当前执行阶段：P1 Benchmark Layer  
+> 当前执行阶段：P2 Multimodal RCA Representation and Attribution
 > 最近整理：2026-08-18
 
 ## 1. 核心定位
@@ -99,7 +99,9 @@ r_v=g(h_v)
 \hat t_0=t_0+\Delta t,
 \]
 
-观察分析锚点提前或延迟时的性能变化。候选延迟为 30 s、60 s、120 s，但具体取值需由两数据集的采样粒度与有效上下文诊断后确定，不能现在写死。
+观察分析锚点提前或延迟时的性能变化。最初候选延迟为 30 s、60 s、120 s；
+P2 metric coverage audit 已在模型运行前排除 30 s，metric 只保留 60/120 s。
+logs/traces 仍需各自 coverage smoke，不能直接继承 metric 决策。
 
 ### Protocol C：Ada-MGAD-triggered RCA（最终系统实验）
 

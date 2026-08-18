@@ -15,12 +15,12 @@
     "groups.jsonl": {
       "role": "trusted_sidecar",
       "rows": 16200,
-      "sha256": "247832d21affe7441337a647899c7ec70f65447a42c3b5a696045bf37324fba7"
+      "sha256": "adc68a6267bb3a75788b5944a26d656334e82c6d2e035e4e547e68355cacbdf9"
     },
     "inputs.jsonl": {
       "role": "prediction_input",
       "rows": 16200,
-      "sha256": "afeb9fee1acf5e557eebd37b01d9e829938af27ffa412f094ab51fd01d2796f7"
+      "sha256": "53e3635dbe7159ee05be50279c731f7d9ddb2c6e99b3062ab9cc460280fe1df0"
     },
     "labels.jsonl": {
       "role": "training_evaluation_label",
@@ -35,15 +35,20 @@
   },
   "metadata": {
     "adapter": "src.data.gaia.load_gaia_cases",
+    "context_window": {
+      "interval_semantics": "half-open [t0-T_pre, t0+T_post)",
+      "post_seconds": 300,
+      "pre_seconds": 300
+    },
     "excluded_records": 952,
     "group_summary": {
-      "cases_in_non_singleton_groups": 4037,
-      "groups": 13077,
-      "largest_group": 39,
-      "non_singleton_groups": 914
+      "cases_in_non_singleton_groups": 16184,
+      "groups": 322,
+      "largest_group": 471,
+      "non_singleton_groups": 306
     },
-    "grouping": "connected components of directly overlapping injection intervals",
-    "status": "candidate cases; final context and split policy not frozen"
+    "grouping": "connected components of half-open injection intervals union [t0-context, t0+context) telemetry windows",
+    "status": "context frozen; split assignment not frozen"
   },
   "schema_version": "p1_rca_manifest_v1"
 }

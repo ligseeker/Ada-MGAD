@@ -1,6 +1,6 @@
 # 项目背景与总体研究框架
 
-> 文档版本：`project_context_v1`  
+> 文档版本：`project_context_v2`
 > 状态：背景基线  
 > 最近更新：2026-08-18
 
@@ -103,15 +103,19 @@ rca-standalone   # 新的独立 RCA 研究
 pipeline         # 未来按需建立，负责事件级系统集成
 ```
 
-当前工作区能直接验证的情况更有限：
+当前工作区能直接验证的情况：
 
 - 本地与远端可见分支只有 `rca-standalone` / `origin/rca-standalone`；
 - 当前提交为 `ab31282`（`first commit`）；
-- 当前树中没有 `src/rca/`、`RCACase`、RCA evaluator、RCA baseline 或 RCA tests；
+- 当前树已有 label-separated `RCACaseInput`/`RCACaseLabel`、RCA evaluator、
+  P1 sanity baselines、数据诊断、split/cohort/source manifests 与 51 个测试；
 - 当前 GAIA 预处理器会解析 `run_table_2021-07.csv` 并保存 `label_events.csv`，随后又把事件映射到 30 s `label.csv`；P1 可以复用前者的事件解析，但不能把后者的窗口标签直接当成新的 RCA case 协议；
-- 参考对话提到的旧 `rca` Pilot 分支及其实验产物不在当前 clone 中。
+- P1 G1–G8 与 reproducibility closeout 已通过，当前进入 P2；
+- 参考对话提到的旧 `rca` Pilot 分支及其实验产物仍不在当前 clone 中。
 
-因此，文档对旧 Pilot 使用“对话报告”标签；任何要写入论文的 Pilot 结论都必须先恢复原分支/产物或在当前协议下重新复现。
+因此，文档继续对旧 Pilot 使用“对话报告”标签；任何要写入论文的 Pilot 结论都
+必须先恢复原分支/产物或在当前协议下重新复现。当前可复核的 P1 结果只作为
+benchmark/data sanity evidence，不代表 H1/H2/H3 已成立。
 
 ## 6. 毕业论文叙事基线
 
@@ -133,12 +137,14 @@ pipeline         # 未来按需建立，负责事件级系统集成
 当前可以说：
 
 - Ada-MGAD 是节点级多模态异常检测方法；
-- Standalone RCA 的任务、数据角色和 benchmark 协议已冻结；
+- Standalone RCA 的任务、数据角色和 benchmark 协议已冻结，P1 已完成；
+- Random、Root Frequency、Metric Change sanity baselines 已在 GAIA 与 RE2-OB
+  上复现；
 - 旧 Pilot 提供了“跨节点相对比较值得研究”的前期线索。
 
 当前不能说：
 
-- Standalone RCA 已实现或已在 RE2-OB 上取得结果；
+- P2 的多模态、阶段、相对比较或结构方法已经取得结果；
 - H1/H2/H3 已被验证；
 - 结构信息必然提升 RCA；
 - 当前方法解决 indicator-level RCA；
@@ -150,4 +156,3 @@ pipeline         # 未来按需建立，负责事件级系统集成
 - [RCAEval 官方仓库](https://github.com/phamquiluan/RCAEval)
 - [RCAEval 官方论文（arXiv）](https://arxiv.org/abs/2412.17015)
 - [RCAEval 当前 evaluator 实现](https://github.com/phamquiluan/RCAEval/blob/main/RCAEval/benchmark/evaluation.py)
-

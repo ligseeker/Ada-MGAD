@@ -186,9 +186,15 @@ def load_gaia_cases(raw_path: str) -> GAIAAdapterResult:
     log_ref = TelemetryRef(
         uri="gaia://micross-2021-07/business-logs",
         format="csv-shards",
-        timestamp_column="datetime",
+        timestamp_column="message",
         service_column="service",
-        metadata={"timezone": GAIA_TZ},
+        metadata={
+            "timezone": GAIA_TZ,
+            "timestamp_extraction": (
+                "leading YYYY-MM-DD HH:MM:SS,mmm prefix from message"
+            ),
+            "declared_datetime_column": "date-only; not used for event slicing",
+        },
     )
     trace_ref = TelemetryRef(
         uri="gaia://micross-2021-07/traces",

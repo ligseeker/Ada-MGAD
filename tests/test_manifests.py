@@ -5,6 +5,7 @@ import unittest
 
 from src.data.manifest import (
     ManifestIntegrityError,
+    read_manifest_cases,
     verify_manifest_bundle,
     write_manifest_bundle,
 )
@@ -101,6 +102,14 @@ class ManifestTest(unittest.TestCase):
                     (label,),
                     {"inputs.jsonl": []},
                 )
+
+    def test_verified_bundle_round_trips_schema_objects(self):
+        with tempfile.TemporaryDirectory() as directory:
+            self.write_bundle(Path(directory))
+            inputs, labels = read_manifest_cases(directory)
+            expected_input, expected_label = self.make_case()
+            self.assertEqual(inputs, (expected_input,))
+            self.assertEqual(labels, (expected_label,))
 
 
 if __name__ == "__main__":

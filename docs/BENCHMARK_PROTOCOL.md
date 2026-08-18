@@ -1,8 +1,8 @@
-# P1 Unified Event-level / Service-level RCA Benchmark Protocol V0.1
+# P1 Unified Event-level / Service-level RCA Benchmark Protocol V0.5
 
-> 决策状态：**用户已确认，P1 当前执行协议**  
-> 实现状态：**部分实现：G2/G4 completed；G1/G6/G7 partial**
-> 最近核验：2026-08-18
+> 决策状态：**V0.1 用户已确认；V0.2–V0.5 为数据诊断与收尾审计驱动的执行修订**
+> 实现状态：**G1–G8 与 P1 reproducibility closeout completed**
+> 最近核验：2026-08-19
 
 ## 1. P1 目标
 
@@ -20,7 +20,10 @@ P1 不设计复杂网络。目标是把 GAIA fault injection 与 RCAEval RE2-OB 
 
 协议不依赖“真实故障结束时间”。真实结束时间若存在，只能作为诊断元数据或敏感性分析依据，不能成为所有数据集必须提供的输入。
 
-`T_pre`、`T_post` 需在数据诊断后确定，并记录单位、闭开区间语义、边界填充策略和模态各自的 timestamp 对齐方式。
+G8 诊断后，主协议冻结 `T_pre=T_post=300 s`。切片统一使用毫秒时间和半开区间
+`[t0-300 s, t0+300 s)`；不合成边界填充值。定时 metric 缺失使用显式 mask，
+log/trace 无事件只表示该窗口无活动。GAIA split 原子组必须使用实际注入区间与
+该上下文区间之并集的重叠连通分量。
 
 ## 3. 逻辑 schema
 
@@ -93,9 +96,17 @@ GAIA adapter 在实现前必须审计：
 - 可用拓扑是静态图还是由事件窗口 traces 构建；
 - 独立 injection 数量与各 fault/root 分布。
 
+当前 inventory 为 16,200 条 supported、time-bounded operational anomaly
+events。主结果使用 `anchor_unique_root_service` cohort：若另一 root service 的
+事件在目标 `t0` 仍活跃，则该 case 从主表移入 multi-root sensitivity；同 root
+并发仍保留。主 cohort 为 13,470 cases，multi-root sensitivity 为 2,730 cases。
+label 表示目标运维事件指定的 service，不声称它是整个 ±300 s context 中唯一
+因果故障。
+
 ### 4.2 RCAEval RE2-OB adapter
 
-官方当前数据组织以独立 case 为单位，原始布局包含 `metrics.json`、`inject_time.txt`、`logs.csv`、`traces.csv`；官方也提供 Parquet 布局与 `cases.parquet` 索引。
+当前本地数据组织以独立 case 为单位，每个正式 case 使用 `metrics.csv`、
+`inject_time.txt`、`logs.csv`、`traces.csv`。
 
 ```text
 one RE2-OB case directory/index row = one RCACase
@@ -106,7 +117,11 @@ one RE2-OB case directory/index row = one RCACase
         +--> metrics/logs/traces around t0
 ```
 
-当前官方资料列出 RE2-OB 共 90 cases。实现时必须固定 RCAEval commit/tag 或数据 DOI/manifest，不能只写“最新版”。
+当前正式 manifest 覆盖 RE2-OB 90/90 cases。由于本地资产没有保存上游
+commit/tag/DOI/version 文件，执行版本以 content-addressed snapshot 固定：原始
+`RE2-OB.zip` 加上实际消费的 360 个文件均有逐文件 size/SHA-256，组合内容身份为
+`cec0030da8b499914af7979283eb1a2cd4f2cad2430742c70130829cd28133c9`。该身份
+能验证实验字节一致性，但不能替代上游 provenance 声明。
 
 ### 4.3 候选服务集合
 
@@ -166,13 +181,26 @@ Raw Cases
 
 ### RE2-OB
 
-对需要跨 case 学习的方法，主建议是 5-fold case-level cross-validation，最终拼接 90 个 out-of-fold predictions 后统一评价。具体 stratification/grouping 规则须由 P1 数据诊断决定并固定 seed。
+对需要跨 case 学习的方法，主协议是 seed `20260819` 的 5-fold case-level
+cross-validation，最终拼接 90 个 out-of-fold predictions 后统一评价。90 个
+singleton case 按 root service 与 fault type 平衡，joint stratum 仅作为权重
+0.25 的软目标；五折各 18 cases，每种 fault 每折 3 条，每个 root 每折 3–4 条。
 
 不需要跨 case 训练的 baseline 在相同 90 cases 上直接运行，但不得利用其他 case 的测试标签统计。
 
 ### GAIA
 
-先统计独立 injection 的数量、时间、root 与 fault 分布，再决定 5-fold、分组 fold 或时间分块。当前不预先宣称某一种 split 最合理。
+±300 s 上下文与实际注入区间的并集形成 322 个不可拆分组，最大组 471。完整
+inventory assignment 使用 seed `20260819` 的 grouped-stratified 5-fold，fold
+sizes 为 3239/3239/3239/3241/3242；root/fault/joint 轴权重为 1/1/0.25。
+主 cohort 继承这些 group-safe folds，过滤后 sizes 为
+2693/2684/2711/2705/2677，五折仍覆盖全部 5 个 fault types 和 10 个 roots。
+
+作为候选的 context-purged temporal block 虽然大小和总体 TV 均通过软门槛，
+但 12 条 CPU fault 全部落在 fold-4，前四折均无 CPU，且 fold-0 无 access-
+permission fault，因此不满足“每个由至少 5 个原子组支持的 root/fault 类别
+必须出现在每折”的覆盖约束。该 assignment 只保留为 temporal-shift
+sensitivity，不作为主 OOF split。
 
 无论采用哪种 split，同一次 injection 及其任何 telemetry 片段都只能属于一个 partition。
 
@@ -217,15 +245,20 @@ RCAEval 当前 evaluator 同时实现 fine-grained 与 service-level coarse-grai
 
 ### B0 Random
 
-对全部候选服务生成可复现随机完整排名，用于验证 evaluator 和候选集合。
+对全部候选服务按 `SHA256(seed, case_id, service)` 生成可复现随机完整排名，
+seed 为 `20260819`，用于验证 evaluator 和候选集合。
 
 ### B1 Root Frequency Prior
 
-仅从当前训练 fold 统计根因频率；tie-breaking 必须确定且记录。用于检测数据集 root 分布捷径。
+仅从当前四个训练 folds 统计根因频率；同频服务按名称升序。用于检测数据集
+root 分布捷径。每折保存 train/test ID digest 与 overlap=0 证据。
 
 ### B2 Metric Change Score
 
-比较锚点前后每个服务指标分布或变化幅度并排序。距离函数、缺失指标处理、指标聚合和标准化都必须写入配置。
+比较半开窗口 `[t0-300s,t0)` 与 `[t0,t0+300s)`。每 feature 使用 pooled-std
+标准化的绝对均值位移，score cap=20，单侧至少 2 个样本；每服务聚合 Top-5
+feature scores。无有效 feature 的服务在有观测服务之后按名称回退，并报告
+observed/fallback coverage slices。B2 不做跨 case 拟合。
 
 P1 不实现新神经网络，也不把 Ada-MGAD score 当作跨数据集主 baseline。
 
@@ -258,7 +291,11 @@ P1 不实现新神经网络，也不把 Ada-MGAD score 当作跨数据集主 bas
 - **G7**：preprocessing 与预测路径不读取 test root/fault label；有 Label Firewall 测试。
 - **G8**：生成完整 dataset diagnostic report。
 
-只有 G1–G8 全部有证据路径后，才能进入 P2 表征研究。
+G1–G8 与 reproducibility closeout 已完成。最终机器审计重新验证了 9 组
+baseline outputs、split/source/cohort checksum bindings、完整 rankings、指标重算、
+Label Firewall、349,120,558 行全量诊断以及 RE2 原始字节；详见
+[P1_REPRODUCIBILITY_AUDIT.md](P1_REPRODUCIBILITY_AUDIT.md)。P2 可在不修改本
+协议冻结项的前提下开始。
 
 ## 11. 建议工程结构
 
@@ -269,6 +306,7 @@ src/
     schema.py
     gaia.py
     rcaeval.py
+    source_snapshot.py
   evaluation/
     metrics.py
     evaluator.py
@@ -277,9 +315,10 @@ src/
     frequency.py
     metric_change.py
 scripts/
-  prepare_gaia.py
-  prepare_re2ob.py
-  eval_baselines.py
+  prepare_p1_manifests.py
+  prepare_p1_splits.py
+  pin_p1_rcaeval_source.py
+  audit_p1_gates.py
 tests/
   test_schema.py
   test_metrics.py

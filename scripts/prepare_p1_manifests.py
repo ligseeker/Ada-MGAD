@@ -14,6 +14,8 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.data import (
+    CaseInterval,
+    build_interval_overlap_groups,
     build_overlap_groups,
     build_singleton_groups,
     load_gaia_cases,
@@ -51,9 +53,41 @@ def _group_summary(groups: Iterable[object]) -> Mapping[str, int]:
     }
 
 
-def prepare_gaia(raw_path: str, output_directory: Path) -> Mapping[str, object]:
+def prepare_gaia(
+    raw_path: str,
+    output_directory: Path,
+    context_seconds: int = 0,
+) -> Mapping[str, object]:
     result = load_gaia_cases(raw_path)
-    groups = build_overlap_groups(result.audit)
+    if context_seconds < 0:
+        raise ValueError("context_seconds must be non-negative")
+    if context_seconds:
+        radius_ms = int(context_seconds) * 1000
+        groups = build_interval_overlap_groups(
+            CaseInterval(
+                row.case_id,
+                row.start_ms - radius_ms,
+                max(row.end_ms, row.start_ms + radius_ms),
+            )
+            for row in result.audit
+        )
+        grouping = (
+            "connected components of half-open injection intervals union "
+            "[t0-context, t0+context) telemetry windows"
+        )
+        context_metadata = {
+            "interval_semantics": "half-open [t0-T_pre, t0+T_post)",
+            "pre_seconds": int(context_seconds),
+            "post_seconds": int(context_seconds),
+        }
+        status = "context frozen; split assignment not frozen"
+    else:
+        groups = build_overlap_groups(result.audit)
+        grouping = (
+            "connected components of directly overlapping injection intervals"
+        )
+        context_metadata = None
+        status = "candidate cases; final context and split policy not frozen"
     sidecars = {
         "event_audit.jsonl": [
             {
@@ -95,9 +129,10 @@ def prepare_gaia(raw_path: str, output_directory: Path) -> Mapping[str, object]:
         metadata={
             "adapter": "src.data.gaia.load_gaia_cases",
             "excluded_records": len(result.excluded),
-            "grouping": "connected components of directly overlapping injection intervals",
+            "context_window": context_metadata,
+            "grouping": grouping,
             "group_summary": group_summary,
-            "status": "candidate cases; final context and split policy not frozen",
+            "status": status,
         },
     )
     verify_manifest_bundle(str(output_directory))
@@ -159,6 +194,12 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--gaia-path", required=True)
     parser.add_argument("--re2ob-path", required=True)
+    parser.add_argument(
+        "--gaia-context-seconds",
+        default=0,
+        type=int,
+        help="Symmetric GAIA context radius used for leakage-safe groups",
+    )
     parser.add_argument("--output-root", required=True)
     return parser.parse_args()
 
@@ -167,7 +208,11 @@ def main() -> None:
     args = parse_args()
     output_root = Path(args.output_root)
     summary = {
-        "gaia": prepare_gaia(args.gaia_path, output_root / "gaia"),
+        "gaia": prepare_gaia(
+            args.gaia_path,
+            output_root / "gaia",
+            context_seconds=args.gaia_context_seconds,
+        ),
         "re2ob": prepare_re2ob(args.re2ob_path, output_root / "re2ob"),
     }
     print(json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True))

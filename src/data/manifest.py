@@ -44,6 +44,29 @@ def _topology_record(reference: Optional[TopologyRef]) -> Optional[Mapping[str, 
     }
 
 
+def _telemetry_from_record(record: Optional[Mapping[str, Any]]) -> Optional[TelemetryRef]:
+    if record is None:
+        return None
+    return TelemetryRef(
+        uri=record["uri"],
+        format=record.get("format"),
+        timestamp_column=record.get("timestamp_column"),
+        service_column=record.get("service_column"),
+        metadata=record.get("metadata", {}),
+    )
+
+
+def _topology_from_record(record: Optional[Mapping[str, Any]]) -> Optional[TopologyRef]:
+    if record is None:
+        return None
+    return TopologyRef(
+        uri=record["uri"],
+        format=record.get("format"),
+        directed=record.get("directed"),
+        metadata=record.get("metadata", {}),
+    )
+
+
 def input_record(case: RCACaseInput) -> Mapping[str, Any]:
     """Serialize only fields available to a predictor."""
 
@@ -216,3 +239,47 @@ def verify_manifest_bundle(output_directory: str) -> Mapping[str, Any]:
     if files["labels.jsonl"]["rows"] != index.get("case_count"):
         raise ManifestIntegrityError("case_count does not match labels.jsonl")
     return index
+
+
+def read_manifest_cases(
+    output_directory: str,
+) -> tuple:
+    """Read verified prediction inputs and labels back into schema objects."""
+
+    output = Path(output_directory)
+    verify_manifest_bundle(output_directory)
+    input_rows = []
+    label_rows = []
+    try:
+        with (output / "inputs.jsonl").open("r", encoding="utf-8") as handle:
+            for line in handle:
+                row = json.loads(line)
+                input_rows.append(
+                    RCACaseInput(
+                        case_id=row["case_id"],
+                        dataset=row["dataset"],
+                        anchor_time=row["anchor_time"],
+                        services=tuple(row["services"]),
+                        metrics=_telemetry_from_record(row.get("metrics")),
+                        logs=_telemetry_from_record(row.get("logs")),
+                        traces=_telemetry_from_record(row.get("traces")),
+                        topology=_topology_from_record(row.get("topology")),
+                        metadata=row.get("metadata", {}),
+                    )
+                )
+        with (output / "labels.jsonl").open("r", encoding="utf-8") as handle:
+            for line in handle:
+                row = json.loads(line)
+                label_rows.append(
+                    RCACaseLabel(
+                        case_id=row["case_id"],
+                        root_service=row["root_service"],
+                        fault_type=row.get("fault_type"),
+                    )
+                )
+    except (KeyError, TypeError, json.JSONDecodeError, OSError) as exc:
+        raise ManifestIntegrityError("cannot deserialize manifest cases") from exc
+    inputs = tuple(input_rows)
+    labels = tuple(label_rows)
+    validate_case_collection(inputs, labels)
+    return inputs, labels
