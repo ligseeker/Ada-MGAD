@@ -1,0 +1,44 @@
+{
+  "case_count": 90,
+  "dataset": "RCAEval-RE2-OB",
+  "files": {
+    "excluded.jsonl": {
+      "role": "trusted_sidecar",
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "groups.jsonl": {
+      "role": "trusted_sidecar",
+      "rows": 90,
+      "sha256": "0a8e01d9d5d641a290efee6b0e4be525054590660cb442e6de335dd4ff120655"
+    },
+    "inputs.jsonl": {
+      "role": "prediction_input",
+      "rows": 90,
+      "sha256": "8447b4d53de14f4cf36562b4c7386dc231d2604911a672df4f243d811b54aaed"
+    },
+    "labels.jsonl": {
+      "role": "training_evaluation_label",
+      "rows": 90,
+      "sha256": "f3dd164e03d9207af4d4e432a1848c2100ec7a65c125b420c80642a56be3dba7"
+    },
+    "sources.jsonl": {
+      "role": "trusted_sidecar",
+      "rows": 90,
+      "sha256": "c8d8efcb1f9aec98d6dde34aeb7350d3c9d48b4097b93f5219af15e334fb0f1c"
+    }
+  },
+  "metadata": {
+    "adapter": "src.data.rcaeval.load_re2ob_cases",
+    "excluded_cases": 0,
+    "group_summary": {
+      "cases_in_non_singleton_groups": 0,
+      "groups": 90,
+      "largest_group": 1,
+      "non_singleton_groups": 0
+    },
+    "grouping": "one official failure-case directory per group",
+    "status": "complete local case inventory; release identifier not pinned"
+  },
+  "schema_version": "p1_rca_manifest_v1"
+}

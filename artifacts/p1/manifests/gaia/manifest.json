@@ -1,0 +1,49 @@
+{
+  "case_count": 16200,
+  "dataset": "GAIA-MicroSS-2021-07",
+  "files": {
+    "event_audit.jsonl": {
+      "role": "trusted_sidecar",
+      "rows": 16200,
+      "sha256": "e5e9e28d44c5fa0e7b19a63e901901aa7ae95abd781cc1f4d6c59f3bae223eff"
+    },
+    "excluded.jsonl": {
+      "role": "trusted_sidecar",
+      "rows": 952,
+      "sha256": "c3de2a4baee715e21c30ab71638085e5375e74e5bf5c34af75eb651bd15c9793"
+    },
+    "groups.jsonl": {
+      "role": "trusted_sidecar",
+      "rows": 16200,
+      "sha256": "247832d21affe7441337a647899c7ec70f65447a42c3b5a696045bf37324fba7"
+    },
+    "inputs.jsonl": {
+      "role": "prediction_input",
+      "rows": 16200,
+      "sha256": "afeb9fee1acf5e557eebd37b01d9e829938af27ffa412f094ab51fd01d2796f7"
+    },
+    "labels.jsonl": {
+      "role": "training_evaluation_label",
+      "rows": 16200,
+      "sha256": "dc4b0db3092e2a70c235a5a49f3a52b4cc1a23311d09d97344e082c51c6a2ce4"
+    },
+    "sources.jsonl": {
+      "role": "trusted_sidecar",
+      "rows": 1,
+      "sha256": "d5b5330cbbb713d698289e6c6d90fe1bb195309676e6e03acd8492abad9e14b3"
+    }
+  },
+  "metadata": {
+    "adapter": "src.data.gaia.load_gaia_cases",
+    "excluded_records": 952,
+    "group_summary": {
+      "cases_in_non_singleton_groups": 4037,
+      "groups": 13077,
+      "largest_group": 39,
+      "non_singleton_groups": 914
+    },
+    "grouping": "connected components of directly overlapping injection intervals",
+    "status": "candidate cases; final context and split policy not frozen"
+  },
+  "schema_version": "p1_rca_manifest_v1"
+}

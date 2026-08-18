@@ -1,0 +1,69 @@
+{
+  "evidence_scope": "adapter-and-event-inventory-only",
+  "gaia": {
+    "candidate_count_distribution": {
+      "10": 16200
+    },
+    "excluded_records": 952,
+    "exclusion_reason_distribution": {
+      "non_injection_error_record": 38,
+      "normal_record": 861,
+      "recovery_marker": 17,
+      "unsupported_event_type": 36
+    },
+    "fault_type_distribution": {
+      "access permission denied exception": 15,
+      "cpu_anomalies": 12,
+      "file moving program": 43,
+      "login failure": 15478,
+      "memory_anomalies": 652
+    },
+    "overlap_cases": 4037,
+    "overlap_pairs": 3429,
+    "root_service_distribution": {
+      "dbservice1": 83,
+      "dbservice2": 96,
+      "logservice1": 66,
+      "logservice2": 63,
+      "mobservice1": 7815,
+      "mobservice2": 7799,
+      "redisservice1": 55,
+      "redisservice2": 57,
+      "webservice1": 82,
+      "webservice2": 84
+    },
+    "source_path": "/home/zhangll24/project_2/MultimodalAD/MSTGAD-GAIA/data/GAIA/MicroSS",
+    "valid_cases": 16200
+  },
+  "limitations": [
+    "RCAEval release/checksum is not pinned yet",
+    "telemetry missingness and relative-time coverage are not computed",
+    "topology coverage is not computed",
+    "GAIA overlap inclusion policy and context window are not frozen"
+  ],
+  "re2ob": {
+    "candidate_count_distribution": {
+      "11": 90
+    },
+    "excluded_cases": 0,
+    "exclusions": [],
+    "fault_type_distribution": {
+      "cpu": 15,
+      "delay": 15,
+      "disk": 15,
+      "loss": 15,
+      "mem": 15,
+      "socket": 15
+    },
+    "root_service_distribution": {
+      "checkoutservice": 18,
+      "currencyservice": 18,
+      "emailservice": 18,
+      "productcatalogservice": 18,
+      "recommendationservice": 18
+    },
+    "source_path": "/home/zhangll24/RCA_project/datasets/RCAEval/RE2-OB",
+    "valid_cases": 90
+  },
+  "schema_version": "p1_dataset_audit_v1"
+}

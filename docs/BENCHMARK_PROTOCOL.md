@@ -1,7 +1,7 @@
 # P1 Unified Event-level / Service-level RCA Benchmark Protocol V0.1
 
 > 决策状态：**用户已确认，P1 当前执行协议**  
-> 实现状态：**尚未实现**  
+> 实现状态：**部分实现：G2/G4 completed；G1/G6/G7 partial**
 > 最近核验：2026-08-18
 
 ## 1. P1 目标

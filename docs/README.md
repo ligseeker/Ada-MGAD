@@ -15,11 +15,12 @@
 | 2 | [RESEARCH_STATUS.md](RESEARCH_STATUS.md) | 查看当前真实进度、已冻结决策、阻塞项和下一步 |
 | 3 | [RCA_RESEARCH_DESIGN.md](RCA_RESEARCH_DESIGN.md) | 查看 Standalone RCA Research Design V0.2 |
 | 4 | [BENCHMARK_PROTOCOL.md](BENCHMARK_PROTOCOL.md) | 执行 P1 统一 Event-level / Service-level RCA 协议 |
-| 5 | [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) | 查看旧 Pilot 证据及后续实验记录规范 |
+| 5 | [DATASET_AUDIT.md](DATASET_AUDIT.md) | 查看 GAIA / RE2-OB 的真实本地布局、初步计数和未决风险 |
+| 6 | [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) | 查看旧 Pilot 证据及后续实验记录规范 |
 
 ## 当前一句话状态
 
-Ada-MGAD 异常检测代码已存在；`rca-standalone` 分支已经建立，但独立 RCA 尚未实现。当前正式阶段是 **P1：统一 GAIA 与 RCAEval RE2-OB 的事件级、服务级 RCA Benchmark Layer**，第一步应实现 `RCACase`、评价器 toy tests 和 Label Firewall，而不是设计新神经网络。
+当前正式阶段仍是 **P1：统一 GAIA 与 RCAEval RE2-OB 的事件级、服务级 RCA Benchmark Layer**。统一 schema、评价器、两个 adapter、确定性 manifest bundle 与 overlap split-integrity 首版已实现；G2、G4 完成，G1、G6、G7 partial。下一步是完整模态覆盖/missingness 诊断、冻结 split，再实现 sanity baselines；不进入新神经网络设计。
 
 ## 新对话启动方式
 
@@ -28,7 +29,7 @@ Ada-MGAD 异常检测代码已存在；`rca-standalone` 分支已经建立，但
 ```text
 请先完整阅读 docs/README.md、docs/PROJECT_CONTEXT.md、
 docs/RESEARCH_STATUS.md、docs/RCA_RESEARCH_DESIGN.md、
-docs/BENCHMARK_PROTOCOL.md 和 docs/EXPERIMENT_LOG.md。
+docs/BENCHMARK_PROTOCOL.md、docs/DATASET_AUDIT.md 和 docs/EXPERIMENT_LOG.md。
 以 docs/RESEARCH_STATUS.md 的当前状态为准，从 P1 的下一项未完成任务继续；
 不要把 conversation-reported 的旧 Pilot 结果当作当前分支已复现结果，
 不要在 P1 阶段加入 Ada-MGAD 表征或新的复杂神经网络。
