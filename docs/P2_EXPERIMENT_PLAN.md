@@ -8,7 +8,10 @@
 - Verification Status: UNVERIFIED
 - Version Label: p2_experiment_plan_v0.2
 
-> 状态：P2-G1/G2、全量 M/L/T、C0-M/L/T 与 C1-I completed；M1-S in progress
+> 状态：P2-G1/G2、全量 M/L/T、C0-M/L/T、C1-I 与 M1-S completed。
+> P2-G4 判定为 `no-go`（H1 在冻结门禁下未获支持，见
+> [P2_G4_STAGE_RESULTS.md](P2_G4_STAGE_RESULTS.md)）；本计划中 M2-R / M2-D / M3-G
+> 的排期在用户就后续路线做出决定前不生效。
 
 ## 1. 研究目标与冻结边界
 

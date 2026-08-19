@@ -1,7 +1,7 @@
 # 研究状态与决策日志
 
-> 状态版本：`research_state_v9`
-> 最近更新：2026-08-19
+> 状态版本：`research_state_v11`
+> 最近更新：2026-08-20
 > 状态所有者：本文件；完成 Gate 后必须同步更新
 
 ## 1. 当前状态摘要
@@ -13,7 +13,7 @@
 | 旧 Ada-MGAD-dependent RCA Pilot | 对话报告已完成，当前 clone 不可核验 | [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) |
 | Standalone RCA 研究定位 | 已冻结 | [RCA_RESEARCH_DESIGN.md](RCA_RESEARCH_DESIGN.md) V0.2 |
 | P1 Benchmark Protocol | 已完成并冻结 | [BENCHMARK_PROTOCOL.md](BENCHMARK_PROTOCOL.md) V0.5 |
-| `rca-standalone` 分支 | 已建立 | Git 当前分支与远端 tracking branch |
+| `rca-standalone` 分支 | 已建立；当前工作分支为 `claudecode` | Git 当前分支与远端 tracking branch |
 | `RCACase` / adapters / evaluator | 已实现首版 | `src/data/`、`src/evaluation/`、`tests/` |
 | Label-separated manifests | GAIA 16,200 + RE2-OB 90 已按修正后的 log 时间引用重生并校验 | `artifacts/p1/manifests/` |
 | Telemetry diagnostics scanner | 约 38 GB raw telemetry 全量扫描完成 | `artifacts/p1/telemetry_diagnostics.json`、[TELEMETRY_DIAGNOSTICS.md](TELEMETRY_DIAGNOSTICS.md) |
@@ -25,25 +25,32 @@
 | P2 Experiment Plan | V0.2；metric onset 由 coverage 收缩为 60/120 s | [P2_EXPERIMENT_PLAN.md](P2_EXPERIMENT_PLAN.md) |
 | P2-G1 metric | completed；170 维全量 bundle 与独立 coverage audit | [P2_METRIC_FEATURES.md](P2_METRIC_FEATURES.md)、`artifacts/p2/features/` |
 | P2-G2 C0-M | completed；nested OOF、泄漏审计、确定性复跑 | [P2_C0_M_RESULTS.md](P2_C0_M_RESULTS.md)、`artifacts/p2/runs/c0_m/` |
-| P2 logs/traces | L0/T0 schema、synthetic tests 与真实 smoke completed；全量 pending | [P2_MODALITY_SCHEMA_AUDIT.md](P2_MODALITY_SCHEMA_AUDIT.md)、`artifacts/p2/event_features_smoke/` |
+| P2-G1 logs/traces | completed；L0/T0 全量流式 extraction 与 coverage audit 已完成 | [P2_G3_MODALITY_RESULTS.md](P2_G3_MODALITY_RESULTS.md) §2、`artifacts/p2/event_features/`、`artifacts/p2/event_feature_{summary,audit}.json` |
+| P2-G3 C0-L / C0-T / C1-I | completed；三个 run + 独立审计 + 配对 bootstrap | [P2_G3_MODALITY_RESULTS.md](P2_G3_MODALITY_RESULTS.md)、`artifacts/p2/runs/{c0_l,c0_t,c1_i}/`、`artifacts/p2/linear_ablation_{summary,audit}.json` |
+| C1-I 门禁状态 | `exploratory_signal=true`；`claim_ready=false` | `artifacts/p2/c1_i_bootstrap.json`（`p2_c1_i_paired_bootstrap_v1`） |
+| P2-G4 M1-S | completed；run + 独立审计 + 配对 bootstrap 均已完成 | [P2_G4_STAGE_RESULTS.md](P2_G4_STAGE_RESULTS.md)、`artifacts/p2/runs/m1_s/`、`artifacts/p2/m1_s_{summary,audit,bootstrap}.json` |
+| M1-S 门禁状态 | `exploratory_signal=false`；`claim_ready=false`；**`p2_g4_decision="no-go"`** | `artifacts/p2/m1_s_bootstrap.json`（`p2_m1_s_paired_bootstrap_v1`） |
+| H1（event-stage 表征优于 naive early fusion） | **未获支持**（冻结门禁下） | 同上；GAIA 双端点为正但 RE2-OB 主端点符号为负 |
 
 **当前研究阶段：P2 — Multimodal RCA Representation and Attribution。**
 
 ## 2. 仓库快照
 
 ```text
-branch:       rca-standalone
-remote:       origin/rca-standalone
-commit:       ab31282055b625838f41a1a3c91e51098175f254
-subject:      first commit
-commit date:  2026-07-15T22:27:48+08:00
-working tree: 当前 P1 代码与文档未提交
+branch:       claudecode
+worktree:     .git 指向 /home/zhangll24/RCA_project/Ada-MGAD/.git/worktrees/Ada-MGAD-rca-claudecode
+commit:       64bb681328fa1793014615a20ba2bc1fdf33c3b7
+subject:      update L0/T0
+PR target:    main
+working tree: 治理文档修改（docs/{README,RESEARCH_STATUS,EXPERIMENT_LOG}.md）+ 未跟踪新增文件
+              （CLAUDE.md、P2-G4 后处理脚本与测试、P2-G3/P2-G4 结果文档）；
+              src/ 与 scripts/run_* 未修改
 ```
 
 当前事实：
 
-- Git 仅显示一个本地分支与对应远端分支；
-- `docs/` 在本轮之前为空；
+- 当前检出为 git worktree，工作分支 `claudecode`，PR 目标为 `main`；
+- `docs/` 现有 18 个文件，`docs/README.md` 为唯一入口；
 - 旧 Ada-MGAD 的 GAIA/MSDS 异常检测实现保持不动；
 - `src/data/schema.py` 已物理拆分 prediction input 与 label；
 - `src/evaluation/` 已实现完整 ranking 校验与 AC@1/3/5、Avg@5、MRR；
@@ -59,8 +66,8 @@ working tree: 当前 P1 代码与文档未提交
 - GAIA 主 split 已冻结为 grouped-stratified 5-fold，RE2-OB 为 singleton
   stratified 5-fold，统一 seed `20260819`；
 - Random/Frequency/Metric-change 已在两个数据集完成并字节级复现；
-- P1 closeout 时 `tests/` 51/51 通过；P2 新增 metric/event feature 与
-  linear-ranker tests 后当前全套 66/66 通过；
+- P1 closeout 时 `tests/` 51/51 通过；P2 新增 metric/event feature、linear-ranker
+  与 P2-G4 后处理 tests 后当前全套 106/106 通过；
 - GAIA 16,200 event inventory 已分为 13,470-case main 与 2,730-case
   multi-root sensitivity；
 - RE2-OB 原始归档与 8,441,465,341 字节实际消费文件已逐字节固定，content
@@ -73,7 +80,33 @@ working tree: 当前 P1 代码与文档未提交
   60/120 s；
 - C0-M GAIA/RE2 root-macro Avg@5 为 0.5820/0.9756；相对 P1 B2 为
   −0.1266/+0.0422，不形成统一优越性结论；
-- P2-G2 的 predictions/metrics/training-audit 核心文件重跑 SHA-256 一致。
+- P2-G2 的 predictions/metrics/training-audit 核心文件重跑 SHA-256 一致；
+- L0/T0 全量 extraction 已完成：GAIA log/trace 各 134,700 rows × 50/80
+  （扫描 87,974,871 / 28,681,438 raw rows），RE2 各 990 rows × 50/80
+  （15,053,223 / 34,461,235）；
+- entity-observed 比例为 GAIA log/trace 0.999777、RE2 log 0.911111、
+  RE2 trace 0.636364；
+- RE2 log 三档 onset 的 content-complete 比例同为 0.794900，低于冻结的 0.80
+  绝对阈值，故 M1-S 的 staged 通道排除 log，只用 metric + trace；
+- C0-L / C0-T / C1-I root-macro Avg@5 为 GAIA 0.3567/0.3549/0.6072、
+  RE2 0.4667/0.8156/0.9956；两数据集 best single modality 均为 C0-M；
+- C1-I 相对 C0-M 主端点为 GAIA +0.0253 / RE2 +0.0200，次端点 AC@1 为
+  GAIA −0.0911 / RE2 +0.0667；
+- C1-I 配对 bootstrap 判定 `exploratory_signal=true`、`claim_ready=false`
+  （GAIA 主端点 CI 下界 −0.003557 ≤ 0，且 GAIA AC@1 −0.0911 < −0.01）；
+- GAIA 上所有 learned 方法的 root-macro 主端点仍低于未学习的 P1 B2
+  （C1-I 相对 B2 为 −0.1013，M1-S 为 −0.0767，差距缩小但未反转）；
+- M1-S 已完成：design 为 105 值 + 105 masks = 210 列，两数据集各 160 inner
+  + 5 outer fits，root-macro Avg@5 为 GAIA 0.6319 / RE2 0.9933；
+- M1-S 相对 C1-I 的主端点为 GAIA +0.024646 / RE2 **−0.002222**，次端点 AC@1 为
+  GAIA +0.039918 / RE2 **−0.011111**；
+- M1-S 配对 bootstrap 判定 `exploratory_signal=false`、`claim_ready=false`、
+  `p2_g4_decision="no-go"`（GAIA 双端点 CI 下界均 > 0，但 RE2 主端点 CI 下界
+  −0.007500 ≤ 0 且 RE2 AC@1 −0.011111 < −0.01）；
+- RE2-OB 的全部退化溯源为单个 case `re2ob-c9c8f348d3f5974b`（fold_1，root
+  `recommendationservice`，rank 1 → 2）；89/90 个 case 只发生尾部重排；
+- M1-S runtime 为 GAIA 12,326.37 s / RE2 24.01 s；audit 与 bootstrap 二次运行
+  逐字节复现。
 
 ## 3. ARS 工作流位置
 
@@ -86,8 +119,8 @@ working tree: 当前 P1 代码与文档未提交
 Standalone RCA Design    completed / frozen V0.2
 P1 Benchmark Protocol    completed / frozen V0.5
 P1 implementation        G1-G8 + reproducibility closeout completed
-P2 representation        metric completed / L0-T0 smoke completed
-P2 controlled experiments P2-G2 completed / P2-G3 inputs pending
+P2 representation        metric + L0/T0 full extraction completed
+P2 controlled experiments P2-G2 completed / P2-G3 completed / P2-G4 completed (no-go)
 paper full drafting      not started in this workspace
 ```
 
@@ -136,7 +169,9 @@ content snapshot 与全产物一致性 closeout 也已完成；最终审计 SHA-
 - RE2-OB 指标候选已稳定为 11 个应用服务；trace 静态 alias 已冻结，但缺失候选的
   mask/coverage 对模型的影响仍待实验；
 - topology 的统一表示与缺失/动态策略；
-- logs/traces 的 30/60/120 s stage coverage；metric 已冻结为 60/120 s；
+- ~~logs/traces 的 30/60/120 s stage coverage~~ 已由 P2-G1 全量 extraction 解决：
+  GAIA log/trace 三档均 supported，RE2 trace 三档均 supported，RE2 log 三档均
+  unsupported（0.794900 < 0.80）；metric 仍冻结为 60/120 s；
 - H2 的比较模块与 H3 的结构机制；
 - 最终论文题目是否加入“根因分析”。
 
@@ -199,13 +234,18 @@ RCAEval 参考实现固定审计 commit 为
 `4695aa69f4f1f57b9094ca04ff235908b73a8e24`；官方输入/窗口与 Track C 不等价，
 必须分表。
 
-### P2-G1：feature schema + modality extractors（partial）
+### P2-G1：feature schema + modality extractors（completed）
 
 - 通用 label-free feature bundle 与 metric extractor 已完成；
 - GAIA main/RE2-OB metric 全量产物、coverage audit 与确定性 smoke 已完成；
 - L0/T0 raw schema、`frontendservice→frontend` alias、纯函数 tests 与真实 smoke
   已完成；
-- 下一步把 readers 改为可恢复的全量流式 extraction，并审计总体 coverage。
+- readers 已改为可恢复的全量流式实现（GAIA 各 10 checkpoints、RE2 各 90），
+  双数据集 L0/T0 全量 extraction 与 coverage audit 已完成；
+- coverage audit 由 extractor 在同一次运行内经 `verify_feature_bundle` 复验后
+  写出，**不是**独立第二进程产物，引用时不得与 `run_*`/`audit_*` 的独立审计混称；
+- 证据：`artifacts/p2/event_features/`、`artifacts/p2/event_feature_{summary,audit}.json`、
+  [P2_G3_MODALITY_RESULTS.md](P2_G3_MODALITY_RESULTS.md) §2。
 
 ### P2-G2：C0-M nested OOF（completed）
 
@@ -214,6 +254,66 @@ RCAEval 参考实现固定审计 commit 为
 - 完整 rankings、service scores、metrics、fit-state hashes 与 source bindings 已保存；
 - 独立审计精确重算 metrics，第二次全量运行核心文件 hashes 一致；
 - GAIA 不优于 P1 B2 的 root-macro 主端点，负结果保留。
+
+### P2-G3：C0-L / C0-T / C1-I 单模态与 naive 融合（completed）
+
+- 三个方法共用 P2-G2 冻结装置，只改输入 design（C0-L 5/10、C0-T 8/16、
+  C1-I 30/60），均只用 `whole.*` 通道；
+- 每方法每数据集 5 outer fits + 80 inner fits，case/group overlap 与 inner
+  fit/validation overlap 均为 0；
+- 独立审计精确重算 metrics、重建 selected C、逐文件校验 SHA-256；
+- 两数据集 best single modality 均为 C0-M；C1-I 主端点两侧为正
+  （GAIA +0.0253、RE2 +0.0200），GAIA 次端点 AC@1 退化 −0.0911；
+- 配对 bootstrap（10,000 次，seed `20260819`，GAIA 按 context group、RE2 按 case）
+  判定 `exploratory_signal=true`、`claim_ready=false`；
+- GAIA AC@1 退化只作为诊断结果保留，**不**作为修改 inner selection objective
+  的依据；若要调整须单独做 protocol version bump + sensitivity experiment；
+- 证据：`artifacts/p2/runs/{c0_l,c0_t,c1_i}/`、
+  `artifacts/p2/linear_ablation_{summary,audit}.json`、`artifacts/p2/c1_i_bootstrap.json`、
+  [P2_G3_MODALITY_RESULTS.md](P2_G3_MODALITY_RESULTS.md)。
+
+### P2-G4：M1-S event-stage 单因素对照（completed，判定 `no-go`）
+
+- design 为 C1-I 的 `whole.` M/L/T（30 值）加 selected-onset 的 metric+trace
+  `stage{60|120}.`（75 值），共 105 值 + 105 masks = 210 列，audit 已核对；
+- 网格 4 C × 2 onsets = 8 未缩减，每 outer fold 32 inner fits ⇒ 每数据集
+  实测 160 inner + 5 outer fits，为 C0-M/C1-I 的两倍；
+- 冻结项全程未动：inner 目标仍唯一为 root-service macro Avg@5，
+  `C={0.01,0.1,1,10}`、`onset={60,120}` 与既定 tie-break 均保持原样；未引入 RE2-TT；
+- selected 超参：GAIA 五折均为 C=10 / onset=60 s；RE2-OB 为 C 1/1/10/0.1/0.1、
+  onset 120/60/120/120/120 s——两数据集落在不同 onset 上；
+- root-macro 结果：GAIA AC@1 0.405516 / Avg@5 0.631871；RE2-OB 0.966667 / 0.993333；
+- 相对 C1-I：GAIA AC@1 +0.039918 / Avg@5 +0.024646；RE2 AC@1 −0.011111 /
+  Avg@5 −0.002222；
+- 配对 bootstrap（10,000 次，seed `20260819`，GAIA 按 322 context group、RE2 按
+  90 case）：GAIA 主端点 CI [+0.005371, +0.043954]、次端点 CI [+0.008128, +0.070546]，
+  两者下界均 > 0；RE2 主端点 CI [−0.007500, 0.000000]、次端点 CI [−0.037500, 0.000000]；
+- 判定 `exploratory_signal=false`、`claim_ready=false`（两项检查均 false）⇒
+  `p2_g4_decision="no-go"`；**H1 在冻结门禁下未获支持**，不得宣称 event-stage
+  切分带来一致收益；
+- 独立审计（`p2_m1_stage_audit_v1`）两数据集全部通过：outer/inner fold 与冻结
+  split 一致、case 与 group overlap 全为 0、metrics 逐位重算一致、selected
+  C/onset 可由 inner scores 重建、Label Firewall 干净，且 C1-I 对照方一并复验；
+- audit 与 bootstrap 二次运行（输出至 scratch 路径）得到逐字节相同 SHA-256；
+- RE2-OB 退化的确定性溯源与 6 项 limitation 记于
+  [P2_G4_STAGE_RESULTS.md](P2_G4_STAGE_RESULTS.md) §7 与 §9；
+- 证据：`artifacts/p2/runs/m1_s/`、
+  `artifacts/p2/m1_s_{summary,audit,bootstrap}.json`、
+  [P2_G4_STAGE_RESULTS.md](P2_G4_STAGE_RESULTS.md)、
+  [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) §22。
+
+### P2-G5 及之后：待用户决策，尚未开工
+
+`no-go` 之后的三个方向互斥，任何一项都须用户明确决定后才立项，且都不得回改已冻结
+协议或既有记录（详见 [P2_G4_STAGE_RESULTS.md](P2_G4_STAGE_RESULTS.md) §10）：
+
+1. 维持现状，把 H1 记为“未获支持”并据此重写方法叙述；
+2. 就 RE2-OB 天花板效应重新讨论是否扩展 RE2-TT（该决定原本推迟到 H1 结果之后，
+   现结果已产生）；
+3. 对 inner selection objective 做单独的 protocol version bump + sensitivity
+   experiment。
+
+M2-R / M2-D / M3-G 在上述决策产生前不实现。H2 / H3 未检验，不得预判其结论。
 
 ## 8. 主要风险
 
@@ -245,6 +345,13 @@ RCAEval 参考实现固定审计 commit 为
 | 2026-08-19 | metric onset 候选为 30/60/120 s | 统一 metric 调参只允许 60/120 s，30 s 保留 unsupported control | GAIA 30 s onset blocks 仅约 0.09% service rows 可观察；决策发生在 stage 模型运行前 |
 | 2026-08-19 | C0-M 只是计划项 | C0-M nested OOF 完成并作为 learned metric reference；不宣称统一优于 B2 | GAIA/RE2 root-macro Avg@5 为 0.5820/0.9756，相对 B2 为 −0.1266/+0.0422；完整泄漏与确定性审计通过 |
 | 2026-08-19 | log/trace entity 与派生字段边界未定 | L0 只用 raw 无词表统计；T0 固定 `frontendservice→frontend`，缺失 trace entities 保留 mask | GAIA 无 raw template ID；RE2 template 字段已派生且 trace 仅直接覆盖 7 类 entity |
+| 2026-08-19 | L0/T0 staged 通道是否含 log 未定 | M1-S 的 staged 通道排除 log，只用 metric + trace 的 `stage{60,120}` | RE2 log 三档 onset 的 content-complete 比例同为 0.794900，低于冻结的 0.80 绝对阈值；决策发生在 M1-S 运行前 |
+| 2026-08-19 | C0-L/C0-T/C1-I 只是计划项 | P2-G3 完成；C1-I 记为 `exploratory_signal=true` / `claim_ready=false`，不得用于任何论文级 claim | 两数据集主端点点估计为正（+0.0253/+0.0200），但 GAIA CI 下界 −0.003557 ≤ 0 且 GAIA AC@1 −0.0911 < −0.01 |
+| 2026-08-19 | 是否因 C1-I 的 GAIA AC@1 退化调整 inner selection objective | 不调整；保持 inner 唯一目标为 root-service macro Avg@5，AC@1 退化只作 P2-G4 诊断 | 用户已确认：中途改选择目标会破坏 H1 的单因素可解释性；如需调整须单独 protocol version bump + sensitivity experiment |
+| 2026-08-19 | 是否为绕开 RE2 天花板效应引入 RE2-TT | 暂不引入；先在冻结的 GAIA + RE2-OB 协议上完成 P2-G4，RE2 天花板记为 limitation | 用户已确认：是否扩展待 H1 结果出来后再决定，当前不重新打开 P1/P2 数据协议 |
+| 2026-08-20 | M1-S 只是计划项，H1 待检验 | P2-G4 完成并判定 `no-go`；H1 记为“在冻结门禁下未获支持”，不得宣称 event-stage 切分带来一致收益 | GAIA 双端点为正且 CI 下界 > 0（+0.024646 / +0.039918），但 RE2 主端点点估计 −0.002222 为负、CI 下界 −0.007500 ≤ 0，次端点 −0.011111 < −0.01；三项检查全 false |
+| 2026-08-20 | RE2-OB 退化可能提示 stage 通道有系统性害处 | RE2-OB 退化溯源为单个 case 的 rank 1 → 2，只作诊断记录，**不**改变 `no-go` 判定，也**不**作为放宽阈值或更换数据集的依据 | 逐 case 比对显示 89/90 只有尾部重排、仅 1/90 的 root 排名变化；5 root × 18 cases 下该 case 恰好解释 −0.011111 与 −0.002222 |
+| 2026-08-20 | `no-go` 后可直接推进 M2-R/M2-D/M3-G | 在用户就三条互斥路线（维持现状 / 重议 RE2-TT / selection objective 独立 bump）明确决定前不立项、不实现 | 用户已确认停止点为 `M1-S run → audit → bootstrap → P2-G4 go/no-go`；越过 gate 推进会使 H2/H3 失去可解释的对照基线 |
 | 2026-08-18 | HR@k 为主 | 对齐 AC@1/3/5 + Avg@5，MRR 补充 | 对齐 RCAEval 官方 evaluator |
 | 2026-08-18 | 直接进入方法开发 | 先完成 P1 Benchmark Layer | 当前任务协议、候选集合、split 和泄漏风险尚未落地 |
 | 2026-08-18 | P1 可能预切 event stages | P1 只提供完整锚点上下文 | 阶段划分属于 H1，不应固化成数据协议 |
@@ -257,6 +364,11 @@ RCAEval 参考实现固定审计 commit 为
 1. 当前分支与提交是否仍与本文件一致；
 2. 是否已有未登记的 RCA 文件、数据或实验产物；
 3. P1 冻结产物的哈希是否仍通过 `scripts/audit_p1_gates.py`；
-4. 下一项是否仍为 P2-G1 L0/T0 full streaming extraction + coverage audit。
+4. P2-G4 已收口为 `no-go`：`artifacts/p2/runs/m1_s/` 与
+   `artifacts/p2/m1_s_{summary,audit,bootstrap}.json` 均应存在，且
+   `m1_s_bootstrap.json` 的 `p2_g4_decision` 应为 `"no-go"`；
+5. 下一项**不是**继续跑实验，而是等用户在 §7 末尾三条互斥路线中做出选择；
+   在此之前不得改动冻结协议、不得引入 RE2-TT、不得修改 inner selection objective；
+6. M2-R / M2-D / M3-G 在上述决策产生前不实现；H2 / H3 未检验，不得预判结论。
 
 如仓库事实变化，以代码/测试/产物为准更新本文件，不沿用过期状态。

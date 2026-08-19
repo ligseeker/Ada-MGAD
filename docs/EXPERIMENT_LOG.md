@@ -526,3 +526,315 @@ python scripts/audit_p2_c0_metric.py
 - 负结果照常记录；不得因为结构模块无增益而只保留最优 seed。
 - H1/H2/H3 的结论至少需要 GAIA 与 RE2-OB 的一致趋势或明确解释数据集差异。
 - Oracle 与 Detected-trigger 结果分表，不能混用标题或 claim。
+
+## 19. 2026-08-19 — P2-G1-L0-T0-FULL-EXTRACTION
+
+> 记录性质：治理补账（backfill）。产物先于本记录写入，本轮未重跑 extraction；
+> 下列数值全部从既有 artifact 直读。
+
+- Evidence level: artifact-verified
+- Objective: 把 L0 log / T0 trace readers 换成可恢复的全量流式实现，并完成 GAIA
+  main 与 RE2-OB 双数据集全量 extraction 与 coverage 审计。
+- Hypothesis / gate: P2-G1 事件模态子门（不检验 H1/H2/H3）。
+- Git branch: `claudecode`
+- Git commit: `64bb681328fa1793014615a20ba2bc1fdf33c3b7`
+- Working tree status: 仅未跟踪新增文件，无已跟踪文件修改。
+- Dataset source/version/manifest: `artifacts/p1/manifests/{gaia,re2ob}`，
+  `p1_rca_manifest_v1`；raw telemetry 只经 manifest 内 URI 访问。
+- Included/excluded cases: GAIA main cohort 13,470（`artifacts/p1/inclusion/gaia/
+  main_cohort.jsonl`）；RE2-OB 全部 90。
+- RCACase schema version: `p2_feature_bundle_v2`；extractors `p2_log_l0_v1`（50 列）
+  与 `p2_trace_t0_v1`（80 列）。
+- Split manifest + seed: 本阶段不使用 split；extraction 与 fold 无关，seed 不适用。
+- T_pre / T_post: ±300 s 半开、毫秒。
+- Preprocessing fit scope: 无任何拟合量；L0 只用 raw 无词表 rate/severity/
+  message-shape，template 特征留给 train-fold-only L1。
+- Candidate-set rule: 每 case 的候选 service 完全取自 manifest inputs，
+  未出现的 candidate 一律 values=0 / mask=false。
+- Label Firewall test result: `labels_read_by_extractor=false`、
+  `masked_values_zero=true`、`all_values_finite=true`、`all_bundles_verified=true`。
+- Command:
+
+```text
+python scripts/extract_p2_event_features_smoke.py
+python scripts/extract_p2_event_features.py
+```
+
+- Config path: 脚本内默认绑定（无外部 config 文件）；raw 路径不作为 flag 暴露。
+- Output artifact path:
+  `artifacts/p2/event_features/{gaia_main,re2ob}/{p2_log_l0_v1,p2_trace_t0_v1}/`、
+  `artifacts/p2/event_feature_summary.json`（SHA-256
+  `a2ba98d4e52c566639701e1c9a16df99894c27cc4a509622c6a17b666aa2aa3d`）、
+  `artifacts/p2/event_feature_audit.json`（SHA-256
+  `27367fb5d14a46d74551a767507c119be7aeb11491bd2bc69de3aaf86e1d1ff3`）。
+- Per-case prediction path: 不适用（本阶段无 ranking 输出）。
+- Full counts: GAIA log 扫描 87,974,871 raw rows → 134,700 × 50（10 checkpoints）；
+  GAIA trace 28,681,438 → 134,700 × 80（10 checkpoints）；RE2 log 15,053,223 →
+  990 × 50（90 checkpoints）；RE2 trace 34,461,235 → 990 × 80（90 checkpoints）。
+- Coverage slices（`entity_observed_row_count` / 总 service rows）：GAIA log
+  134,670/134,700 = 0.999777；GAIA trace 134,670/134,700 = 0.999777；RE2 log
+  902/990 = 0.911111；RE2 trace 630/990 = 0.636364（严格对应 11 candidates 中
+  7 个直接可观测的 trace entities）。
+- Onset support（`absolute_min_complete_ratio`，阈值 absolute ≥ 0.80 且
+  relative-to-whole ≥ 0.90）：GAIA log 30/60/120 s = 0.964833 / 0.964706 /
+  0.964677，GAIA trace = 0.927051 / 0.926962 / 0.926962，RE2 trace = 0.995238 /
+  0.988889 / 0.988889，均 supported；**RE2 log 三档同为 0.794900，低于 0.80 绝对
+  阈值，全部 unsupported**（relative_to_whole 为 1.0，故判定只由绝对阈值触发）。
+- Overall AC@1/3/5, Avg@5, MRR: 不适用（无 ranking）。
+- Fault-type macro: 不适用。
+- Root-service macro: 不适用。
+- Runtime: 未记录（`event_feature_summary.json` 无 runtime 字段）。
+- Sanity checks: coverage audit 由 `extract_p2_event_features.py` 在同一次运行内
+  经 `verify_feature_bundle` 复验后写出，**不是**独立第二进程产物，引用时不得与
+  `run_*`/`audit_*` 成对的独立审计混称。
+- Result interpretation: 事件模态可用于 C0-L / C0-T / C1-I 的 `whole.*` 通道；
+  RE2 log 因 unsupported 不得进入任何 staged 通道。
+- Limitations / anomalies: RE2 trace 仅 0.6364 entity-observed，其融合贡献部分
+  依赖 mask 通道；RE2 log 0.794900 的缺口来自 cohort 本身而非窗口截断。
+- Decision: continue — P2-G1 事件模态子门 completed；M1-S 的 staged 通道排除 log，
+  该排除写入 run manifest 的 `log_stage_excluded`。
+
+## 20. 2026-08-19 — P2-G3-LINEAR-ABLATIONS（C0-L / C0-T / C1-I）
+
+> 记录性质：治理补账（backfill）。产物先于本记录写入，本轮未重跑三个 run；
+> 数值取自 `linear_ablation_summary.json` 与独立 `linear_ablation_audit.json`。
+
+- Evidence level: artifact-verified
+- Objective: 在与 C0-M 完全同一装置下建立两个事件单模态 scorer（C0-L / C0-T）与
+  naive early-fusion 对照（C1-I），为 M1-S 提供合法单因素基线。
+- Hypothesis / gate: P2-G3；本阶段不检验 H1（H1 需 M1-S vs C1-I）。
+- Git branch: `claudecode`
+- Git commit: `64bb681328fa1793014615a20ba2bc1fdf33c3b7`
+- Working tree status: 仅未跟踪新增文件，无已跟踪文件修改。
+- Dataset source/version/manifest: 同记录 19。
+- Included/excluded cases: GAIA main 13,470；RE2-OB 90。
+- RCACase schema version: 输入 `p2_feature_bundle_v2`；run schema
+  `p2_nested_oof_v1`。
+- Split manifest + seed: `artifacts/p1/splits/{gaia,re2ob}`，
+  `p1_split_manifest_v1`，5-fold outer OOF，seed `20260819`。
+- T_pre / T_post: ±300 s 半开、毫秒。
+- Preprocessing fit scope: StandardScaler 与 L2 logistic 只在当前 fit rows 拟合；
+  每 case root 权重 0.5、全部 non-root 合计 0.5；outer-test labels 不参与
+  fit 或 selection。
+- Candidate-set rule: 输出每 case 的完整候选排列，分数并列按 service name 升序。
+- Design: 只用 `whole.*` 值列及等宽 masks —— C0-L 5/10，C0-T 8/16，
+  C1-I 30/60（metric 17 + log 5 + trace 8 拼接）；不含 stage、service identity、
+  fault type、root frequency。
+- Label Firewall test result: predictions 归一化后 root/fault/ground-truth token
+  零命中；`label_free_predictions=true`（三方法、两数据集）。
+- Command:
+
+```text
+python scripts/run_p2_linear_ablations.py
+python scripts/audit_p2_linear_ablations.py
+```
+
+- Config path: 脚本内默认绑定；`C ∈ {0.01,0.1,1,10}`；inner 目标唯一为
+  root-service macro Avg@5；并列优先较小 C。
+- Output artifact path: `artifacts/p2/runs/{c0_l,c0_t,c1_i}/{gaia_main,re2ob}/`、
+  `artifacts/p2/linear_ablation_summary.json`（SHA-256
+  `ef1d3aa46f961dbf77776882d3c2234e26f5e474090e047bee2711654b62a718`）、
+  `artifacts/p2/linear_ablation_audit.json`（SHA-256
+  `003655fc3207d7831f92d2d4d1631ab7bdeefbde17275acd5d67a717cdba75e3`）。
+- Per-case prediction path:
+  `artifacts/p2/runs/<method>/<dataset>/predictions.jsonl`。
+- Overall AC@1/Avg@5: GAIA C0-L 0.0856/0.4141，C0-T 0.3566/0.5043，
+  C1-I 0.3376/0.6691；RE2 C0-L 0.2889/0.4667，C0-T 0.6222/0.8156，
+  C1-I 0.9778/0.9956（RE2 单例分层，三层同值）。
+- Fault-type macro AC@1/Avg@5: GAIA C0-L 0.4180/0.5731，C0-T 0.4971/0.6096，
+  C1-I 0.6020/0.7541。
+- Root-service macro AC@1/Avg@5（主端点层）: GAIA C0-L 0.1622/0.3567，
+  C0-T 0.1722/0.3549，C1-I 0.3656/0.6072；RE2 C0-L 0.2889/0.4667，
+  C0-T 0.6222/0.8156，C1-I 0.9778/0.9956。
+- Delta vs best single modality（两数据集均为 C0-M）root-macro AC@1/Avg@5:
+  GAIA −0.0911/**+0.0253**；RE2 +0.0667/**+0.0200**。
+  `c1_i_primary_improved=true`（两侧），
+  `c1_i_exploratory_signal_both_datasets=true`。
+- Delta vs P1 B2 metric-change root-macro AC@1/Avg@5: GAIA −0.1655/−0.1013；
+  RE2 +0.1222/+0.0622。（B2 基数直读
+  `artifacts/p1/baselines/{gaia_main,re2ob}/metric_change/metrics.json`：
+  GAIA root-macro 0.531066/0.708573，RE2 0.855556/0.933333。）
+- Runtime: C0-L GAIA 114.41 s / RE2 0.71 s；C0-T 131.06 s / 0.78 s；
+  C1-I 848.98 s / 8.58 s（均 `informational_only`）。
+- Sanity checks: 每方法每数据集 5 outer fits + 80 inner fits；outer train/test 的
+  case overlap 与 group overlap 全为 0；inner fit/validation overlap 全为 0；
+  rankings 经 evaluator 独立重算且与记录逐字相等；selected C 可由保存的 inner
+  objective 重建；run manifest 内每个核心文件 SHA-256 校验通过。
+- Per-fold（root-macro Avg@5）: GAIA C1-I 0.6276/0.6038/0.5986/0.5879/0.6135，
+  五折无反转；GAIA 各 outer fold 选中 C 均为 10；RE2 C1-I 为
+  1.0000/0.9767/1.0000/1.0000/1.0000。逐 fold 切片由 predictions + 冻结
+  assignments 重算补齐，**未写回 summary artifact**。
+- Code checks（补账时点）: 全套 106/106 tests、`compileall`、`git diff --check`
+  通过。
+- Result interpretation: naive 拼接在两数据集主端点均优于任一单模态，构成
+  exploratory 级融合信号；但 GAIA 次端点 AC@1 明显退化，且 GAIA 上所有 learned
+  方法主端点仍低于未学习的 P1 B2。
+- Limitations / anomalies: (1) GAIA 两个事件单模态在主端点接近低信息水平
+  （0.3567/0.3549），其 overall 层优于 metric-only 反映类别频率相关信号而非 root
+  区分度；(2) RE2-OB C1-I 已达 0.9956，天花板效应使该数据集对后续方法区分度极低；
+  (3) RE2-OB 单例分层使三层指标同值。
+- Decision: continue — P2-G3 completed；不得宣称学习式融合优于 metric-change
+  基线；GAIA AC@1 退化仅作为诊断结果，不作为修改 inner selection objective 的
+  依据（用户已确认：改动会破坏 H1 的单因素可解释性）。
+
+## 21. 2026-08-19 — P2-G3-C1-I-PAIRED-BOOTSTRAP
+
+> 记录性质：治理补账（backfill）。数值直读 `artifacts/p2/c1_i_bootstrap.json`。
+
+- Evidence level: artifact-verified
+- Objective: 用冻结的配对 bootstrap 判定 C1-I 相对 best single modality 的
+  exploratory / claim-ready 门禁状态。
+- Hypothesis / gate: P2-G3 统计收口；不检验 H1。
+- Git branch: `claudecode`
+- Git commit: `64bb681328fa1793014615a20ba2bc1fdf33c3b7`
+- Working tree status: 仅未跟踪新增文件，无已跟踪文件修改。
+- Dataset source/version/manifest: 同记录 19；比较对象由
+  `linear_ablation_audit.json` → `best_single_comparison` 决定，两数据集均为
+  `c0_m`。
+- Split manifest + seed: 同记录 20；bootstrap seed `20260819`，
+  `numpy.default_rng/PCG64`，10,000 次。
+- Resampling unit: GAIA 按 322 context group；RE2-OB 按 90 case。
+- Preprocessing fit scope: 不适用（只对已保存 rankings 重采样，不重新拟合模型）。
+- Label Firewall test result: 只读 predictions 与 labels 用于评估；无模型拟合，
+  故无泄漏面。
+- Command:
+
+```text
+python scripts/bootstrap_p2_c1_i.py
+```
+
+- Output artifact path: `artifacts/p2/c1_i_bootstrap.json`（schema
+  `p2_c1_i_paired_bootstrap_v1`，SHA-256
+  `f7399673340d7af540af2336e997ef5fffb4ca7495247a72e36597a95ca77212`）。
+- Root-service macro Avg@5（主端点，C1-I 减 C0-M）: GAIA point +0.025261，
+  95% CI [−0.003557, +0.056340]，P(Δ ≤ 0) = 0.0445；RE2 point +0.020000，
+  95% CI [+0.002514, +0.040000]，P(Δ ≤ 0) = 0.0118。
+- Root-service macro AC@1（关键次端点）: GAIA point −0.091132，
+  95% CI [−0.132206, −0.049165]，P(Δ ≤ 0) = 1.0000；RE2 point +0.066667，
+  95% CI [+0.002050, +0.133333]，P(Δ ≤ 0) = 0.0223。
+- Gate 判定: `exploratory_signal = true`（两数据集主端点点估计均为正）；
+  `claim_ready = false`，两项检查均不通过 ——
+  `both_primary_ci_lower_bounds_positive = false`（GAIA CI 下界 −0.003557 ≤ 0），
+  `both_secondary_point_deltas_at_least_minus_0_01 = false`（GAIA AC@1
+  −0.091132 < −0.01）。
+- Runtime: 未单列记录。
+- Sanity checks: point estimate 与 OOF 报表逐位一致；重采样单位数与
+  `resampling_unit_count`（GAIA 322、RE2 90）一致；root service 数 GAIA 10 / RE2 5。
+- Result interpretation: C1-I 只达到 exploratory 级信号，不可用于任何论文级
+  claim；GAIA 主端点 CI 跨 0 且次端点显著退化。
+- Limitations / anomalies: GAIA CI 下界仅 −0.003557，接近但未越过 0，说明当前
+  样本与重采样单位下融合增益不稳定；RE2 的正结果受天花板效应影响，不能单独支撑
+  结论。
+- Decision: continue — 以 `exploratory_signal=true / claim_ready=false` 收口
+  P2-G3，进入 P2-G4（M1-S run → 独立 audit → M1-S vs C1-I 配对 bootstrap）；
+  不因本结果改动冻结协议、不缩减 C/onset 网格、暂不引入 RE2-TT。
+
+## 22. 2026-08-20 — P2-G4-M1-S（run + independent audit + paired bootstrap）
+
+> 记录性质：实时记录。数值直读 `artifacts/p2/m1_s_summary.json`、
+> `artifacts/p2/m1_s_audit.json`、`artifacts/p2/m1_s_bootstrap.json`。
+
+- Evidence level: artifact-verified
+- Objective: 在冻结的 nested OOF 装置内，以 event-stage 通道为**唯一**变化因素，
+  检验 H1（stage-aware 表征是否优于 naive early fusion C1-I）。
+- Hypothesis / gate: H1；P2-G4 go/no-go。
+- Git branch: `claudecode`
+- Git commit: `64bb681328fa1793014615a20ba2bc1fdf33c3b7`
+- Working tree status: `scripts/run_p2_m1_stage.py` 与 `src/` 为该提交的未修改
+  版本；工作树另有治理文档修改（`docs/{README,RESEARCH_STATUS,EXPERIMENT_LOG}.md`）
+  与未跟踪新增文件（`scripts/{audit_p2_m1_stage,bootstrap_p2_m1_s}.py`、
+  `tests/test_m1_stage_{audit,bootstrap}.py`、`docs/P2_G{3,4}_*.md`、`CLAUDE.md`）。
+- Dataset source/version/manifest: GAIA main 13,470 cases
+  (`dataset_manifest_sha256` `69fe14c41e165a9a734649586fa7ab8df09685607ad51ef0cd5c4a99e77e1cbd`)
+  与 RE2-OB 90 cases；特征绑定为
+  `artifacts/p2/features/<ds>/p2_metric_summary_v1` +
+  `artifacts/p2/event_features/<ds>/{p2_log_l0_v1,p2_trace_t0_v1}`，
+  manifest SHA-256 逐一记录在 run manifest 的 `source.features`。
+- Split manifest + seed: `artifacts/p1/splits/{gaia,re2ob}`，
+  `p1_split_manifest_v1`，5-fold OOF，seed `20260819`；GAIA
+  `split_assignment_sha256` `996a03698f77fa8128c737ffc6547fe767e3f5d9d8fd7b430d86341c6dac7c90`。
+- Design: C1-I 的 `whole.` metric+log+trace（30 值）加 selected-onset 的
+  metric+trace `stage{60|120}.`（51 + 24 = 75 值），共 105 值 + 105 masks =
+  **210 列**（audit `design_column_count` 两数据集均为 210）。log 的 staged 通道
+  按已冻结决策排除，理由记于 run manifest `log_stage_excluded`。
+- Grid: `C ∈ {0.01,0.1,1,10}` × `onset ∈ {60,120}`，未缩减；每 outer fold 32
+  inner fits ⇒ 每数据集 **160 inner + 5 outer fits**（audit `inner_fit_count` = 160）。
+- Preprocessing fit scope: StandardScaler 仅在当前 fit rows 上拟合；inner
+  validation 唯一目标为 inner root-service macro Avg@5，tie-break 为较小 C →
+  较短 onset（**未修改**）。
+- Label Firewall test result: `label_free_predictions = true`、
+  `label_firewall_flags_all_false = true`（两数据集）。
+- Command:
+
+```text
+nohup setsid python -u scripts/run_p2_m1_stage.py > logs/m1_s_run.log 2>&1 < /dev/null &
+python scripts/audit_p2_m1_stage.py
+python scripts/bootstrap_p2_m1_s.py
+```
+
+- Output artifact path: `artifacts/p2/runs/m1_s/{gaia_main,re2ob}/`；
+  `artifacts/p2/m1_s_summary.json`（`p2_nested_oof_v1`，SHA-256
+  `d77b31436e1eb0c0ec6dac61ad917d31418d82988e1b819b61c84be17a5dc495`）；
+  `artifacts/p2/m1_s_audit.json`（`p2_m1_stage_audit_v1`，SHA-256
+  `930c3ae14269a3dc7ecb64187f18f2297efd37605bf6a0fd2d0b7fe247f82910`）；
+  `artifacts/p2/m1_s_bootstrap.json`（`p2_m1_s_paired_bootstrap_v1`，SHA-256
+  `65788c2dd7f8c79d82c4494255cf2b2295e64ab8f983f9ea48b33ca84f0b323a`）；
+  run manifests `b774070c77b4fa4ae9e01bcc055111992fc52208aba1ca859bffa0de41667687`
+  (GAIA) / `e96efb25ea73845ab01c368ca51ea692a141be1948d1eae1f33fddc3b785f0bb` (RE2)。
+- Root-service macro（主层，OOF）: GAIA AC@1 0.405516 / Avg@5 0.631871；
+  RE2-OB AC@1 0.966667 / Avg@5 0.993333。
+- Overall / fault-type macro: GAIA overall 0.518486 / 0.808552，fault-macro
+  0.646138 / 0.793613；RE2-OB 三层同值（单例分层）。
+- 相对 C1-I 的主层差值（单因素对照）: GAIA AC@1 +0.039918 / Avg@5 +0.024646；
+  RE2-OB AC@1 −0.011111 / Avg@5 −0.002222。
+- 相对其他参照的主端点差值: vs C0-M GAIA +0.049907 / RE2 +0.017778；
+  vs P1 B2 GAIA **−0.076702** / RE2 +0.060000。
+- Selected 超参: GAIA 五折均为 C=10、onset=60 s；RE2-OB 为 C 1/1/10/0.1/0.1、
+  onset 120/60/120/120/120 s。
+- Paired bootstrap（10,000 次，seed `20260819`，GAIA 按 322 context group、
+  RE2 按 90 case）: GAIA 主端点 point +0.024646，95% CI
+  [+0.005371, +0.043954]，P(Δ ≤ 0) = 0.0070；GAIA 次端点 point +0.039918，
+  95% CI [+0.008128, +0.070546]，P(Δ ≤ 0) = 0.0066；RE2 主端点 point −0.002222,
+  95% CI [−0.007500, 0.000000]，P(Δ ≤ 0) = 1.0000；RE2 次端点 point −0.011111,
+  95% CI [−0.037500, 0.000000]，P(Δ ≤ 0) = 1.0000。
+- Gate 判定: `exploratory_signal = false`（RE2 主端点点估计为负）；
+  `claim_ready = false`，两项检查均不通过 ——
+  `both_primary_ci_lower_bounds_positive = false`（RE2 CI 下界 −0.007500 ≤ 0），
+  `both_secondary_point_deltas_at_least_minus_0_01 = false`（RE2 AC@1
+  −0.011111 < −0.01）。⇒ `p2_g4_decision = "no-go"`。
+- Runtime: GAIA 12,326.37 s（≈3 h 25 min）、RE2-OB 24.01 s，均标记
+  `informational_only=true` 且排除在核心 checksum 之外。
+- Sanity checks: audit 独立重算 metrics 与记录逐位相等；
+  `outer_fold_count`=5、`inner_fit_count`=160、`outer_fold_ids_match_frozen_split`
+  与 `prediction_folds_match_frozen_split` 均 true；outer train/test case 与 group
+  overlap、inner fit/validation case 与 group overlap 全部为 0；selected C 与
+  onset 均可由保存的 inner objective 重建；run manifest 内每个核心文件 SHA-256
+  校验通过；对照方 C1-I 亦经
+  `comparator_metrics_exactly_recomputed=true` / `comparator_core_files_verified=true`
+  复验；bootstrap 的 point delta 与 audit 的 `root_service_macro` delta 交叉一致
+  （容差 1e-12）；第二次运行 audit 与 bootstrap（输出至 scratch 路径，未覆盖既有
+  产物）得到逐字节相同 SHA-256。
+- Result interpretation: **H1 在冻结门禁下未获支持。** GAIA 上 stage 通道同时改善
+  主端点与次端点（两端点 CI 下界均 > 0），但 RE2-OB 上主端点符号为负且次端点越过
+  −0.01 guardrail，因此不满足"两数据集同向"的 exploratory 条件。M1-S 与 C1-I 的
+  门禁失败原因互补（C1-I 败于 GAIA 次端点，M1-S 败于 RE2 主端点与次端点），两个
+  gate 均未出现两数据集同向证据。GAIA 上 M1-S 主端点仍低于未学习的 P1 B2
+  （−0.0767，C1-I 时为 −0.1013），"learned 方法在 GAIA 主端点不优于 B2"的结论
+  在本 gate 依然成立。
+- Limitations / anomalies: RE2-OB 的全部退化溯源为**单个 case**
+  `re2ob-c9c8f348d3f5974b`（fold_1，root `recommendationservice`）的 root 由
+  rank 1 落到 rank 2 —— 逐 case 比对显示 89/90 个 case 仅发生尾部重排，只有
+  1/90 个 case 的 root 排名位置变化；5 root × 18 cases 下该 case 使宏平均 AC@1
+  降 (1/18)/5 = 0.011111、Avg@5 降 0.002222，与记录值逐位一致，且 AC@3/AC@5
+  差值恰为 0.0。这是 P2-G3 已记录的 RE2-OB 天花板效应（C1-I 已达 0.9956）在门禁上
+  的直接后果；该溯源**只作诊断，不改变判定**，也不构成放宽阈值的依据。本次
+  guardrail 差值 −0.011111 与 −0.01 的距离远大于浮点误差，无边界歧义。另：
+  两数据集 inner selection 落在不同 onset（GAIA 全 60 s、RE2 多为 120 s）；M1-S
+  同时引入 stage 切分与 75 个新值列，无法分离"切分本身"与"维度增加"的贡献；逐 fold
+  切片与单 case 溯源由 predictions 重算，未写回 summary artifact。
+- Decision: stop — 按既定停止点（`M1-S run → independent audit → paired bootstrap
+  → P2-G4 go/no-go`）在此收口。不因本结果改动任何冻结协议、不缩减 C/onset 网格、
+  不修改 inner selection objective、不引入 RE2-TT、不实现 M2-R/M2-D/M3-G。
+  后续路线（维持 H1 未获支持的叙述 / 重新讨论 RE2-TT / 对 selection objective 做
+  独立 protocol version bump + sensitivity experiment）三者互斥，须由用户明确决定
+  后另开 gate。H2 / H3 仍未检验。
