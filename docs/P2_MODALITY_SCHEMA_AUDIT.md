@@ -8,7 +8,7 @@
 - Verification Status: UNVERIFIED
 - Version Label: p2_modality_schema_audit_v0.1
 
-> 状态：raw schema、L0/T0 纯函数与真实双数据集 smoke completed；全量 pending
+> 状态：raw schema、L0/T0 纯函数、真实 smoke 与全量可恢复提取 completed
 
 ## 1. 审计范围
 
@@ -108,13 +108,33 @@ diagnostics 的 log/trace 共同覆盖区间中点选择一个 main case，并�
 全部一致。RE2 T0 的 560 observed cells 恰为 7 entities × 80 features；其余四个
 候选 values=0/mask=false，证明缺失实体未被当成零异常活动。
 
-## 6. 仍待验证
+## 6. 全量结果与 stage 决策
 
-- 30 s log/trace onset 是否具备足够事件覆盖；该结论不能从 metric coverage 外推；
-- RE2 trace 的候选缺失对 C0-T macro 指标影响；
+全量 reader 按 GAIA service、RE2 case-modality 写 checksum-bound 检查点，并在
+最终 bundle 发布前验证 source binding、shape、dtype、finite 与 masked-zero。
+
+| Dataset / modality | Raw rows | Service rows | Entity-observed | Whole content-complete | 30/60/120 support |
+|---|---:|---:|---:|---:|---|
+| GAIA L0 | 87,974,871 | 134,700 | 134,670 | 0.964914 | all supported |
+| GAIA T0 | 28,681,438 | 134,700 | 134,670 | 0.927155 | all supported |
+| RE2 L0 | 15,053,223 | 990 | 902 | 0.794900 | none supported |
+| RE2 T0 | 34,461,235 | 990 | 630 | 1.000000 | all supported |
+
+support 门槛在查看全量 coverage 前固定为 content-complete 绝对比率至少 0.80，且
+不低于 whole 的 0.90。GAIA 两模态三个 onset 都通过；RE2 T0 通过；RE2 L0
+因 0.794900 略低于绝对门槛而不进入统一 M1-S staged 通道。该决定不删除 L0 whole，
+也不把缺失 trace candidates 当零异常。
+
+四个 bundle 的 raw row totals 与 P1 全量诊断精确相等；GAIA logs 有 294 个无效
+时间戳行、traces 为 0，RE2 两模态均为 0。RE2 trace 未发现冻结 alias 之外的未知
+raw entity。全量 audit SHA-256 为
+`27367fb5d14a46d74551a767507c119be7aeb11491bd2bc69de3aaf86e1d1ff3`。
+
+## 7. 仍待验证
+
+- RE2 trace 的候选缺失为何仍可得到较高 C0-T overall、但 GAIA root-macro 较低；
 - L1 template parser/vocabulary 的 train-fold-only 实现成本；
 - parent graph 的 operation/entity alias 是否还需新增，新增必须通过全量未知实体审计。
 
-下一步把 reader 改为全量流式/可恢复实现并扫描全部 logs/traces；不得复用 RE2 已
-派生 `log_template` 作为 GAIA raw L0 的替代，也不能仅凭单 case smoke 宣称总体
-coverage 足够。
+下一步按冻结的 metric+trace staged 设计运行 M1-S；不得因 C1-I 结果反向改变
+coverage 门槛或加入 RE2 已派生 `log_template`。

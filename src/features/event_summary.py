@@ -84,6 +84,25 @@ def _validate_common(timestamps_ms, anchor_ms, pre_ms, post_ms, onset_seconds):
     )
 
 
+def _validate_parameters(pre_ms, post_ms, onset_seconds, score_cap):
+    if pre_ms <= 0 or post_ms <= 0:
+        raise ValueError("event windows must be positive")
+    onsets = tuple(int(value) for value in onset_seconds)
+    if tuple(sorted(set(onsets))) != DEFAULT_EVENT_ONSET_SECONDS:
+        raise ValueError("event schema requires onset boundaries 30/60/120 s")
+    if score_cap <= 0:
+        raise ValueError("event score cap must be positive")
+    return onsets
+
+
+def _prepare_timestamps(timestamps_ms):
+    timestamps = np.asarray(timestamps_ms, dtype=np.int64)
+    if timestamps.ndim != 1:
+        raise ValueError("event timestamps must be one-dimensional")
+    order = np.argsort(timestamps, kind="mergesort")
+    return timestamps[order], order
+
+
 def _segments(timestamps, interval):
     _, left_start, left_end, right_start, right_end = interval
     return (
@@ -138,6 +157,18 @@ def _text_aligned(values, order, expected_length, field_name):
                 missing = False
         normalized.append("" if missing else str(value))
     return np.asarray(normalized, dtype=str)[order]
+
+
+def _code_aligned(values, order, expected_length, field_name):
+    array = np.asarray(values)
+    if array.shape != (expected_length,) or not np.issubdtype(
+        array.dtype, np.integer
+    ):
+        raise ValueError("{} must be aligned integer codes".format(field_name))
+    result = array.astype(np.int64, copy=False)[order]
+    if np.any(result < -1):
+        raise ValueError("{} may use only -1 as a missing code".format(field_name))
+    return result
 
 
 def _fraction(values, segment):
@@ -196,38 +227,59 @@ def log_feature_names() -> Tuple[str, ...]:
     return tuple(names)
 
 
-def log_stream_features(
-    timestamps_ms: Sequence[int],
-    error_flags: Sequence[float],
-    message_lengths: Sequence[float],
-    anchor_ms: int,
-    entity_observed: bool = True,
-    pre_ms: int = 300000,
-    post_ms: int = 300000,
-    onset_seconds: Sequence[int] = DEFAULT_EVENT_ONSET_SECONDS,
-    score_cap: float = 20.0,
-) -> Tuple[Tuple[str, ...], Tuple[float, ...], Tuple[bool, ...]]:
-    """Compute raw, vocabulary-free log change features for one service."""
+def _log_features_sorted(
+    timestamps,
+    errors,
+    lengths,
+    anchor_ms,
+    entity_observed,
+    pre_ms,
+    post_ms,
+    onset_seconds,
+    score_cap,
+):
+    intervals = _comparison_intervals(
+        int(anchor_ms), int(pre_ms), int(post_ms), onset_seconds
+    )
+    segment_cache = {}
 
-    if not isinstance(entity_observed, bool) or score_cap <= 0:
-        raise ValueError("log entity flag and score cap are invalid")
-    timestamps, order, intervals = _validate_common(
-        timestamps_ms, anchor_ms, pre_ms, post_ms, onset_seconds
-    )
-    errors = _binary_aligned(error_flags, order, len(order), "error flags")
-    lengths = _nonnegative_aligned(
-        message_lengths, order, len(order), "message lengths"
-    )
+    def summarize(segment):
+        if segment not in segment_cache:
+            error, error_ok = _fraction(errors, segment)
+            mean, std, length_ok = _mean_std(lengths, segment)
+            segment_cache[segment] = (
+                segment.right - segment.left,
+                _active_fraction(timestamps, segment),
+                error,
+                error_ok,
+                mean,
+                std,
+                length_ok,
+            )
+        return segment_cache[segment]
+
     values = []
     masks = []
     for interval in intervals:
         left, right = _segments(timestamps, interval)
-        left_count = left.right - left.left
-        right_count = right.right - right.left
-        left_error, left_error_ok = _fraction(errors, left)
-        right_error, right_error_ok = _fraction(errors, right)
-        left_mean, left_std, left_length_ok = _mean_std(lengths, left)
-        right_mean, right_std, right_length_ok = _mean_std(lengths, right)
+        (
+            left_count,
+            left_active,
+            left_error,
+            left_error_ok,
+            left_mean,
+            left_std,
+            left_length_ok,
+        ) = summarize(left)
+        (
+            right_count,
+            right_active,
+            right_error,
+            right_error_ok,
+            right_mean,
+            right_std,
+            right_length_ok,
+        ) = summarize(right)
         block_values = (
             _log_rate_shift(
                 left_count,
@@ -236,8 +288,7 @@ def log_stream_features(
                 right.duration_seconds,
                 score_cap,
             ),
-            _active_fraction(timestamps, right)
-            - _active_fraction(timestamps, left),
+            right_active - left_active,
             right_error - left_error,
             _standardized_mean_shift(
                 left_mean, left_std, right_mean, right_std, score_cap
@@ -257,6 +308,80 @@ def log_stream_features(
         )
         masks.extend(block_masks)
     return log_feature_names(), tuple(values), tuple(masks)
+
+
+class PreparedLogStream:
+    """Validated log arrays sorted once for many case-window queries."""
+
+    def __init__(
+        self,
+        timestamps_ms: Sequence[int],
+        error_flags: Sequence[float],
+        message_lengths: Sequence[float],
+        entity_observed: bool = True,
+        pre_ms: int = 300000,
+        post_ms: int = 300000,
+        onset_seconds: Sequence[int] = DEFAULT_EVENT_ONSET_SECONDS,
+        score_cap: float = 20.0,
+    ):
+        if not isinstance(entity_observed, bool):
+            raise ValueError("log entity flag must be bool")
+        self.onset_seconds = _validate_parameters(
+            pre_ms, post_ms, onset_seconds, score_cap
+        )
+        self.pre_ms = int(pre_ms)
+        self.post_ms = int(post_ms)
+        self.score_cap = float(score_cap)
+        self.entity_observed = entity_observed
+        self.timestamps, order = _prepare_timestamps(timestamps_ms)
+        self.errors = _binary_aligned(
+            error_flags, order, len(order), "error flags"
+        )
+        self.lengths = _nonnegative_aligned(
+            message_lengths, order, len(order), "message lengths"
+        )
+
+    def features(self, anchor_ms: int, entity_observed: Optional[bool] = None):
+        observed = self.entity_observed if entity_observed is None else entity_observed
+        if not isinstance(observed, bool):
+            raise ValueError("log entity flag must be bool")
+        return _log_features_sorted(
+            self.timestamps,
+            self.errors,
+            self.lengths,
+            anchor_ms,
+            observed,
+            self.pre_ms,
+            self.post_ms,
+            self.onset_seconds,
+            self.score_cap,
+        )
+
+
+def log_stream_features(
+    timestamps_ms: Sequence[int],
+    error_flags: Sequence[float],
+    message_lengths: Sequence[float],
+    anchor_ms: int,
+    entity_observed: bool = True,
+    pre_ms: int = 300000,
+    post_ms: int = 300000,
+    onset_seconds: Sequence[int] = DEFAULT_EVENT_ONSET_SECONDS,
+    score_cap: float = 20.0,
+) -> Tuple[Tuple[str, ...], Tuple[float, ...], Tuple[bool, ...]]:
+    """Compute raw, vocabulary-free log change features for one service."""
+
+    stream = PreparedLogStream(
+        timestamps_ms,
+        error_flags,
+        message_lengths,
+        entity_observed=entity_observed,
+        pre_ms=pre_ms,
+        post_ms=post_ms,
+        onset_seconds=onset_seconds,
+        score_cap=score_cap,
+    )
+    return stream.features(anchor_ms)
 
 
 @lru_cache(maxsize=1)
@@ -288,65 +413,88 @@ def _quantiles(values, segment):
 
 def _unique_rate(values, segment):
     selected = values[segment.left : segment.right]
-    valid = selected[selected != ""]
+    if np.issubdtype(selected.dtype, np.integer):
+        valid = selected[selected >= 0]
+    else:
+        valid = selected[selected != ""]
     if valid.size == 0:
         return 0.0, False
     return float(np.unique(valid).size / segment.duration_seconds), True
 
 
-def trace_stream_features(
-    timestamps_ms: Sequence[int],
-    durations_seconds: Sequence[float],
-    error_flags: Sequence[float],
-    trace_ids: Sequence[str],
-    operations: Sequence[str],
-    parent_present: Sequence[float],
-    anchor_ms: int,
-    entity_observed: bool = True,
-    pre_ms: int = 300000,
-    post_ms: int = 300000,
-    onset_seconds: Sequence[int] = DEFAULT_EVENT_ONSET_SECONDS,
-    score_cap: float = 20.0,
-) -> Tuple[Tuple[str, ...], Tuple[float, ...], Tuple[bool, ...]]:
-    """Compute non-graph trace change features for one service."""
+def _trace_features_sorted(
+    timestamps,
+    durations,
+    errors,
+    traces,
+    operations_array,
+    parents,
+    anchor_ms,
+    entity_observed,
+    pre_ms,
+    post_ms,
+    onset_seconds,
+    score_cap,
+):
+    intervals = _comparison_intervals(
+        int(anchor_ms), int(pre_ms), int(post_ms), onset_seconds
+    )
+    segment_cache = {}
 
-    if not isinstance(entity_observed, bool) or score_cap <= 0:
-        raise ValueError("trace entity flag and score cap are invalid")
-    timestamps, order, intervals = _validate_common(
-        timestamps_ms, anchor_ms, pre_ms, post_ms, onset_seconds
-    )
-    durations = _nonnegative_aligned(
-        durations_seconds, order, len(order), "trace durations"
-    )
-    errors = _binary_aligned(error_flags, order, len(order), "trace error flags")
-    parents = _binary_aligned(
-        parent_present, order, len(order), "parent-presence flags"
-    )
-    traces = _text_aligned(trace_ids, order, len(order), "trace identifiers")
-    operations_array = _text_aligned(
-        operations, order, len(order), "trace operations"
-    )
+    def summarize(segment):
+        if segment not in segment_cache:
+            error, error_ok = _fraction(errors, segment)
+            duration, duration_ok = _quantiles(durations, segment)
+            trace_rate, trace_ok = _unique_rate(traces, segment)
+            operation_rate, operation_ok = _unique_rate(
+                operations_array, segment
+            )
+            parent, parent_ok = _fraction(parents, segment)
+            segment_cache[segment] = (
+                segment.right - segment.left,
+                error,
+                error_ok,
+                duration,
+                duration_ok,
+                trace_rate,
+                trace_ok,
+                operation_rate,
+                operation_ok,
+                parent,
+                parent_ok,
+            )
+        return segment_cache[segment]
 
     values = []
     masks = []
     for interval in intervals:
         left, right = _segments(timestamps, interval)
-        left_count = left.right - left.left
-        right_count = right.right - right.left
-        left_error, left_error_ok = _fraction(errors, left)
-        right_error, right_error_ok = _fraction(errors, right)
-        left_duration, left_duration_ok = _quantiles(durations, left)
-        right_duration, right_duration_ok = _quantiles(durations, right)
-        left_trace_rate, left_trace_ok = _unique_rate(traces, left)
-        right_trace_rate, right_trace_ok = _unique_rate(traces, right)
-        left_operation_rate, left_operation_ok = _unique_rate(
-            operations_array, left
-        )
-        right_operation_rate, right_operation_ok = _unique_rate(
-            operations_array, right
-        )
-        left_parent, left_parent_ok = _fraction(parents, left)
-        right_parent, right_parent_ok = _fraction(parents, right)
+        (
+            left_count,
+            left_error,
+            left_error_ok,
+            left_duration,
+            left_duration_ok,
+            left_trace_rate,
+            left_trace_ok,
+            left_operation_rate,
+            left_operation_ok,
+            left_parent,
+            left_parent_ok,
+        ) = summarize(left)
+        (
+            right_count,
+            right_error,
+            right_error_ok,
+            right_duration,
+            right_duration_ok,
+            right_trace_rate,
+            right_trace_ok,
+            right_operation_rate,
+            right_operation_ok,
+            right_parent,
+            right_parent_ok,
+        ) = summarize(right)
         block_values = (
             _log_rate_shift(
                 left_count,
@@ -382,3 +530,104 @@ def trace_stream_features(
         )
         masks.extend(block_masks)
     return trace_feature_names(), tuple(values), tuple(masks)
+
+
+class PreparedTraceStream:
+    """Validated trace arrays sorted once for many case-window queries."""
+
+    def __init__(
+        self,
+        timestamps_ms: Sequence[int],
+        durations_seconds: Sequence[float],
+        error_flags: Sequence[float],
+        trace_ids,
+        operations,
+        parent_present: Sequence[float],
+        entity_observed: bool = True,
+        pre_ms: int = 300000,
+        post_ms: int = 300000,
+        onset_seconds: Sequence[int] = DEFAULT_EVENT_ONSET_SECONDS,
+        score_cap: float = 20.0,
+        identifier_codes: bool = False,
+    ):
+        if not isinstance(entity_observed, bool):
+            raise ValueError("trace entity flag must be bool")
+        if not isinstance(identifier_codes, bool):
+            raise ValueError("identifier_codes must be bool")
+        self.onset_seconds = _validate_parameters(
+            pre_ms, post_ms, onset_seconds, score_cap
+        )
+        self.pre_ms = int(pre_ms)
+        self.post_ms = int(post_ms)
+        self.score_cap = float(score_cap)
+        self.entity_observed = entity_observed
+        self.timestamps, order = _prepare_timestamps(timestamps_ms)
+        length = len(order)
+        self.durations = _nonnegative_aligned(
+            durations_seconds, order, length, "trace durations"
+        )
+        self.errors = _binary_aligned(
+            error_flags, order, length, "trace error flags"
+        )
+        self.parents = _binary_aligned(
+            parent_present, order, length, "parent-presence flags"
+        )
+        align = _code_aligned if identifier_codes else _text_aligned
+        self.traces = align(trace_ids, order, length, "trace identifiers")
+        self.operations = align(operations, order, length, "trace operations")
+
+    @classmethod
+    def from_identifier_codes(cls, *args, **kwargs):
+        kwargs["identifier_codes"] = True
+        return cls(*args, **kwargs)
+
+    def features(self, anchor_ms: int, entity_observed: Optional[bool] = None):
+        observed = self.entity_observed if entity_observed is None else entity_observed
+        if not isinstance(observed, bool):
+            raise ValueError("trace entity flag must be bool")
+        return _trace_features_sorted(
+            self.timestamps,
+            self.durations,
+            self.errors,
+            self.traces,
+            self.operations,
+            self.parents,
+            anchor_ms,
+            observed,
+            self.pre_ms,
+            self.post_ms,
+            self.onset_seconds,
+            self.score_cap,
+        )
+
+
+def trace_stream_features(
+    timestamps_ms: Sequence[int],
+    durations_seconds: Sequence[float],
+    error_flags: Sequence[float],
+    trace_ids: Sequence[str],
+    operations: Sequence[str],
+    parent_present: Sequence[float],
+    anchor_ms: int,
+    entity_observed: bool = True,
+    pre_ms: int = 300000,
+    post_ms: int = 300000,
+    onset_seconds: Sequence[int] = DEFAULT_EVENT_ONSET_SECONDS,
+    score_cap: float = 20.0,
+) -> Tuple[Tuple[str, ...], Tuple[float, ...], Tuple[bool, ...]]:
+    """Compute non-graph trace change features for one service."""
+
+    stream = PreparedTraceStream(
+        timestamps_ms,
+        durations_seconds,
+        error_flags,
+        trace_ids,
+        operations,
+        parent_present,
+        entity_observed=entity_observed,
+        pre_ms=pre_ms,
+        post_ms=post_ms,
+        onset_seconds=onset_seconds,
+        score_cap=score_cap,
+    )
+    return stream.features(anchor_ms)

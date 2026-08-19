@@ -1,7 +1,11 @@
 import math
 import unittest
 
+import numpy as np
+
 from src.features import (
+    PreparedLogStream,
+    PreparedTraceStream,
     RE2_TRACE_SERVICE_ALIASES,
     log_stream_features,
     normalize_trace_service,
@@ -82,6 +86,52 @@ class EventFeatureTest(unittest.TestCase):
             trace_stream_features(
                 (0,), (-1,), (0,), (None,), (None,), (0,), 0
             )
+
+    def test_prepared_streams_match_scalar_and_accept_exact_identifier_codes(self):
+        timestamps = np.asarray([1100, 900, 1010, 800, 1200], dtype=np.int64)
+        errors = np.asarray([1, 0, 0, 1, 0], dtype=np.float64)
+        lengths = np.asarray([12, 10, 11, 8, 13], dtype=np.float64)
+        scalar_log = log_stream_features(
+            timestamps, errors, lengths, 1000, pre_ms=200, post_ms=200
+        )
+        prepared_log = PreparedLogStream(
+            timestamps, errors, lengths, pre_ms=200, post_ms=200
+        ).features(1000)
+        self.assertEqual(scalar_log, prepared_log)
+
+        durations = np.asarray([0.5, 0.2, 0.3, 0.1, 0.7])
+        traces = np.asarray(["a", "b", "a", "c", "d"])
+        operations = np.asarray(["x", "y", "x", "z", "x"])
+        parents = np.asarray([1, 0, 1, 0, 1], dtype=np.float64)
+        scalar_trace = trace_stream_features(
+            timestamps,
+            durations,
+            errors,
+            traces,
+            operations,
+            parents,
+            1000,
+            pre_ms=200,
+            post_ms=200,
+        )
+        trace_codes = np.asarray([0, 1, 0, 2, 3], dtype=np.int32)
+        operation_codes = np.asarray([0, 1, 0, 2, 0], dtype=np.int32)
+        prepared_trace = PreparedTraceStream.from_identifier_codes(
+            timestamps,
+            durations,
+            errors,
+            trace_codes,
+            operation_codes,
+            parents,
+            pre_ms=200,
+            post_ms=200,
+        ).features(1000)
+        self.assertEqual(scalar_trace, prepared_trace)
+        _, values, observed = PreparedLogStream(
+            timestamps, errors, lengths, pre_ms=200, post_ms=200
+        ).features(1000, entity_observed=False)
+        self.assertFalse(any(observed))
+        self.assertFalse(any(values))
 
 
 if __name__ == "__main__":

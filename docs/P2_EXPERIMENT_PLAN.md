@@ -8,7 +8,7 @@
 - Verification Status: UNVERIFIED
 - Version Label: p2_experiment_plan_v0.2
 
-> 状态：P2-G1 metric 子门与 P2-G2 completed；下一步为 L0/T0 extractor smoke
+> 状态：P2-G1/G2、全量 M/L/T、C0-M/L/T 与 C1-I completed；M1-S in progress
 
 ## 1. 研究目标与冻结边界
 
@@ -94,6 +94,20 @@ incoming/outgoing parent edge 不进入独立 T0，留到 H3 observed/randomized
 - stage features 同时包括 pre→onset、pre→impact、onset→impact，缺失段保留 mask。
 
 不得根据 outer-test 或完整数据结果固定 `T_o`。
+
+全量 coverage audit 后、查看任何 M1-S 模型结果前，统一 M1-S 的可用 staged
+通道冻结如下：
+
+- metric 仅使用 coverage-supported 的 60/120 s 候选，30 s 继续作为 unsupported
+  control，不进入主模型；
+- trace 的 60/120 s 在 GAIA 与 RE2 均达到预先冻结的 content-complete 绝对覆盖
+  0.80、相对 whole 覆盖 0.90 门槛，进入 M1-S；
+- RE2 log staged 的 content-complete 比率为 0.794900，虽与 whole 相同但低于
+  0.80 绝对门槛，因此 unified M1-S 不加入 log staged；C1-I 已有的 log whole
+  保留；
+- M1-S 因而是 C1-I whole M/L/T 加 metric+trace staged，`T_o ∈ {60,120}` 与
+  `C` 在每个 outer-train 的四折 inner validation 内联合选择。并列时先更强正则，
+  再更短 onset。
 
 ## 4. 受控模型阶梯
 

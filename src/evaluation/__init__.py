@@ -1,5 +1,7 @@
 """Ranking validation and metrics for standalone RCA."""
 
+from .bootstrap import paired_root_macro_bootstrap
+
 from .evaluator import (
     CaseEvaluation,
     EvaluationSummary,
@@ -17,6 +19,7 @@ __all__ = [
     "evaluate_rankings",
     "evaluate_ranking_report",
     "hit_at_k",
+    "paired_root_macro_bootstrap",
     "predict_rankings",
     "reciprocal_rank",
     "validate_ranking",
