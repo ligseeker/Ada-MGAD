@@ -43,21 +43,19 @@
 ```text
 branch:       claudecode
 worktree:     .git 指向 /home/zhangll24/RCA_project/Ada-MGAD/.git/worktrees/Ada-MGAD-rca-claudecode
-commit:       c2af48f2be4066de7363d7e5f0871052e8564301
-subject:      update P2-G4
+commit:       768409df4de2f25b69555e395199869a48ad7057
+subject:      add RE2-TT protocol extension (E1-E5 audit-first; E4 headroom gate failed)
 PR target:    main
-working tree: 不干净。已修改：docs/{EXPERIMENT_LOG,RESEARCH_STATUS}.md、
-              src/data/{__init__,rcaeval,telemetry_diagnostics}.py、
-              scripts/run_p1_metric_change.py（后四项为 RE2-TT extension 的
-              参数化改造，已用字节级回归证明不改变 P1/RE2-OB 既有输出）；
-              未跟踪新增：docs/RE2TT_EXTENSION_PROTOCOL.md、
-              scripts/{prepare,diagnose,run,audit}_ext_re2tt_*.py、
-              tests/test_ext_re2tt_extension.py、tests/test_rcaeval_profiles.py
+working tree: 干净（该提交收入了 RE2-TT extension 的 5 个 driver、2 个测试文件、
+              RE2TT_EXTENSION_PROTOCOL.md 与三份治理文档更新，以及
+              src/data/{__init__,rcaeval,telemetry_diagnostics}.py 和
+              scripts/run_p1_metric_change.py 的 artifact-neutral 参数化改造；
+              同时删除了随 c2af48f 误提交的 logs/m1_s_run.pid）
 ```
 
-**引用本文件中任何 EXT-RE2TT 数字时必须注意**：上述 extension driver 尚未提交，
-所以 [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) §23 记录的是逐文件 SHA-256 而不是
-单一 commit hash；提交后应回填 commit。
+**引用本文件中任何 EXT-RE2TT 数字时必须注意**：E1–E5 实际运行时上述 driver 尚未
+提交，因此 [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) §23 记录的是逐文件 SHA-256；
+该批代码现已提交为 `768409df…`，树内容与那些 digest 一致，复现时应检出该提交。
 
 当前事实：
 

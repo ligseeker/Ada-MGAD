@@ -3,9 +3,10 @@
 > 状态版本：`research_context_v8`
 > 最近更新：2026-08-20
 > 当前分支：`claudecode`（git worktree；PR 目标 `main`）
-> 基准提交：`c2af48f2be4066de7363d7e5f0871052e8564301`（RE2-TT extension 的
-> driver 与文档尚未提交，其数字以 [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) §23
-> 记录的逐文件 SHA-256 为准）
+> 基准提交：`768409df4de2f25b69555e395199869a48ad7057`
+> （E1–E5 实际运行于其父提交 `c2af48f…` 加未提交工作树，故
+> [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) §23 同时记录逐文件 SHA-256；复现请检出
+> `768409df…`）
 > 当前 Gate：P2-G4（M1-S）已完成，判定 **`no-go`**；RE2-TT protocol extension
 > 的 E1–E5 已执行完毕，**E4 预登记 headroom 门禁 `fail`，E6/E7 被阻塞**；
 > 下一步待用户决策

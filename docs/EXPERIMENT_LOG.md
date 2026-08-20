@@ -853,13 +853,17 @@ python scripts/bootstrap_p2_m1_s.py
   H-4 B1 AC@5（仅报告）。
 - Git branch: `claudecode`
 - Git commit: `c2af48f2be4066de7363d7e5f0871052e8564301`
-- Working tree status: **不干净** —— 扩展 driver 与新测试在运行时为 untracked/modified。
+- Working tree status: 运行时**不干净** —— 扩展 driver 与新测试当时为 untracked/modified。
   为保证可核对，逐文件 SHA-256 记录于 `docs/RE2TT_EXTENSION_PROTOCOL.md` §9.0
   （`prepare_ext_re2tt_manifests.py` `5bee68ec…`、`diagnose_ext_re2tt_telemetry.py`
   `8b7b1a2d…`、`prepare_ext_re2tt_splits.py` `47c56980…`、
   `run_ext_re2tt_baselines.py` `eb00fed7…`、`audit_ext_re2tt_gates.py` `698bacd8…`，
   另有 `src/data/{rcaeval,telemetry_diagnostics,__init__}.py` 与
   `scripts/run_p1_metric_change.py` 的 artifact-neutral 改动）。
+  **补记（不改变上述运行时事实）**：这批 driver、测试与治理文档已于 2026-08-20
+  提交为 `768409df4de2f25b69555e395199869a48ad7057`（"add RE2-TT protocol
+  extension (E1-E5 audit-first; E4 headroom gate failed)"），其树内容与上列
+  SHA-256 一致；复现本记录时应检出该提交而非 `c2af48f…`。
 - Dataset source/version/manifest: `RCAEval-RE2-TT`，源根
   `/home/zhangll24/RCA_project/datasets/RCAEval/RE2`（`RE2-TT/` 与 `RE2-TT.zip` 同根）；
   `content_identity_sha256 = ad1396d0713fe21343a9db9233a60e51aa043026f8f39cd30fa1ba0fd5f15fc0`
@@ -966,7 +970,8 @@ python scripts/bootstrap_p2_m1_s.py
   +123.289 s，t0 之前无日志；按冻结的事件提取规则会被整段掩码而非剔除，无需新规则。
   (7) 单一应用、每场景 3 replicate、无级联故障，与 RE2-OB 同类局限。
   (8) 运行时工作树不干净（driver 未提交），已用逐文件 SHA-256 补偿，但严格意义上
-  本记录的可复现性依赖那些 digest 而非单一 commit。
+  本记录的可复现性依赖那些 digest 而非单一 commit；该批代码随后已提交为
+  `768409df4de2f25b69555e395199869a48ad7057`，后续复现应以该提交为准。
 - Decision: no-go（对 E6/E7）—— 按预登记规则停在 E5。**不放宽 H-1 阈值**（0.904444 与
   0.90 只差 2 个量子，但门禁在看到数值之前已冻结，事后调整会使整条 route ② 失去证据
   价值）；不修改 inner selection objective；不删除或弱化 RE2-OB；不改写 P2-G4 的

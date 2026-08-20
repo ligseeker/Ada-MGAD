@@ -370,8 +370,8 @@ git diff --check
 | 源根 | `/home/zhangll24/RCA_project/datasets/RCAEval/RE2`（`RE2-TT/` + `RE2-TT.zip`） |
 | split | `artifacts/ext/re2tt/splits/`，`grouped_stratified_5fold`，`p1_split_manifest_v1` |
 | seed | `20260819` |
-| 提交哈希 | `c2af48f2be4066de7363d7e5f0871052e8564301` |
-| 代码状态 | ⚠ 扩展 driver 当时**未提交**（untracked）。逐文件 SHA-256 见下表，用于在提交后核对是否为同一份代码 |
+| 提交哈希 | 运行时为 `c2af48f2be4066de7363d7e5f0871052e8564301`；登记提交为 `768409df4de2f25b69555e395199869a48ad7057` |
+| 代码状态 | ⚠ 扩展 driver 在运行时**未提交**（untracked）。逐文件 SHA-256 见下表；已核对 `768409df…` 的树内容与下表一致，复现请检出该提交 |
 | 产物根 | `artifacts/ext/re2tt/`（gitignored） |
 
 驱动代码 SHA-256（记录时刻的工作树内容）：
