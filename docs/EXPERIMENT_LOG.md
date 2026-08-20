@@ -838,3 +838,137 @@ python scripts/bootstrap_p2_m1_s.py
   后续路线（维持 H1 未获支持的叙述 / 重新讨论 RE2-TT / 对 selection objective 做
   独立 protocol version bump + sensitivity experiment）三者互斥，须由用户明确决定
   后另开 gate。H2 / H3 仍未检验。
+
+## 23. 2026-08-20 — EXT-RE2TT-E1..E5（第三 benchmark 的 audit-first 验收）
+
+- Evidence level: artifact-verified（E5 独立复算，不 import E1/E3/E4 driver 的计算 helper）
+- Objective: 用户选择路线②——保留 P2-G4 的 `no-go` 与 H1「冻结门禁下未获支持」不变，
+  新建独立 protocol extension，引入 RCAEval RE2-TT 作为第三 benchmark，**先**验证其在
+  统一 Track C 下的数据质量、候选空间、三模态 coverage 与性能 headroom，审计全部通过后
+  才在完全冻结的 C1-I → M1-S 单因素协议下做 H1 replication。
+- Hypothesis / gate: E-G1…E-G5（协议见 `docs/RE2TT_EXTENSION_PROTOCOL.md`
+  `re2tt_extension_protocol_v0.2` §6，判定规则在看到任何 E4 数值之前冻结）。
+  核心为 E-G4 headroom 门禁：H-1 `B2 metric_change` root-macro Avg@5 ≤ 0.90（门禁）、
+  H-2 同 AC@1 ≤ 0.90（门禁）、H-3 B2 在主/次端点均严格优于 B1（门禁）、
+  H-4 B1 AC@5（仅报告）。
+- Git branch: `claudecode`
+- Git commit: `c2af48f2be4066de7363d7e5f0871052e8564301`
+- Working tree status: **不干净** —— 扩展 driver 与新测试在运行时为 untracked/modified。
+  为保证可核对，逐文件 SHA-256 记录于 `docs/RE2TT_EXTENSION_PROTOCOL.md` §9.0
+  （`prepare_ext_re2tt_manifests.py` `5bee68ec…`、`diagnose_ext_re2tt_telemetry.py`
+  `8b7b1a2d…`、`prepare_ext_re2tt_splits.py` `47c56980…`、
+  `run_ext_re2tt_baselines.py` `eb00fed7…`、`audit_ext_re2tt_gates.py` `698bacd8…`，
+  另有 `src/data/{rcaeval,telemetry_diagnostics,__init__}.py` 与
+  `scripts/run_p1_metric_change.py` 的 artifact-neutral 改动）。
+- Dataset source/version/manifest: `RCAEval-RE2-TT`，源根
+  `/home/zhangll24/RCA_project/datasets/RCAEval/RE2`（`RE2-TT/` 与 `RE2-TT.zip` 同根）；
+  `content_identity_sha256 = ad1396d0713fe21343a9db9233a60e51aa043026f8f39cd30fa1ba0fd5f15fc0`
+  （`p1_source_snapshot_v1`，1 归档 2,801,345,134 B + 360 消费文件 22,752,639,186 B）；
+  manifest `artifacts/ext/re2tt/manifests/manifest.json`
+  `e7c0bb4c8fd3866f7af11db3c08078133a3f8557517ff8886bdd62b7743a7aa2`。
+- Included/excluded cases: 90 / 0。候选服务 68 个，候选元组变体 1 个（全 case 同一候选
+  集）；90 个 singleton group（`largest_group = 1`）；root `ts-auth/order/route/train/
+  travel-service` 各 18；fault `cpu/delay/disk/loss/mem/socket` 各 15；
+  root ∉ 候选集 = 0。
+- RCACase schema version: `p1_rca_manifest_v1`（复用，未新造）
+- Split manifest + seed: `artifacts/ext/re2tt/splits/split_manifest.json`
+  （`p1_split_manifest_v1`，`grouped_stratified_5fold`），seed `20260819`，5 折；
+  `assignments.jsonl` `6a1f165dbdbb3b651f7def513ea3447873da7d5276f685bb1aec8dc8a40f1662`、
+  `split_manifest.json` `7e590bb408e163ab0b8474fba26162abbdd6d05fdee861b2adcad04e27aa684c`。
+- T_pre / T_post: 300 s / 300 s，半开毫秒窗（未改动）
+- Preprocessing fit scope: B0/B1 仅在训练折拟合（root 频率先验）；B2 无拟合，
+  每个分数只用本 case 窗内数据（`fit_scope = "none; every score uses only its own
+  case window"`）。E1–E5 不产出任何进入模型的特征。
+- Candidate-set rule: 官方部署清单全集，未按 root 标签剔除任何实体（剔除需用标签，
+  属泄漏）；因此 68 候选中包含大量 `ts-*-mongo`/`ts-*-mysql` 类永不为 root 的实体。
+- Label Firewall test result: 90/90 input 通过 `assert_label_free`；
+  `inputs.jsonl` 原始路径泄漏扫描 `raw_home_paths` / `condition_directory_names` /
+  `release_directory` 全为 `false`；`verify_manifest_bundle` 通过；与冻结 RE2-OB 的
+  case_id 冲突 0。E5 是本扩展中唯一被允许在扫描原始遥测时读标签的阶段（审计用途，
+  不产出特征），该豁免已写入协议 §6.1。
+- Command:
+  ```bash
+  python scripts/prepare_ext_re2tt_manifests.py    # E1
+  python scripts/diagnose_ext_re2tt_telemetry.py   # E2
+  python scripts/prepare_ext_re2tt_splits.py       # E3  (--folds 5 --seed 20260819)
+  python scripts/run_ext_re2tt_baselines.py        # E4
+  python scripts/audit_ext_re2tt_gates.py          # E5
+  ```
+- Config path: B2 配置与冻结 P1 逐键相同（300 s 半开窗、每侧 ≥ 2 样本、top-5 特征、
+  cap 20.0），记录于 `artifacts/ext/re2tt/baseline_summary.json`
+  → `metric_change_config`，等值性由
+  `tests/test_ext_re2tt_extension.py::FrozenReuseTest` 以 golden literal 钉住。
+- Output artifact path: `artifacts/ext/re2tt/`（gitignored；**未写入
+  `artifacts/p1/**` 或 `artifacts/p2/**`**，由 `_assert_isolated` 在每个 driver 入口强制）
+  —— `manifests/`、`source_snapshot/`、`telemetry_diagnostics.json`
+  （`eb4cba13ca8b8d6c8f93143d8dd78ae739adc7ddf8ce08c0a5e369b9b2a19522`）、
+  `splits/`、`split_diagnostics.json`、`baselines/{random,root_frequency,metric_change}/`、
+  `baseline_summary.json`（`8488604fac2b02d30f78bd15d7ec27287d08b7989438603807be5c62066ca1bc`）、
+  `headroom_gate.json`（`8f015bf2df84ee599f0d25ccd12d3147252410d6462b8caa236085b3ab881e18`）、
+  `gate_audit.json`（`8895138ab617d49f8928072c571bf0bdb5a8cfadb0600ac29a6c528fda197cf4`）。
+- Per-case prediction path: `artifacts/ext/re2tt/baselines/<baseline>/`
+  （run manifest digest：B0 `f5bb15b2…e92c0c`、B1 `2ba40b4f…4aa32330`、
+  B2 `7294f3c8…f0ba0a8b`）
+- Overall AC@1/3/5, Avg@5, MRR: B0 0.000000 / 0.033333 / 0.077778 / 0.037778 /
+  0.063523；B1 0.166667 / 0.555556 / 1.000000 / 0.566667 / 0.424074；
+  B2 0.822222 / 0.922222 / 0.944444 / **0.904444** / 0.878432。
+- Fault-type macro: 与 overall **逐位相同**。
+- Root-service macro: 与 overall **逐位相同**。RE2-TT 的 root 5×18 与 fault 6×15 都是
+  完全均衡设计，故三个报告层恒等；这一点本身是局限（见下），不是巧合。
+  参照（不合并统计）：RE2-OB root-macro B0 0.255556 / B1 0.566667 / B2 0.933333；
+  GAIA main root-macro B0 0.313242 / B1 0.296640 / B2 0.708573（候选数 68 / 11 / 10）。
+- Runtime: E2 全扫（metrics 129,690 行 + logs 21,291,651 行 + traces 67,345,051 行）
+  与 E4/E5 均为分钟级，无需 nohup 长作业；未纳入任何 checksum。
+- Sanity checks: E5 独立重算——`manifests/` 5 个文件 digest 全部一致、
+  `verify_manifest_bundle` 通过；source snapshot 的 `archives.jsonl` /
+  `consumed_files.jsonl` digest 一致；重建 `SplitAssignment`/`CaseGroup` 后
+  `validate_split_integrity` 通过且 `fold_label_consistent = true`、折间 case 与
+  group 重叠均为 0、fold 大小 18/18/18/18/18、`max_case_count_relative_deviation
+  = 0.0`、`max_fault_type_total_variation = 0.0`、
+  `max_root_service_total_variation = 0.06666666666666665`（阈值 0.10）、
+  每折含全部 5 root 与 6 fault；每条预测均为 68 服务的无重复全排列，
+  三个报告层的每个指标与记录的 `metrics.json` 差 ≤ `1e-12`，OOF 覆盖完整；
+  `integrity_gates_passed = true`；headroom 独立复判
+  `matches_recorded_gate = true`。E3 重跑逐字节一致。
+  **RE2-OB 逐字节回归 passed**（`inputs/labels/sources/groups.jsonl` 四文件，
+  raw root `…/RCAEval/RE2-OB`，90 case）—— adapter 的 profile 化未扰动任何已冻结产物。
+  三道闸门：`python -m unittest discover -s tests` 131 tests OK、
+  `python -m compileall -q src scripts tests` OK、`git diff --check` OK。
+- Result interpretation: **E-G4 的预登记 headroom 门禁 H-1 不通过**：
+  B2 `metric_change` root-macro Avg@5 = **0.9044444444444444 > 0.90**，超出 0.004444
+  （恰为 2 个 Avg@5 case 量子，1 量子 = 0.002222）。`decision = "fail"`、
+  `failed_gates = ["H-1"]`。H-2 通过（0.822222）、H-3 通过（Avg@5 +0.337778、
+  AC@1 +0.655556）、H-4 报告值 B1 AC@5 = 1.000000（与 RE2-OB 同值）。
+  三项实质读数：(a) B0 从 0.255556 降到 0.037778，68 候选的干扰项扩张是真实且巨大的；
+  (b) B1 与 RE2-OB **逐位同值**，已排除接线错误（run manifest 绑定
+  `artifacts/ext/re2tt/{manifests,splits}` 且 digest 相符，预测排序全部 68 个 RE2-TT
+  服务），同值是"5 root × 18 case 均衡设计 + B1 只用 root 频率先验（与候选总数无关）"
+  的结构性后果 —— **RE2-TT 没有修复 5-root 先验退化**；(c) B2 只从 0.933333 降到
+  0.904444（−0.028889），即干扰项从 6 个变 63 个后，一个无训练的 within-case metric
+  shift 基线仍占据 0.904 的主端点。因此 **RE2-TT 的天花板不是候选空间造成的**，而是
+  "注入式单点故障 + 完整 metric 覆盖"这一实验设计的共性；换 RCAEval 的另一个 release
+  无法解决。按协议 §5 与 §6.3，`gate_audit.json` 记录
+  `blocked_stages = ["E6","E7"]`，**E6/E7 未执行**。route ② 以"第三个 benchmark 也
+  饱和"收口：P2-G4 的 `no-go` 与 H1「冻结门禁下未获支持」不变，且多出一条更强证据 ——
+  RE2-OB 的天花板不是它自己的偶然缺陷。
+- Limitations / anomalies: (1) **log 掩码与 root 类别完全混杂** —— E5 的
+  root-conditioned coverage（±300 s 双侧可见）为 metrics 90/90、traces 90/90、
+  **logs 72/90**，未覆盖的 18 个恰好且仅是 `ts-train-service` 的全部 18 个 case
+  （11 个窗内完全无 root 日志、6 个仅 post 侧、1 个仅 pre 侧），其余 4 个 root 的 72
+  个 case 全部双侧可见。故"root 的 log 通道被掩码"在 RE2-TT 上是"root **不是**
+  `ts-train-service`"的近确定性指示器，任何用到 log observed mask 的模型都可能靠此
+  捷径抬高 root-macro，且该捷径不迁移。(2) 三个报告层同值使 RE2-TT 无法暴露"总体好但
+  某分组塌陷"的失效模式 —— 恰是 GAIA 上最有信息量的那种。(3) 90-case 粒度未改善
+  （单 case 量子 AC@1 0.011111 / Avg@5 0.002222），与 RE2-OB 相同。(4) 候选空间跨数据
+  集不可比（68 / 11 / 10），报告时必须并列候选数；68 候选含大量数据库实体，模型可学到
+  "数据库实体不是 root"的静态先验。(5) trace 掩码同样携带静态实体类型信息（68 候选中
+  仅 ~27 个有 span）。(6) 1 个 case（`ts-train-service_socket/1`）的 log 起点为
+  +123.289 s，t0 之前无日志；按冻结的事件提取规则会被整段掩码而非剔除，无需新规则。
+  (7) 单一应用、每场景 3 replicate、无级联故障，与 RE2-OB 同类局限。
+  (8) 运行时工作树不干净（driver 未提交），已用逐文件 SHA-256 补偿，但严格意义上
+  本记录的可复现性依赖那些 digest 而非单一 commit。
+- Decision: no-go（对 E6/E7）—— 按预登记规则停在 E5。**不放宽 H-1 阈值**（0.904444 与
+  0.90 只差 2 个量子，但门禁在看到数值之前已冻结，事后调整会使整条 route ② 失去证据
+  价值）；不修改 inner selection objective；不删除或弱化 RE2-OB；不改写 P2-G4 的
+  `no-go` 与 H1 结论；不为 H1 寻找第四个数据集；不实现 M2-R/M2-D/M3-G。
+  Event-stage 的去留与是否进入 H2 仍待用户决定。H2 / H3 仍未检验。

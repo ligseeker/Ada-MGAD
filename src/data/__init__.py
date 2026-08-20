@@ -23,7 +23,15 @@ from .manifest import (
     verify_manifest_bundle,
     write_manifest_bundle,
 )
-from .rcaeval import load_re2ob_cases
+from .rcaeval import (
+    DATASET_PROFILES,
+    RE2OB_PROFILE,
+    RE2TT_PROFILE,
+    RCAEvalDatasetProfile,
+    load_rcaeval_cases,
+    load_re2ob_cases,
+    load_re2tt_cases,
+)
 from .source_snapshot import (
     SOURCE_SNAPSHOT_SCHEMA_VERSION,
     ConsumedSource,
@@ -72,6 +80,12 @@ __all__ = [
     "validate_split_integrity",
     "load_gaia_cases",
     "load_re2ob_cases",
+    "load_re2tt_cases",
+    "load_rcaeval_cases",
+    "DATASET_PROFILES",
+    "RE2OB_PROFILE",
+    "RE2TT_PROFILE",
+    "RCAEvalDatasetProfile",
     "SOURCE_SNAPSHOT_SCHEMA_VERSION",
     "ConsumedSource",
     "SourceSnapshotError",

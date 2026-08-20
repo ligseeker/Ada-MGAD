@@ -244,7 +244,10 @@ def _extract_re2ob(
     top_k,
     max_cases,
     progress_every,
+    progress_label="RE2-OB cases",
 ):
+    # progress_label only labels the stderr counter, so any RCAEval release can
+    # reuse this extractor without changing a single byte of P1 output.
     source_by_case = {
         str(row["case_id"]): row
         for row in _read_jsonl(manifest_directory / "sources.jsonl")
@@ -280,7 +283,7 @@ def _extract_re2ob(
         completed = case_index + 1
         if progress_every > 0 and (completed % progress_every == 0 or completed == limit):
             print(
-                "[metric-change] RE2-OB cases: {}/{}".format(completed, limit),
+                "[metric-change] {}: {}/{}".format(progress_label, completed, limit),
                 file=sys.stderr,
                 flush=True,
             )

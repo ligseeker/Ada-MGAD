@@ -1,6 +1,6 @@
 # 研究状态与决策日志
 
-> 状态版本：`research_state_v11`
+> 状态版本：`research_state_v12`
 > 最近更新：2026-08-20
 > 状态所有者：本文件；完成 Gate 后必须同步更新
 
@@ -31,26 +31,38 @@
 | P2-G4 M1-S | completed；run + 独立审计 + 配对 bootstrap 均已完成 | [P2_G4_STAGE_RESULTS.md](P2_G4_STAGE_RESULTS.md)、`artifacts/p2/runs/m1_s/`、`artifacts/p2/m1_s_{summary,audit,bootstrap}.json` |
 | M1-S 门禁状态 | `exploratory_signal=false`；`claim_ready=false`；**`p2_g4_decision="no-go"`** | `artifacts/p2/m1_s_bootstrap.json`（`p2_m1_s_paired_bootstrap_v1`） |
 | H1（event-stage 表征优于 naive early fusion） | **未获支持**（冻结门禁下） | 同上；GAIA 双端点为正但 RE2-OB 主端点符号为负 |
+| RE2-TT protocol extension | V0.2；E1–E5 audit-first 阶段全部执行完毕 | [RE2TT_EXTENSION_PROTOCOL.md](RE2TT_EXTENSION_PROTOCOL.md)、`artifacts/ext/re2tt/` |
+| EXT-RE2TT E1 manifests / E2 telemetry / E3 splits / E5 audit | 4/4 通过；RE2-OB manifest 字节级回归 `passed` | `artifacts/ext/re2tt/{manifests,telemetry_diagnostics.json,splits,gate_audit.json}` |
+| EXT-RE2TT E4 headroom gate | **`decision="fail"`，`failed_gates=["H-1"]`** | `artifacts/ext/re2tt/headroom_gate.json`（`ext_re2tt_headroom_gate_v1`）；B2 主端点 0.904444 > 0.90 上限 |
+| EXT-RE2TT E6 / E7（feature extraction、H1 replication） | **`blocked_stages=["E6","E7"]`；未执行** | 预登记规则「E1–E5 全部通过前不进入 E6/E7」；见 [RE2TT_EXTENSION_PROTOCOL.md](RE2TT_EXTENSION_PROTOCOL.md) §9.6 |
 
-**当前研究阶段：P2 — Multimodal RCA Representation and Attribution。**
+**当前研究阶段：P2 — Multimodal RCA Representation and Attribution；并行的 RE2-TT protocol extension 已在 audit 阶段停下，等待用户决策。**
 
 ## 2. 仓库快照
 
 ```text
 branch:       claudecode
 worktree:     .git 指向 /home/zhangll24/RCA_project/Ada-MGAD/.git/worktrees/Ada-MGAD-rca-claudecode
-commit:       64bb681328fa1793014615a20ba2bc1fdf33c3b7
-subject:      update L0/T0
+commit:       c2af48f2be4066de7363d7e5f0871052e8564301
+subject:      update P2-G4
 PR target:    main
-working tree: 治理文档修改（docs/{README,RESEARCH_STATUS,EXPERIMENT_LOG}.md）+ 未跟踪新增文件
-              （CLAUDE.md、P2-G4 后处理脚本与测试、P2-G3/P2-G4 结果文档）；
-              src/ 与 scripts/run_* 未修改
+working tree: 不干净。已修改：docs/{EXPERIMENT_LOG,RESEARCH_STATUS}.md、
+              src/data/{__init__,rcaeval,telemetry_diagnostics}.py、
+              scripts/run_p1_metric_change.py（后四项为 RE2-TT extension 的
+              参数化改造，已用字节级回归证明不改变 P1/RE2-OB 既有输出）；
+              未跟踪新增：docs/RE2TT_EXTENSION_PROTOCOL.md、
+              scripts/{prepare,diagnose,run,audit}_ext_re2tt_*.py、
+              tests/test_ext_re2tt_extension.py、tests/test_rcaeval_profiles.py
 ```
+
+**引用本文件中任何 EXT-RE2TT 数字时必须注意**：上述 extension driver 尚未提交，
+所以 [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) §23 记录的是逐文件 SHA-256 而不是
+单一 commit hash；提交后应回填 commit。
 
 当前事实：
 
 - 当前检出为 git worktree，工作分支 `claudecode`，PR 目标为 `main`；
-- `docs/` 现有 18 个文件，`docs/README.md` 为唯一入口；
+- `docs/` 现有 19 个文件，`docs/README.md` 为唯一入口；
 - 旧 Ada-MGAD 的 GAIA/MSDS 异常检测实现保持不动；
 - `src/data/schema.py` 已物理拆分 prediction input 与 label；
 - `src/evaluation/` 已实现完整 ranking 校验与 AC@1/3/5、Avg@5、MRR；
@@ -67,7 +79,8 @@ working tree: 治理文档修改（docs/{README,RESEARCH_STATUS,EXPERIMENT_LOG}.
   stratified 5-fold，统一 seed `20260819`；
 - Random/Frequency/Metric-change 已在两个数据集完成并字节级复现；
 - P1 closeout 时 `tests/` 51/51 通过；P2 新增 metric/event feature、linear-ranker
-  与 P2-G4 后处理 tests 后当前全套 106/106 通过；
+  与 P2-G4 后处理 tests，再加 RE2-TT extension 的 12 个 + RCAEval profile tests 后
+  当前全套 131/131 通过；
 - GAIA 16,200 event inventory 已分为 13,470-case main 与 2,730-case
   multi-root sensitivity；
 - RE2-OB 原始归档与 8,441,465,341 字节实际消费文件已逐字节固定，content
@@ -106,7 +119,32 @@ working tree: 治理文档修改（docs/{README,RESEARCH_STATUS,EXPERIMENT_LOG}.
 - RE2-OB 的全部退化溯源为单个 case `re2ob-c9c8f348d3f5974b`（fold_1，root
   `recommendationservice`，rank 1 → 2）；89/90 个 case 只发生尾部重排；
 - M1-S runtime 为 GAIA 12,326.37 s / RE2 24.01 s；audit 与 bootstrap 二次运行
-  逐字节复现。
+  逐字节复现；
+- RE2-TT extension 的全部产物只写在 `artifacts/ext/re2tt/`，四个 driver 均在
+  `main()` 首行调用 `_assert_isolated()` 拒绝写入 `artifacts/p1`、`artifacts/p2`；
+- RE2-TT 为 90 cases / 排除 0 / 68 个候选服务 / 90 个 singleton groups；
+  roots 为 `ts-{auth,order,route,train,travel}-service` 各 18 个，faults 为
+  `cpu/delay/disk/loss/mem/socket` 各 15 个，完全平衡；
+- 因该平衡设计，RE2-TT 的 overall、fault-type macro 与 root-service macro
+  **三层报告数值完全相同**，无法暴露“整体好但某一组塌陷”的失败模式；
+- RE2-TT source snapshot 固定了 1 个归档（`RE2-TT.zip`，2,801,345,134 B）与
+  360 个实际消费文件（22,752,639,186 B），content identity 为
+  `ad1396d0713fe21343a9db9233a60e51aa043026f8f39cd30fa1ba0fd5f15fc0`；
+- RE2-TT 三模态 label-free 候选 presence ratio（±300 s）为 metric 1.000000、
+  log 0.654739、trace 0.383333；metric 采样为精确 1000 ms、无重复无缺口；
+- RE2-TT 5-fold 为 18/18/18/18/18，`max_root_service_total_variation`
+  0.066667 < 0.10，case/group overlap 均为 0，复跑逐字节一致；
+- RE2-TT baselines 的 root-macro Avg@5 为 B0 0.037778 / B1 0.566667 /
+  B2 **0.904444**，B2 AC@1 为 0.822222；
+- 预登记 headroom 门禁 H-1（B2 主端点 ≤ 0.90）**不通过**（超出 0.004444，
+  恰为 2 个 Avg@5 case 量子），H-2/H-3 通过，故 `blocked_stages=["E6","E7"]`；
+- B1 在 RE2-TT 上与 RE2-OB **逐位相同**（Avg@5 0.566667、AC@5 1.000000），已
+  排除接线错误：这是 5 root × 18 case 平衡设计的结构性后果，说明 **RE2-TT 并未
+  修复 5-root frequency prior 的退化**；
+- B2 从 RE2-OB 的 0.933333 只降到 0.904444（−0.028889），说明 RE2 系列天花板
+  不来自候选空间大小，而来自单点注入 + metric 全覆盖的数据构造方式；
+- E5 root-conditioned coverage：metrics 90/90、traces 90/90、**logs 72/90**，
+  缺口 18 例全部落在 root=`ts-train-service`，与该 root 完全共变（confound）。
 
 ## 3. ARS 工作流位置
 
@@ -121,6 +159,7 @@ P1 Benchmark Protocol    completed / frozen V0.5
 P1 implementation        G1-G8 + reproducibility closeout completed
 P2 representation        metric + L0/T0 full extraction completed
 P2 controlled experiments P2-G2 completed / P2-G3 completed / P2-G4 completed (no-go)
+RE2-TT extension        E1-E5 completed (E4 gate failed) / E6-E7 blocked
 paper full drafting      not started in this workspace
 ```
 
@@ -147,7 +186,11 @@ content snapshot 与全产物一致性 closeout 也已完成；最终审计 SHA-
 2. Standalone RCA 不使用 Ada-MGAD latent representation。
 3. 旧 `rca` 只作为 Pilot，不作为新方法开发基线。
 4. 新 RCA 任务是 event-level、service-level、single-root ranking 主协议。
-5. 主数据为 GAIA + RE2-OB；RE2-TT 为扩展。
+5. 主数据为 GAIA + RE2-OB；RE2-TT 为扩展。2026-08-20 用户已确认以**独立
+   protocol extension** 的形式引入 RE2-TT：不修改 P1/P2 冻结协议、不删除 RE2-OB、
+   不放宽 Go/No-Go 阈值，产物物理隔离在 `artifacts/ext/re2tt/`，且必须
+   audit-first（E1–E5 全部通过才允许做 H1 replication）。见
+   [RE2TT_EXTENSION_PROTOCOL.md](RE2TT_EXTENSION_PROTOCOL.md)。
 6. 主实验为 Oracle RCA；Trigger Robustness 与 Ada-MGAD-triggered RCA 后置。
 7. 候选集合由测试时可得信息构造，主实验包含全部可观测服务。
 8. 先 case/event split，再拟合任何学习型 preprocessing。
@@ -173,6 +216,8 @@ content snapshot 与全产物一致性 closeout 也已完成；最终审计 SHA-
   GAIA log/trace 三档均 supported，RE2 trace 三档均 supported，RE2 log 三档均
   unsupported（0.794900 < 0.80）；metric 仍冻结为 60/120 s；
 - H2 的比较模块与 H3 的结构机制；
+- RE2-TT 的 E4 门禁失败如何处置（接受 E6/E7 永久 blocked，还是在新的 protocol
+  version bump 中重新定义 headroom 准入口径）——不得就地放宽 0.90 上限；
 - 最终论文题目是否加入“根因分析”。
 
 ## 7. 下一步执行队列
@@ -302,17 +347,63 @@ RCAEval 参考实现固定审计 commit 为
   [P2_G4_STAGE_RESULTS.md](P2_G4_STAGE_RESULTS.md)、
   [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) §22。
 
+### EXT-RE2TT：第三 benchmark 的 audit-first 验收（E1–E5 completed；E4 门禁 fail；E6/E7 blocked）
+
+用户在 P2-G4 `no-go` 之后选择了 §7 末尾的**路线②**，并给出边界条件：P2-G4 的
+`no-go` 与 H1「冻结门禁下未获支持」保持不变；不修改 inner selection objective；
+不放宽 gate；不删除 RE2-OB；先审计数据质量 / 候选空间 / 三模态 coverage /
+性能 headroom，只有审计全部通过才做 H1 replication。执行协议为
+[RE2TT_EXTENSION_PROTOCOL.md](RE2TT_EXTENSION_PROTOCOL.md) V0.2。
+
+- **E1 manifests（通过）**：90 cases、排除 0、68 候选服务、90 singleton groups；
+  5 roots × 18 + 6 fault types × 15 完全平衡；`roots_outside_candidate_space=[]`；
+  90/90 通过 `assert_label_free`；与 RE2-OB 零 case-ID 冲突。同一次运行用参数化后的
+  adapter 重建 RE2-OB manifest 并与 `artifacts/p1/manifests/re2ob/` 做
+  `inputs/labels/sources/groups.jsonl` 四文件**字节级比对，结果 `passed`**——这是
+  「新增第三数据集没有扰动已记录数据集」的证据。
+- **E2 telemetry（通过）**：metrics 129,690 行 / 0 非法 / 精确 1000 ms 采样 /
+  0 重复 0 缺口 / missing value ratio 0.003632；logs 21,291,651 行、traces
+  67,345,051 行、必填字段 0 缺失（`parentSpanID` 的 563,677 缺失为 root span）。
+  异常两项：1 个 case 的 log 起点在 t0**+123.289 s**；无显式静态服务图，
+  90/90 需由 trace 推导动态图。
+- **E3 splits（通过）**：`selection_eligible=true`，18/18/18/18/18，
+  `max_fault_type_total_variation=0.0`、`max_root_service_total_variation=0.066667`，
+  case 与 group overlap 均为 0，复跑逐字节一致。
+- **E4 headroom（不通过）**：B2 metric-change 的 root-macro Avg@5 = **0.904444**，
+  超出预登记上限 0.90，`decision="fail"`、`failed_gates=["H-1"]`。H-2（B2 AC@1
+  0.822222 < 0.95）与 H-3（B2 相对 B1 主端点 +0.337778）通过。
+- **E5 独立审计（通过）**：`integrity_gates_passed=true`，四个 section 全通过，
+  三层 metrics 在 `1e-12` 内重算一致，全部预测为合法的 68 服务排列，独立复判
+  headroom 判定同为 `fail` / `["H-1"]`（`matches_recorded_gate=true`）。
+- **判定**：按预登记规则「E1–E5 全部通过前不进入 E6/E7」，
+  `blocked_stages=["E6","E7"]`。用户明确要求「不放宽 gate」，因此不得为让 E7
+  开工而调整 0.90 上限。
+- **结论方向**：审计结果不是「换个数据集就能救 H1」，而是「第三个 benchmark
+  同样饱和」，这**加强**而非推翻既有的 P2-G4 `no-go`。
+- 证据：`artifacts/ext/re2tt/{manifests,source_snapshot,splits,baselines,
+  telemetry_diagnostics.json,split_diagnostics.json,baseline_summary.json,
+  headroom_gate.json,gate_audit.json}`（该目录下**不存在** `features/`、
+  `event_features/`、`runs/`，与 E6/E7 未执行一致）、
+  [RE2TT_EXTENSION_PROTOCOL.md](RE2TT_EXTENSION_PROTOCOL.md) §9、
+  [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) §23。
+
 ### P2-G5 及之后：待用户决策，尚未开工
 
-`no-go` 之后的三个方向互斥，任何一项都须用户明确决定后才立项，且都不得回改已冻结
-协议或既有记录（详见 [P2_G4_STAGE_RESULTS.md](P2_G4_STAGE_RESULTS.md) §10）：
+P2-G4 `no-go` 之后曾列出三条互斥方向，用户已选择其中的**路线②（重议 RE2-TT）**，
+该路线现已在 audit 阶段收口（见上一节）。当前仍未开工、且都须用户明确决定后才立项
+的选项（均不得回改已冻结协议或既有记录，详见
+[P2_G4_STAGE_RESULTS.md](P2_G4_STAGE_RESULTS.md) §10 与
+[RE2TT_EXTENSION_PROTOCOL.md](RE2TT_EXTENSION_PROTOCOL.md) §9.6）：
 
-1. 维持现状，把 H1 记为“未获支持”并据此重写方法叙述；
-2. 就 RE2-OB 天花板效应重新讨论是否扩展 RE2-TT（该决定原本推迟到 H1 结果之后，
-   现结果已产生）；
+1. 维持现状，把 H1 记为“未获支持”，并把「三个 benchmark 都饱和」写成方法/
+   limitation 叙述；
+2. 就 RE2-TT 的 H-1 失败作出显式处置：或者接受 E6/E7 永久 blocked，或者在**新的
+   protocol version bump**（不是就地放宽）中重新定义 headroom 准入口径；
 3. 对 inner selection objective 做单独的 protocol version bump + sensitivity
    experiment。
 
+是否保留 Event-stage、是否进入 H2，按用户设定的顺序需在看到 RE2-TT 结果**之后**
+决定；结果现已产生，但由于 E7 未执行，RE2-TT 尚未提供 H1 replication 证据。
 M2-R / M2-D / M3-G 在上述决策产生前不实现。H2 / H3 未检验，不得预判其结论。
 
 ## 8. 主要风险
@@ -327,6 +418,9 @@ M2-R / M2-D / M3-G 在上述决策产生前不实现。H2 / H3 未检验，不�
 | 结构创新被预设 | H3 Go/No-Go |
 | RCAEval 主分支持续变化 | 本地归档与实际消费文件已 content-pinned；上游 provenance 缺失需披露 |
 | 官方 service-level 口径与自定义 evaluator 漂移 | toy tests + 对照官方 evaluator |
+| 为参数化 RE2-TT 而改动的 adapter 悄悄改变已记录的 RE2-OB 数字 | E1 在写任何 extension 产物前重建 RE2-OB manifest 并做四文件字节级比对（`passed`）；四个 extension driver 的 `main()` 首行拒绝写入 `artifacts/p1`、`artifacts/p2` |
+| RE2-TT 的 log 缺失与 root 身份共变，使「log 通道被 mask」成为近确定性的 root 指示器 | 缺口 18/18 全在 root=`ts-train-service`、其余 72 例全覆盖，已记为 confound：C1-I 的 log 整通道需报 coverage 切片；M1-S staged 通道只用 metric+trace，H1 单因素不吃这条捷径；E7 若出现该 root 的组异常必须先排除此 confound |
+| RE2-TT 三层报告数值相同，掩盖分组塌陷型失败 | 已在 §2 与协议 §7 显式记录：RE2-TT 不能替代 GAIA 承担 macro 分层诊断职能 |
 
 ## 9. 决策日志
 
@@ -349,6 +443,11 @@ M2-R / M2-D / M3-G 在上述决策产生前不实现。H2 / H3 未检验，不�
 | 2026-08-19 | C0-L/C0-T/C1-I 只是计划项 | P2-G3 完成；C1-I 记为 `exploratory_signal=true` / `claim_ready=false`，不得用于任何论文级 claim | 两数据集主端点点估计为正（+0.0253/+0.0200），但 GAIA CI 下界 −0.003557 ≤ 0 且 GAIA AC@1 −0.0911 < −0.01 |
 | 2026-08-19 | 是否因 C1-I 的 GAIA AC@1 退化调整 inner selection objective | 不调整；保持 inner 唯一目标为 root-service macro Avg@5，AC@1 退化只作 P2-G4 诊断 | 用户已确认：中途改选择目标会破坏 H1 的单因素可解释性；如需调整须单独 protocol version bump + sensitivity experiment |
 | 2026-08-19 | 是否为绕开 RE2 天花板效应引入 RE2-TT | 暂不引入；先在冻结的 GAIA + RE2-OB 协议上完成 P2-G4，RE2 天花板记为 limitation | 用户已确认：是否扩展待 H1 结果出来后再决定，当前不重新打开 P1/P2 数据协议 |
+| 2026-08-20（**取代上一行**） | RE2-TT 暂不引入 | 引入 RE2-TT，但只作为**独立 protocol extension**：P2-G4 的 `no-go` 与 H1「未获支持」不变、不改 inner selection objective、不放宽 gate、不删 RE2-OB，且必须 audit-first（先验数据质量/候选空间/三模态 coverage/headroom，全部通过才做 H1 replication） | 用户已确认（路线②）；产物物理隔离在 `artifacts/ext/re2tt/`，四个 driver 的 `main()` 首行 `_assert_isolated()` 拒写 `artifacts/p1`、`artifacts/p2` |
+| 2026-08-20 | RE2-TT 可能提供未饱和的第三 benchmark，从而给 H1 一次干净的 replication | E1/E2/E3/E5 通过，但 **E4 预登记门禁 H-1 不通过**（B2 root-macro Avg@5 = 0.904444 > 0.90 上限，超出 0.004444 = 2 个 case 量子）⇒ `blocked_stages=["E6","E7"]`，H1 replication 未执行 | `artifacts/ext/re2tt/headroom_gate.json` 与独立复判的 `gate_audit.json` 判定一致（`matches_recorded_gate=true`）；门禁在看到任何 C1-I/M1-S 数字之前已预登记 |
+| 2026-08-20 | RE2 天花板可能由 RE2-OB 的 11 个候选服务太少造成，换 68 候选的 RE2-TT 即可缓解 | 天花板**不是**候选空间问题：候选从 11 → 68 使 B0 从 0.255556 崩到 0.037778，但 B2 只从 0.933333 降到 0.904444（−0.028889） | 归因于 RCAEval RE2 系列共有的单点注入 + metric 全覆盖构造（RE2-TT metric presence ratio 在 30/60/120/300 s 全为 1.000000）；因此再换一个 RE2 release 也不会解决 |
+| 2026-08-20 | 更大的候选空间会顺带修复 5-root frequency prior 的退化 | 未修复：B1 在 RE2-TT 与 RE2-OB 上**逐位相同**（Avg@5 0.566667、AC@5 1.000000） | 已排除接线错误（run manifest 绑定 `artifacts/ext/re2tt/{manifests,splits}` 且预测排满 68 个 RE2-TT 服务）；这是 5 root × 18 case 平衡设计 + B1 只依赖 train-fold root prior 的结构性后果 |
+| 2026-08-20 | E-G2 的 root-conditioned coverage 缺口应落在 `telemetry_diagnostics.json` | 改落在 E5 的 `gate_audit.json → root_conditioned_coverage`；E5 是本扩展中唯一被允许读标签的阶段（纯审计、不产出任何进入模型的特征） | 该缺口是 root-conditioned 事实，必须读 `labels.jsonl` 才能算；`telemetry_diagnostics.json` 与 P1 同口径、刻意不接触标签。落点更正发生在看到 E4/E7 任何数值之前 |
 | 2026-08-20 | M1-S 只是计划项，H1 待检验 | P2-G4 完成并判定 `no-go`；H1 记为“在冻结门禁下未获支持”，不得宣称 event-stage 切分带来一致收益 | GAIA 双端点为正且 CI 下界 > 0（+0.024646 / +0.039918），但 RE2 主端点点估计 −0.002222 为负、CI 下界 −0.007500 ≤ 0，次端点 −0.011111 < −0.01；三项检查全 false |
 | 2026-08-20 | RE2-OB 退化可能提示 stage 通道有系统性害处 | RE2-OB 退化溯源为单个 case 的 rank 1 → 2，只作诊断记录，**不**改变 `no-go` 判定，也**不**作为放宽阈值或更换数据集的依据 | 逐 case 比对显示 89/90 只有尾部重排、仅 1/90 的 root 排名变化；5 root × 18 cases 下该 case 恰好解释 −0.011111 与 −0.002222 |
 | 2026-08-20 | `no-go` 后可直接推进 M2-R/M2-D/M3-G | 在用户就三条互斥路线（维持现状 / 重议 RE2-TT / selection objective 独立 bump）明确决定前不立项、不实现 | 用户已确认停止点为 `M1-S run → audit → bootstrap → P2-G4 go/no-go`；越过 gate 推进会使 H2/H3 失去可解释的对照基线 |
@@ -367,8 +466,16 @@ M2-R / M2-D / M3-G 在上述决策产生前不实现。H2 / H3 未检验，不�
 4. P2-G4 已收口为 `no-go`：`artifacts/p2/runs/m1_s/` 与
    `artifacts/p2/m1_s_{summary,audit,bootstrap}.json` 均应存在，且
    `m1_s_bootstrap.json` 的 `p2_g4_decision` 应为 `"no-go"`；
-5. 下一项**不是**继续跑实验，而是等用户在 §7 末尾三条互斥路线中做出选择；
-   在此之前不得改动冻结协议、不得引入 RE2-TT、不得修改 inner selection objective；
-6. M2-R / M2-D / M3-G 在上述决策产生前不实现；H2 / H3 未检验，不得预判结论。
+5. RE2-TT extension 已收口在 audit 阶段：`artifacts/ext/re2tt/gate_audit.json`
+   的 `integrity_gates_passed` 应为 `true`，而
+   `artifacts/ext/re2tt/headroom_gate.json` 的 `decision` 应为 `"fail"`、
+   `failed_gates` 应为 `["H-1"]`；不应存在 `artifacts/ext/re2tt/features/`、
+   `event_features/` 或 `runs/`（E6/E7 被阻塞，未执行）；
+6. 下一项**不是**继续跑实验，而是等用户在 §7 末尾三条互斥路线中做出选择；
+   在此之前不得改动冻结协议、不得放宽 RE2-TT 的 0.90 headroom 上限、
+   不得修改 inner selection objective、不得删除 RE2-OB；
+7. M2-R / M2-D / M3-G 在上述决策产生前不实现；H2 / H3 未检验，不得预判结论；
+   「是否保留 Event-stage、是否进入 H2」按用户设定顺序须在 RE2-TT 结果之后决定，
+   而 E7 未执行意味着 RE2-TT 尚未提供 H1 replication 证据。
 
 如仓库事实变化，以代码/测试/产物为准更新本文件，不沿用过期状态。

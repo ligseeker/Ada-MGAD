@@ -1,10 +1,18 @@
-"""Adapter for the local RCAEval RE2-OB failure-case layout."""
+"""Adapter for the local RCAEval failure-case layouts (RE2-OB, RE2-TT).
+
+Both releases share one directory convention, one raw file set and one candidate
+derivation rule, so a single reader serves them; only the dataset identity and the
+auxiliary-entity filter are release specific. Those differences live in a frozen
+``RCAEvalDatasetProfile`` rather than in forked code, because the RE2-OB manifest
+under ``artifacts/p1/manifests/re2ob/`` is frozen: any behavioural drift in the
+shared path would silently invalidate already-recorded case IDs and digests.
+"""
 
 import csv
 from dataclasses import dataclass
 import hashlib
 from pathlib import Path
-from typing import List, Sequence, Tuple
+from typing import FrozenSet, List, Sequence, Tuple
 
 from src.data.schema import (
     RCACaseInput,
@@ -22,6 +30,47 @@ _AUXILIARY_METRIC_ENTITIES = frozenset(
         "loadgenerator",
     }
 )
+
+
+@dataclass(frozen=True)
+class RCAEvalDatasetProfile:
+    """Release-specific identity for one RCAEval failure-case collection."""
+
+    key: str
+    dataset: str
+    id_namespace: str
+    id_prefix: str
+    uri_namespace: str
+    auxiliary_entities: FrozenSet[str]
+    replicates: Tuple[str, ...]
+
+
+RE2OB_PROFILE = RCAEvalDatasetProfile(
+    key="re2ob",
+    dataset="RCAEval-RE2-OB",
+    id_namespace="RCAEval:RE2-OB",
+    id_prefix="re2ob",
+    uri_namespace="re2-ob",
+    auxiliary_entities=_AUXILIARY_METRIC_ENTITIES,
+    replicates=("1", "2", "3"),
+)
+
+
+RE2TT_PROFILE = RCAEvalDatasetProfile(
+    key="re2tt",
+    dataset="RCAEval-RE2-TT",
+    id_namespace="RCAEval:RE2-TT",
+    id_prefix="re2tt",
+    uri_namespace="re2-tt",
+    auxiliary_entities=_AUXILIARY_METRIC_ENTITIES,
+    replicates=("1", "2", "3"),
+)
+
+
+DATASET_PROFILES = {
+    RE2OB_PROFILE.key: RE2OB_PROFILE,
+    RE2TT_PROFILE.key: RE2TT_PROFILE,
+}
 
 
 @dataclass(frozen=True)
@@ -48,9 +97,9 @@ class RCAEvalAdapterResult:
     excluded: Tuple[RCAEvalExcludedCase, ...]
 
 
-def _opaque_case_id(relative_directory: str) -> str:
-    payload = "RCAEval:RE2-OB:{}".format(relative_directory).encode("utf-8")
-    return "re2ob-{}".format(hashlib.sha256(payload).hexdigest()[:16])
+def _opaque_case_id(profile: RCAEvalDatasetProfile, relative_directory: str) -> str:
+    payload = "{}:{}".format(profile.id_namespace, relative_directory).encode("utf-8")
+    return "{}-{}".format(profile.id_prefix, hashlib.sha256(payload).hexdigest()[:16])
 
 
 def _parse_condition(condition: str) -> Tuple[str, str]:
@@ -65,7 +114,9 @@ def _read_header(path: Path) -> Sequence[str]:
         return next(csv.reader(handle))
 
 
-def _candidate_services(case_directory: Path) -> Tuple[str, ...]:
+def _candidate_services(
+    case_directory: Path, auxiliary_entities: FrozenSet[str]
+) -> Tuple[str, ...]:
     simple_metrics = case_directory / "simple_metrics.csv"
     if simple_metrics.is_file():
         header = _read_header(simple_metrics)
@@ -74,7 +125,7 @@ def _candidate_services(case_directory: Path) -> Tuple[str, ...]:
             for column in header
             if column.endswith("_cpu") or column.endswith("_mem")
         }
-        candidates.difference_update(_AUXILIARY_METRIC_ENTITIES)
+        candidates.difference_update(auxiliary_entities)
     else:
         header = _read_header(case_directory / "metrics.csv")
         candidates = {
@@ -83,24 +134,28 @@ def _candidate_services(case_directory: Path) -> Tuple[str, ...]:
             if "_container-" in column
             and not column.startswith("loadgenerator_container-")
         }
-        candidates.difference_update(_AUXILIARY_METRIC_ENTITIES)
+        candidates.difference_update(auxiliary_entities)
     if not candidates:
         raise ValueError("could not derive observable service candidates")
     return tuple(sorted(candidates))
 
 
-def _discover_case_directories(root: Path) -> Sequence[Path]:
+def _discover_case_directories(
+    root: Path, replicates: Tuple[str, ...]
+) -> Sequence[Path]:
     directories: List[Path] = []
     for condition_directory in sorted(path for path in root.iterdir() if path.is_dir()):
-        for replicate in ("1", "2", "3"):
+        for replicate in replicates:
             candidate = condition_directory / replicate
             if candidate.is_dir():
                 directories.append(candidate)
     return directories
 
 
-def load_re2ob_cases(raw_path: str) -> RCAEvalAdapterResult:
-    """Load locally available RE2-OB cases without exposing label paths.
+def load_rcaeval_cases(
+    raw_path: str, profile: RCAEvalDatasetProfile
+) -> RCAEvalAdapterResult:
+    """Load locally available RCAEval cases without exposing label paths.
 
     Prediction-visible telemetry URIs contain only opaque case IDs. Actual local
     paths remain in the trusted sources sidecar used by data materialization.
@@ -114,7 +169,7 @@ def load_re2ob_cases(raw_path: str) -> RCAEvalAdapterResult:
     labels = []
     sources = []
     excluded = []
-    for case_directory in _discover_case_directories(root):
+    for case_directory in _discover_case_directories(root, profile.replicates):
         relative = str(case_directory.relative_to(root))
         required = {
             "metrics": case_directory / "metrics.csv",
@@ -132,7 +187,7 @@ def load_re2ob_cases(raw_path: str) -> RCAEvalAdapterResult:
         try:
             root_service, fault_type = _parse_condition(case_directory.parent.name)
             anchor_time = int(required["inject_time"].read_text(encoding="utf-8").strip())
-            services = _candidate_services(case_directory)
+            services = _candidate_services(case_directory, profile.auxiliary_entities)
         except (OSError, StopIteration, TypeError, ValueError) as exc:
             excluded.append(
                 RCAEvalExcludedCase(relative, "parse_error:{}".format(type(exc).__name__))
@@ -143,12 +198,12 @@ def load_re2ob_cases(raw_path: str) -> RCAEvalAdapterResult:
             excluded.append(RCAEvalExcludedCase(relative, "root_not_in_candidates"))
             continue
 
-        case_id = _opaque_case_id(relative)
-        base_uri = "rcaeval://re2-ob/{}".format(case_id)
+        case_id = _opaque_case_id(profile, relative)
+        base_uri = "rcaeval://{}/{}".format(profile.uri_namespace, case_id)
         inputs.append(
             RCACaseInput(
                 case_id=case_id,
-                dataset="RCAEval-RE2-OB",
+                dataset=profile.dataset,
                 anchor_time=anchor_time,
                 services=services,
                 metrics=TelemetryRef(
@@ -197,3 +252,15 @@ def load_re2ob_cases(raw_path: str) -> RCAEvalAdapterResult:
         sources=tuple(sources),
         excluded=tuple(excluded),
     )
+
+
+def load_re2ob_cases(raw_path: str) -> RCAEvalAdapterResult:
+    """Load RE2-OB cases. Signature frozen: the P1 manifest depends on it."""
+
+    return load_rcaeval_cases(raw_path, RE2OB_PROFILE)
+
+
+def load_re2tt_cases(raw_path: str) -> RCAEvalAdapterResult:
+    """Load RE2-TT (TrainTicket) cases under the same unmodified rules."""
+
+    return load_rcaeval_cases(raw_path, RE2TT_PROFILE)

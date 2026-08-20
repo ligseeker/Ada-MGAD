@@ -1031,7 +1031,16 @@ def diagnose_re2ob(
     windows_seconds: Sequence[int] = DEFAULT_WINDOWS_SECONDS,
     max_cases: Optional[int] = None,
     progress_every: int = 10,
+    dataset: str = "RCAEval-RE2-OB",
+    progress_label: str = "RE2-OB cases",
 ) -> Mapping[str, Any]:
+    """Diagnose one RCAEval release. Defaults reproduce the frozen RE2-OB report.
+
+    ``dataset``/``progress_label`` exist so the RE2-TT protocol extension can reuse
+    this scanner verbatim instead of forking it; passing neither leaves the P1
+    output byte-identical.
+    """
+
     root = Path(raw_path).resolve()
     cases_by_id = {case.case_id: case for case in adapter.inputs}
     sources = adapter.sources[:max_cases] if max_cases is not None else adapter.sources
@@ -1110,11 +1119,11 @@ def diagnose_re2ob(
         annotation_digest.update(b"\0")
         annotation_digest.update(Path(source.inject_time_path).read_bytes())
         annotation_digest.update(b"\n")
-        _progress("RE2-OB cases", index, len(sources), progress_every)
+        _progress(progress_label, index, len(sources), progress_every)
 
     deployment_rows = [record["deployment_metadata"] for record in case_records]
     return {
-        "dataset": "RCAEval-RE2-OB",
+        "dataset": dataset,
         "scan_scope": "limited-smoke" if max_cases is not None else "full",
         "cases": len(case_records),
         "available_adapter_cases": len(adapter.inputs),
