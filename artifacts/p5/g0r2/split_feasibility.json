@@ -1,0 +1,1276 @@
+{
+  "event_registry": {
+    "end_max_ms": 1627747192313,
+    "event_count": 16200,
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/g0r2/event_registry.csv",
+    "sha256": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5",
+    "start_min_ms": 1625108812249
+  },
+  "evidence_status": "REVALIDATED FACT",
+  "interpretation": {
+    "context_vs_raw": "Protocol S grouping uses expanded context; Protocol T reports raw chronological blocks plus explicit purge.",
+    "raw_injection_gt": "Events remain raw registry units; no event merging was performed.",
+    "selection_rule": "No AC@1, Avg@5, MRR, F1, or model performance was used."
+  },
+  "protocol_s_component_integration": {
+    "purpose": "component/integration evaluation; not temporal deployment generalization",
+    "windows": {
+      "300": {
+        "context_definition": "raw [start,end) union [start-W,start+W)",
+        "context_seconds": 300,
+        "feasible": true,
+        "group_count": 322,
+        "group_integrity": {
+          "passed": true,
+          "violations": []
+        },
+        "group_size_distribution": {
+          "1": 16,
+          "10": 4,
+          "102": 3,
+          "107": 1,
+          "109": 2,
+          "11": 7,
+          "112": 1,
+          "115": 2,
+          "116": 2,
+          "118": 1,
+          "12": 1,
+          "122": 1,
+          "124": 1,
+          "13": 6,
+          "130": 1,
+          "131": 1,
+          "133": 2,
+          "134": 1,
+          "14": 6,
+          "140": 2,
+          "142": 1,
+          "143": 1,
+          "145": 1,
+          "149": 1,
+          "15": 8,
+          "16": 5,
+          "162": 1,
+          "167": 1,
+          "17": 7,
+          "178": 1,
+          "18": 1,
+          "183": 1,
+          "186": 1,
+          "19": 6,
+          "193": 1,
+          "197": 1,
+          "2": 9,
+          "20": 7,
+          "203": 1,
+          "209": 1,
+          "21": 2,
+          "22": 2,
+          "226": 1,
+          "229": 1,
+          "23": 1,
+          "236": 1,
+          "239": 1,
+          "24": 3,
+          "240": 1,
+          "25": 2,
+          "26": 3,
+          "267": 1,
+          "268": 1,
+          "27": 2,
+          "271": 1,
+          "278": 1,
+          "28": 3,
+          "29": 5,
+          "3": 13,
+          "30": 1,
+          "31": 2,
+          "32": 3,
+          "33": 2,
+          "34": 4,
+          "35": 2,
+          "36": 2,
+          "38": 2,
+          "387": 1,
+          "39": 3,
+          "4": 7,
+          "40": 4,
+          "41": 1,
+          "42": 3,
+          "426": 1,
+          "43": 5,
+          "44": 2,
+          "45": 4,
+          "46": 2,
+          "47": 2,
+          "471": 1,
+          "49": 3,
+          "5": 12,
+          "50": 1,
+          "52": 3,
+          "53": 3,
+          "54": 1,
+          "55": 3,
+          "56": 3,
+          "58": 3,
+          "59": 1,
+          "6": 10,
+          "60": 3,
+          "61": 4,
+          "62": 3,
+          "63": 2,
+          "64": 1,
+          "65": 1,
+          "66": 3,
+          "67": 1,
+          "68": 3,
+          "69": 2,
+          "7": 8,
+          "70": 1,
+          "71": 3,
+          "73": 2,
+          "75": 1,
+          "76": 2,
+          "77": 1,
+          "8": 5,
+          "80": 1,
+          "81": 1,
+          "82": 1,
+          "83": 1,
+          "87": 1,
+          "9": 6,
+          "90": 1,
+          "97": 2,
+          "98": 2,
+          "99": 1
+        },
+        "grouped_stratified_5fold": {
+          "fold_event_counts": [
+            3241,
+            3240,
+            3238,
+            3239,
+            3242
+          ],
+          "folds": [
+            {
+              "event_count": 3241,
+              "fault_counts": {
+                "access permission denied exception": 3,
+                "cpu_anomalies": 3,
+                "file moving program": 9,
+                "login failure": 3096,
+                "memory_anomalies": 130
+              },
+              "fold": 0,
+              "missing_faults": [],
+              "missing_roots": [],
+              "root_counts": {
+                "dbservice1": 16,
+                "dbservice2": 19,
+                "logservice1": 14,
+                "logservice2": 12,
+                "mobservice1": 1553,
+                "mobservice2": 1572,
+                "redisservice1": 11,
+                "redisservice2": 11,
+                "webservice1": 16,
+                "webservice2": 17
+              }
+            },
+            {
+              "event_count": 3240,
+              "fault_counts": {
+                "access permission denied exception": 3,
+                "cpu_anomalies": 2,
+                "file moving program": 8,
+                "login failure": 3096,
+                "memory_anomalies": 131
+              },
+              "fold": 1,
+              "missing_faults": [],
+              "missing_roots": [],
+              "root_counts": {
+                "dbservice1": 17,
+                "dbservice2": 19,
+                "logservice1": 13,
+                "logservice2": 13,
+                "mobservice1": 1571,
+                "mobservice2": 1551,
+                "redisservice1": 11,
+                "redisservice2": 12,
+                "webservice1": 16,
+                "webservice2": 17
+              }
+            },
+            {
+              "event_count": 3238,
+              "fault_counts": {
+                "access permission denied exception": 3,
+                "cpu_anomalies": 2,
+                "file moving program": 9,
+                "login failure": 3094,
+                "memory_anomalies": 130
+              },
+              "fold": 2,
+              "missing_faults": [],
+              "missing_roots": [],
+              "root_counts": {
+                "dbservice1": 17,
+                "dbservice2": 19,
+                "logservice1": 13,
+                "logservice2": 12,
+                "mobservice1": 1555,
+                "mobservice2": 1566,
+                "redisservice1": 11,
+                "redisservice2": 11,
+                "webservice1": 17,
+                "webservice2": 17
+              }
+            },
+            {
+              "event_count": 3239,
+              "fault_counts": {
+                "access permission denied exception": 3,
+                "cpu_anomalies": 3,
+                "file moving program": 9,
+                "login failure": 3093,
+                "memory_anomalies": 131
+              },
+              "fold": 3,
+              "missing_faults": [],
+              "missing_roots": [],
+              "root_counts": {
+                "dbservice1": 17,
+                "dbservice2": 19,
+                "logservice1": 13,
+                "logservice2": 13,
+                "mobservice1": 1562,
+                "mobservice2": 1560,
+                "redisservice1": 11,
+                "redisservice2": 11,
+                "webservice1": 17,
+                "webservice2": 16
+              }
+            },
+            {
+              "event_count": 3242,
+              "fault_counts": {
+                "access permission denied exception": 3,
+                "cpu_anomalies": 2,
+                "file moving program": 8,
+                "login failure": 3099,
+                "memory_anomalies": 130
+              },
+              "fold": 4,
+              "missing_faults": [],
+              "missing_roots": [],
+              "root_counts": {
+                "dbservice1": 16,
+                "dbservice2": 20,
+                "logservice1": 13,
+                "logservice2": 13,
+                "mobservice1": 1574,
+                "mobservice2": 1550,
+                "redisservice1": 11,
+                "redisservice2": 12,
+                "webservice1": 16,
+                "webservice2": 17
+              }
+            }
+          ]
+        },
+        "maximum_group_size": 471,
+        "non_singleton_group_count": 306,
+        "selection_basis": "coverage, group integrity and deterministic balance only; no model performance"
+      },
+      "600": {
+        "context_definition": "raw [start,end) union [start-W,start+W)",
+        "context_seconds": 600,
+        "feasible": false,
+        "group_count": 23,
+        "group_integrity": {
+          "passed": true,
+          "violations": []
+        },
+        "group_size_distribution": {
+          "1": 5,
+          "123": 1,
+          "1457": 1,
+          "16": 1,
+          "170": 1,
+          "2": 2,
+          "2095": 1,
+          "269": 1,
+          "2737": 1,
+          "3029": 1,
+          "3206": 1,
+          "35": 1,
+          "397": 1,
+          "475": 1,
+          "6": 1,
+          "644": 1,
+          "763": 1,
+          "769": 1
+        },
+        "grouped_stratified_5fold": {
+          "fold_event_counts": [
+            3212,
+            3429,
+            3025,
+            3371,
+            3163
+          ],
+          "folds": [
+            {
+              "event_count": 3212,
+              "fault_counts": {
+                "access permission denied exception": 3,
+                "cpu_anomalies": 12,
+                "file moving program": 12,
+                "login failure": 3072,
+                "memory_anomalies": 113
+              },
+              "fold": 0,
+              "missing_faults": [],
+              "missing_roots": [],
+              "root_counts": {
+                "dbservice1": 18,
+                "dbservice2": 19,
+                "logservice1": 8,
+                "logservice2": 15,
+                "mobservice1": 1543,
+                "mobservice2": 1553,
+                "redisservice1": 13,
+                "redisservice2": 10,
+                "webservice1": 15,
+                "webservice2": 18
+              }
+            },
+            {
+              "event_count": 3429,
+              "fault_counts": {
+                "file moving program": 10,
+                "login failure": 3286,
+                "memory_anomalies": 133
+              },
+              "fold": 1,
+              "missing_faults": [
+                "access permission denied exception",
+                "cpu_anomalies"
+              ],
+              "missing_roots": [],
+              "root_counts": {
+                "dbservice1": 14,
+                "dbservice2": 18,
+                "logservice1": 15,
+                "logservice2": 20,
+                "mobservice1": 1662,
+                "mobservice2": 1647,
+                "redisservice1": 11,
+                "redisservice2": 12,
+                "webservice1": 15,
+                "webservice2": 15
+              }
+            },
+            {
+              "event_count": 3025,
+              "fault_counts": {
+                "access permission denied exception": 4,
+                "file moving program": 8,
+                "login failure": 2869,
+                "memory_anomalies": 144
+              },
+              "fold": 2,
+              "missing_faults": [
+                "cpu_anomalies"
+              ],
+              "missing_roots": [],
+              "root_counts": {
+                "dbservice1": 14,
+                "dbservice2": 20,
+                "logservice1": 19,
+                "logservice2": 11,
+                "mobservice1": 1410,
+                "mobservice2": 1491,
+                "redisservice1": 11,
+                "redisservice2": 15,
+                "webservice1": 16,
+                "webservice2": 18
+              }
+            },
+            {
+              "event_count": 3371,
+              "fault_counts": {
+                "access permission denied exception": 3,
+                "file moving program": 5,
+                "login failure": 3232,
+                "memory_anomalies": 131
+              },
+              "fold": 3,
+              "missing_faults": [
+                "cpu_anomalies"
+              ],
+              "missing_roots": [],
+              "root_counts": {
+                "dbservice1": 22,
+                "dbservice2": 18,
+                "logservice1": 17,
+                "logservice2": 7,
+                "mobservice1": 1650,
+                "mobservice2": 1606,
+                "redisservice1": 9,
+                "redisservice2": 10,
+                "webservice1": 17,
+                "webservice2": 15
+              }
+            },
+            {
+              "event_count": 3163,
+              "fault_counts": {
+                "access permission denied exception": 5,
+                "file moving program": 8,
+                "login failure": 3019,
+                "memory_anomalies": 131
+              },
+              "fold": 4,
+              "missing_faults": [
+                "cpu_anomalies"
+              ],
+              "missing_roots": [],
+              "root_counts": {
+                "dbservice1": 15,
+                "dbservice2": 21,
+                "logservice1": 7,
+                "logservice2": 10,
+                "mobservice1": 1550,
+                "mobservice2": 1502,
+                "redisservice1": 11,
+                "redisservice2": 10,
+                "webservice1": 19,
+                "webservice2": 18
+              }
+            }
+          ]
+        },
+        "maximum_group_size": 3206,
+        "non_singleton_group_count": 18,
+        "selection_basis": "coverage, group integrity and deterministic balance only; no model performance"
+      }
+    }
+  },
+  "protocol_t_continuous_temporal_e2e": {
+    "protocols": {
+      "duration_60_20_20": {
+        "ada_mgad_sliding_window_crossing": {
+          "boundary_crossing_events": 1,
+          "definition": "[floor(start/30s)*30s - 9*30s, floor(start/30s)*30s + 30s)",
+          "window_bins": 10,
+          "window_seconds": 300.0
+        },
+        "blocks": [
+          {
+            "collision_stats": {
+              "collision_bins": 496,
+              "collision_events": 1004,
+              "event_bearing_start_bins": 8279,
+              "maximum_events_per_start_bin": 3,
+              "multi_root_collision_bins": 265,
+              "multi_root_collision_events": 539
+            },
+            "duration_seconds": 1583028.038,
+            "end_max_ms": 1626623435739,
+            "event_count": 8787,
+            "fault_counts": {
+              "access permission denied exception": 8,
+              "file moving program": 20,
+              "login failure": 8381,
+              "memory_anomalies": 378
+            },
+            "missing_faults": [
+              "cpu_anomalies"
+            ],
+            "missing_roots": [],
+            "name": "train",
+            "rare_fault_counts": {
+              "access permission denied exception": 8
+            },
+            "root_counts": {
+              "dbservice1": 44,
+              "dbservice2": 50,
+              "logservice1": 45,
+              "logservice2": 39,
+              "mobservice1": 4237,
+              "mobservice2": 4224,
+              "redisservice1": 28,
+              "redisservice2": 34,
+              "webservice1": 42,
+              "webservice2": 44
+            },
+            "start_max_ms": 1626623424739,
+            "start_min_ms": 1625108812249,
+            "time_block_end_ms": 1626691840287,
+            "time_block_start_ms": 1625108812249
+          },
+          {
+            "collision_stats": {
+              "collision_bins": 242,
+              "collision_events": 489,
+              "event_bearing_start_bins": 3266,
+              "maximum_events_per_start_bin": 3,
+              "multi_root_collision_bins": 137,
+              "multi_root_collision_events": 278
+            },
+            "duration_seconds": 527676.013,
+            "end_max_ms": 1627219491984,
+            "event_count": 3513,
+            "fault_counts": {
+              "access permission denied exception": 3,
+              "file moving program": 11,
+              "login failure": 3367,
+              "memory_anomalies": 132
+            },
+            "missing_faults": [
+              "cpu_anomalies"
+            ],
+            "missing_roots": [],
+            "name": "validation",
+            "rare_fault_counts": {
+              "access permission denied exception": 3
+            },
+            "root_counts": {
+              "dbservice1": 14,
+              "dbservice2": 22,
+              "logservice1": 9,
+              "logservice2": 9,
+              "mobservice1": 1710,
+              "mobservice2": 1683,
+              "redisservice1": 12,
+              "redisservice2": 12,
+              "webservice1": 22,
+              "webservice2": 20
+            },
+            "start_max_ms": 1627219480984,
+            "start_min_ms": 1626711225473,
+            "time_block_end_ms": 1627219516300,
+            "time_block_start_ms": 1626691840287
+          },
+          {
+            "collision_stats": {
+              "collision_bins": 265,
+              "collision_events": 540,
+              "event_bearing_start_bins": 3625,
+              "maximum_events_per_start_bin": 3,
+              "multi_root_collision_bins": 134,
+              "multi_root_collision_events": 274
+            },
+            "duration_seconds": 527676.013,
+            "end_max_ms": 1627747192313,
+            "event_count": 3900,
+            "fault_counts": {
+              "access permission denied exception": 4,
+              "cpu_anomalies": 12,
+              "file moving program": 12,
+              "login failure": 3730,
+              "memory_anomalies": 142
+            },
+            "missing_faults": [],
+            "missing_roots": [],
+            "name": "test",
+            "rare_fault_counts": {
+              "access permission denied exception": 4,
+              "cpu_anomalies": 12
+            },
+            "root_counts": {
+              "dbservice1": 25,
+              "dbservice2": 24,
+              "logservice1": 12,
+              "logservice2": 15,
+              "mobservice1": 1868,
+              "mobservice2": 1892,
+              "redisservice1": 15,
+              "redisservice2": 11,
+              "webservice1": 18,
+              "webservice2": 20
+            },
+            "start_max_ms": 1627747181313,
+            "start_min_ms": 1627219612023,
+            "time_block_end_ms": 1627747192313,
+            "time_block_start_ms": 1627219516300
+          }
+        ],
+        "boundaries_ms": [
+          1626691840287,
+          1627219516300
+        ],
+        "boundary_definition": "chronological contiguous blocks; no event-window concatenation",
+        "context_crossing": {
+          "300": {
+            "boundary_crossing_events": 2,
+            "boundary_crossing_ratio": 0.0001234567901234568,
+            "crossing_case_ids": [
+              "gaia-553873e756b76fd2",
+              "gaia-5fb9af715fb19ade"
+            ]
+          },
+          "600": {
+            "boundary_crossing_events": 3,
+            "boundary_crossing_ratio": 0.00018518518518518518,
+            "crossing_case_ids": [
+              "gaia-3fa8f5ff49bb5813",
+              "gaia-553873e756b76fd2",
+              "gaia-5fb9af715fb19ade"
+            ]
+          }
+        },
+        "mode": "duration_60_20_20",
+        "purge": {
+          "300": {
+            "before_events": 16200,
+            "purge_rule": "remove event if expanded raw/context interval crosses either chronological boundary",
+            "purged_events": 2,
+            "retained_by_block": [
+              8787,
+              3512,
+              3899
+            ],
+            "retained_events": 16198,
+            "retention_ratio": 0.9998765432098765
+          },
+          "600": {
+            "before_events": 16200,
+            "purge_rule": "remove event if expanded raw/context interval crosses either chronological boundary",
+            "purged_events": 3,
+            "retained_by_block": [
+              8787,
+              3511,
+              3899
+            ],
+            "retained_events": 16197,
+            "retention_ratio": 0.9998148148148148
+          }
+        }
+      },
+      "event_count_60_20_20": {
+        "ada_mgad_sliding_window_crossing": {
+          "boundary_crossing_events": 4,
+          "definition": "[floor(start/30s)*30s - 9*30s, floor(start/30s)*30s + 30s)",
+          "window_bins": 10,
+          "window_seconds": 300.0
+        },
+        "blocks": [
+          {
+            "collision_stats": {
+              "collision_bins": 558,
+              "collision_events": 1129,
+              "event_bearing_start_bins": 9149,
+              "maximum_events_per_start_bin": 3,
+              "multi_root_collision_bins": 304,
+              "multi_root_collision_events": 617
+            },
+            "duration_seconds": 1754803.767,
+            "end_max_ms": 1626863600798,
+            "event_count": 9720,
+            "fault_counts": {
+              "access permission denied exception": 10,
+              "file moving program": 24,
+              "login failure": 9265,
+              "memory_anomalies": 421
+            },
+            "missing_faults": [
+              "cpu_anomalies"
+            ],
+            "missing_roots": [],
+            "name": "train",
+            "rare_fault_counts": {
+              "access permission denied exception": 10
+            },
+            "root_counts": {
+              "dbservice1": 48,
+              "dbservice2": 62,
+              "logservice1": 47,
+              "logservice2": 42,
+              "mobservice1": 4670,
+              "mobservice2": 4681,
+              "redisservice1": 32,
+              "redisservice2": 39,
+              "webservice1": 49,
+              "webservice2": 50
+            },
+            "start_max_ms": 1626863589798,
+            "start_min_ms": 1625108812249,
+            "time_block_end_ms": 1626863616016,
+            "time_block_start_ms": 1625108812249
+          },
+          {
+            "collision_stats": {
+              "collision_bins": 220,
+              "collision_events": 446,
+              "event_bearing_start_bins": 3014,
+              "maximum_events_per_start_bin": 3,
+              "multi_root_collision_bins": 118,
+              "multi_root_collision_events": 241
+            },
+            "duration_seconds": 450476.045,
+            "end_max_ms": 1627314047388,
+            "event_count": 3240,
+            "fault_counts": {
+              "access permission denied exception": 1,
+              "file moving program": 7,
+              "login failure": 3114,
+              "memory_anomalies": 118
+            },
+            "missing_faults": [
+              "cpu_anomalies"
+            ],
+            "missing_roots": [],
+            "name": "validation",
+            "rare_fault_counts": {
+              "access permission denied exception": 1
+            },
+            "root_counts": {
+              "dbservice1": 17,
+              "dbservice2": 14,
+              "logservice1": 11,
+              "logservice2": 6,
+              "mobservice1": 1592,
+              "mobservice2": 1547,
+              "redisservice1": 10,
+              "redisservice2": 9,
+              "webservice1": 18,
+              "webservice2": 16
+            },
+            "start_max_ms": 1627314036388,
+            "start_min_ms": 1626863616016,
+            "time_block_end_ms": 1627314092061,
+            "time_block_start_ms": 1626863616016
+          },
+          {
+            "collision_stats": {
+              "collision_bins": 225,
+              "collision_events": 458,
+              "event_bearing_start_bins": 3007,
+              "maximum_events_per_start_bin": 3,
+              "multi_root_collision_bins": 114,
+              "multi_root_collision_events": 233
+            },
+            "duration_seconds": 433100.252,
+            "end_max_ms": 1627747192313,
+            "event_count": 3240,
+            "fault_counts": {
+              "access permission denied exception": 4,
+              "cpu_anomalies": 12,
+              "file moving program": 12,
+              "login failure": 3099,
+              "memory_anomalies": 113
+            },
+            "missing_faults": [],
+            "missing_roots": [],
+            "name": "test",
+            "rare_fault_counts": {
+              "access permission denied exception": 4,
+              "cpu_anomalies": 12
+            },
+            "root_counts": {
+              "dbservice1": 18,
+              "dbservice2": 20,
+              "logservice1": 8,
+              "logservice2": 15,
+              "mobservice1": 1553,
+              "mobservice2": 1571,
+              "redisservice1": 13,
+              "redisservice2": 9,
+              "webservice1": 15,
+              "webservice2": 18
+            },
+            "start_max_ms": 1627747181313,
+            "start_min_ms": 1627314092061,
+            "time_block_end_ms": 1627747192313,
+            "time_block_start_ms": 1627314092061
+          }
+        ],
+        "boundaries_ms": [
+          1626863616016,
+          1627314092061
+        ],
+        "boundary_definition": "chronological contiguous blocks; no event-window concatenation",
+        "context_crossing": {
+          "300": {
+            "boundary_crossing_events": 7,
+            "boundary_crossing_ratio": 0.0004320987654320988,
+            "crossing_case_ids": [
+              "gaia-2034e04183a1dbc9",
+              "gaia-33e80bb4f96f448d",
+              "gaia-453c4eb6bc93ed00",
+              "gaia-6418551adc81af06",
+              "gaia-8b2e51b6ad8c577d",
+              "gaia-8df3d1f2e13762d0",
+              "gaia-cd124a74bb28fcc4"
+            ]
+          },
+          "600": {
+            "boundary_crossing_events": 18,
+            "boundary_crossing_ratio": 0.0011111111111111111,
+            "crossing_case_ids": [
+              "gaia-1bfe5a1c4cd5bf56",
+              "gaia-2034e04183a1dbc9",
+              "gaia-33e80bb4f96f448d",
+              "gaia-427dc28e219ea4f2",
+              "gaia-453c4eb6bc93ed00",
+              "gaia-47de3e0438176694",
+              "gaia-6418551adc81af06",
+              "gaia-6c4a31b7dc35db02",
+              "gaia-7f3ab76cfd5a44cd",
+              "gaia-8b2e51b6ad8c577d",
+              "gaia-8df3d1f2e13762d0",
+              "gaia-af79ab901241d519",
+              "gaia-b9c0e13cf6a9987c",
+              "gaia-bcf53ba30dd95651",
+              "gaia-cd124a74bb28fcc4",
+              "gaia-de0ab316c4436d6a",
+              "gaia-eaa14ac36c991fa2",
+              "gaia-ef4d7f7cb3e01dfc"
+            ]
+          }
+        },
+        "mode": "event_count_60_20_20",
+        "purge": {
+          "300": {
+            "before_events": 16200,
+            "purge_rule": "remove event if expanded raw/context interval crosses either chronological boundary",
+            "purged_events": 7,
+            "retained_by_block": [
+              9719,
+              3236,
+              3238
+            ],
+            "retained_events": 16193,
+            "retention_ratio": 0.9995679012345678
+          },
+          "600": {
+            "before_events": 16200,
+            "purge_rule": "remove event if expanded raw/context interval crosses either chronological boundary",
+            "purged_events": 18,
+            "retained_by_block": [
+              9717,
+              3229,
+              3236
+            ],
+            "retained_events": 16182,
+            "retention_ratio": 0.9988888888888889
+          }
+        }
+      }
+    },
+    "purpose": "continuous chronological trigger-to-RCA evaluation feasibility"
+  },
+  "rare_fault_distribution": {
+    "by_date_root_fault": {
+      "2021-07-13": {
+        "dbservice1::access permission denied exception": 1,
+        "dbservice1::memory_anomalies": 2,
+        "dbservice2::memory_anomalies": 1,
+        "logservice1::memory_anomalies": 4,
+        "mobservice1::login failure": 240,
+        "mobservice1::memory_anomalies": 2,
+        "mobservice2::login failure": 275,
+        "mobservice2::memory_anomalies": 3,
+        "redisservice1::memory_anomalies": 3,
+        "redisservice2::memory_anomalies": 1,
+        "webservice1::file moving program": 1,
+        "webservice1::memory_anomalies": 1,
+        "webservice2::file moving program": 1,
+        "webservice2::memory_anomalies": 1
+      },
+      "2021-07-14": {
+        "dbservice1::access permission denied exception": 2,
+        "dbservice1::memory_anomalies": 2,
+        "dbservice2::access permission denied exception": 1,
+        "dbservice2::memory_anomalies": 2,
+        "logservice2::memory_anomalies": 2,
+        "mobservice1::login failure": 229,
+        "mobservice1::memory_anomalies": 3,
+        "mobservice2::login failure": 227,
+        "mobservice2::memory_anomalies": 3,
+        "redisservice1::memory_anomalies": 2,
+        "redisservice2::memory_anomalies": 2,
+        "webservice1::file moving program": 1,
+        "webservice1::memory_anomalies": 2,
+        "webservice2::file moving program": 1,
+        "webservice2::memory_anomalies": 3
+      },
+      "2021-07-16": {
+        "dbservice1::access permission denied exception": 1,
+        "dbservice1::memory_anomalies": 3,
+        "dbservice2::memory_anomalies": 5,
+        "logservice1::memory_anomalies": 1,
+        "logservice2::memory_anomalies": 3,
+        "mobservice1::login failure": 274,
+        "mobservice1::memory_anomalies": 2,
+        "mobservice2::login failure": 238,
+        "mobservice2::memory_anomalies": 5,
+        "redisservice1::memory_anomalies": 1,
+        "redisservice2::memory_anomalies": 1,
+        "webservice1::memory_anomalies": 2,
+        "webservice2::memory_anomalies": 2
+      },
+      "2021-07-17": {
+        "dbservice1::access permission denied exception": 1,
+        "dbservice1::memory_anomalies": 3,
+        "dbservice2::memory_anomalies": 1,
+        "logservice1::memory_anomalies": 2,
+        "logservice2::memory_anomalies": 1,
+        "mobservice1::login failure": 289,
+        "mobservice1::memory_anomalies": 4,
+        "mobservice2::login failure": 277,
+        "mobservice2::memory_anomalies": 2,
+        "redisservice1::memory_anomalies": 3,
+        "redisservice2::memory_anomalies": 1,
+        "webservice1::file moving program": 1,
+        "webservice1::memory_anomalies": 2,
+        "webservice2::memory_anomalies": 2
+      },
+      "2021-07-18": {
+        "dbservice1::access permission denied exception": 1,
+        "dbservice1::memory_anomalies": 1,
+        "dbservice2::access permission denied exception": 1,
+        "dbservice2::memory_anomalies": 5,
+        "logservice1::memory_anomalies": 4,
+        "logservice2::memory_anomalies": 1,
+        "mobservice1::login failure": 303,
+        "mobservice1::memory_anomalies": 3,
+        "mobservice2::login failure": 286,
+        "mobservice2::memory_anomalies": 1,
+        "webservice1::memory_anomalies": 1,
+        "webservice2::memory_anomalies": 1
+      },
+      "2021-07-20": {
+        "dbservice1::memory_anomalies": 2,
+        "dbservice2::access permission denied exception": 1,
+        "dbservice2::memory_anomalies": 6,
+        "logservice1::memory_anomalies": 1,
+        "logservice2::memory_anomalies": 1,
+        "mobservice1::login failure": 238,
+        "mobservice1::memory_anomalies": 1,
+        "mobservice2::login failure": 231,
+        "mobservice2::memory_anomalies": 2,
+        "redisservice1::memory_anomalies": 1,
+        "redisservice2::memory_anomalies": 3,
+        "webservice1::file moving program": 1,
+        "webservice1::memory_anomalies": 2,
+        "webservice2::memory_anomalies": 2
+      },
+      "2021-07-21": {
+        "dbservice1::memory_anomalies": 2,
+        "dbservice2::access permission denied exception": 1,
+        "dbservice2::memory_anomalies": 4,
+        "logservice1::memory_anomalies": 1,
+        "logservice2::memory_anomalies": 2,
+        "mobservice1::login failure": 250,
+        "mobservice1::memory_anomalies": 3,
+        "mobservice2::login failure": 295,
+        "mobservice2::memory_anomalies": 1,
+        "redisservice1::memory_anomalies": 3,
+        "redisservice2::memory_anomalies": 2,
+        "webservice1::file moving program": 1,
+        "webservice1::memory_anomalies": 3,
+        "webservice2::file moving program": 2,
+        "webservice2::memory_anomalies": 3
+      },
+      "2021-07-23": {
+        "dbservice1::access permission denied exception": 1,
+        "dbservice1::memory_anomalies": 1,
+        "dbservice2::memory_anomalies": 3,
+        "logservice1::memory_anomalies": 1,
+        "logservice2::memory_anomalies": 2,
+        "mobservice1::login failure": 293,
+        "mobservice2::login failure": 292,
+        "mobservice2::memory_anomalies": 3,
+        "redisservice1::memory_anomalies": 2,
+        "redisservice2::memory_anomalies": 4,
+        "webservice1::memory_anomalies": 3,
+        "webservice2::file moving program": 1,
+        "webservice2::memory_anomalies": 2
+      },
+      "2021-07-27": {
+        "dbservice1::cpu_anomalies": 1,
+        "dbservice1::memory_anomalies": 3,
+        "dbservice2::access permission denied exception": 1,
+        "dbservice2::memory_anomalies": 5,
+        "logservice2::memory_anomalies": 4,
+        "mobservice1::login failure": 284,
+        "mobservice1::memory_anomalies": 3,
+        "mobservice2::login failure": 298,
+        "mobservice2::memory_anomalies": 3,
+        "redisservice1::memory_anomalies": 3,
+        "redisservice2::memory_anomalies": 2,
+        "webservice1::memory_anomalies": 4,
+        "webservice2::memory_anomalies": 3
+      },
+      "2021-07-28": {
+        "dbservice1::access permission denied exception": 1,
+        "dbservice1::cpu_anomalies": 4,
+        "dbservice1::memory_anomalies": 3,
+        "dbservice2::memory_anomalies": 4,
+        "logservice1::memory_anomalies": 1,
+        "logservice2::memory_anomalies": 4,
+        "mobservice1::login failure": 276,
+        "mobservice1::memory_anomalies": 3,
+        "mobservice2::cpu_anomalies": 2,
+        "mobservice2::login failure": 287,
+        "mobservice2::memory_anomalies": 3,
+        "redisservice1::memory_anomalies": 2,
+        "redisservice2::memory_anomalies": 1,
+        "webservice1::file moving program": 1,
+        "webservice2::file moving program": 2,
+        "webservice2::memory_anomalies": 3
+      },
+      "2021-07-29": {
+        "dbservice1::cpu_anomalies": 2,
+        "dbservice2::memory_anomalies": 3,
+        "logservice1::memory_anomalies": 3,
+        "logservice2::memory_anomalies": 2,
+        "mobservice1::login failure": 321,
+        "mobservice1::memory_anomalies": 1,
+        "mobservice2::cpu_anomalies": 1,
+        "mobservice2::login failure": 294,
+        "mobservice2::memory_anomalies": 1,
+        "redisservice1::memory_anomalies": 3,
+        "redisservice2::memory_anomalies": 1,
+        "webservice1::file moving program": 2,
+        "webservice1::memory_anomalies": 1,
+        "webservice2::file moving program": 1,
+        "webservice2::memory_anomalies": 2
+      },
+      "2021-07-30": {
+        "dbservice1::memory_anomalies": 1,
+        "dbservice2::access permission denied exception": 2,
+        "dbservice2::memory_anomalies": 4,
+        "logservice1::memory_anomalies": 1,
+        "logservice2::memory_anomalies": 3,
+        "mobservice1::login failure": 298,
+        "mobservice1::memory_anomalies": 3,
+        "mobservice2::login failure": 318,
+        "redisservice1::memory_anomalies": 2,
+        "redisservice2::memory_anomalies": 2,
+        "webservice1::file moving program": 3,
+        "webservice1::memory_anomalies": 1,
+        "webservice2::file moving program": 2
+      },
+      "2021-07-31": {
+        "dbservice1::cpu_anomalies": 1,
+        "dbservice1::memory_anomalies": 2,
+        "dbservice2::memory_anomalies": 1,
+        "logservice1::memory_anomalies": 3,
+        "logservice2::memory_anomalies": 2,
+        "mobservice1::login failure": 361,
+        "mobservice1::memory_anomalies": 2,
+        "mobservice2::cpu_anomalies": 1,
+        "mobservice2::login failure": 358,
+        "mobservice2::memory_anomalies": 2,
+        "redisservice1::memory_anomalies": 3,
+        "redisservice2::memory_anomalies": 3,
+        "webservice1::memory_anomalies": 3,
+        "webservice2::file moving program": 1,
+        "webservice2::memory_anomalies": 4
+      }
+    },
+    "rare_event_rows": [
+      {
+        "case_id": "gaia-3f14771a61d506c4",
+        "date": "2021-07-13",
+        "fault": "access permission denied exception",
+        "root": "dbservice1",
+        "start_ms": 1626144372912
+      },
+      {
+        "case_id": "gaia-8e6f3ea647840c20",
+        "date": "2021-07-14",
+        "fault": "access permission denied exception",
+        "root": "dbservice1",
+        "start_ms": 1626192060353
+      },
+      {
+        "case_id": "gaia-5e0c125e2a1a9d8f",
+        "date": "2021-07-14",
+        "fault": "access permission denied exception",
+        "root": "dbservice1",
+        "start_ms": 1626206400770
+      },
+      {
+        "case_id": "gaia-b9425fc2a1351163",
+        "date": "2021-07-14",
+        "fault": "access permission denied exception",
+        "root": "dbservice2",
+        "start_ms": 1626220800986
+      },
+      {
+        "case_id": "gaia-4766ba0c59297ed9",
+        "date": "2021-07-16",
+        "fault": "access permission denied exception",
+        "root": "dbservice1",
+        "start_ms": 1626393600652
+      },
+      {
+        "case_id": "gaia-93fe9352fd60a026",
+        "date": "2021-07-17",
+        "fault": "access permission denied exception",
+        "root": "dbservice1",
+        "start_ms": 1626451260582
+      },
+      {
+        "case_id": "gaia-a6decbe1ca019742",
+        "date": "2021-07-18",
+        "fault": "access permission denied exception",
+        "root": "dbservice1",
+        "start_ms": 1626580800799
+      },
+      {
+        "case_id": "gaia-9c9abb75a502ad40",
+        "date": "2021-07-18",
+        "fault": "access permission denied exception",
+        "root": "dbservice2",
+        "start_ms": 1626595200052
+      },
+      {
+        "case_id": "gaia-6afdb6647d8eaa4a",
+        "date": "2021-07-20",
+        "fault": "access permission denied exception",
+        "root": "dbservice2",
+        "start_ms": 1626782400700
+      },
+      {
+        "case_id": "gaia-677f2d12d99a7526",
+        "date": "2021-07-21",
+        "fault": "access permission denied exception",
+        "root": "dbservice2",
+        "start_ms": 1626854400863
+      },
+      {
+        "case_id": "gaia-3ed732a425004f56",
+        "date": "2021-07-23",
+        "fault": "access permission denied exception",
+        "root": "dbservice1",
+        "start_ms": 1626998400237
+      },
+      {
+        "case_id": "gaia-85c7420b1d31051f",
+        "date": "2021-07-27",
+        "fault": "access permission denied exception",
+        "root": "dbservice2",
+        "start_ms": 1627315260853
+      },
+      {
+        "case_id": "gaia-b4c2814ba5c9159a",
+        "date": "2021-07-27",
+        "fault": "cpu_anomalies",
+        "root": "dbservice1",
+        "start_ms": 1627400785446
+      },
+      {
+        "case_id": "gaia-33594ed0add3748b",
+        "date": "2021-07-28",
+        "fault": "access permission denied exception",
+        "root": "dbservice1",
+        "start_ms": 1627416000208
+      },
+      {
+        "case_id": "gaia-d123d8de0bae642b",
+        "date": "2021-07-28",
+        "fault": "cpu_anomalies",
+        "root": "mobservice2",
+        "start_ms": 1627425620936
+      },
+      {
+        "case_id": "gaia-4e82b4626362e366",
+        "date": "2021-07-28",
+        "fault": "cpu_anomalies",
+        "root": "dbservice1",
+        "start_ms": 1627436019426
+      },
+      {
+        "case_id": "gaia-4fd984b7048abb94",
+        "date": "2021-07-28",
+        "fault": "cpu_anomalies",
+        "root": "dbservice1",
+        "start_ms": 1627446851898
+      },
+      {
+        "case_id": "gaia-d6af0e18622a5277",
+        "date": "2021-07-28",
+        "fault": "cpu_anomalies",
+        "root": "dbservice1",
+        "start_ms": 1627457493624
+      },
+      {
+        "case_id": "gaia-5dd040905a8aa3d1",
+        "date": "2021-07-28",
+        "fault": "cpu_anomalies",
+        "root": "mobservice2",
+        "start_ms": 1627468796272
+      },
+      {
+        "case_id": "gaia-3821b27f65a0e280",
+        "date": "2021-07-28",
+        "fault": "cpu_anomalies",
+        "root": "dbservice1",
+        "start_ms": 1627480899125
+      },
+      {
+        "case_id": "gaia-8a65812582dd885b",
+        "date": "2021-07-29",
+        "fault": "cpu_anomalies",
+        "root": "dbservice1",
+        "start_ms": 1627500524737
+      },
+      {
+        "case_id": "gaia-061e04be9f837277",
+        "date": "2021-07-29",
+        "fault": "cpu_anomalies",
+        "root": "mobservice2",
+        "start_ms": 1627513936290
+      },
+      {
+        "case_id": "gaia-5b7274bab3ead2d0",
+        "date": "2021-07-29",
+        "fault": "cpu_anomalies",
+        "root": "dbservice1",
+        "start_ms": 1627544076586
+      },
+      {
+        "case_id": "gaia-e204f884b986dd80",
+        "date": "2021-07-30",
+        "fault": "access permission denied exception",
+        "root": "dbservice2",
+        "start_ms": 1627617600298
+      },
+      {
+        "case_id": "gaia-dabce83a8626c898",
+        "date": "2021-07-30",
+        "fault": "access permission denied exception",
+        "root": "dbservice2",
+        "start_ms": 1627632000476
+      },
+      {
+        "case_id": "gaia-6c9ed0c8777463f8",
+        "date": "2021-07-31",
+        "fault": "cpu_anomalies",
+        "root": "dbservice1",
+        "start_ms": 1627675027979
+      },
+      {
+        "case_id": "gaia-f6dc5cd3789dfb43",
+        "date": "2021-07-31",
+        "fault": "cpu_anomalies",
+        "root": "mobservice2",
+        "start_ms": 1627732844203
+      }
+    ],
+    "rare_faults": [
+      "cpu_anomalies",
+      "access permission denied exception"
+    ]
+  },
+  "schema_version": "p5_g0r2_split_feasibility_v1"
+}

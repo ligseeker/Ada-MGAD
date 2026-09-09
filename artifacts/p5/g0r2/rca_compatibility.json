@@ -1,0 +1,1000 @@
+{
+  "ada_rca_repository": {
+    "branch": "main",
+    "canonical_specification": "/home/zhangll24/RCA_project/Ada-RCA-cleanup/docs/REPRESENTATION_FREEZE.md",
+    "canonical_specification_sha256": "740fbf8a48c0753c19d8450e92ed2a1e80f81cfae9f34c354fd83ab1b12f4387",
+    "feature_extractor": "/home/zhangll24/RCA_project/Ada-RCA-cleanup/src/rca/features.py",
+    "feature_extractor_sha256": "91d452cc17bb2bdc51712a65e13cd079057f1d112016ef94836bbc13445e0a11",
+    "final_method": "/home/zhangll24/RCA_project/Ada-RCA-cleanup/src/rca/final_method.py",
+    "final_method_sha256": "8587e9790d6a1d0d73ce9ae3b3149baea6a8e61153475f48f0cdc7143b6dbed7",
+    "head": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
+    "path": "/home/zhangll24/RCA_project/Ada-RCA-cleanup",
+    "working_tree": "clean"
+  },
+  "configuration_health": {
+    "W300_B15": {
+      "bin_seconds": 15,
+      "bins_total": 40,
+      "exact_68d_representation_built": false,
+      "exact_health_status": "NOT COMPUTED: GAIA four-channel materializer is not frozen",
+      "full_scan_activity_coverage_available": true,
+      "metric_cadence_gap_adjusted_occupancy_reference": 0.4190841737133817,
+      "metric_native_cadence_seconds": 30,
+      "metric_structural_occupancy_upper_bound_without_fill": 0.5,
+      "selection_basis": "coverage, contamination, representation health, and split feasibility only",
+      "w300_non_68d_proxy_available": true,
+      "window_seconds_each_side": 300
+    },
+    "W300_B30": {
+      "bin_seconds": 30,
+      "bins_total": 20,
+      "exact_68d_representation_built": false,
+      "exact_health_status": "NOT COMPUTED: GAIA four-channel materializer is not frozen",
+      "full_scan_activity_coverage_available": true,
+      "metric_cadence_gap_adjusted_occupancy_reference": 0.8381683474267634,
+      "metric_native_cadence_seconds": 30,
+      "metric_structural_occupancy_upper_bound_without_fill": 1.0,
+      "selection_basis": "coverage, contamination, representation health, and split feasibility only",
+      "w300_non_68d_proxy_available": true,
+      "window_seconds_each_side": 300
+    },
+    "W600_B15": {
+      "bin_seconds": 15,
+      "bins_total": 80,
+      "exact_68d_representation_built": false,
+      "exact_health_status": "NOT COMPUTED: GAIA four-channel materializer is not frozen",
+      "full_scan_activity_coverage_available": true,
+      "metric_cadence_gap_adjusted_occupancy_reference": 0.4190841737133817,
+      "metric_native_cadence_seconds": 30,
+      "metric_structural_occupancy_upper_bound_without_fill": 0.5,
+      "selection_basis": "coverage, contamination, representation health, and split feasibility only",
+      "w300_non_68d_proxy_available": false,
+      "window_seconds_each_side": 600
+    },
+    "W600_B30": {
+      "bin_seconds": 30,
+      "bins_total": 40,
+      "exact_68d_representation_built": false,
+      "exact_health_status": "NOT COMPUTED: GAIA four-channel materializer is not frozen",
+      "full_scan_activity_coverage_available": true,
+      "metric_cadence_gap_adjusted_occupancy_reference": 0.8381683474267634,
+      "metric_native_cadence_seconds": 30,
+      "metric_structural_occupancy_upper_bound_without_fill": 1.0,
+      "selection_basis": "coverage, contamination, representation health, and split feasibility only",
+      "w300_non_68d_proxy_available": false,
+      "window_seconds_each_side": 600
+    }
+  },
+  "context_overlap": {
+    "300": {
+      "context_only": {
+        "cases_in_multi_fault_groups": 15069,
+        "cases_in_multi_root_groups": 16148,
+        "cases_in_non_singleton_groups": 16182,
+        "different_root_direct_pair_ratio": 0.5364361912287633,
+        "different_root_direct_pairs": 33943,
+        "direct_overlap_pairs": 63275,
+        "group_size_distribution": {
+          "1": 18,
+          "10": 5,
+          "102": 3,
+          "107": 1,
+          "109": 1,
+          "11": 9,
+          "115": 1,
+          "116": 2,
+          "118": 2,
+          "12": 1,
+          "120": 1,
+          "122": 1,
+          "124": 1,
+          "125": 1,
+          "126": 1,
+          "13": 9,
+          "130": 1,
+          "133": 1,
+          "134": 1,
+          "14": 10,
+          "140": 2,
+          "142": 1,
+          "145": 1,
+          "15": 9,
+          "16": 5,
+          "162": 1,
+          "167": 1,
+          "17": 8,
+          "172": 1,
+          "18": 2,
+          "186": 1,
+          "19": 6,
+          "190": 1,
+          "193": 1,
+          "197": 2,
+          "198": 1,
+          "2": 11,
+          "20": 7,
+          "203": 1,
+          "21": 5,
+          "22": 2,
+          "226": 1,
+          "229": 1,
+          "23": 3,
+          "236": 1,
+          "239": 1,
+          "24": 3,
+          "25": 2,
+          "26": 3,
+          "268": 1,
+          "27": 1,
+          "278": 1,
+          "28": 3,
+          "29": 4,
+          "3": 13,
+          "30": 1,
+          "31": 4,
+          "32": 3,
+          "33": 2,
+          "34": 5,
+          "35": 3,
+          "36": 2,
+          "38": 2,
+          "387": 1,
+          "39": 2,
+          "4": 9,
+          "40": 2,
+          "41": 1,
+          "42": 2,
+          "43": 5,
+          "44": 2,
+          "45": 4,
+          "46": 1,
+          "47": 3,
+          "471": 1,
+          "49": 3,
+          "5": 13,
+          "50": 2,
+          "52": 3,
+          "53": 3,
+          "54": 2,
+          "55": 3,
+          "56": 4,
+          "58": 5,
+          "59": 1,
+          "6": 11,
+          "60": 4,
+          "61": 4,
+          "62": 1,
+          "63": 2,
+          "64": 1,
+          "65": 1,
+          "66": 3,
+          "67": 1,
+          "68": 4,
+          "69": 2,
+          "7": 9,
+          "71": 3,
+          "73": 2,
+          "74": 2,
+          "75": 1,
+          "76": 2,
+          "77": 1,
+          "79": 1,
+          "8": 8,
+          "80": 2,
+          "81": 2,
+          "82": 1,
+          "83": 2,
+          "84": 1,
+          "9": 8,
+          "90": 2,
+          "92": 2,
+          "95": 1,
+          "97": 2,
+          "98": 3,
+          "99": 1
+        },
+        "groups": 361,
+        "interval_kind": "context only",
+        "interval_semantics": "half-open; boundary touching is not overlap",
+        "largest_group": 471,
+        "maximum_direct_overlap_degree": 19,
+        "multi_fault_groups": 246,
+        "multi_root_groups": 335,
+        "non_singleton_groups": 343,
+        "same_root_direct_pairs": 29332
+      },
+      "eligible_registry_coverage": {
+        "cases": 16200,
+        "fault_types": 5,
+        "roots": 10
+      },
+      "injection_union_context": {
+        "cases_in_multi_fault_groups": 15254,
+        "cases_in_multi_root_groups": 16160,
+        "cases_in_non_singleton_groups": 16184,
+        "different_root_direct_pair_ratio": 0.5464006404335242,
+        "different_root_direct_pairs": 35492,
+        "direct_overlap_pairs": 64956,
+        "group_size_distribution": {
+          "1": 16,
+          "10": 4,
+          "102": 3,
+          "107": 1,
+          "109": 2,
+          "11": 7,
+          "112": 1,
+          "115": 2,
+          "116": 2,
+          "118": 1,
+          "12": 1,
+          "122": 1,
+          "124": 1,
+          "13": 6,
+          "130": 1,
+          "131": 1,
+          "133": 2,
+          "134": 1,
+          "14": 6,
+          "140": 2,
+          "142": 1,
+          "143": 1,
+          "145": 1,
+          "149": 1,
+          "15": 8,
+          "16": 5,
+          "162": 1,
+          "167": 1,
+          "17": 7,
+          "178": 1,
+          "18": 1,
+          "183": 1,
+          "186": 1,
+          "19": 6,
+          "193": 1,
+          "197": 1,
+          "2": 9,
+          "20": 7,
+          "203": 1,
+          "209": 1,
+          "21": 2,
+          "22": 2,
+          "226": 1,
+          "229": 1,
+          "23": 1,
+          "236": 1,
+          "239": 1,
+          "24": 3,
+          "240": 1,
+          "25": 2,
+          "26": 3,
+          "267": 1,
+          "268": 1,
+          "27": 2,
+          "271": 1,
+          "278": 1,
+          "28": 3,
+          "29": 5,
+          "3": 13,
+          "30": 1,
+          "31": 2,
+          "32": 3,
+          "33": 2,
+          "34": 4,
+          "35": 2,
+          "36": 2,
+          "38": 2,
+          "387": 1,
+          "39": 3,
+          "4": 7,
+          "40": 4,
+          "41": 1,
+          "42": 3,
+          "426": 1,
+          "43": 5,
+          "44": 2,
+          "45": 4,
+          "46": 2,
+          "47": 2,
+          "471": 1,
+          "49": 3,
+          "5": 12,
+          "50": 1,
+          "52": 3,
+          "53": 3,
+          "54": 1,
+          "55": 3,
+          "56": 3,
+          "58": 3,
+          "59": 1,
+          "6": 10,
+          "60": 3,
+          "61": 4,
+          "62": 3,
+          "63": 2,
+          "64": 1,
+          "65": 1,
+          "66": 3,
+          "67": 1,
+          "68": 3,
+          "69": 2,
+          "7": 8,
+          "70": 1,
+          "71": 3,
+          "73": 2,
+          "75": 1,
+          "76": 2,
+          "77": 1,
+          "8": 5,
+          "80": 1,
+          "81": 1,
+          "82": 1,
+          "83": 1,
+          "87": 1,
+          "9": 6,
+          "90": 1,
+          "97": 2,
+          "98": 2,
+          "99": 1
+        },
+        "groups": 322,
+        "interval_kind": "injection union context",
+        "interval_semantics": "half-open; boundary touching is not overlap",
+        "largest_group": 471,
+        "maximum_direct_overlap_degree": 43,
+        "multi_fault_groups": 219,
+        "multi_root_groups": 299,
+        "non_singleton_groups": 306,
+        "same_root_direct_pairs": 29464
+      },
+      "telemetry_coverage": {
+        "logs": {
+          "candidate_service_presence_ratio": {
+            "count": 16200,
+            "max": 1.0,
+            "mean": 0.9650432098765432,
+            "median": 1.0,
+            "min": 0.0,
+            "p05": 0.8,
+            "p95": 1.0
+          },
+          "case_any_activity_ratio": 0.9997530864197531,
+          "cases_with_any_activity": 16196,
+          "occupied_bin_ratio": {
+            "count": 16200,
+            "max": 1.0,
+            "mean": 0.9996766607877718,
+            "median": 1.0,
+            "min": 0.0,
+            "p05": 1.0,
+            "p95": 1.0
+          },
+          "window_semantics": "inclusive [t0-window, t0+window], 30s occupancy bins"
+        },
+        "metrics": {
+          "candidate_service_presence_ratio": {
+            "count": 16200,
+            "max": 1.0,
+            "mean": 0.846604938271605,
+            "median": 1.0,
+            "min": 0.0,
+            "p05": 0.0,
+            "p95": 1.0
+          },
+          "case_any_activity_ratio": 0.8862962962962962,
+          "cases_with_any_activity": 14358,
+          "occupied_bin_ratio": {
+            "count": 16200,
+            "max": 1.0,
+            "mean": 0.8833362727807171,
+            "median": 1.0,
+            "min": 0.0,
+            "p05": 0.0,
+            "p95": 1.0
+          },
+          "window_semantics": "inclusive [t0-window, t0+window], 30s occupancy bins"
+        },
+        "traces": {
+          "candidate_service_presence_ratio": {
+            "count": 16200,
+            "max": 1.0,
+            "mean": 0.9281481481481482,
+            "median": 1.0,
+            "min": 0.0,
+            "p05": 0.4,
+            "p95": 1.0
+          },
+          "case_any_activity_ratio": 0.9997530864197531,
+          "cases_with_any_activity": 16196,
+          "occupied_bin_ratio": {
+            "count": 16200,
+            "max": 1.0,
+            "mean": 0.9996825396825397,
+            "median": 1.0,
+            "min": 0.0,
+            "p05": 1.0,
+            "p95": 1.0
+          },
+          "window_semantics": "inclusive [t0-window, t0+window], 30s occupancy bins"
+        }
+      }
+    },
+    "600": {
+      "context_only": {
+        "cases_in_multi_fault_groups": 16177,
+        "cases_in_multi_root_groups": 16195,
+        "cases_in_non_singleton_groups": 16195,
+        "different_root_direct_pair_ratio": 0.5361593662993608,
+        "different_root_direct_pairs": 68363,
+        "direct_overlap_pairs": 127505,
+        "group_size_distribution": {
+          "1": 5,
+          "123": 1,
+          "1457": 1,
+          "16": 1,
+          "170": 1,
+          "2": 2,
+          "2095": 1,
+          "269": 1,
+          "2737": 1,
+          "3029": 1,
+          "3206": 1,
+          "35": 1,
+          "397": 1,
+          "475": 1,
+          "6": 1,
+          "644": 1,
+          "763": 1,
+          "769": 1
+        },
+        "groups": 23,
+        "interval_kind": "context only",
+        "interval_semantics": "half-open; boundary touching is not overlap",
+        "largest_group": 3206,
+        "maximum_direct_overlap_degree": 31,
+        "multi_fault_groups": 16,
+        "multi_root_groups": 18,
+        "non_singleton_groups": 18,
+        "same_root_direct_pairs": 59142
+      },
+      "eligible_registry_coverage": {
+        "cases": 16200,
+        "fault_types": 5,
+        "roots": 10
+      },
+      "injection_union_context": {
+        "cases_in_multi_fault_groups": 16177,
+        "cases_in_multi_root_groups": 16195,
+        "cases_in_non_singleton_groups": 16195,
+        "different_root_direct_pair_ratio": 0.5372789860741668,
+        "different_root_direct_pairs": 68675,
+        "direct_overlap_pairs": 127820,
+        "group_size_distribution": {
+          "1": 5,
+          "123": 1,
+          "1457": 1,
+          "16": 1,
+          "170": 1,
+          "2": 2,
+          "2095": 1,
+          "269": 1,
+          "2737": 1,
+          "3029": 1,
+          "3206": 1,
+          "35": 1,
+          "397": 1,
+          "475": 1,
+          "6": 1,
+          "644": 1,
+          "763": 1,
+          "769": 1
+        },
+        "groups": 23,
+        "interval_kind": "injection union context",
+        "interval_semantics": "half-open; boundary touching is not overlap",
+        "largest_group": 3206,
+        "maximum_direct_overlap_degree": 50,
+        "multi_fault_groups": 16,
+        "multi_root_groups": 18,
+        "non_singleton_groups": 18,
+        "same_root_direct_pairs": 59145
+      },
+      "telemetry_coverage": {
+        "logs": {
+          "candidate_service_presence_ratio": {
+            "count": 16200,
+            "max": 1.0,
+            "mean": 0.9653086419753086,
+            "median": 1.0,
+            "min": 0.0,
+            "p05": 0.8,
+            "p95": 1.0
+          },
+          "case_any_activity_ratio": 0.9997530864197531,
+          "cases_with_any_activity": 16196,
+          "occupied_bin_ratio": {
+            "count": 16200,
+            "max": 1.0,
+            "mean": 0.9996221017765734,
+            "median": 1.0,
+            "min": 0.0,
+            "p05": 1.0,
+            "p95": 1.0
+          },
+          "window_semantics": "inclusive [t0-window, t0+window], 30s occupancy bins"
+        },
+        "metrics": {
+          "candidate_service_presence_ratio": {
+            "count": 16200,
+            "max": 1.0,
+            "mean": 0.8477530864197531,
+            "median": 1.0,
+            "min": 0.0,
+            "p05": 0.0,
+            "p95": 1.0
+          },
+          "case_any_activity_ratio": 0.8877160493827161,
+          "cases_with_any_activity": 14381,
+          "occupied_bin_ratio": {
+            "count": 16200,
+            "max": 1.0,
+            "mean": 0.883170731707317,
+            "median": 1.0,
+            "min": 0.0,
+            "p05": 0.0,
+            "p95": 1.0
+          },
+          "window_semantics": "inclusive [t0-window, t0+window], 30s occupancy bins"
+        },
+        "traces": {
+          "candidate_service_presence_ratio": {
+            "count": 16200,
+            "max": 1.0,
+            "mean": 0.9283456790123458,
+            "median": 1.0,
+            "min": 0.0,
+            "p05": 0.4,
+            "p95": 1.0
+          },
+          "case_any_activity_ratio": 0.9997530864197531,
+          "cases_with_any_activity": 16196,
+          "occupied_bin_ratio": {
+            "count": 16200,
+            "max": 1.0,
+            "mean": 0.9996281240590184,
+            "median": 1.0,
+            "min": 0.0,
+            "p05": 1.0,
+            "p95": 1.0
+          },
+          "window_semantics": "inclusive [t0-window, t0+window], 30s occupancy bins"
+        }
+      }
+    }
+  },
+  "evidence_status": "REVALIDATED FACT plus explicitly labelled proxy/inference",
+  "frozen_contract": {
+    "aggregation": "service-channel Q90 of finite absolute normalized deviations",
+    "bin_seconds": 15,
+    "bins": 80,
+    "feature_channels": [
+      "Metric",
+      "Log",
+      "Trace Error",
+      "Trace Latency"
+    ],
+    "missingness": "mask-preserving; no interpolation/fill; numeric zero is observed zero",
+    "normalization": "case-local indicator-local pre-event median/MAD with IQR fallback",
+    "raw_modalities": [
+      "Metrics",
+      "Logs",
+      "Traces"
+    ],
+    "terminology": "three raw modalities, four derived feature channels; never four modalities",
+    "window": "half-open [t0-600s, t0+600s)",
+    "z2_dimension": 68
+  },
+  "limitations": [
+    "No ranker was trained and no ranking metric was computed.",
+    "Exact GAIA Z2 feature health for the four window/bin configurations requires a frozen audit-only four-channel materializer.",
+    "Historical W300 P2 arrays are used only as checksum-verified proxy evidence and preserve their status>=500 limitation."
+  ],
+  "prohibited_selection_metrics": [
+    "AC@1",
+    "Avg@5",
+    "MRR"
+  ],
+  "raw_vs_processed": {
+    "option_a_ada_mgad_processed": {
+      "information_loss": [
+        "30s aggregation removes native millisecond log and microsecond trace timing",
+        "raw log text/schema is replaced by Ada-MGAD-specific template/count representation",
+        "trace status and latency are aggregated for detector edges rather than frozen RCA scalar channels",
+        "parent/span identifiers and dynamic trace structure are not preserved as raw evidence",
+        "Ada-MGAD node tensors do not satisfy Ada-RCA's four derived CSV channel contract"
+      ],
+      "verdict": "NOT RECOMMENDED"
+    },
+    "option_b_independent_raw_event_relative": {
+      "minimum_adapter": [
+        "long metric shards -> label-free <candidate>_<indicator> scalar series",
+        "message-prefix logs -> numeric log indicator series",
+        "trace status != 200 -> Trace Error series",
+        "end_time-start_time -> Trace Latency series",
+        "consistent numeric time unit for channel files and event anchor",
+        "trusted source hashes/config/masks; labels remain outside prediction-visible input"
+      ],
+      "verdict": "RECOMMENDED"
+    }
+  },
+  "recommendations": {
+    "B15": "CONDITIONAL: no all-missing structural failure is proven, but 30s metrics imply alternating-bin sparsity and about half cadence occupancy",
+    "B30": "CONDITIONAL ADVANTAGE for GAIA metric cadence; changes frozen temporal resolution and remains NOT FROZEN",
+    "W300": "CONDITIONAL ADVANTAGE: much smaller context components with similar activity coverage; exact 68D health still not computed",
+    "W600": "CONDITIONAL: telemetry coverage is acceptable, but context grouping/contamination is severe",
+    "configuration_freeze": "NOT FROZEN",
+    "trace_error": "use status != 200 for GAIA adapter; historical >=500 proxy is not semantically valid"
+  },
+  "representation_health_proxy": {
+    "bin_size": "stage summaries, not frozen 15s/30s Z2 bins",
+    "channels": {
+      "log": {
+        "all_masked_ratio": 0.00022271714922048998,
+        "all_zero_ratio": 0.034974016332590945,
+        "channel_available_proxy_ratio": 0.9997772828507795,
+        "coverage_observed_cell_ratio": 0.9787305122494432,
+        "feature_health": {
+          "constant_feature_ratio": 0.0,
+          "feature_count": 5,
+          "features": [
+            {
+              "constant": false,
+              "feature": "whole.log_event_rate_ratio",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.00022271714922050823,
+              "near_constant": false,
+              "observed_ratio": 0.9997772828507795,
+              "variance_among_observed": 0.026391423659545648
+            },
+            {
+              "constant": false,
+              "feature": "whole.active_second_fraction_shift",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.00022271714922050823,
+              "near_constant": false,
+              "observed_ratio": 0.9997772828507795,
+              "variance_among_observed": 0.0022549692414135583
+            },
+            {
+              "constant": false,
+              "feature": "whole.error_fraction_shift",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.03530066815144761,
+              "near_constant": false,
+              "observed_ratio": 0.9646993318485524,
+              "variance_among_observed": 0.0001080656348526459
+            },
+            {
+              "constant": false,
+              "feature": "whole.message_length_mean_shift",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.03530066815144761,
+              "near_constant": false,
+              "observed_ratio": 0.9646993318485524,
+              "variance_among_observed": 0.0007307063232941078
+            },
+            {
+              "constant": false,
+              "feature": "whole.message_length_log_scale_ratio",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.03530066815144761,
+              "near_constant": false,
+              "observed_ratio": 0.9646993318485524,
+              "variance_among_observed": 0.0023449719086327155
+            }
+          ],
+          "near_constant_feature_ratio": 0.0
+        },
+        "finite_ratio": 1.0,
+        "morphology_active_proxy_ratio": 0.9650259836674091,
+        "valid_service_row_ratio": 0.9997772828507795
+      },
+      "metric": {
+        "all_masked_ratio": 0.0,
+        "all_zero_ratio": 0.16256124721603563,
+        "channel_available_proxy_ratio": 1.0,
+        "coverage_observed_cell_ratio": 0.8565636053976157,
+        "feature_health": {
+          "constant_feature_ratio": 0.0,
+          "feature_count": 17,
+          "features": [
+            {
+              "constant": false,
+              "feature": "whole.valid_count",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.0,
+              "near_constant": false,
+              "observed_ratio": 1.0,
+              "variance_among_observed": 45617.440306384
+            },
+            {
+              "constant": false,
+              "feature": "whole.valid_ratio",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.0,
+              "near_constant": false,
+              "observed_ratio": 1.0,
+              "variance_among_observed": 0.14761271179955154
+            },
+            {
+              "constant": false,
+              "feature": "whole.signed_mean_shift.abs_max",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 0.00448062695830914
+            },
+            {
+              "constant": false,
+              "feature": "whole.signed_mean_shift.abs_top3_mean",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 0.0028328729031919897
+            },
+            {
+              "constant": false,
+              "feature": "whole.signed_mean_shift.abs_top5_mean",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 0.002117568840822879
+            },
+            {
+              "constant": false,
+              "feature": "whole.signed_mean_shift.signed_mean",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 0.004749165868582004
+            },
+            {
+              "constant": false,
+              "feature": "whole.signed_mean_shift.positive_fraction",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 0.0036745656838839103
+            },
+            {
+              "constant": false,
+              "feature": "whole.log_scale_ratio.abs_max",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 8.237357986528185
+            },
+            {
+              "constant": false,
+              "feature": "whole.log_scale_ratio.abs_top3_mean",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 11.2287312326182
+            },
+            {
+              "constant": false,
+              "feature": "whole.log_scale_ratio.abs_top5_mean",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 12.769232885665662
+            },
+            {
+              "constant": false,
+              "feature": "whole.log_scale_ratio.signed_mean",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 0.05201717299528971
+            },
+            {
+              "constant": false,
+              "feature": "whole.log_scale_ratio.positive_fraction",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 0.003015977939706495
+            },
+            {
+              "constant": false,
+              "feature": "whole.slope_shift.abs_max",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 1.0960889167856123
+            },
+            {
+              "constant": false,
+              "feature": "whole.slope_shift.abs_top3_mean",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 1.0458798477139437
+            },
+            {
+              "constant": false,
+              "feature": "whole.slope_shift.abs_top5_mean",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 0.9677632793002717
+            },
+            {
+              "constant": false,
+              "feature": "whole.slope_shift.signed_mean",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 0.012736059487306793
+            },
+            {
+              "constant": false,
+              "feature": "whole.slope_shift.positive_fraction",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.1625612472160356,
+              "near_constant": false,
+              "observed_ratio": 0.8374387527839644,
+              "variance_among_observed": 0.002986260466253237
+            }
+          ],
+          "near_constant_feature_ratio": 0.0
+        },
+        "finite_ratio": 1.0,
+        "morphology_active_proxy_ratio": 0.8374387527839644,
+        "valid_service_row_ratio": 1.0
+      },
+      "trace-error": {
+        "all_masked_ratio": 0.07305122494432072,
+        "all_zero_ratio": 0.29729027468448405,
+        "channel_available_proxy_ratio": 0.9269487750556793,
+        "coverage_observed_cell_ratio": 0.9269487750556793,
+        "feature_health": {
+          "constant_feature_ratio": 0.0,
+          "feature_count": 1,
+          "features": [
+            {
+              "constant": false,
+              "feature": "whole.error_fraction_shift",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.0730512249443207,
+              "near_constant": false,
+              "observed_ratio": 0.9269487750556793,
+              "variance_among_observed": 0.0015964447946128614
+            }
+          ],
+          "near_constant_feature_ratio": 0.0
+        },
+        "finite_ratio": 1.0,
+        "morphology_active_proxy_ratio": 0.702709725315516,
+        "valid_service_row_ratio": 0.9269487750556793
+      },
+      "trace-latency": {
+        "all_masked_ratio": 0.07305122494432072,
+        "all_zero_ratio": 0.07305122494432072,
+        "channel_available_proxy_ratio": 0.9269487750556793,
+        "coverage_observed_cell_ratio": 0.9269487750556793,
+        "feature_health": {
+          "constant_feature_ratio": 0.0,
+          "feature_count": 3,
+          "features": [
+            {
+              "constant": false,
+              "feature": "whole.duration_median_ratio",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.0730512249443207,
+              "near_constant": false,
+              "observed_ratio": 0.9269487750556793,
+              "variance_among_observed": 0.011496096591799797
+            },
+            {
+              "constant": false,
+              "feature": "whole.duration_p90_ratio",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.0730512249443207,
+              "near_constant": false,
+              "observed_ratio": 0.9269487750556793,
+              "variance_among_observed": 0.03098554200443031
+            },
+            {
+              "constant": false,
+              "feature": "whole.duration_p99_ratio",
+              "finite_ratio_among_observed": 1.0,
+              "missing_masked_ratio": 0.0730512249443207,
+              "near_constant": false,
+              "observed_ratio": 0.9269487750556793,
+              "variance_among_observed": 1.0938004360213078
+            }
+          ],
+          "near_constant_feature_ratio": 0.0
+        },
+        "finite_ratio": 1.0,
+        "morphology_active_proxy_ratio": 0.9269487750556793,
+        "valid_service_row_ratio": 0.9269487750556793
+      }
+    },
+    "cohort": "historical 13,470-case anchor-unique-root GAIA main cohort",
+    "limitations": [
+      "This is not an exact Ada-RCA 68D Z2 extraction.",
+      "Trace error and latency proxies select only whole.error_fraction_shift and whole.duration_* fields.",
+      "The historical trace error proxy used status >=500 and is semantically incompatible with the revalidated official !=200 rule.",
+      "No W600 proxy bundle exists; W600 feature health is NOT COMPUTED."
+    ],
+    "per_case": {
+      "all_candidates_identical_case_ratio": 7.423904974016333e-05,
+      "any_identical_candidate_pair_case_ratio": 0.0005196733481811433,
+      "candidate_count": 10,
+      "candidate_discrimination_unique_signature_ratio": {
+        "max": 1.0,
+        "mean": 0.9996510764662212,
+        "median": 1.0,
+        "min": 0.1
+      },
+      "case_count": 13470,
+      "effective_candidate_count": {
+        "max": 10,
+        "mean": 10.0,
+        "median": 10.0,
+        "min": 10
+      },
+      "identical_candidate_pair_ratio": 0.00029200692897797574
+    },
+    "source_bundles": {
+      "log": {
+        "case_count": 13470,
+        "directory": "/home/zhangll24/RCA_project/Ada-MGAD-rca-standalone/artifacts/p2/event_features/gaia_main/p2_log_l0_v1",
+        "feature_count": 50,
+        "manifest_sha256": "70c1828e47a34145682fbfb27e8a142e8f042f54d7cdf9d3e67065906d11496d",
+        "service_row_count": 134700
+      },
+      "metric": {
+        "case_count": 13470,
+        "directory": "/home/zhangll24/RCA_project/Ada-MGAD-rca-standalone/artifacts/p2/features/gaia_main/p2_metric_summary_v1",
+        "feature_count": 170,
+        "manifest_sha256": "ded9f7ce90a9551b1f60b463b32159d8e48380fcacfb749a8640e85dea198f2c",
+        "service_row_count": 134700
+      },
+      "trace": {
+        "case_count": 13470,
+        "directory": "/home/zhangll24/RCA_project/Ada-MGAD-rca-standalone/artifacts/p2/event_features/gaia_main/p2_trace_t0_v1",
+        "feature_count": 80,
+        "manifest_sha256": "7f66ae060ca2a029c34cb08839b11ff0422663708af39c119efba6b89e7c4876",
+        "service_row_count": 134700
+      }
+    },
+    "status": "HISTORICAL EVIDENCE REBOUND TO CURRENT RAW LAYOUT; NON-68D PROXY",
+    "window_seconds": 300
+  },
+  "schema_version": "p5_g0r2_rca_compatibility_v1",
+  "source": {
+    "event_registry": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/g0r2/event_registry.csv",
+    "event_registry_sha256": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5",
+    "historical_head": "64bb681328fa1793014615a20ba2bc1fdf33c3b7",
+    "historical_repository": "/home/zhangll24/RCA_project/Ada-MGAD-rca-standalone",
+    "raw_telemetry_artifact": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/g0r2/raw_telemetry_timing.json",
+    "raw_telemetry_artifact_sha256": "ab8d4156e070077e2f292b8f7567206d46473e4a2ea59fded0f1b1b2ebc49e6c"
+  }
+}

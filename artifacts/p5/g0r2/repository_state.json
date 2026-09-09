@@ -1,0 +1,67 @@
+{
+  "capture_note": "Working-tree values are the live state at capture time; initial state is also recorded in the report narrative.",
+  "gaia": {
+    "root": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS",
+    "run_table": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS/run/run/run/run_table_2021-07.csv",
+    "run_table_exists": true
+  },
+  "historical_assets": {
+    "docs/BASELINE_RESULTS.md": true,
+    "docs/BENCHMARK_PROTOCOL.md": true,
+    "docs/DATASET_AUDIT.md": true,
+    "docs/EXPERIMENT_LOG.md": true,
+    "docs/GAIA_INCLUSION_AUDIT.md": true,
+    "docs/P2_C0_M_RESULTS.md": true,
+    "docs/P2_METRIC_FEATURES.md": true,
+    "docs/P2_MODALITY_SCHEMA_AUDIT.md": true,
+    "docs/PROJECT_CONTEXT.md": true,
+    "docs/RCA_RESEARCH_DESIGN.md": true,
+    "docs/README.md": true,
+    "docs/RESEARCH_STATUS.md": true,
+    "docs/SPLIT_DIAGNOSTICS.md": true,
+    "docs/TELEMETRY_DIAGNOSTICS.md": true,
+    "src/data/event_purity.py": true,
+    "src/data/gaia.py": true,
+    "src/data/split.py": true,
+    "src/data/telemetry_diagnostics.py": true
+  },
+  "repositories": [
+    {
+      "branch": "main",
+      "head": "ab31282055b625838f41a1a3c91e51098175f254",
+      "origin": "git@github.com:ligseeker/Ada-MGAD.git",
+      "repository": "/home/zhangll24/RCA_project/Ada-MGAD",
+      "role": "Ada-MGAD main",
+      "upstream": "origin/main",
+      "working_tree": "?? baselines/"
+    },
+    {
+      "branch": "e2e",
+      "head": "ab31282055b625838f41a1a3c91e51098175f254",
+      "origin": "git@github.com:ligseeker/Ada-MGAD.git",
+      "repository": "/home/zhangll24/RCA_project/Ada-MGAD-e2e",
+      "role": "P5 audit worktree",
+      "upstream": "none",
+      "working_tree": "?? artifacts/\n?? scripts/p5/"
+    },
+    {
+      "branch": "rca-standalone",
+      "head": "64bb681328fa1793014615a20ba2bc1fdf33c3b7",
+      "origin": "git@github.com:ligseeker/Ada-MGAD.git",
+      "repository": "/home/zhangll24/RCA_project/Ada-MGAD-rca-standalone",
+      "role": "Ada-MGAD rca-standalone historical",
+      "upstream": "origin/rca-standalone",
+      "working_tree": "clean"
+    },
+    {
+      "branch": "main",
+      "head": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
+      "origin": "git@github.com:ligseeker/Ada-RCA.git",
+      "repository": "/home/zhangll24/RCA_project/Ada-RCA-cleanup",
+      "role": "Ada-RCA canonical main",
+      "upstream": "origin/main",
+      "working_tree": "clean"
+    }
+  ],
+  "schema_version": "p5_g0r2_repository_state_v1"
+}
