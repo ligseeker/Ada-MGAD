@@ -1,0 +1,115 @@
+{
+  "bindings": {
+    "event_count": 16200,
+    "event_registry_sha256": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5",
+    "run_table_sha256": "ca8d44dd08319d940b0d607305165853da376208440b0e3ec07a80dac44e2820"
+  },
+  "config_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/configs/e2e/gaia_p5_v1.yaml",
+  "config_sha256": "8712f8b799250c000e6ea3ebb3631f7fafc248208cb47cce3b52a17d9c2a1f17",
+  "generated_at_utc": "2026-09-09T19:12:05.704088+00:00",
+  "git_commit": "cbe57512b6bd1ce772ab42d9b8ec0b292c3cb91b",
+  "protocol": {
+    "ad": {
+      "checkpoint_selection": "validation node F1 only",
+      "epochs": 120,
+      "grid_seconds": 30,
+      "label_interval": "closed [start,end] rasterized to observed 30-second prediction timestamps",
+      "patience": 7,
+      "threshold_selection": "maximize deterministic event F1 on validation only",
+      "window_bins": 10,
+      "window_step": 1
+    },
+    "event_registry": {
+      "excluded": [
+        "normal",
+        "38 ERROR records",
+        "17 normal memory freed label",
+        "36 unsupported or unknown rows"
+      ],
+      "expected_events": 16200,
+      "path": "artifacts/p5/g0r2/event_registry.csv",
+      "semantics": "supported injection registry established from explicit injection semantics; not the unique official canonical GAIA taxonomy",
+      "sha256": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5"
+    },
+    "event_trigger": {
+      "anchor_rule": "first positive timestamp",
+      "episode_rule": "consecutive positive 30-second timestamps",
+      "matching_rule": "chronological prediction order; nearest unmatched GT onset; tie by earlier onset then source_index then case_id",
+      "matching_tolerance_seconds": 60,
+      "system_score": "max service anomaly probability"
+    },
+    "gaia_raw_root": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS",
+    "output_dir": "artifacts/p5/i1",
+    "protocol_id": "P5-I1-GAIA-W300-B15",
+    "random_seed": 42,
+    "rca": {
+      "bin_seconds": 15,
+      "channels": [
+        "metric",
+        "log",
+        "trace-error",
+        "trace-latency"
+      ],
+      "feature_dimension": 68,
+      "gradient_tolerance": 1e-08,
+      "l2_lambda": 1.0,
+      "max_iter": 1000,
+      "model": "conditional_logit",
+      "n_bins": 40,
+      "onset_sentinel_seconds": 300.0,
+      "onset_threshold": 3.0,
+      "post_bins": 20,
+      "post_position_denominator": 19.0,
+      "pre_bins": 20,
+      "trace_error_rule": "status_code != 200",
+      "trace_latency_rule": "(end_time - start_time).total_seconds()",
+      "window_seconds": 300
+    },
+    "run_table": {
+      "path": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS/run/run/run/run_table_2021-07.csv",
+      "sha256": "ca8d44dd08319d940b0d607305165853da376208440b0e3ec07a80dac44e2820"
+    },
+    "schema_version": "p5_i1_gaia_protocol_v1",
+    "services": [
+      "dbservice1",
+      "dbservice2",
+      "logservice1",
+      "logservice2",
+      "mobservice1",
+      "mobservice2",
+      "redisservice1",
+      "redisservice2",
+      "webservice1",
+      "webservice2"
+    ],
+    "source": {
+      "ada_rca_commit": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
+      "ada_rca_files": [
+        "docs/REPRESENTATION_FREEZE.md",
+        "src/rca/features.py",
+        "src/rca/final_method.py",
+        "src/rca/p4.py"
+      ],
+      "ada_rca_repository": "/home/zhangll24/RCA_project/Ada-RCA-cleanup",
+      "p5_g0r2_commit": "cbe57512b6bd1ce772ab42d9b8ec0b292c3cb91b"
+    },
+    "split": {
+      "absolute_end_ms": 1627747192313,
+      "absolute_start_ms": 1625108812249,
+      "boundaries_ms": [
+        1626691840287,
+        1627219516300
+      ],
+      "definition": "boundaries frozen from P5-G0R2 duration_60_20_20 before window construction",
+      "mode": "chronological_absolute_duration_60_20_20"
+    }
+  },
+  "random_seed": 42,
+  "schema_version": "p5_i1_protocol_manifest_v1",
+  "selection_firewall": {
+    "rca_temporal_spec_selected_without_performance": true,
+    "split_selected_without_performance": true,
+    "test_for_checkpoint_selection": false,
+    "test_for_threshold_selection": false
+  }
+}

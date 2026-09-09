@@ -179,11 +179,11 @@ def parse_anomaly_event(row):
         elif '[cpu_anomalies]' in msg:
             anomaly_type = 'cpu_anomalies'
             start_match = re.search(r'start at (\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}\.\d+)', msg)
-            dur_match = re.search(r'lasts\s+(\d+)\s+seconds', msg)
+            dur_match = re.search(r'lasts\s+(\d+(?:\.\d+)?)\s+seconds', msg)
             if start_match:
                 st_time = pd.Timestamp(start_match.group(1), tz=GAIA_TZ)
             if dur_match:
-                duration = int(dur_match.group(1))
+                duration = float(dur_match.group(1))
             if st_time and duration:
                 ed_time = st_time + pd.Timedelta(seconds=duration)
 

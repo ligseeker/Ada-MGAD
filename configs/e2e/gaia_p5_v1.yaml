@@ -1,0 +1,71 @@
+{
+  "schema_version": "p5_i1_gaia_protocol_v1",
+  "protocol_id": "P5-I1-GAIA-W300-B15",
+  "gaia_raw_root": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS",
+  "run_table": {
+    "path": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS/run/run/run/run_table_2021-07.csv",
+    "sha256": "ca8d44dd08319d940b0d607305165853da376208440b0e3ec07a80dac44e2820"
+  },
+  "event_registry": {
+    "path": "artifacts/p5/g0r2/event_registry.csv",
+    "sha256": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5",
+    "expected_events": 16200,
+    "semantics": "supported injection registry established from explicit injection semantics; not the unique official canonical GAIA taxonomy",
+    "excluded": ["normal", "38 ERROR records", "17 normal memory freed label", "36 unsupported or unknown rows"]
+  },
+  "services": [
+    "dbservice1", "dbservice2", "logservice1", "logservice2",
+    "mobservice1", "mobservice2", "redisservice1", "redisservice2",
+    "webservice1", "webservice2"
+  ],
+  "split": {
+    "mode": "chronological_absolute_duration_60_20_20",
+    "absolute_start_ms": 1625108812249,
+    "boundaries_ms": [1626691840287, 1627219516300],
+    "absolute_end_ms": 1627747192313,
+    "definition": "boundaries frozen from P5-G0R2 duration_60_20_20 before window construction"
+  },
+  "ad": {
+    "grid_seconds": 30,
+    "window_bins": 10,
+    "window_step": 1,
+    "label_interval": "closed [start,end] rasterized to observed 30-second prediction timestamps",
+    "threshold_selection": "maximize deterministic event F1 on validation only",
+    "checkpoint_selection": "validation node F1 only",
+    "epochs": 120,
+    "patience": 7
+  },
+  "event_trigger": {
+    "system_score": "max service anomaly probability",
+    "episode_rule": "consecutive positive 30-second timestamps",
+    "anchor_rule": "first positive timestamp",
+    "matching_tolerance_seconds": 60,
+    "matching_rule": "chronological prediction order; nearest unmatched GT onset; tie by earlier onset then source_index then case_id"
+  },
+  "rca": {
+    "window_seconds": 300,
+    "bin_seconds": 15,
+    "pre_bins": 20,
+    "post_bins": 20,
+    "n_bins": 40,
+    "onset_threshold": 3.0,
+    "onset_sentinel_seconds": 300.0,
+    "post_position_denominator": 19.0,
+    "channels": ["metric", "log", "trace-error", "trace-latency"],
+    "trace_error_rule": "status_code != 200",
+    "trace_latency_rule": "(end_time - start_time).total_seconds()",
+    "model": "conditional_logit",
+    "l2_lambda": 1.0,
+    "max_iter": 1000,
+    "gradient_tolerance": 1e-8,
+    "feature_dimension": 68
+  },
+  "random_seed": 42,
+  "output_dir": "artifacts/p5/i1",
+  "source": {
+    "p5_g0r2_commit": "cbe57512b6bd1ce772ab42d9b8ec0b292c3cb91b",
+    "ada_rca_repository": "/home/zhangll24/RCA_project/Ada-RCA-cleanup",
+    "ada_rca_commit": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
+    "ada_rca_files": ["docs/REPRESENTATION_FREEZE.md", "src/rca/features.py", "src/rca/final_method.py", "src/rca/p4.py"]
+  }
+}

@@ -1,0 +1,1 @@
+"""Ada-MGAD source package."""

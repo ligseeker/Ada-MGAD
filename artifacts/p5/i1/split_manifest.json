@@ -1,0 +1,158 @@
+{
+  "ad_window_boundary_purge": {
+    "candidate_prediction_timestamps": 87947,
+    "purged_prediction_timestamps_ms": [
+      1625108790000,
+      1625108820000,
+      1625108850000,
+      1625108880000,
+      1625108910000,
+      1625108940000,
+      1625108970000,
+      1625109000000,
+      1625109030000,
+      1625109060000,
+      1626691830000,
+      1626691860000,
+      1626691890000,
+      1626691920000,
+      1626691950000,
+      1626691980000,
+      1626692010000,
+      1626692040000,
+      1626692070000,
+      1626692100000,
+      1627219500000,
+      1627219530000,
+      1627219560000,
+      1627219590000,
+      1627219620000,
+      1627219650000,
+      1627219680000,
+      1627219710000,
+      1627219740000,
+      1627219770000,
+      1627747170000
+    ],
+    "purged_windows": 31,
+    "window_interval": "[prediction_timestamp-(window_bins-1)*grid, prediction_timestamp+grid)"
+  },
+  "blocks": [
+    {
+      "absolute_end_ms": 1626691840287,
+      "absolute_end_utc": "2021-07-19T10:50:40.287000+00:00",
+      "absolute_start_ms": 1625108812249,
+      "absolute_start_utc": "2021-07-01T03:06:52.249000+00:00",
+      "duration_seconds": 1583028.038,
+      "event_count_after_raw_boundary_purge": 8787,
+      "fault_counts": {
+        "access permission denied exception": 8,
+        "file moving program": 20,
+        "login failure": 8381,
+        "memory_anomalies": 378
+      },
+      "purged_rca_case_ids": [],
+      "purged_rca_cases": 0,
+      "rca_case_count_after_w300_purge": 8787,
+      "service_counts": {
+        "dbservice1": 44,
+        "dbservice2": 50,
+        "logservice1": 45,
+        "logservice2": 39,
+        "mobservice1": 4237,
+        "mobservice2": 4224,
+        "redisservice1": 28,
+        "redisservice2": 34,
+        "webservice1": 42,
+        "webservice2": 44
+      },
+      "split": "train"
+    },
+    {
+      "absolute_end_ms": 1627219516300,
+      "absolute_end_utc": "2021-07-25T13:25:16.300000+00:00",
+      "absolute_start_ms": 1626691840287,
+      "absolute_start_utc": "2021-07-19T10:50:40.287000+00:00",
+      "duration_seconds": 527676.013,
+      "event_count_after_raw_boundary_purge": 3513,
+      "fault_counts": {
+        "access permission denied exception": 3,
+        "file moving program": 11,
+        "login failure": 3367,
+        "memory_anomalies": 132
+      },
+      "purged_rca_case_ids": [
+        "gaia-5fb9af715fb19ade"
+      ],
+      "purged_rca_cases": 1,
+      "rca_case_count_after_w300_purge": 3512,
+      "service_counts": {
+        "dbservice1": 14,
+        "dbservice2": 22,
+        "logservice1": 9,
+        "logservice2": 9,
+        "mobservice1": 1710,
+        "mobservice2": 1683,
+        "redisservice1": 12,
+        "redisservice2": 12,
+        "webservice1": 22,
+        "webservice2": 20
+      },
+      "split": "validation"
+    },
+    {
+      "absolute_end_ms": 1627747192313,
+      "absolute_end_utc": "2021-07-31T15:59:52.313000+00:00",
+      "absolute_start_ms": 1627219516300,
+      "absolute_start_utc": "2021-07-25T13:25:16.300000+00:00",
+      "duration_seconds": 527676.013,
+      "event_count_after_raw_boundary_purge": 3900,
+      "fault_counts": {
+        "access permission denied exception": 4,
+        "cpu_anomalies": 12,
+        "file moving program": 12,
+        "login failure": 3730,
+        "memory_anomalies": 142
+      },
+      "purged_rca_case_ids": [
+        "gaia-553873e756b76fd2"
+      ],
+      "purged_rca_cases": 1,
+      "rca_case_count_after_w300_purge": 3899,
+      "service_counts": {
+        "dbservice1": 25,
+        "dbservice2": 24,
+        "logservice1": 12,
+        "logservice2": 15,
+        "mobservice1": 1868,
+        "mobservice2": 1892,
+        "redisservice1": 15,
+        "redisservice2": 11,
+        "webservice1": 18,
+        "webservice2": 20
+      },
+      "split": "test"
+    }
+  ],
+  "config_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/configs/e2e/gaia_p5_v1.yaml",
+  "config_sha256": "8712f8b799250c000e6ea3ebb3631f7fafc248208cb47cce3b52a17d9c2a1f17",
+  "generated_at_utc": "2026-09-09T19:12:05.704088+00:00",
+  "git_commit": "cbe57512b6bd1ce772ab42d9b8ec0b292c3cb91b",
+  "random_seed": 42,
+  "raw_injection_boundary_purge": {
+    "case_ids": [],
+    "count": 0,
+    "rule": "exclude complete raw injection interval if it crosses a split boundary"
+  },
+  "rca_w300_boundary_purge": {
+    "case_ids": [
+      "gaia-553873e756b76fd2",
+      "gaia-5fb9af715fb19ade"
+    ],
+    "count": 2,
+    "rule": "exclude raw-injection union [t0-300s,t0+300s) context crossing a split boundary"
+  },
+  "schema_version": "p5_i1_split_manifest_v1",
+  "split_definition": "boundaries frozen from P5-G0R2 duration_60_20_20 before window construction",
+  "split_mode": "chronological_absolute_duration_60_20_20"
+}

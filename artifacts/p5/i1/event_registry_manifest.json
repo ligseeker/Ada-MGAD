@@ -1,0 +1,47 @@
+{
+  "config_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/configs/e2e/gaia_p5_v1.yaml",
+  "config_sha256": "8712f8b799250c000e6ea3ebb3631f7fafc248208cb47cce3b52a17d9c2a1f17",
+  "cpu_parser_regression": {
+    "after_float_duration_parse_failure": 0,
+    "after_float_duration_parse_success": 12,
+    "before_integer_only_parse_failure": 12,
+    "before_integer_only_parse_success": 0,
+    "change_scope": "CPU duration regex and float conversion only",
+    "cpu_rows": 12
+  },
+  "event_count": 16200,
+  "event_registry_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/g0r2/event_registry.csv",
+  "event_registry_sha256": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5",
+  "excluded_from_e2e_gt": [
+    "normal",
+    "38 ERROR records",
+    "17 normal memory freed label",
+    "36 unsupported or unknown rows"
+  ],
+  "fault_counts": {
+    "access permission denied exception": 15,
+    "cpu_anomalies": 12,
+    "file moving program": 43,
+    "login failure": 15478,
+    "memory_anomalies": 652
+  },
+  "generated_at_utc": "2026-09-09T19:12:05.704088+00:00",
+  "git_commit": "cbe57512b6bd1ce772ab42d9b8ec0b292c3cb91b",
+  "random_seed": 42,
+  "run_table_path": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS/run/run/run/run_table_2021-07.csv",
+  "run_table_sha256": "ca8d44dd08319d940b0d607305165853da376208440b0e3ec07a80dac44e2820",
+  "schema_version": "p5_i1_event_registry_manifest_v1",
+  "semantics": "supported injection registry established from explicit injection semantics; not the unique official canonical GAIA taxonomy",
+  "service_counts": {
+    "dbservice1": 83,
+    "dbservice2": 96,
+    "logservice1": 66,
+    "logservice2": 63,
+    "mobservice1": 7815,
+    "mobservice2": 7799,
+    "redisservice1": 55,
+    "redisservice2": 57,
+    "webservice1": 82,
+    "webservice2": 84
+  }
+}
