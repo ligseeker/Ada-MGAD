@@ -1,0 +1,142 @@
+{
+  "ad_label_definition": {
+    "positive_node": "parsed run-table service/instance column",
+    "real_sample_checks": [
+      {
+        "aligned_bin_count": 21,
+        "aligned_first_bin_ms": 1625227200000,
+        "aligned_last_bin_ms": 1625227800000,
+        "current_main_mappable": true,
+        "event_service": "webservice1",
+        "fault_type": "file moving program",
+        "label_matrix_column": "webservice1",
+        "sliding_window_groundtruth": "label row at global_end - 1; same service one-hot state",
+        "source_index": 252
+      },
+      {
+        "aligned_bin_count": 1,
+        "aligned_first_bin_ms": 1627400760000,
+        "aligned_last_bin_ms": 1627400760000,
+        "current_main_mappable": false,
+        "event_service": "dbservice1",
+        "fault_type": "cpu_anomalies",
+        "label_matrix_column": "dbservice1",
+        "sliding_window_groundtruth": "label row at global_end - 1; same service one-hot state",
+        "source_index": 13762
+      },
+      {
+        "aligned_bin_count": 1,
+        "aligned_first_bin_ms": 1625123010000,
+        "aligned_last_bin_ms": 1625123010000,
+        "current_main_mappable": true,
+        "event_service": "mobservice1",
+        "fault_type": "login failure",
+        "label_matrix_column": "mobservice1",
+        "sliding_window_groundtruth": "label row at global_end - 1; same service one-hot state",
+        "source_index": 14
+      },
+      {
+        "aligned_bin_count": 21,
+        "aligned_first_bin_ms": 1625111040000,
+        "aligned_last_bin_ms": 1625111640000,
+        "current_main_mappable": true,
+        "event_service": "dbservice1",
+        "fault_type": "memory_anomalies",
+        "label_matrix_column": "dbservice1",
+        "sliding_window_groundtruth": "label row at global_end - 1; same service one-hot state",
+        "source_index": 0
+      },
+      {
+        "aligned_bin_count": 121,
+        "aligned_first_bin_ms": 1626144360000,
+        "aligned_last_bin_ms": 1626147960000,
+        "current_main_mappable": true,
+        "event_service": "dbservice1",
+        "fault_type": "access permission denied exception",
+        "label_matrix_column": "dbservice1",
+        "sliding_window_groundtruth": "label row at global_end - 1; same service one-hot state",
+        "source_index": 5894
+      }
+    ],
+    "sliding_window_target": "last timestep of each 10-step input window",
+    "time_alignment": "floor start and end to 30s; current code includes the aligned end bin"
+  },
+  "ad_timestep_multiplicity": {
+    "different_root_multi_injection_bins": 4837,
+    "distinct_positive_service_count_distribution": {
+      "1": 26070,
+      "2": 4463,
+      "3": 354,
+      "4": 19,
+      "5": 1
+    },
+    "injection_count_distribution": {
+      "1": 25040,
+      "2": 5194,
+      "3": 619,
+      "4": 50,
+      "5": 4
+    },
+    "maximum_injections_in_one_bin": 5,
+    "maximum_positive_services_in_one_bin": 5,
+    "positive_supported_injection_bins": 30907,
+    "same_root_multi_injection_bins": 1030
+  },
+  "code_trace": [
+    "run_table row -> util/GAIA/pre_GAIA.py::parse_anomaly_event",
+    "deal_label uses event.instance, which is assigned from row.service",
+    "deal_label writes label_matrix[aligned_timestamp, service] = 1",
+    "util/GAIA/data_GAIA.py::_transform selects label[global_end - 1] as groundtruth_real",
+    "historical src/data/gaia.py assigns parsed['service'] directly to RCACaseLabel.root_service"
+  ],
+  "coupling": {
+    "current_ad_mappable_supported_injections": 16188,
+    "current_ad_missing_supported_injections": 12,
+    "missing_reason": "12 CPU rows have decimal durations rejected by current-main integer-only regex",
+    "rca_supported_injections": 16200,
+    "semantic_statement": "The service identity is shared by construction, but event identity is not one-to-one after 30s rasterization.",
+    "service_exact_match_ratio_among_current_ad_mappable": 1.0,
+    "service_exact_match_ratio_over_all_rca_injections_treating_missing_as_mismatch": 0.9992592592592593,
+    "service_exact_matches_among_current_ad_mappable": 16188
+  },
+  "current_noninjection_ad_entries": {
+    "error_event_rows": 38,
+    "normal_memory_freed_rows": 17,
+    "unknown_rows": 0
+  },
+  "evidence_status": "REVALIDATED FACT",
+  "injection_to_ad_timesteps": {
+    "count": 16200,
+    "max": 121.0,
+    "mean": 2.3151234567901233,
+    "median": 1.0,
+    "min": 1.0,
+    "p10": 1.0,
+    "p25": 1.0,
+    "p75": 2.0,
+    "p90": 2.0,
+    "production_semantics_note": "counts reproduce current inclusive aligned-end implementation, not half-open GT semantics"
+  },
+  "limitations": [
+    "Exact membership in a generated label.csv also depends on the metric-derived timestamp index.",
+    "This audit reproduces the current alignment formula on real events without writing production label files.",
+    "Service equality is annotation coupling, not independent causal validation."
+  ],
+  "rca_label_definition": {
+    "additional_causal_inference": false,
+    "causal_root_cause_claim_supported": false,
+    "preferred_term": "labelled injected service or labelled fault service",
+    "root_service_expression": "str(parsed['service'])"
+  },
+  "schema_version": "p5_g0r2_label_reconciliation_v1",
+  "shared_ad_positive_intervals": {
+    "injections_in_shared_same_service_exact_intervals": 414,
+    "maximum_group": 3,
+    "same_service_exact_interval_groups": 206
+  },
+  "source": {
+    "grid_seconds": 30,
+    "run_table": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS/run/run/run/run_table_2021-07.csv",
+    "run_table_sha256": "ca8d44dd08319d940b0d607305165853da376208440b0e3ec07a80dac44e2820"
+  }
+}

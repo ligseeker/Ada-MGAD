@@ -1,0 +1,651 @@
+{
+  "audit_interpretation_parseable_start_end": 16255,
+  "cpu_parser_audit": {
+    "audit_float_repair_success": 12,
+    "cpu_event_count": 12,
+    "current_main_parse_failure": 12,
+    "current_main_parse_success": 0,
+    "duration_examples_seconds": [
+      2.8919918537139893,
+      2.9050204753875732,
+      2.915334701538086,
+      2.937929630279541,
+      2.9688236713409424,
+      2.9959075450897217,
+      3.0034542083740234,
+      3.0210864543914795,
+      3.0509350299835205,
+      3.051996946334839,
+      3.0525479316711426,
+      3.2413992881774902
+    ],
+    "status": "REVALIDATED PARSER DEFECT"
+  },
+  "current_main_parseable_start_end": 16243,
+  "error_record_audit": {
+    "current_main_zero_duration_intervals": 38,
+    "error_rows": 38,
+    "official_injection_status": "not established",
+    "would_enter_deal_label_filter": 38
+  },
+  "evidence_status": "REVALIDATED FACT",
+  "excluded_records": 952,
+  "exclusion_reason_distribution": {
+    "non_injection_error_record": 38,
+    "normal_record": 861,
+    "recovery_marker_candidate": 17,
+    "unsupported_event_type": 36
+  },
+  "fault_distribution": {
+    "access permission denied exception": {
+      "count": 15,
+      "percentage": 0.09259259259259259
+    },
+    "cpu_anomalies": {
+      "count": 12,
+      "percentage": 0.07407407407407407
+    },
+    "file moving program": {
+      "count": 43,
+      "percentage": 0.2654320987654321
+    },
+    "login failure": {
+      "count": 15478,
+      "percentage": 95.54320987654322
+    },
+    "memory_anomalies": {
+      "count": 652,
+      "percentage": 4.0246913580246915
+    }
+  },
+  "frequency_shortcut": {
+    "full_inventory_majority_fault_accuracy": 0.9554320987654321,
+    "full_inventory_majority_root_accuracy": 0.4824074074074074,
+    "majority_fault": "login failure",
+    "majority_fault_count": 15478,
+    "majority_root": "mobservice1",
+    "majority_root_count": 7815,
+    "scope": "dataset-shortcut sanity check only; not used for configuration selection"
+  },
+  "level_distribution": {
+    "ERROR": 38,
+    "INFO": 861,
+    "UNKNOWN": 36,
+    "WARNING": 16217
+  },
+  "limitations": [
+    "The audit-only decimal CPU interpretation does not modify Ada-MGAD production preprocessing.",
+    "Official GAIA documentation establishes the run directory role but does not define every message subtype.",
+    "label.csv membership also depends on the metric-derived timestamp index; that exact index is audited separately."
+  ],
+  "raw_interval_overlap": {
+    "case_categories": {
+      "different_root_overlap": 3470,
+      "isolated": 12163,
+      "same_root_only_overlap": 567
+    },
+    "component_size_distribution": {
+      "1": 12163,
+      "10": 7,
+      "11": 3,
+      "12": 5,
+      "13": 3,
+      "14": 1,
+      "15": 3,
+      "16": 3,
+      "18": 1,
+      "2": 372,
+      "21": 1,
+      "22": 3,
+      "23": 2,
+      "24": 1,
+      "25": 1,
+      "26": 1,
+      "29": 1,
+      "3": 111,
+      "30": 2,
+      "35": 1,
+      "37": 1,
+      "39": 1,
+      "4": 98,
+      "5": 96,
+      "6": 89,
+      "7": 54,
+      "8": 36,
+      "9": 17
+    },
+    "connected_components": 13077,
+    "different_root_overlap_pairs": 2958,
+    "interval_semantics": "half-open [start_ms, end_ms); boundary touching is not overlap",
+    "maximum_component_size": 39,
+    "maximum_overlap_degree": 38,
+    "overlap_cases": 4037,
+    "overlap_pairs": 3429,
+    "same_root_overlap_pairs": 471
+  },
+  "raw_record_count": 17152,
+  "raw_type_distribution": {
+    "access permission denied exception": 15,
+    "cpu_anomalies": 12,
+    "error_event": 38,
+    "file moving program": 43,
+    "login failure": 15478,
+    "memory_anomalies": 652,
+    "normal": 861,
+    "normal memory freed label": 17,
+    "unknown": 36
+  },
+  "recovery_marker_audit": {
+    "examples": [
+      {
+        "gap_from_memory_end_seconds": 1841.922,
+        "memory_source_index": 0,
+        "recovery_source_index": 1,
+        "service": "dbservice1"
+      },
+      {
+        "gap_from_memory_end_seconds": 48971.587,
+        "memory_source_index": 1476,
+        "recovery_source_index": 2088,
+        "service": "webservice2"
+      },
+      {
+        "gap_from_memory_end_seconds": 44859.648,
+        "memory_source_index": 2803,
+        "recovery_source_index": 3162,
+        "service": "mobservice2"
+      },
+      {
+        "gap_from_memory_end_seconds": 27469.619,
+        "memory_source_index": 3724,
+        "recovery_source_index": 3794,
+        "service": "mobservice1"
+      },
+      {
+        "gap_from_memory_end_seconds": 1761.767,
+        "memory_source_index": 3955,
+        "recovery_source_index": 3956,
+        "service": "webservice2"
+      },
+      {
+        "gap_from_memory_end_seconds": 3144.121,
+        "memory_source_index": 4371,
+        "recovery_source_index": 4372,
+        "service": "redisservice1"
+      },
+      {
+        "gap_from_memory_end_seconds": 64842.017,
+        "memory_source_index": 4831,
+        "recovery_source_index": 5370,
+        "service": "webservice1"
+      },
+      {
+        "gap_from_memory_end_seconds": 62969.945,
+        "memory_source_index": 5369,
+        "recovery_source_index": 5882,
+        "service": "webservice2"
+      },
+      {
+        "gap_from_memory_end_seconds": 6512.348,
+        "memory_source_index": 6461,
+        "recovery_source_index": 6967,
+        "service": "dbservice1"
+      },
+      {
+        "gap_from_memory_end_seconds": 37866.769,
+        "memory_source_index": 6972,
+        "recovery_source_index": 6973,
+        "service": "dbservice1"
+      }
+    ],
+    "gap_from_preceding_memory_end_seconds": {
+      "count": 17,
+      "max": 149909.332,
+      "median": 27469.619,
+      "min": 1761.767,
+      "p10": 2623.2414000000003,
+      "p25": 9656.123,
+      "p75": 48971.587,
+      "p90": 76153.08060000002
+    },
+    "interpretation_boundary": "temporal association is evidence for a recovery marker, not proof of official semantics",
+    "recovery_marker_rows": 17,
+    "same_service_preceding_memory_rows": 17,
+    "within_1_second_of_memory_end": 0,
+    "within_30_seconds_after_memory_end": 0
+  },
+  "root_distribution": {
+    "dbservice1": {
+      "count": 83,
+      "percentage": 0.5123456790123457
+    },
+    "dbservice2": {
+      "count": 96,
+      "percentage": 0.5925925925925926
+    },
+    "logservice1": {
+      "count": 66,
+      "percentage": 0.4074074074074074
+    },
+    "logservice2": {
+      "count": 63,
+      "percentage": 0.3888888888888889
+    },
+    "mobservice1": {
+      "count": 7815,
+      "percentage": 48.24074074074074
+    },
+    "mobservice2": {
+      "count": 7799,
+      "percentage": 48.141975308641975
+    },
+    "redisservice1": {
+      "count": 55,
+      "percentage": 0.3395061728395062
+    },
+    "redisservice2": {
+      "count": 57,
+      "percentage": 0.35185185185185186
+    },
+    "webservice1": {
+      "count": 82,
+      "percentage": 0.5061728395061729
+    },
+    "webservice2": {
+      "count": 84,
+      "percentage": 0.5185185185185185
+    }
+  },
+  "root_fault_distribution": [
+    {
+      "count": 8,
+      "fault_type": "access permission denied exception",
+      "percentage": 0.04938271604938271,
+      "service": "dbservice1"
+    },
+    {
+      "count": 8,
+      "fault_type": "cpu_anomalies",
+      "percentage": 0.04938271604938271,
+      "service": "dbservice1"
+    },
+    {
+      "count": 67,
+      "fault_type": "memory_anomalies",
+      "percentage": 0.41358024691358025,
+      "service": "dbservice1"
+    },
+    {
+      "count": 7,
+      "fault_type": "access permission denied exception",
+      "percentage": 0.043209876543209874,
+      "service": "dbservice2"
+    },
+    {
+      "count": 89,
+      "fault_type": "memory_anomalies",
+      "percentage": 0.5493827160493827,
+      "service": "dbservice2"
+    },
+    {
+      "count": 66,
+      "fault_type": "memory_anomalies",
+      "percentage": 0.4074074074074074,
+      "service": "logservice1"
+    },
+    {
+      "count": 63,
+      "fault_type": "memory_anomalies",
+      "percentage": 0.3888888888888889,
+      "service": "logservice2"
+    },
+    {
+      "count": 7749,
+      "fault_type": "login failure",
+      "percentage": 47.833333333333336,
+      "service": "mobservice1"
+    },
+    {
+      "count": 66,
+      "fault_type": "memory_anomalies",
+      "percentage": 0.4074074074074074,
+      "service": "mobservice1"
+    },
+    {
+      "count": 4,
+      "fault_type": "cpu_anomalies",
+      "percentage": 0.024691358024691357,
+      "service": "mobservice2"
+    },
+    {
+      "count": 7729,
+      "fault_type": "login failure",
+      "percentage": 47.70987654320987,
+      "service": "mobservice2"
+    },
+    {
+      "count": 66,
+      "fault_type": "memory_anomalies",
+      "percentage": 0.4074074074074074,
+      "service": "mobservice2"
+    },
+    {
+      "count": 55,
+      "fault_type": "memory_anomalies",
+      "percentage": 0.3395061728395062,
+      "service": "redisservice1"
+    },
+    {
+      "count": 57,
+      "fault_type": "memory_anomalies",
+      "percentage": 0.35185185185185186,
+      "service": "redisservice2"
+    },
+    {
+      "count": 22,
+      "fault_type": "file moving program",
+      "percentage": 0.13580246913580246,
+      "service": "webservice1"
+    },
+    {
+      "count": 60,
+      "fault_type": "memory_anomalies",
+      "percentage": 0.37037037037037035,
+      "service": "webservice1"
+    },
+    {
+      "count": 21,
+      "fault_type": "file moving program",
+      "percentage": 0.12962962962962962,
+      "service": "webservice2"
+    },
+    {
+      "count": 63,
+      "fault_type": "memory_anomalies",
+      "percentage": 0.3888888888888889,
+      "service": "webservice2"
+    }
+  ],
+  "schema_version": "p5_g0r2_event_revalidation_v1",
+  "source": {
+    "bytes": 3642539,
+    "official_repository": "https://github.com/CloudWise-OpenSource/GAIA-DataSet",
+    "official_semantics": "MicroSS run contains system logs and all anomaly-injection records",
+    "run_table": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS/run/run/run/run_table_2021-07.csv",
+    "sha256": "ca8d44dd08319d940b0d607305165853da376208440b0e3ec07a80dac44e2820"
+  },
+  "supported_injections": 16200,
+  "taxonomy": {
+    "access permission denied exception": {
+      "audit_supported_injections": 15,
+      "current_main_interval_valid": 15,
+      "duration_examples_seconds": [
+        3600.0
+      ],
+      "duration_rule": "3600 seconds for 'an hour', otherwise integer seconds/default 3600",
+      "end_time_source": "start + duration",
+      "explicit_injection": true,
+      "message_examples": [
+        "2021-07-13 10:46:12,912 | WARNING | 0.0.0.4 | 172.17.0.3 | dbservice1 | trigger an access permission denied exception, will lasts an hour",
+        "2021-07-14 00:01:00,353 | WARNING | 0.0.0.4 | 172.17.0.3 | dbservice1 | trigger an access permission denied exception, will lasts an hour",
+        "2021-07-14 04:00:00,770 | WARNING | 0.0.0.4 | 172.17.0.3 | dbservice1 | trigger an access permission denied exception, will lasts an hour"
+      ],
+      "official_semantics": "run directory is documented as system log and anomaly-injection records; message names injected exception",
+      "parsing_rule": "WARNING contains access permission denied exception",
+      "raw_count": 15,
+      "service_distribution": {
+        "dbservice1": 8,
+        "dbservice2": 7
+      },
+      "start_time_source": "millisecond message prefix"
+    },
+    "cpu_anomalies": {
+      "audit_supported_injections": 12,
+      "current_main_interval_valid": 0,
+      "duration_examples_seconds": [
+        2.8919918537139893,
+        2.9050204753875732,
+        2.915334701538086,
+        2.937929630279541,
+        2.9688236713409424,
+        2.9959075450897217,
+        3.0034542083740234,
+        3.0210864543914795,
+        3.0509350299835205,
+        3.051996946334839,
+        3.0525479316711426,
+        3.2413992881774902
+      ],
+      "duration_rule": "current main accepts integer only; audit interpretation accepts decimal seconds",
+      "end_time_source": "start + duration when parsed",
+      "explicit_injection": true,
+      "message_examples": [
+        "2021-07-27 23:46:25,455 | WARNING | 0.0.0.4 | 172.17.0.3 | dbservice1 | [cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-27 23:46:25.446893 and lasts 3.0210864543914795 seconds",
+        "2021-07-28 09:33:39,427 | WARNING | 0.0.0.4 | 172.17.0.3 | dbservice1 | [cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-28 09:33:39.426569 and lasts 3.0509350299835205 seconds",
+        "2021-07-28 12:34:11,899 | WARNING | 0.0.0.4 | 172.17.0.3 | dbservice1 | [cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-28 12:34:11.898093 and lasts 2.9959075450897217 seconds"
+      ],
+      "official_semantics": "run directory is documented as system log and anomaly-injection records; message is explicit anomaly trigger",
+      "parsing_rule": "WARNING message contains [cpu_anomalies]",
+      "raw_count": 12,
+      "service_distribution": {
+        "dbservice1": 8,
+        "mobservice2": 4
+      },
+      "start_time_source": "embedded 'start at' timestamp"
+    },
+    "error_event": {
+      "audit_supported_injections": 0,
+      "current_main_interval_valid": 38,
+      "duration_examples_seconds": [
+        0.0
+      ],
+      "duration_rule": "0",
+      "end_time_source": "equal to start",
+      "explicit_injection": false,
+      "message_examples": [
+        "2021-07-02 03:11:23,156 | ERROR | 0.0.0.1 | 172.17.0.3 | webservice1 | upload run_logs logs on 2021-07-01 failed: 'str' object does not support item assignment",
+        "2021-07-02 03:52:37,678 | ERROR | 0.0.0.3 | 172.17.0.3 | logservice1 | upload run_logs logs on 2021-07-01 failed: 'str' object does not support item assignment",
+        "2021-07-06 03:50:01,652 | ERROR | 0.0.0.3 | 172.17.0.3 | logservice1 | upload business logs on 2021-07-05 failed: (pymysql.err.OperationalError) (1040, 'ny connections')"
+      ],
+      "official_semantics": "ERROR system-log record; no official evidence that every ERROR row is an injection",
+      "parsing_rule": "all ERROR records",
+      "raw_count": 38,
+      "service_distribution": {
+        "dbservice1": 3,
+        "dbservice2": 3,
+        "logservice1": 7,
+        "logservice2": 6,
+        "mobservice1": 3,
+        "mobservice2": 3,
+        "redisservice1": 3,
+        "redisservice2": 3,
+        "webservice1": 4,
+        "webservice2": 3
+      },
+      "start_time_source": "second-resolution message prefix"
+    },
+    "file moving program": {
+      "audit_supported_injections": 43,
+      "current_main_interval_valid": 43,
+      "duration_examples_seconds": [
+        600.0
+      ],
+      "duration_rule": "integer seconds",
+      "end_time_source": "start + parsed duration",
+      "explicit_injection": true,
+      "message_examples": [
+        "2021-07-02 20:10:00,659 | WARNING | 0.0.0.1 | 172.17.0.3 | webservice1 | trigger the file moving program, start with 2021-07-02 20:00:00.510589, last for 600 seconds",
+        "2021-07-04 04:10:00,703 | WARNING | 0.0.0.1 | 172.17.0.3 | webservice1 | trigger the file moving program, start with 2021-07-04 04:00:00.578620, last for 600 seconds",
+        "2021-07-04 12:10:01,055 | WARNING | 0.0.0.1 | 172.17.0.3 | webservice1 | trigger the file moving program, start with 2021-07-04 12:00:00.956911, last for 600 seconds"
+      ],
+      "official_semantics": "run directory is documented as system log and anomaly-injection records; message says trigger program",
+      "parsing_rule": "WARNING contains file moving program",
+      "raw_count": 43,
+      "service_distribution": {
+        "webservice1": 22,
+        "webservice2": 21
+      },
+      "start_time_source": "embedded 'start with' timestamp"
+    },
+    "login failure": {
+      "audit_supported_injections": 15478,
+      "current_main_interval_valid": 15478,
+      "duration_examples_seconds": [
+        11.0
+      ],
+      "duration_rule": "integer seconds, default 11",
+      "end_time_source": "start + parsed/default duration",
+      "explicit_injection": true,
+      "message_examples": [
+        "2021-07-01 15:03:43,991 | WARNING | 0.0.0.1 | 172.17.0.5 | mobservice1 | db0ed47426370ed5 | wait for 11 seconds for follow-up operations to simulate the login failure of the QR code expired",
+        "2021-07-01 15:11:37,103 | WARNING | 0.0.0.1 | 172.17.0.5 | mobservice1 | fe98597588500994 | wait for 11 seconds for follow-up operations to simulate the login failure of the QR code expired",
+        "2021-07-01 15:15:11,830 | WARNING | 0.0.0.1 | 172.17.0.5 | mobservice1 | 4c8314c7ce3aceab | wait for 11 seconds for follow-up operations to simulate the login failure of the QR code expired"
+      ],
+      "official_semantics": "run directory contains anomaly-injection records; message says simulate/login failure",
+      "parsing_rule": "WARNING message contains login failure; integer 'wait for N seconds', default 11 seconds",
+      "raw_count": 15478,
+      "service_distribution": {
+        "mobservice1": 7749,
+        "mobservice2": 7729
+      },
+      "start_time_source": "millisecond message prefix"
+    },
+    "memory_anomalies": {
+      "audit_supported_injections": 652,
+      "current_main_interval_valid": 652,
+      "duration_examples_seconds": [
+        600.0
+      ],
+      "duration_rule": "integer seconds in current main",
+      "end_time_source": "start + parsed duration",
+      "explicit_injection": true,
+      "message_examples": [
+        "2021-07-01 11:54:27,616 | WARNING | 0.0.0.4 | 172.17.0.3 | dbservice1 | [memory_anomalies] trigger a high memory program, start at 2021-07-01 11:44:26.882752 and lasts 600 seconds and use 1g memory",
+        "2021-07-01 22:33:05,033 | WARNING | 0.0.0.4 | 172.17.0.3 | dbservice1 | [memory_anomalies] trigger a high memory program, start at 2021-07-01 22:23:04.230332 and lasts 600 seconds and use 1g memory",
+        "2021-07-01 12:54:56,480 | WARNING | 0.0.0.2 | 172.17.0.2 | dbservice2 | [memory_anomalies] trigger a high memory program, start at 2021-07-01 12:44:55.798971 and lasts 600 seconds and use 1g memory"
+      ],
+      "official_semantics": "official run example is an anomaly injection; message says trigger high-memory program",
+      "parsing_rule": "WARNING message contains [memory_anomalies]",
+      "raw_count": 652,
+      "service_distribution": {
+        "dbservice1": 67,
+        "dbservice2": 89,
+        "logservice1": 66,
+        "logservice2": 63,
+        "mobservice1": 66,
+        "mobservice2": 66,
+        "redisservice1": 55,
+        "redisservice2": 57,
+        "webservice1": 60,
+        "webservice2": 63
+      },
+      "start_time_source": "embedded 'start at' timestamp"
+    },
+    "normal": {
+      "audit_supported_injections": 0,
+      "current_main_interval_valid": 0,
+      "duration_examples_seconds": [
+        0.0
+      ],
+      "duration_rule": "0",
+      "end_time_source": "not assigned",
+      "explicit_injection": false,
+      "message_examples": [
+        "2021-07-02 03:10:24,568 | INFO | 0.0.0.4 | 172.17.0.3 | dbservice1 | upload business logs on 2021-07-01 successfully",
+        "2021-07-02 03:11:13,840 | INFO | 0.0.0.4 | 172.17.0.3 | dbservice1 | upload trace logs on 2021-07-01 successfully",
+        "2021-07-02 03:11:14,055 | INFO | 0.0.0.4 | 172.17.0.3 | dbservice1 | upload run_logs logs on 2021-07-01 successfully"
+      ],
+      "official_semantics": "system-log record, not established as an anomaly injection",
+      "parsing_rule": "all INFO records",
+      "raw_count": 861,
+      "service_distribution": {
+        "dbservice1": 90,
+        "dbservice2": 88,
+        "logservice1": 80,
+        "logservice2": 81,
+        "mobservice1": 100,
+        "mobservice2": 87,
+        "redisservice1": 84,
+        "redisservice2": 84,
+        "webservice1": 83,
+        "webservice2": 84
+      },
+      "start_time_source": "not assigned by current parser"
+    },
+    "normal memory freed label": {
+      "audit_supported_injections": 0,
+      "current_main_interval_valid": 17,
+      "duration_examples_seconds": [
+        600.0
+      ],
+      "duration_rule": "hard-coded 600 seconds",
+      "end_time_source": "synthetic start + 600 seconds in current main",
+      "explicit_injection": false,
+      "message_examples": [
+        "2021-07-01 12:25:08,804 | WARNING | 0.0.0.4 | 172.17.0.3 | dbservice1 | [normal memory freed label] lasts ten minutes",
+        "2021-07-05 08:25:27,738 | WARNING | 0.0.0.3 | 172.17.0.4 | webservice2 | [normal memory freed label] lasts ten minutes",
+        "2021-07-07 03:47:26,304 | WARNING | 0.0.0.4 | 172.17.0.2 | mobservice2 | [normal memory freed label] lasts ten minutes"
+      ],
+      "official_semantics": "message names a normal memory-freed label; recovery interpretation requires temporal evidence",
+      "parsing_rule": "WARNING contains [normal memory freed label]",
+      "raw_count": 17,
+      "service_distribution": {
+        "dbservice1": 3,
+        "logservice1": 1,
+        "logservice2": 1,
+        "mobservice1": 1,
+        "mobservice2": 1,
+        "redisservice1": 1,
+        "redisservice2": 1,
+        "webservice1": 4,
+        "webservice2": 4
+      },
+      "start_time_source": "millisecond message prefix"
+    },
+    "unknown": {
+      "audit_supported_injections": 0,
+      "current_main_interval_valid": 0,
+      "duration_examples_seconds": [
+        0.0
+      ],
+      "duration_rule": "0",
+      "end_time_source": "none",
+      "explicit_injection": false,
+      "message_examples": [
+        "(Background on this error at: http://sqlalche.me/e/14/e3q8)",
+        "(Background on this error at: http://sqlalche.me/e/14/e3q8)",
+        "(Background on this error at: http://sqlalche.me/e/14/e3q8)"
+      ],
+      "official_semantics": "unsupported",
+      "parsing_rule": "message level not recognized",
+      "raw_count": 36,
+      "service_distribution": {
+        "dbservice1": 3,
+        "dbservice2": 3,
+        "logservice1": 6,
+        "logservice2": 6,
+        "mobservice1": 3,
+        "mobservice2": 3,
+        "redisservice1": 3,
+        "redisservice2": 3,
+        "webservice1": 3,
+        "webservice2": 3
+      },
+      "start_time_source": "none"
+    },
+    "unknown_warning": {
+      "audit_supported_injections": 0,
+      "current_main_interval_valid": 0,
+      "duration_examples_seconds": [],
+      "duration_rule": "0",
+      "end_time_source": "equal to start",
+      "explicit_injection": false,
+      "message_examples": [],
+      "official_semantics": "unsupported without an explicit supported-injection rule",
+      "parsing_rule": "WARNING not matched by a named current-main rule",
+      "raw_count": 0,
+      "service_distribution": {},
+      "start_time_source": "millisecond message prefix when present"
+    }
+  }
+}

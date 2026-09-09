@@ -1,0 +1,170 @@
+{
+  "evidence_status": "REVALIDATED FACT",
+  "limitations": [
+    "Historical timestamp counts are not blindly copied: they are reused only after exact run-table and layout binding.",
+    "Layout digests bind relative paths and byte sizes, not every telemetry file byte; run-table uses a full SHA-256.",
+    "Trace duration quantiles use a deterministic every-257th-row sample; row counts, invalid/negative counts, min/max, and mean are full-scan."
+  ],
+  "logs": {
+    "declared_datetime_rows_with_clock": 0,
+    "files": 10,
+    "header": [
+      "datetime",
+      "service",
+      "message"
+    ],
+    "invalid_timestamp_rows": 294,
+    "rows": 87974871,
+    "timestamp_resolution": "millisecond message prefix YYYY-MM-DD HH:MM:SS,mmm",
+    "timestamp_source": "millisecond prefix parsed from message",
+    "valid_timestamp_rows": 87974577
+  },
+  "metrics": {
+    "all_files": 6640,
+    "candidate_files": 5724,
+    "candidate_source_bytes": 4018245802,
+    "duplicate_timestamp_rows": 21752467,
+    "gap_semantics": "per-file grid inferred from lower-median positive timestamp delta",
+    "header": [
+      "timestamp",
+      "value"
+    ],
+    "inferred_sampling_gap_count": 31098659,
+    "inferred_sampling_gap_ratio": 0.16183165257323656,
+    "invalid_timestamp_rows": 0,
+    "positive_delta_median_ms": 30000.0,
+    "positive_delta_p95_ms": 60000.0,
+    "rows": 182820535,
+    "scheduled_nominal_interval_median_ms": 30000.0,
+    "scheduled_nominal_interval_p95_ms": 60000.0,
+    "valid_timestamp_rows": 182820535
+  },
+  "schema_version": "p5_g0r2_raw_telemetry_timing_v1",
+  "source_binding": {
+    "binding_valid": true,
+    "current_inventory": {
+      "logs": {
+        "bytes": 18445461523,
+        "digest_scope": "sha256(sorted relative_path + NUL + byte_size)",
+        "files": 10,
+        "layout_sha256": "ee10c7afacf40bb9eddb00a3cdfa2d99ce73d531654066b27595e579663c409b"
+      },
+      "metrics": {
+        "bytes": 4790077103,
+        "digest_scope": "sha256(sorted relative_path + NUL + byte_size)",
+        "files": 6640,
+        "layout_sha256": "38cabf0c6582a900a5ae80489eb0af392dedc00b4383ab7c4fabe1463eefd556"
+      },
+      "traces": {
+        "bytes": 8343966340,
+        "digest_scope": "sha256(sorted relative_path + NUL + byte_size)",
+        "files": 10,
+        "layout_sha256": "a12ae950f613c8f119742e7d1d149b56407cd76437020c4d31736e356e1fd08d"
+      }
+    },
+    "gaia_root": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS",
+    "historical_artifact": "/home/zhangll24/RCA_project/Ada-MGAD-rca-standalone/artifacts/p1/telemetry_diagnostics.json",
+    "historical_artifact_sha256": "957ef5f94f50e096b53e7f0107920361cdb70ad5b0610a87640bbacbc327c6b6",
+    "historical_inventory": {
+      "logs": {
+        "bytes": 18445461523,
+        "digest_scope": "sha256(sorted relative_path + NUL + byte_size)",
+        "files": 10,
+        "layout_sha256": "ee10c7afacf40bb9eddb00a3cdfa2d99ce73d531654066b27595e579663c409b"
+      },
+      "metrics": {
+        "bytes": 4790077103,
+        "digest_scope": "sha256(sorted relative_path + NUL + byte_size)",
+        "files": 6640,
+        "layout_sha256": "38cabf0c6582a900a5ae80489eb0af392dedc00b4383ab7c4fabe1463eefd556"
+      },
+      "traces": {
+        "bytes": 8343966340,
+        "digest_scope": "sha256(sorted relative_path + NUL + byte_size)",
+        "files": 10,
+        "layout_sha256": "a12ae950f613c8f119742e7d1d149b56407cd76437020c4d31736e356e1fd08d"
+      }
+    },
+    "historical_run_table_sha256": "ca8d44dd08319d940b0d607305165853da376208440b0e3ec07a80dac44e2820",
+    "inventory_match": {
+      "logs": true,
+      "metrics": true,
+      "traces": true
+    },
+    "reuse_rule": "full-scan facts are upgraded only because run-table hash and all size-bound layout digests match",
+    "run_table_match": true,
+    "run_table_sha256": "ca8d44dd08319d940b0d607305165853da376208440b0e3ec07a80dac44e2820"
+  },
+  "traces": {
+    "duration_rule": "(end_time - start_time).total_seconds()",
+    "files": 10,
+    "header": [
+      "timestamp",
+      "host_ip",
+      "service_name",
+      "trace_id",
+      "span_id",
+      "parent_id",
+      "start_time",
+      "end_time",
+      "url",
+      "status_code",
+      "message"
+    ],
+    "historical_negative_duration_rows": 0,
+    "historical_rows": 28681438,
+    "parent_id_missing_rows": 0,
+    "required_field_missing": {
+      "end_time": 0,
+      "service_name": 0,
+      "span_id": 0,
+      "start_time": 0,
+      "trace_id": 0
+    },
+    "span_parent_fields": [
+      "trace_id",
+      "span_id",
+      "parent_id",
+      "service_name"
+    ],
+    "status_official_semantics": "200 normal, all other codes anomalous",
+    "targeted_full_status_and_duration_scan": {
+      "duration_seconds": {
+        "invalid_rows": 0,
+        "max": 8889.437669,
+        "mean": 0.24266309522165522,
+        "min": 0.001934,
+        "negative_rows": 0,
+        "quantile_sample": {
+          "count": 111601,
+          "max": 1210.611472,
+          "median": 0.016062,
+          "min": 0.001957,
+          "p10": 0.003249,
+          "p25": 0.003439,
+          "p75": 0.312332,
+          "p90": 0.735759,
+          "sample_stride": 257,
+          "sampling": "global source-order every 257th row"
+        },
+        "valid_rows": 28681438,
+        "zero_rows": 0
+      },
+      "historical_ge_500_count": 1156668,
+      "historical_ge_500_ratio": 0.04032810349327673,
+      "invalid_status_rows": 0,
+      "official_not_200_count": 4228408,
+      "official_not_200_ratio": 0.1474266387898682,
+      "rows": 28681438,
+      "rows_missed_by_ge_500": 3071740,
+      "rules_equivalent": false,
+      "status_code_distribution": {
+        "200": 24453030,
+        "300": 3040760,
+        "400": 30980,
+        "500": 1156668
+      }
+    },
+    "timestamp_field": "timestamp is second-resolution display time; start_time/end_time carry microseconds"
+  }
+}

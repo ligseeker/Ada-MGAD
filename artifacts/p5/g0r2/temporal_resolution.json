@@ -1,0 +1,381 @@
+{
+  "evidence_status": "REVALIDATED FACT",
+  "injection_count": 16200,
+  "interarrival_seconds": {
+    "all_supported_consecutive": {
+      "count": 16199,
+      "max": 87800.734,
+      "median": 106.73,
+      "min": 0.01,
+      "p10": 21.706400000000002,
+      "p25": 48.587500000000006,
+      "p75": 210.72750000000002,
+      "p90": 355.3396,
+      "thresholds": {
+        "lt_120s": {
+          "count": 8811,
+          "ratio": 0.5439224643496512
+        },
+        "lt_15s": {
+          "count": 930,
+          "ratio": 0.05741095129328971
+        },
+        "lt_300s": {
+          "count": 13934,
+          "ratio": 0.8601765541082783
+        },
+        "lt_30s": {
+          "count": 2448,
+          "ratio": 0.15112043953330453
+        },
+        "lt_60s": {
+          "count": 4980,
+          "ratio": 0.30742638434471264
+        }
+      }
+    },
+    "by_fault_type": {
+      "access permission denied exception": {
+        "count": 14,
+        "max": 316860.616,
+        "median": 86369.75899999999,
+        "min": 14340.417,
+        "p10": 14399.5305,
+        "p25": 22722.02225,
+        "p75": 165599.593,
+        "p90": 197280.2574,
+        "thresholds": {
+          "lt_120s": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "lt_15s": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "lt_300s": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "lt_30s": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "lt_60s": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        }
+      },
+      "cpu_anomalies": {
+        "count": 11,
+        "max": 130951.393,
+        "median": 13411.553,
+        "min": 10398.49,
+        "p10": 10641.726,
+        "p25": 11067.56,
+        "p75": 27487.893,
+        "p90": 57816.224,
+        "thresholds": {
+          "lt_120s": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "lt_15s": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "lt_300s": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "lt_30s": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "lt_60s": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        }
+      },
+      "file moving program": {
+        "count": 42,
+        "max": 287999.893,
+        "median": 30599.907,
+        "min": 0.067,
+        "p10": 10799.555600000002,
+        "p25": 14400.306499999999,
+        "p75": 83699.52475000001,
+        "p90": 114120.47639999999,
+        "thresholds": {
+          "lt_120s": {
+            "count": 4,
+            "ratio": 0.09523809523809523
+          },
+          "lt_15s": {
+            "count": 4,
+            "ratio": 0.09523809523809523
+          },
+          "lt_300s": {
+            "count": 4,
+            "ratio": 0.09523809523809523
+          },
+          "lt_30s": {
+            "count": 4,
+            "ratio": 0.09523809523809523
+          },
+          "lt_60s": {
+            "count": 4,
+            "ratio": 0.09523809523809523
+          }
+        }
+      },
+      "login failure": {
+        "count": 15477,
+        "max": 87800.734,
+        "median": 111.755,
+        "min": 0.024,
+        "p10": 22.9252,
+        "p25": 50.585,
+        "p75": 220.288,
+        "p90": 369.4952,
+        "thresholds": {
+          "lt_120s": {
+            "count": 8155,
+            "ratio": 0.5269109000452284
+          },
+          "lt_15s": {
+            "count": 806,
+            "ratio": 0.052077275957872975
+          },
+          "lt_300s": {
+            "count": 13124,
+            "ratio": 0.8479679524455643
+          },
+          "lt_30s": {
+            "count": 2203,
+            "ratio": 0.14234024681785876
+          },
+          "lt_60s": {
+            "count": 4570,
+            "ratio": 0.29527686244104157
+          }
+        }
+      },
+      "memory_anomalies": {
+        "count": 651,
+        "max": 89935.788,
+        "median": 2995.82,
+        "min": 0.099,
+        "p10": 458.193,
+        "p25": 1349.2555000000002,
+        "p75": 5447.5965,
+        "p90": 8848.517,
+        "thresholds": {
+          "lt_120s": {
+            "count": 19,
+            "ratio": 0.029185867895545316
+          },
+          "lt_15s": {
+            "count": 3,
+            "ratio": 0.004608294930875576
+          },
+          "lt_300s": {
+            "count": 40,
+            "ratio": 0.06144393241167435
+          },
+          "lt_30s": {
+            "count": 5,
+            "ratio": 0.007680491551459293
+          },
+          "lt_60s": {
+            "count": 6,
+            "ratio": 0.009216589861751152
+          }
+        }
+      }
+    },
+    "different_root_adjacent_global": {
+      "count": 8707,
+      "max": 6700.234,
+      "median": 108.335,
+      "min": 0.01,
+      "p10": 21.8502,
+      "p25": 48.7665,
+      "p75": 214.4405,
+      "p90": 362.3838,
+      "thresholds": {
+        "lt_120s": {
+          "count": 4695,
+          "ratio": 0.539221316182382
+        },
+        "lt_15s": {
+          "count": 506,
+          "ratio": 0.05811416101986907
+        },
+        "lt_300s": {
+          "count": 7459,
+          "ratio": 0.856667049500402
+        },
+        "lt_30s": {
+          "count": 1310,
+          "ratio": 0.1504536579763409
+        },
+        "lt_60s": {
+          "count": 2658,
+          "ratio": 0.30527162053520157
+        }
+      }
+    },
+    "same_root_consecutive_pooled": {
+      "count": 16190,
+      "max": 245478.124,
+      "median": 234.9525,
+      "min": 0.054,
+      "p10": 40.35490000000001,
+      "p25": 97.90975,
+      "p75": 480.14225,
+      "p90": 879.2598000000002,
+      "thresholds": {
+        "lt_120s": {
+          "count": 4834,
+          "ratio": 0.29857936998147006
+        },
+        "lt_15s": {
+          "count": 428,
+          "ratio": 0.026436071649166153
+        },
+        "lt_300s": {
+          "count": 9488,
+          "ratio": 0.5860407659048795
+        },
+        "lt_30s": {
+          "count": 1166,
+          "ratio": 0.07201976528721434
+        },
+        "lt_60s": {
+          "count": 2493,
+          "ratio": 0.15398394070413834
+        }
+      }
+    }
+  },
+  "interval_to_ad_grid": {
+    "audit_repaired_all_injections_inclusive_end_bin_count": {
+      "count": 16200,
+      "max": 121.0,
+      "mean": 2.3151234567901233,
+      "median": 1.0,
+      "min": 1.0,
+      "p10": 1.0,
+      "p25": 1.0,
+      "p75": 2.0,
+      "p90": 2.0
+    },
+    "current_main_inclusive_end_bin_count": {
+      "count": 16188,
+      "max": 121.0,
+      "mean": 2.316098344452681,
+      "median": 1.0,
+      "min": 1.0,
+      "p10": 1.0,
+      "p25": 1.0,
+      "p75": 2.0,
+      "p90": 2.0
+    },
+    "current_main_mappable_injections": 16188,
+    "duration_seconds": {
+      "count": 16200,
+      "lt_30s_count": 15490,
+      "lt_30s_ratio": 0.9561728395061728,
+      "lt_60s_count": 15490,
+      "lt_60s_ratio": 0.9561728395061728,
+      "max": 3600.0,
+      "mean": 39.58605154320988,
+      "median": 11.0,
+      "min": 2.892,
+      "p10": 11.0,
+      "p25": 11.0,
+      "p75": 11.0,
+      "p90": 11.0
+    },
+    "injections_in_shared_same_service_exact_aligned_intervals": 414,
+    "injections_sharing_any_same_service_ad_positive_bin": 2151,
+    "injections_sharing_any_same_service_ad_positive_bin_ratio": 0.13277777777777777,
+    "maximum_shared_group": 3,
+    "same_service_event_pairs_sharing_any_ad_positive_bin": 1213,
+    "same_service_exact_aligned_interval_groups": 206
+  },
+  "limitations": [
+    "The zero-bin denominator is the full July calendar, not the metric-derived observed timestamp subset.",
+    "Different-service events in one time bin can remain distinct node positives, while same-service collisions cannot.",
+    "Current Ada-MGAD includes the aligned end bin; raw injection GT remains half-open and is not merged here."
+  ],
+  "one_to_one_resolution": {
+    "decision": "30s node-time outputs are not a one-injection-per-timestep event registry",
+    "service_aware_lower_bound": {
+      "meaning": "injection shares both service and 30s start bin; node-time labels cannot separate them",
+      "not_one_to_one_count": 974,
+      "not_one_to_one_ratio": 0.06012345679012346
+    },
+    "strict_time_bin_definition": {
+      "meaning": "injection start shares a 30s output time bin with at least one other injection",
+      "not_one_to_one_count": 2033,
+      "not_one_to_one_ratio": 0.12549382716049381
+    }
+  },
+  "resolution_compatible_subsets": {
+    "nearest_other_gt_120s": {
+      "count": 3354,
+      "ratio": 0.20703703703703705
+    },
+    "nearest_other_gt_30s": {
+      "count": 11660,
+      "ratio": 0.7197530864197531
+    },
+    "nearest_other_gt_60s": {
+      "count": 7758,
+      "ratio": 0.47888888888888886
+    }
+  },
+  "schema_version": "p5_g0r2_temporal_resolution_v1",
+  "source": {
+    "event_registry": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/g0r2/event_registry.csv",
+    "event_registry_sha256": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5",
+    "grid_seconds": 30
+  },
+  "start_bin_collision_30s": {
+    "alignment": "Unix-epoch floor(timestamp_ms / 30000) * 30000, matching current Ada-MGAD",
+    "bin_injection_count_distribution": {
+      "0": {
+        "count": 74110,
+        "percentage": 83.00851254480287
+      },
+      "1": {
+        "count": 14167,
+        "percentage": 15.868055555555555
+      },
+      "2": {
+        "count": 976,
+        "percentage": 1.093189964157706
+      },
+      "ge_3": {
+        "count": 27,
+        "percentage": 0.03024193548387097
+      }
+    },
+    "calendar_bins": 89280,
+    "colliding_bins": 1003,
+    "denominator": "all 30-second calendar bins in July 2021 Asia/Shanghai",
+    "different_root_only_collision_bins": 520,
+    "event_bearing_bins": 15170,
+    "injections_in_any_start_bin_collision": 2033,
+    "injections_in_any_start_bin_collision_ratio": 0.12549382716049381,
+    "injections_in_same_service_start_bin_collision": 974,
+    "injections_in_same_service_start_bin_collision_ratio": 0.06012345679012346,
+    "maximum_injections_in_one_start_bin": 3,
+    "mixed_same_and_different_root_collision_bins": 16,
+    "same_root_only_collision_bins": 467
+  }
+}
