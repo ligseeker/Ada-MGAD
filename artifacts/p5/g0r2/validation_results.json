@@ -1,0 +1,224 @@
+{
+  "checks": [
+    {
+      "check": "required_artifacts_exist",
+      "evidence": {
+        "event_registry.csv": true,
+        "event_revalidation.json": true,
+        "evidence_ledger.csv": true,
+        "historical_reuse_matrix.csv": true,
+        "label_reconciliation.csv": true,
+        "label_reconciliation.json": true,
+        "raw_telemetry_timing.json": true,
+        "rca_compatibility.json": true,
+        "repository_state.json": true,
+        "split_feasibility.json": true,
+        "temporal_resolution.json": true
+      },
+      "passed": true
+    },
+    {
+      "check": "event_inventory",
+      "evidence": {
+        "excluded": 952,
+        "raw": 17152,
+        "supported": 16200
+      },
+      "passed": true
+    },
+    {
+      "check": "registry_count",
+      "evidence": 16200,
+      "passed": true
+    },
+    {
+      "check": "registry_hash_binding",
+      "evidence": {
+        "actual": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5",
+        "compatibility": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5",
+        "split": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5",
+        "temporal": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5"
+      },
+      "passed": true
+    },
+    {
+      "check": "label_coupling",
+      "evidence": {
+        "current_ad_mappable_supported_injections": 16188,
+        "current_ad_missing_supported_injections": 12,
+        "missing_reason": "12 CPU rows have decimal durations rejected by current-main integer-only regex",
+        "rca_supported_injections": 16200,
+        "semantic_statement": "The service identity is shared by construction, but event identity is not one-to-one after 30s rasterization.",
+        "service_exact_match_ratio_among_current_ad_mappable": 1.0,
+        "service_exact_match_ratio_over_all_rca_injections_treating_missing_as_mismatch": 0.9992592592592593,
+        "service_exact_matches_among_current_ad_mappable": 16188
+      },
+      "passed": true
+    },
+    {
+      "check": "cpu_defect",
+      "evidence": {
+        "audit_float_repair_success": 12,
+        "cpu_event_count": 12,
+        "current_main_parse_failure": 12,
+        "current_main_parse_success": 0,
+        "duration_examples_seconds": [
+          2.8919918537139893,
+          2.9050204753875732,
+          2.915334701538086,
+          2.937929630279541,
+          2.9688236713409424,
+          2.9959075450897217,
+          3.0034542083740234,
+          3.0210864543914795,
+          3.0509350299835205,
+          3.051996946334839,
+          3.0525479316711426,
+          3.2413992881774902
+        ],
+        "status": "REVALIDATED PARSER DEFECT"
+      },
+      "passed": true
+    },
+    {
+      "check": "trace_status_full_count",
+      "evidence": {
+        "200": 24453030,
+        "300": 3040760,
+        "400": 30980,
+        "500": 1156668
+      },
+      "passed": true
+    },
+    {
+      "check": "trace_rules_not_equivalent",
+      "evidence": {
+        "missed": 3071740,
+        "rules_equivalent": false
+      },
+      "passed": true
+    },
+    {
+      "check": "context_group_consistency",
+      "evidence": "W300=322; W600=23",
+      "passed": true
+    },
+    {
+      "check": "no_exact_68d_claim",
+      "evidence": {
+        "W300_B15": {
+          "bin_seconds": 15,
+          "bins_total": 40,
+          "exact_68d_representation_built": false,
+          "exact_health_status": "NOT COMPUTED: GAIA four-channel materializer is not frozen",
+          "full_scan_activity_coverage_available": true,
+          "metric_cadence_gap_adjusted_occupancy_reference": 0.4190841737133817,
+          "metric_native_cadence_seconds": 30,
+          "metric_structural_occupancy_upper_bound_without_fill": 0.5,
+          "selection_basis": "coverage, contamination, representation health, and split feasibility only",
+          "w300_non_68d_proxy_available": true,
+          "window_seconds_each_side": 300
+        },
+        "W300_B30": {
+          "bin_seconds": 30,
+          "bins_total": 20,
+          "exact_68d_representation_built": false,
+          "exact_health_status": "NOT COMPUTED: GAIA four-channel materializer is not frozen",
+          "full_scan_activity_coverage_available": true,
+          "metric_cadence_gap_adjusted_occupancy_reference": 0.8381683474267634,
+          "metric_native_cadence_seconds": 30,
+          "metric_structural_occupancy_upper_bound_without_fill": 1.0,
+          "selection_basis": "coverage, contamination, representation health, and split feasibility only",
+          "w300_non_68d_proxy_available": true,
+          "window_seconds_each_side": 300
+        },
+        "W600_B15": {
+          "bin_seconds": 15,
+          "bins_total": 80,
+          "exact_68d_representation_built": false,
+          "exact_health_status": "NOT COMPUTED: GAIA four-channel materializer is not frozen",
+          "full_scan_activity_coverage_available": true,
+          "metric_cadence_gap_adjusted_occupancy_reference": 0.4190841737133817,
+          "metric_native_cadence_seconds": 30,
+          "metric_structural_occupancy_upper_bound_without_fill": 0.5,
+          "selection_basis": "coverage, contamination, representation health, and split feasibility only",
+          "w300_non_68d_proxy_available": false,
+          "window_seconds_each_side": 600
+        },
+        "W600_B30": {
+          "bin_seconds": 30,
+          "bins_total": 40,
+          "exact_68d_representation_built": false,
+          "exact_health_status": "NOT COMPUTED: GAIA four-channel materializer is not frozen",
+          "full_scan_activity_coverage_available": true,
+          "metric_cadence_gap_adjusted_occupancy_reference": 0.8381683474267634,
+          "metric_native_cadence_seconds": 30,
+          "metric_structural_occupancy_upper_bound_without_fill": 1.0,
+          "selection_basis": "coverage, contamination, representation health, and split feasibility only",
+          "w300_non_68d_proxy_available": false,
+          "window_seconds_each_side": 600
+        }
+      },
+      "passed": true
+    },
+    {
+      "check": "split_protocols_distinct",
+      "evidence": "Protocol S W300 feasible; W600 infeasible; two Protocol T candidates",
+      "passed": true
+    },
+    {
+      "check": "evidence_ledger_schema",
+      "evidence": {
+        "fields": [
+          "artifact",
+          "branch",
+          "claim",
+          "claim_id",
+          "confidence",
+          "evidence",
+          "file_or_dataset",
+          "location",
+          "repository",
+          "reproduction_command",
+          "status"
+        ],
+        "rows": 20
+      },
+      "passed": true
+    },
+    {
+      "check": "historical_reuse_matrix",
+      "evidence": {
+        "assets": [
+          "DATASET_AUDIT",
+          "GAIA_INCLUSION_AUDIT",
+          "TELEMETRY_DIAGNOSTICS",
+          "SPLIT_DIAGNOSTICS",
+          "P2_METRIC_FEATURES",
+          "P2_MODALITY_SCHEMA_AUDIT",
+          "BASELINE_RESULTS",
+          "PROTOCOL_DOCS"
+        ],
+        "rows": 8
+      },
+      "passed": true
+    },
+    {
+      "check": "report_structure",
+      "evidence": {
+        "missing": []
+      },
+      "passed": true
+    },
+    {
+      "check": "production_code_unchanged",
+      "evidence": [],
+      "passed": true
+    }
+  ],
+  "checks_passed": 15,
+  "checks_total": 15,
+  "schema_version": "p5_g0r2_validation_v1",
+  "scope": "artifact consistency only; no model training or performance evaluation",
+  "status": "PASS"
+}

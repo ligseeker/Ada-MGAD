@@ -1,0 +1,126 @@
+{
+  "files": {
+    "artifacts/p5/g0r2/event_registry.csv": {
+      "bytes": 1710208,
+      "sha256": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5"
+    },
+    "artifacts/p5/g0r2/event_revalidation.json": {
+      "bytes": 22732,
+      "sha256": "e56927971e9f8cdaca904a861174396c062f3ac5b1404a24c790ce62e197790d"
+    },
+    "artifacts/p5/g0r2/evidence_ledger.csv": {
+      "bytes": 26293,
+      "sha256": "eb94154a8c488af1b7b923c03d87bc37e09a58bc9cf6ccdcf5782ba51b41705b"
+    },
+    "artifacts/p5/g0r2/historical_reuse_matrix.csv": {
+      "bytes": 48381,
+      "sha256": "dd27f90b537e59af3d37c94aeb2ed11423cd7606b330ec10f8a1e1967cd77133"
+    },
+    "artifacts/p5/g0r2/label_reconciliation.csv": {
+      "bytes": 2389,
+      "sha256": "0a8556cb2404350497deb8846576b75cbed342ccf43e84c9662833c3a58acded"
+    },
+    "artifacts/p5/g0r2/label_reconciliation.json": {
+      "bytes": 5625,
+      "sha256": "ff60468adc07290cd9474273e4228a4621fb503b6f42660196ddb6865439cb76"
+    },
+    "artifacts/p5/g0r2/raw_telemetry_timing.json": {
+      "bytes": 5875,
+      "sha256": "ab8d4156e070077e2f292b8f7567206d46473e4a2ea59fded0f1b1b2ebc49e6c"
+    },
+    "artifacts/p5/g0r2/rca_compatibility.json": {
+      "bytes": 34367,
+      "sha256": "2714c1e76e3c49fd309fb7fa68b976d85e377204705fb02129ed5b7d9ff78032"
+    },
+    "artifacts/p5/g0r2/repository_state.json": {
+      "bytes": 2467,
+      "sha256": "588b288716d0a3612a9606eddaf23474ae441271720f9225bf73f36cefca3de3"
+    },
+    "artifacts/p5/g0r2/split_feasibility.json": {
+      "bytes": 41399,
+      "sha256": "1d324f188cf0d80c20f2fd6d893e6de674b89b462712356868e984a2bece7c87"
+    },
+    "artifacts/p5/g0r2/temporal_resolution.json": {
+      "bytes": 10197,
+      "sha256": "3ccf125e4ec5ad955abd7e5aa6939dc09c95c1b2dc57f1740cd3273212cb2242"
+    },
+    "artifacts/p5/g0r2/validation_results.json": {
+      "bytes": 7480,
+      "sha256": "6ee0b0bc7e3b8a75076d39446b26cb49d75cd037cb487e2c2e7ec9726cb88308"
+    },
+    "docs/P5_GAIA_RECONCILIATION_AUDIT_V1.md": {
+      "bytes": 35659,
+      "sha256": "789b4665654f56829c931fe227ffa2100d5695adb78f8d2a50b87287adad472b"
+    },
+    "scripts/p5/__init__.py": {
+      "bytes": 46,
+      "sha256": "7d871e2fe2a9e8b4cfb106121806c39356f364006b2ae4cf8792b58c94b69f34"
+    },
+    "scripts/p5/audit_injection_resolution.py": {
+      "bytes": 12794,
+      "sha256": "1d96cb8acc63b8fc3184c02bd8107d77f76e0915288ab830d17d5e4fe1305e1f"
+    },
+    "scripts/p5/audit_label_reconciliation.py": {
+      "bytes": 14267,
+      "sha256": "9993964069f4b8e97d45f10bf934d10c9f4f5fb9294a06cf78aa6525ead979d1"
+    },
+    "scripts/p5/audit_p5_split_feasibility.py": {
+      "bytes": 17844,
+      "sha256": "a8880529d9224d72c30f8d3d28a1ee5a009db2b7b7ece774184fed98061576d8"
+    },
+    "scripts/p5/audit_raw_telemetry.py": {
+      "bytes": 11147,
+      "sha256": "ec475d75ac2aa5d894610c100b7796617e5a6d30b0eef14a48b9c9380530ec64"
+    },
+    "scripts/p5/audit_rca_compatibility.py": {
+      "bytes": 21880,
+      "sha256": "24cc1ee021483e18acbe3112c24667dbe2f139bea4759bbfb3352cb5f791e948"
+    },
+    "scripts/p5/build_audit_manifest.py": {
+      "bytes": 2493,
+      "sha256": "3ee6aad18efc69d3d73ce6da4c062e63e7e0772217eca70bcd86cd6732c20e42"
+    },
+    "scripts/p5/build_historical_reuse_and_ledger.py": {
+      "bytes": 25902,
+      "sha256": "afe288f92cf66bf1ff9cb951d171e668e05b42b3c0ec356dbdc620e6be90a4fb"
+    },
+    "scripts/p5/capture_repository_state.py": {
+      "bytes": 3669,
+      "sha256": "2c81c438809f730fa569c96b7d0755bde6ec130c14e4f61967e5d7d9bbd3d2a8"
+    },
+    "scripts/p5/common.py": {
+      "bytes": 3566,
+      "sha256": "7c1fc3396977b48f2b5901029c8feeb9c4e2035baf67bacae60ae4bce2bdd567"
+    },
+    "scripts/p5/revalidate_gaia_events.py": {
+      "bytes": 20835,
+      "sha256": "f2c715885e553d5b682c487ff6e760208a8ced752ba49fef336e612b5ed45666"
+    },
+    "scripts/p5/validate_p5_audit.py": {
+      "bytes": 7075,
+      "sha256": "bf11227b81e0ce7864ac171019f46c19c3898f495aaf0beeb801852e9c83dacb"
+    }
+  },
+  "inputs": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-rca-standalone/artifacts/p1/telemetry_diagnostics.json": {
+      "bytes": 3881407,
+      "sha256": "957ef5f94f50e096b53e7f0107920361cdb70ad5b0610a87640bbacbc327c6b6"
+    },
+    "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS/run/run/run/run_table_2021-07.csv": {
+      "bytes": 3642539,
+      "sha256": "ca8d44dd08319d940b0d607305165853da376208440b0e3ec07a80dac44e2820"
+    }
+  },
+  "reproduction_entrypoints": [
+    "scripts/p5/revalidate_gaia_events.py",
+    "scripts/p5/audit_label_reconciliation.py",
+    "scripts/p5/audit_injection_resolution.py",
+    "scripts/p5/audit_raw_telemetry.py",
+    "scripts/p5/audit_rca_compatibility.py",
+    "scripts/p5/audit_p5_split_feasibility.py",
+    "scripts/p5/build_historical_reuse_and_ledger.py",
+    "scripts/p5/validate_p5_audit.py"
+  ],
+  "schema_version": "p5_g0r2_audit_manifest_v1",
+  "scope": "audit scripts, report, and machine-readable evidence; no trained models"
+}
