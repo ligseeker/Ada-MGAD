@@ -1,0 +1,18 @@
+{
+  "config_sha256": "171406d562b36b5513f0b5d011568a4a0831188041b45377068b6587d6e36f26",
+  "finite": true,
+  "generated_at_utc": "2026-09-11T02:09:00.189181+00:00",
+  "git_commit": "71926dcfbd54d31bf3a32394026fca52cf7cfe5e",
+  "n_bins": 40,
+  "onset_sentinel": 300.0,
+  "post_bins": 20,
+  "post_position_denominator": 19.0,
+  "pre_bins": 20,
+  "schema_version": "p5_i1_rca_feature_smoke_v1",
+  "shape": [
+    10,
+    68
+  ],
+  "status": "PASS",
+  "trace_error_rule": "status_code != 200"
+}
