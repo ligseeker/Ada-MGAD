@@ -193,14 +193,29 @@ def smoke(artifact_root: Path):
         grid_seconds=30,
         tolerance_seconds=60,
     )
-    metrics = _write_outputs(result, artifact_root, {
+    selection = result["threshold_selection"]
+    summary = {
+        "schema_version": "p5_i1_event_detection_smoke_v1",
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "status": "PASS",
+        "formal_result": False,
+        "fixture": "synthetic only",
         "git_commit": git_head(),
-        "fixture": True,
         "test_not_used_for_threshold_selection": True,
-    })
-    metrics["status"] = "PASS"
-    write_json(artifact_root / "event_smoke_summary.json", metrics)
-    return metrics
+        "threshold_selection": {
+            "threshold": float(selection.threshold),
+            "candidate_count": int(selection.candidate_count),
+            "tie_break": selection.tie_break,
+            "selection_source": "validation only",
+        },
+        "validation_metrics": result["validation_metrics"],
+        "test_metrics": result["test_metrics"],
+        "event_prediction_rows": int(len(result["event_predictions"])),
+        "matching_rows": int(len(result["matching"])),
+    }
+    artifact_root.mkdir(parents=True, exist_ok=True)
+    write_json(artifact_root / "event_smoke_summary.json", summary)
+    return summary
 
 
 def main():

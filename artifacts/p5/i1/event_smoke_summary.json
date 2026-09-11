@@ -1,0 +1,51 @@
+{
+  "event_prediction_rows": 2,
+  "fixture": "synthetic only",
+  "formal_result": false,
+  "generated_at_utc": "2026-09-11T02:22:29.409905+00:00",
+  "git_commit": "718d7c7afcc436e23a04dd2aff03c08f8b40a60a",
+  "matching_rows": 4,
+  "schema_version": "p5_i1_event_detection_smoke_v1",
+  "status": "PASS",
+  "test_metrics": {
+    "detection_delay": {
+      "matched_delay_count": 0,
+      "mean_seconds": null,
+      "median_seconds": null,
+      "p90_seconds": null,
+      "p95_seconds": null
+    },
+    "event_f1": 0.0,
+    "event_precision": 0.0,
+    "event_recall": 0.0,
+    "false_negative_events": 2,
+    "false_positive_events": 1,
+    "ground_truth_event_count": 2,
+    "predicted_episode_count": 1,
+    "true_positive_events": 0
+  },
+  "test_not_used_for_threshold_selection": true,
+  "threshold_selection": {
+    "candidate_count": 4,
+    "selection_source": "validation only",
+    "threshold": 0.9,
+    "tie_break": "highest threshold among equal validation Event F1"
+  },
+  "validation_metrics": {
+    "detection_delay": {
+      "matched_delay_count": 1,
+      "mean_seconds": 0.0,
+      "median_seconds": 0.0,
+      "p90_seconds": 0.0,
+      "p95_seconds": 0.0
+    },
+    "event_f1": 1.0,
+    "event_precision": 1.0,
+    "event_recall": 1.0,
+    "false_negative_events": 0,
+    "false_positive_events": 0,
+    "ground_truth_event_count": 1,
+    "predicted_episode_count": 1,
+    "true_positive_events": 1
+  }
+}

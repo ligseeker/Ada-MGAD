@@ -1,0 +1,108 @@
+{
+  "config_sha256": "171406d562b36b5513f0b5d011568a4a0831188041b45377068b6587d6e36f26",
+  "delay_relationship": {
+    "absolute_delay_vs_reciprocal_rank_pearson": null,
+    "absolute_delay_vs_reciprocal_rank_spearman": null,
+    "delay_bands": {
+      "early_lt_-30s": {
+        "AC@1": null,
+        "MRR": null,
+        "case_count": 0,
+        "mean_detection_delay_seconds": null
+      },
+      "late_gt_30s": {
+        "AC@1": null,
+        "MRR": null,
+        "case_count": 0,
+        "mean_detection_delay_seconds": null
+      },
+      "near_-30s_to_30s": {
+        "AC@1": 1.0,
+        "MRR": 1.0,
+        "case_count": 2,
+        "mean_detection_delay_seconds": 0.0
+      }
+    },
+    "matched_cases": 2,
+    "signed_delay_vs_reciprocal_rank_pearson": null,
+    "signed_delay_vs_reciprocal_rank_spearman": null
+  },
+  "detector_only_rankings": {
+    "p0": [
+      "dbservice1",
+      "dbservice2",
+      "logservice1",
+      "logservice2",
+      "mobservice1",
+      "mobservice2",
+      "redisservice1",
+      "redisservice2",
+      "webservice1",
+      "webservice2"
+    ],
+    "p1": [
+      "webservice2",
+      "dbservice1",
+      "dbservice2",
+      "logservice1",
+      "logservice2",
+      "mobservice1",
+      "mobservice2",
+      "redisservice1",
+      "redisservice2",
+      "webservice1"
+    ]
+  },
+  "diagnosis": {
+    "counts": {
+      "false_alarm_predictions": 1,
+      "ground_truth_events": 3,
+      "matched_events": 2,
+      "missed_gt_events": 1,
+      "predicted_episodes": 3
+    },
+    "definition": {
+      "FN@k": "unmatched GT or matched GT with labelled service outside Top-k",
+      "FP@k": "unmatched prediction or matched prediction with labelled service outside Top-k",
+      "TP@k": "matched prediction and labelled fault service in Ada-RCA-G Top-k",
+      "note": "a matched ranking failure contributes to both FP and FN"
+    },
+    "diagnosis_f1_at_1": 0.6666666666666666,
+    "metrics": {
+      "@1": {
+        "diagnosis_false_negative": 1,
+        "diagnosis_false_positive": 1,
+        "diagnosis_true_positive": 2,
+        "f1": 0.6666666666666666,
+        "precision": 0.6666666666666666,
+        "ranking_failures": 0,
+        "recall": 0.6666666666666666
+      },
+      "@3": {
+        "diagnosis_false_negative": 1,
+        "diagnosis_false_positive": 1,
+        "diagnosis_true_positive": 2,
+        "f1": 0.6666666666666666,
+        "precision": 0.6666666666666666,
+        "ranking_failures": 0,
+        "recall": 0.6666666666666666
+      },
+      "@5": {
+        "diagnosis_false_negative": 1,
+        "diagnosis_false_positive": 1,
+        "diagnosis_true_positive": 2,
+        "f1": 0.6666666666666666,
+        "precision": 0.6666666666666666,
+        "ranking_failures": 0,
+        "recall": 0.6666666666666666
+      }
+    },
+    "primary_summary": "Diagnosis F1@1"
+  },
+  "fixture": "synthetic only",
+  "formal_result": false,
+  "generated_at_utc": "2026-09-11T02:21:15.155428+00:00",
+  "git_commit": "718d7c7afcc436e23a04dd2aff03c08f8b40a60a",
+  "schema_version": "p5_i1_e2e_smoke_v1",
+  "status": "PASS"
+}
