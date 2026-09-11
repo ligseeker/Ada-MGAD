@@ -7,8 +7,9 @@
   },
   "fixture": "synthetic only",
   "formal_result": false,
-  "generated_at_utc": "2026-09-11T02:16:59.418261+00:00",
-  "git_commit": "99147f34c77ada5eb6147075f51beb22c8c3793b",
+  "generated_at_utc": "2026-09-11T02:37:37.111628+00:00",
+  "git_commit": "1e2f8801a38b24a0124f409056328cc2a7379fde",
+  "random_seed": 42,
   "root_frequency_fit_split": "train only",
   "root_frequency_ranking": [
     "dbservice1",

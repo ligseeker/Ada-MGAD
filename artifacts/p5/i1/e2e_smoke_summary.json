@@ -101,8 +101,9 @@
   },
   "fixture": "synthetic only",
   "formal_result": false,
-  "generated_at_utc": "2026-09-11T02:21:15.155428+00:00",
-  "git_commit": "718d7c7afcc436e23a04dd2aff03c08f8b40a60a",
+  "generated_at_utc": "2026-09-11T02:37:39.447467+00:00",
+  "git_commit": "1e2f8801a38b24a0124f409056328cc2a7379fde",
+  "random_seed": 42,
   "schema_version": "p5_i1_e2e_smoke_v1",
   "status": "PASS"
 }

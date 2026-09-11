@@ -1,0 +1,167 @@
+{
+  "formal_artifacts": {
+    "ad_data_manifest.json": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/ad_data_manifest.json",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "ad_event_predictions.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/ad_event_predictions.csv",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "ad_test_predictions.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/ad_test_predictions.csv",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "ad_training_summary.json": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/ad_training_summary.json",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "ad_validation_predictions.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/ad_validation_predictions.csv",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "detector_only_predictions.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/detector_only_predictions.csv",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "e2e_diagnosis_metrics.json": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/e2e_diagnosis_metrics.json",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "event_detection_metrics.json": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/event_detection_metrics.json",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "event_matching.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/event_matching.csv",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "event_registry_manifest.json": {
+      "bytes": 1828,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/event_registry_manifest.json",
+      "sha256": "1f625216cf940a9b9780d5d2cb427638202bab59ba89c528828d61b736644898",
+      "status": "COMPLETE"
+    },
+    "protocol_manifest.json": {
+      "bytes": 5501,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/protocol_manifest.json",
+      "sha256": "24f6d8ece411f0af8bd2340746a7c69b1d92f0f5563da9041bf9ac78325543b2",
+      "status": "COMPLETE"
+    },
+    "rca_detected_predictions.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_detected_predictions.csv",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "rca_feature_health.json": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_feature_health.json",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "rca_feature_manifest.json": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_feature_manifest.json",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "rca_metrics.json": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_metrics.json",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "rca_oracle_predictions.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_oracle_predictions.csv",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "rca_train_manifest.json": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_train_manifest.json",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "root_frequency_predictions.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/root_frequency_predictions.csv",
+      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+    },
+    "split_manifest.json": {
+      "bytes": 4989,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/split_manifest.json",
+      "sha256": "68ade676eee258b054379dcfc413d33697d95eea75b29ded73766660378d3bf9",
+      "status": "COMPLETE"
+    }
+  },
+  "generated_at_utc": "2026-09-11T02:38:06.048752+00:00",
+  "manual_execution": {
+    "note": "run the documented resumable commands when the 30 GB GAIA source is on responsive local storage",
+    "one_command": "python scripts/p5/run_i1_pipeline.py full --gpu true"
+  },
+  "pending_formal_artifacts": [
+    "ad_data_manifest.json",
+    "ad_training_summary.json",
+    "ad_validation_predictions.csv",
+    "ad_test_predictions.csv",
+    "ad_event_predictions.csv",
+    "event_matching.csv",
+    "event_detection_metrics.json",
+    "rca_feature_health.json",
+    "rca_feature_manifest.json",
+    "rca_train_manifest.json",
+    "rca_oracle_predictions.csv",
+    "rca_detected_predictions.csv",
+    "detector_only_predictions.csv",
+    "root_frequency_predictions.csv",
+    "rca_metrics.json",
+    "e2e_diagnosis_metrics.json"
+  ],
+  "repository": {
+    "branch": "e2e",
+    "implementation_commit_before_manifest": "1e2f8801a38b24a0124f409056328cc2a7379fde",
+    "starting_commit": "cbe57512b6bd1ce772ab42d9b8ec0b292c3cb91b"
+  },
+  "result_scope": "protocol manifests plus non-formal synthetic smoke validation only",
+  "schema_version": "p5_i1_run_manifest_v1",
+  "smoke_artifacts": {
+    "ad_smoke_summary.json": {
+      "bytes": 1632,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/ad_smoke_summary.json",
+      "sha256": "ff83e335b9a0c34b90deb9625f2297cd8913f186f2432e2073e79f0de4c991a3",
+      "status": "COMPLETE"
+    },
+    "e2e_smoke_summary.json": {
+      "bytes": 3090,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/e2e_smoke_summary.json",
+      "sha256": "d69f7b772bd569aceef8ba23b07869c6057a4f9bfbada4138799dda8d9d25990",
+      "status": "COMPLETE"
+    },
+    "event_smoke_summary.json": {
+      "bytes": 1442,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/event_smoke_summary.json",
+      "sha256": "ca27017a08e2505500c10dbd7d14d5ab1b7da2a3df3b0eeb4fb2df92fb4894c3",
+      "status": "COMPLETE"
+    },
+    "rca_feature_smoke_summary.json": {
+      "bytes": 588,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_feature_smoke_summary.json",
+      "sha256": "fa10d824380793f5dc6f1e204e214ac7ac55507a5db878c315e6a9dc6a26071e",
+      "status": "COMPLETE"
+    },
+    "rca_training_smoke_summary.json": {
+      "bytes": 3153,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_training_smoke_summary.json",
+      "sha256": "c86ca48a6f5284995aac9aef237cd798913f519650fd321828e49dd4baca16da",
+      "status": "COMPLETE"
+    }
+  },
+  "source_bindings": {
+    "ada_rca_canonical_commit": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
+    "config": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/configs/e2e/gaia_p5_v1.yaml",
+      "sha256": "171406d562b36b5513f0b5d011568a4a0831188041b45377068b6587d6e36f26"
+    },
+    "random_seed": 42,
+    "run_table_sha256": "ca8d44dd08319d940b0d607305165853da376208440b0e3ec07a80dac44e2820",
+    "supported_event_registry": {
+      "events": 16200,
+      "sha256": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5"
+    }
+  },
+  "status": "IMPLEMENTATION_READY_FORMAL_FULL_DATA_PENDING_MANUAL_RUN",
+  "validation": {
+    "formal_metrics_available": false,
+    "pytest": "43 passed; 8 key CLI help checks passed; combined smoke passed",
+    "smoke_artifacts_complete": true
+  }
+}

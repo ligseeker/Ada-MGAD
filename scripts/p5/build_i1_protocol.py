@@ -75,6 +75,11 @@ def main() -> None:
     retained, rca_purged = purge_rca_cases(
         assigned, blocks, int(config["rca"]["window_seconds"])
     )
+    ad_window_purge = count_crossing_ad_windows(
+        blocks,
+        int(config["ad"]["grid_seconds"]),
+        int(config["ad"]["window_bins"]),
+    )
 
     output_dir = (PROJECT_ROOT / (args.output_dir or str(config["output_dir"]))).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -121,6 +126,9 @@ def main() -> None:
             "rca_case_count_after_w300_purge": len(retained_block),
             "fault_counts": distribution(raw_block, "fault_type"),
             "service_counts": distribution(raw_block, "service"),
+            "purged_ad_windows": int(
+                ad_window_purge["purged_windows_by_split"][block.name]
+            ),
             "purged_rca_cases": len(rca_purged_block),
             "purged_rca_case_ids": sorted(rca_purged_block.get("case_id", pd.Series(dtype=str)).astype(str).tolist()),
         })
@@ -136,15 +144,11 @@ def main() -> None:
             "case_ids": sorted(raw_purged.get("case_id", pd.Series(dtype=str)).astype(str).tolist()),
             "rule": "exclude complete raw injection interval if it crosses a split boundary",
         },
-        "ad_window_boundary_purge": count_crossing_ad_windows(
-            blocks,
-            int(config["ad"]["grid_seconds"]),
-            int(config["ad"]["window_bins"]),
-        ),
+        "ad_window_boundary_purge": ad_window_purge,
         "rca_w300_boundary_purge": {
             "count": len(rca_purged),
             "case_ids": sorted(rca_purged.get("case_id", pd.Series(dtype=str)).astype(str).tolist()),
-            "rule": "exclude raw-injection union [t0-300s,t0+300s) context crossing a split boundary",
+            "rule": "exclude exact [t0-300s,t0+300s) context crossing a split boundary",
         },
     })
 

@@ -162,7 +162,7 @@ def purge_rca_cases(
     blocks: Sequence[TemporalBlock],
     window_seconds: int,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    """Purge cases whose raw/context union crosses its chronological block."""
+    """Purge cases whose exact ``[t0-W,t0+W)`` context crosses its block."""
 
     by_name = {block.name: block for block in blocks}
     first_name = blocks[0].name
@@ -173,7 +173,7 @@ def purge_rca_cases(
     for row in assigned.itertuples(index=False):
         block = by_name[str(row.split)]
         context_start = int(row.start_ms) - radius_ms
-        context_end = max(int(row.end_ms), int(row.start_ms) + radius_ms)
+        context_end = int(row.start_ms) + radius_ms
         record = row._asdict()
         record["context_start_ms"] = context_start
         record["context_end_ms"] = context_end
@@ -206,6 +206,8 @@ def count_crossing_ad_windows(
     start = (blocks[0].start_ms // grid_ms) * grid_ms
     end = (blocks[-1].end_ms // grid_ms) * grid_ms
     crossing = []
+    by_split = {block.name: 0 for block in blocks}
+    outside_absolute_range = 0
     total = 0
     timestamp = start
     while timestamp <= end:
@@ -215,10 +217,16 @@ def count_crossing_ad_windows(
         owner = next((block for block in blocks if block.contains_anchor(timestamp)), None)
         if owner is None or not owner.contains_interval(left, right):
             crossing.append(timestamp)
+            if owner is None:
+                outside_absolute_range += 1
+            else:
+                by_split[owner.name] += 1
         timestamp += grid_ms
     return {
         "candidate_prediction_timestamps": total,
         "purged_windows": len(crossing),
+        "purged_windows_by_split": by_split,
+        "unassigned_grid_timestamps_outside_absolute_range": outside_absolute_range,
         "purged_prediction_timestamps_ms": crossing,
         "window_interval": "[prediction_timestamp-(window_bins-1)*grid, prediction_timestamp+grid)",
     }

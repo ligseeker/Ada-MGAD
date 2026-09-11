@@ -6,6 +6,7 @@ import pandas as pd
 from src.e2e.protocol import (
     TemporalBlock,
     assign_event_blocks,
+    count_crossing_ad_windows,
     layout_digest,
     load_config,
     load_registry,
@@ -90,6 +91,35 @@ class TemporalProtocolTests(unittest.TestCase):
         retained, context_purged = purge_rca_cases(assigned, blocks, 1)
         self.assertEqual(set(retained["case_id"]), {"a"})
         self.assertEqual(set(context_purged["case_id"]), {"edge"})
+
+    def test_ad_window_purge_is_reported_per_split(self):
+        blocks = (
+            TemporalBlock("train", 0, 300000),
+            TemporalBlock("validation", 300000, 600000),
+            TemporalBlock("test", 600000, 900000, is_final=True),
+        )
+        result = count_crossing_ad_windows(blocks, grid_seconds=30, window_bins=10)
+        self.assertEqual(set(result["purged_windows_by_split"]), {
+            "train", "validation", "test",
+        })
+        self.assertGreater(result["purged_windows_by_split"]["validation"], 0)
+        self.assertGreater(result["purged_windows_by_split"]["test"], 0)
+
+    def test_rca_context_is_exact_w300_not_injection_duration(self):
+        blocks = (
+            TemporalBlock("train", 0, 2_000_000),
+            TemporalBlock("validation", 2_000_000, 3_000_000),
+            TemporalBlock("test", 3_000_000, 4_000_000, is_final=True),
+        )
+        assigned = pd.DataFrame([{
+            "case_id": "long", "source_index": 0, "service": "dbservice1",
+            "fault_type": "memory_anomalies", "start_ms": 1_000_000,
+            "end_ms": 1_900_000, "split": "train",
+        }])
+        retained, purged = purge_rca_cases(assigned, blocks, 300)
+        self.assertEqual(len(purged), 0)
+        self.assertEqual(int(retained.iloc[0]["context_start_ms"]), 700_000)
+        self.assertEqual(int(retained.iloc[0]["context_end_ms"]), 1_300_000)
 
 
 if __name__ == "__main__":

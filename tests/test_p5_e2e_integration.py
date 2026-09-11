@@ -23,7 +23,7 @@ class SmallEndToEndIntegrationTest(unittest.TestCase):
             artifact.mkdir()
             index_root = root / "index"
             index_root.mkdir()
-            anchor = 1_000_000
+            anchor = int(config["split"]["boundaries_ms"][1]) + 600_000
             timestamps = np.arange(anchor - 300_000, anchor + 300_000, 15_000, dtype=np.int64)
             values = np.linspace(0.0, 1.0, len(timestamps), dtype=np.float32)
             np.save(index_root / "metric.timestamps.npy", timestamps, allow_pickle=False)
@@ -67,13 +67,19 @@ class SmallEndToEndIntegrationTest(unittest.TestCase):
             frequency_path = root / "root_frequency_predictions.csv"
             pd.DataFrame([prediction]).to_csv(oracle_path, index=False)
             pd.DataFrame([prediction]).to_csv(frequency_path, index=False)
+            case_registry_path = root / "rca_case_registry.csv"
+            pd.DataFrame([{
+                "case_id": "case-0", "split": "test", "service": "dbservice1",
+                "fault_type": "login failure", "start_ms": anchor - 10_000,
+            }]).to_csv(case_registry_path, index=False)
             (artifact / "rca_metrics.json").write_text(
                 json.dumps({"schema_version": "fixture"}), encoding="utf-8"
             )
 
             result = evaluate(
                 config, artifact, index_manifest, model_path,
-                root / "detected.npy", matching_path, node_path, oracle_path, frequency_path,
+                root / "detected.npy", matching_path, node_path, oracle_path,
+                frequency_path, case_registry_path,
             )
             self.assertEqual(
                 result["e2e_diagnosis_metrics"]["counts"]["matched_events"], 1

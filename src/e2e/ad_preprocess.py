@@ -13,6 +13,7 @@ import json
 import logging
 from pathlib import Path
 import re
+import subprocess
 from typing import Dict, Mapping, MutableMapping, Sequence, Tuple
 
 import numpy as np
@@ -20,8 +21,9 @@ import pandas as pd
 
 from util.GAIA.constant import GAIA_MULTI_CORE_PREFIXES
 from util.GAIA.pre_GAIA import (
-    _merge_metric_pair,
+    _metric_duplicate_reduce_mode,
     _parse_metric_filename,
+    _reduce_duplicate_timestamp_values,
     _target_services_for_metric,
 )
 
@@ -48,6 +50,33 @@ LOG_FEATURES = (
 )
 TRACE_STATUS_CODES = ("200", "300", "400", "500")
 HASH_DTYPE = np.dtype([("h1", "<u8"), ("h2", "<u8")])
+
+
+def _read_metric_group_strict(full_name: str, paths: Sequence[Path], feature: str) -> pd.DataFrame:
+    """Read every E2E metric shard and fail rather than accept partial input."""
+
+    frames = []
+    for path in paths:
+        frame = pd.read_csv(path)
+        missing = {"timestamp", "value"} - set(frame.columns)
+        if missing:
+            raise ValueError(
+                "metric shard {} for {} lacks columns {}".format(path, full_name, sorted(missing))
+            )
+        frames.append(frame)
+    if not frames:
+        raise ValueError("metric group {} contains no source shards".format(full_name))
+    merged = pd.concat(frames, ignore_index=True)
+    merged = merged.drop_duplicates(subset=["timestamp", "value"])
+    merged["timestamp"] = pd.to_numeric(merged["timestamp"], errors="coerce")
+    merged["value"] = pd.to_numeric(merged["value"], errors="coerce")
+    merged = merged.dropna(subset=["timestamp", "value"])
+    if merged.duplicated(subset=["timestamp"]).any():
+        reduce_mode = _metric_duplicate_reduce_mode(feature)
+        merged = merged.groupby("timestamp", as_index=False)["value"].agg(
+            lambda values: _reduce_duplicate_timestamp_values(values, reduce_mode)
+        )
+    return merged.sort_values("timestamp").reset_index(drop=True)
 
 
 def _logical_metric_schema(metric_dir: Path, excluded_features: Sequence[str] = ()):
@@ -176,7 +205,7 @@ def build_metric_arrays(
                 sums = np.zeros(len(grid), dtype=np.float64)
                 counts = np.zeros(len(grid), dtype=np.int16)
                 for full_name, paths in sorted(groups[service][base].items()):
-                    _, frame = _merge_metric_pair((full_name, paths, base))
+                    frame = _read_metric_group_strict(full_name, paths, base)
                     aligned = _aligned_mean(frame, grid, grid_ms)
                     observed = np.isfinite(aligned)
                     sums[observed] += aligned[observed]
@@ -554,6 +583,10 @@ def build_ad_data(
     manifest = {
         "schema_version": "p5_i1_ad_data_manifest_v1",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "git_commit": subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=str(project_root), text=True
+        ).strip(),
+        "random_seed": int(config["random_seed"]),
         "config_sha256": sha256_file(Path(project_root) / "configs/e2e/gaia_p5_v1.yaml"),
         "event_registry_sha256": str(config["event_registry"]["sha256"]),
         "raw_layout_binding": expected_inventory,

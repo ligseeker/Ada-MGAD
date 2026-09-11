@@ -43,6 +43,42 @@ def _window_indices(timestamps_ms: np.ndarray, anchor_ms: int, spec) -> Tuple[np
     return indices.astype(np.int64), valid
 
 
+def _window_slice(timestamps_ms: np.ndarray, anchor_ms: int, spec) -> slice:
+    """Locate the event window in a sorted timestamp array without scanning it."""
+
+    timestamps = np.asarray(timestamps_ms, dtype=np.int64)
+    start_ms = int(anchor_ms) - int(round(float(spec.window_seconds) * 1000.0))
+    end_ms = start_ms + int(spec.n_bins) * int(round(float(spec.bin_seconds) * 1000.0))
+    return slice(
+        int(np.searchsorted(timestamps, start_ms, side="left")),
+        int(np.searchsorted(timestamps, end_ms, side="left")),
+    )
+
+
+def binned_sum_count(
+    timestamps_ms: np.ndarray,
+    values: np.ndarray,
+    anchor_ms: int,
+    spec,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Return finite value sums/counts after slicing the sorted raw series."""
+
+    timestamps = np.asarray(timestamps_ms, dtype=np.int64)
+    numeric = np.asarray(values, dtype=np.float64)
+    if timestamps.shape != numeric.shape:
+        raise ValueError("timestamps and values must have identical shapes")
+    window = _window_slice(timestamps, anchor_ms, spec)
+    timestamps = timestamps[window]
+    numeric = numeric[window]
+    indices, valid_time = _window_indices(timestamps, anchor_ms, spec)
+    valid = valid_time & np.isfinite(numeric)
+    sums = np.bincount(
+        indices[valid], weights=numeric[valid], minlength=int(spec.n_bins)
+    ).astype(np.float64)
+    counts = np.bincount(indices[valid], minlength=int(spec.n_bins)).astype(np.int64)
+    return sums, counts
+
+
 def binned_mean(
     timestamps_ms: np.ndarray,
     values: np.ndarray,
@@ -51,14 +87,8 @@ def binned_mean(
 ) -> np.ndarray:
     """Average finite observations into the exact event-relative bins."""
 
-    indices, valid_time = _window_indices(timestamps_ms, anchor_ms, spec)
-    numeric = np.asarray(values, dtype=np.float64)
-    valid = valid_time & np.isfinite(numeric)
+    sums, counts = binned_sum_count(timestamps_ms, values, anchor_ms, spec)
     result = np.full(int(spec.n_bins), np.nan, dtype=np.float64)
-    if not np.any(valid):
-        return result
-    sums = np.bincount(indices[valid], weights=numeric[valid], minlength=int(spec.n_bins))
-    counts = np.bincount(indices[valid], minlength=int(spec.n_bins))
     observed = counts > 0
     result[observed] = sums[observed] / counts[observed]
     return result
@@ -72,9 +102,41 @@ def binned_count(
 ) -> np.ndarray:
     """Count selected raw records; absence is an observed numeric zero."""
 
-    indices, valid_time = _window_indices(timestamps_ms, anchor_ms, spec)
-    chosen = valid_time & np.asarray(selected, dtype=bool)
+    timestamps = np.asarray(timestamps_ms, dtype=np.int64)
+    selected_values = np.asarray(selected, dtype=bool)
+    if timestamps.shape != selected_values.shape:
+        raise ValueError("timestamps and selection must have identical shapes")
+    window = _window_slice(timestamps, anchor_ms, spec)
+    timestamps = timestamps[window]
+    selected_values = selected_values[window]
+    indices, valid_time = _window_indices(timestamps, anchor_ms, spec)
+    chosen = valid_time & selected_values
     return np.bincount(indices[chosen], minlength=int(spec.n_bins)).astype(np.float64)
+
+
+def binned_category_counts(
+    timestamps_ms: np.ndarray,
+    categories: np.ndarray,
+    category_count: int,
+    anchor_ms: int,
+    spec,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Count categorical rows and all rows with one timestamp slice."""
+
+    timestamps = np.asarray(timestamps_ms, dtype=np.int64)
+    values = np.asarray(categories, dtype=np.int64)
+    if timestamps.shape != values.shape:
+        raise ValueError("timestamps and categories must have identical shapes")
+    window = _window_slice(timestamps, anchor_ms, spec)
+    timestamps = timestamps[window]
+    values = values[window]
+    indices, valid_time = _window_indices(timestamps, anchor_ms, spec)
+    valid = valid_time & (values >= 0) & (values < int(category_count))
+    output = np.zeros((int(category_count), int(spec.n_bins)), dtype=np.float64)
+    if np.any(valid):
+        np.add.at(output, (values[valid], indices[valid]), 1.0)
+    total = np.bincount(indices[valid_time], minlength=int(spec.n_bins)).astype(np.float64)
+    return output, total
 
 
 def parse_trace_chunk(frame: pd.DataFrame) -> Tuple[Mapping[str, np.ndarray], Mapping[str, int]]:
@@ -179,37 +241,34 @@ class GaiaRcaRawIndex:
                 service,
                 (np.empty(0, dtype=np.int64), np.empty(0, dtype=np.uint8)),
             )
+            level_counts, total_counts = binned_category_counts(
+                timestamps, levels, len(LOG_LEVELS), anchor_ms, spec
+            )
             for level_index, level in enumerate(LOG_LEVELS):
-                result["log"]["{}::level_{}".format(service, level)] = binned_count(
-                    timestamps, levels == level_index, anchor_ms, spec
-                )
-            result["log"]["{}::log_total".format(service)] = binned_count(
-                timestamps, np.ones(len(timestamps), dtype=bool), anchor_ms, spec
-            )
+                result["log"]["{}::level_{}".format(service, level)] = level_counts[level_index]
+            result["log"]["{}::log_total".format(service)] = total_counts
 
-            error_timestamps = []
-            error_flags = []
-            latency_timestamps = []
-            latency_values = []
+            error_counts = np.zeros(int(spec.n_bins), dtype=np.float64)
+            latency_sums = np.zeros(int(spec.n_bins), dtype=np.float64)
+            latency_counts = np.zeros(int(spec.n_bins), dtype=np.int64)
             for timestamps_part, errors_part, latencies_part in self.traces.get(service, ()):
-                error_timestamps.append(np.asarray(timestamps_part, dtype=np.int64))
-                error_flags.append(np.asarray(errors_part, dtype=bool))
-                latency_timestamps.append(np.asarray(timestamps_part, dtype=np.int64))
-                latency_values.append(np.asarray(latencies_part, dtype=np.float64))
-            if error_timestamps:
-                timestamps = np.concatenate(error_timestamps)
-                errors = np.concatenate(error_flags)
-                latencies = np.concatenate(latency_values)
-            else:
-                timestamps = np.empty(0, dtype=np.int64)
-                errors = np.empty(0, dtype=bool)
-                latencies = np.empty(0, dtype=np.float64)
-            result["trace-error"]["{}::status_not_200_count".format(service)] = binned_count(
-                timestamps, errors, anchor_ms, spec
+                timestamps_part = np.asarray(timestamps_part, dtype=np.int64)
+                error_counts += binned_count(
+                    timestamps_part, np.asarray(errors_part, dtype=bool), anchor_ms, spec
+                )
+                sums, counts = binned_sum_count(
+                    timestamps_part, np.asarray(latencies_part, dtype=np.float64),
+                    anchor_ms, spec,
+                )
+                latency_sums += sums
+                latency_counts += counts
+            latency_mean = np.full(int(spec.n_bins), np.nan, dtype=np.float64)
+            observed_latency = latency_counts > 0
+            latency_mean[observed_latency] = (
+                latency_sums[observed_latency] / latency_counts[observed_latency]
             )
-            result["trace-latency"]["{}::latency_seconds_mean".format(service)] = binned_mean(
-                timestamps, latencies, anchor_ms, spec
-            )
+            result["trace-error"]["{}::status_not_200_count".format(service)] = error_counts
+            result["trace-latency"]["{}::latency_seconds_mean".format(service)] = latency_mean
         return result
 
 

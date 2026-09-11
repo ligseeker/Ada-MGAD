@@ -351,22 +351,6 @@ def predict_rankings(
     return tuple(rank_candidates(names, row) for row in scores)
 
 
-def oracle_rankings(
-    root_indices: Sequence[int], candidates: Optional[Sequence[str]] = None
-) -> Tuple[Tuple[str, ...], ...]:
-    """Return rankings with the labelled fault service in position one."""
-
-    names = _candidate_names(candidates)
-    roots = _as_root_indices(root_indices, len(root_indices))
-    # Sort all non-root names lexically; candidate order is only a tie-safe
-    # protocol input, not a hidden ranking preference.
-    result = []
-    for root in roots:
-        root_name = names[int(root)]
-        result.append((root_name,) + tuple(sorted(name for name in names if name != root_name)))
-    return tuple(result)
-
-
 @dataclass(frozen=True)
 class RootFrequencyBaseline:
     counts: Mapping[str, int]

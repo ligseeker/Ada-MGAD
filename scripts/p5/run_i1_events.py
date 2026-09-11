@@ -178,12 +178,13 @@ def evaluate(config, artifact_root: Path, validation_path: Path, test_path: Path
             (PROJECT_ROOT / str(config["event_registry"]["path"])).resolve()
         ),
         "registry_event_count": int(len(registry)),
+        "random_seed": int(config["random_seed"]),
         "test_not_used_for_threshold_selection": True,
     })
     return metrics
 
 
-def smoke(artifact_root: Path):
+def smoke(config, artifact_root: Path):
     validation, test, registry = _smoke_fixture()
     result = run_event_detection(
         validation,
@@ -201,6 +202,7 @@ def smoke(artifact_root: Path):
         "formal_result": False,
         "fixture": "synthetic only",
         "git_commit": git_head(),
+        "random_seed": int(config["random_seed"]),
         "test_not_used_for_threshold_selection": True,
         "threshold_selection": {
             "threshold": float(selection.threshold),
@@ -223,7 +225,7 @@ def main():
     config = load_config((PROJECT_ROOT / args.config).resolve())
     artifact_root = (PROJECT_ROOT / args.artifact_root).resolve()
     if args.action == "smoke":
-        result = smoke(artifact_root)
+        result = smoke(config, artifact_root)
     else:
         validation_path = Path(args.validation_predictions or (artifact_root / "ad_validation_predictions.csv"))
         test_path = Path(args.test_predictions or (artifact_root / "ad_test_predictions.csv"))

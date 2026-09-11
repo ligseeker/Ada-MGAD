@@ -10,6 +10,7 @@ import pandas as pd
 from src.e2e.gaia_rca_adapter import (
     GaiaRcaRawIndex,
     IndexedSeries,
+    binned_category_counts,
     binned_mean,
     build_raw_index,
     parse_trace_chunk,
@@ -71,6 +72,26 @@ class EventRelativeIndexTests(unittest.TestCase):
         self.assertEqual(result[0], 2.0)
         self.assertEqual(result[1], 5.0)
         self.assertTrue(np.isnan(result[-1]))
+
+    def test_category_counts_and_multiple_trace_parts_preserve_semantics(self):
+        anchor = 1_000_000
+        start = anchor - 300_000
+        timestamps = np.asarray([start, start + 1_000, start + 15_000], dtype=np.int64)
+        levels, total = binned_category_counts(
+            timestamps, np.asarray([0, 1, 1]), 5, anchor, SPEC
+        )
+        self.assertEqual(levels[0, 0], 1.0)
+        self.assertEqual(levels[1, 0], 1.0)
+        self.assertEqual(levels[1, 1], 1.0)
+        self.assertEqual(total[:2].tolist(), [2.0, 1.0])
+
+        index = GaiaRcaRawIndex([], {}, {"dbservice1": [
+            (np.asarray([start]), np.asarray([True]), np.asarray([1.0])),
+            (np.asarray([start + 1_000]), np.asarray([False]), np.asarray([3.0])),
+        ]})
+        output = index.case_indicators(anchor, SPEC)
+        self.assertEqual(output["trace-error"]["dbservice1::status_not_200_count"][0], 1.0)
+        self.assertEqual(output["trace-latency"]["dbservice1::latency_seconds_mean"][0], 2.0)
 
     def test_four_channels_and_no_detector_feature(self):
         anchor = 1_000_000

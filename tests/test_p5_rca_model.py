@@ -10,7 +10,6 @@ from src.e2e.rca_model import (
     fit_conditional_logit,
     fit_root_frequency,
     load_conditional_logit,
-    oracle_rankings,
     rank_candidates,
     rca_metrics,
     save_conditional_logit,
@@ -38,10 +37,8 @@ class P5RcaModelTest(unittest.TestCase):
             tuple(sorted(SERVICES)),
         )
 
-    def test_oracle_and_root_frequency_are_deterministic(self):
+    def test_root_frequency_is_train_only_and_deterministic(self):
         roots = np.array([2, 2, 1, 2, 1, 9])
-        oracle = oracle_rankings(roots, SERVICES)
-        self.assertTrue(all(row[0] == SERVICES[root] for row, root in zip(oracle, roots)))
         baseline = fit_root_frequency(roots, train_indices=[0, 1, 2, 3], candidates=SERVICES)
         self.assertEqual(baseline.ranking[:3], ("s2", "s1", "s0"))
 

@@ -26,8 +26,10 @@
     ],
     "selection_split": "validation"
   },
-  "generated_at_utc": "2026-09-11T01:57:06.050608+00:00",
-  "git_commit": "e7db7911a986f6df8ae4fca9f1beedac21f69bf1",
+  "fixture": "synthetic only",
+  "formal_result": false,
+  "generated_at_utc": "2026-09-11T02:31:27.835390+00:00",
+  "git_commit": "1e2f8801a38b24a0124f409056328cc2a7379fde",
   "gpu": false,
   "node_metrics": {
     "auc": 0.4229112833763996,

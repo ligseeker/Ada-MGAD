@@ -328,6 +328,8 @@ def smoke(config, data_root: Path, artifact_root: Path, gpu: bool):
         "config_sha256": sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v1.yaml"),
         "random_seed": int(config["random_seed"]),
         "status": "PASS",
+        "formal_result": False,
+        "fixture": "synthetic only",
         "gpu": bool(gpu and torch.cuda.is_available()),
         "windows_per_split": {name: len(dataset) for name, dataset in datasets.items()},
         "prediction_windows": len(indices),

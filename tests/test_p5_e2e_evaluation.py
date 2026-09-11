@@ -1,4 +1,5 @@
 import unittest
+from pathlib import Path
 
 import pandas as pd
 
@@ -9,6 +10,11 @@ from src.e2e.e2e_evaluation import (
     diagnosis_metrics,
 )
 from src.e2e.protocol import GAIA_SERVICES
+from src.e2e.protocol import load_config
+from scripts.p5.run_i1_e2e import _purge_rca_ineligible_matching
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 class DetectorOnlyTests(unittest.TestCase):
@@ -62,6 +68,26 @@ class DiagnosisMetricTests(unittest.TestCase):
             {"overall": {"AC@1": 0.5, "AC@3": 0.75, "AC@5": 1, "MRR": 0.6}},
         )
         self.assertEqual(delta["delta_detected_minus_oracle_AC@1"], -0.5)
+
+    def test_rca_context_crossing_and_ineligible_gt_are_purged(self):
+        config = load_config(PROJECT_ROOT / "configs/e2e/gaia_p5_v1.yaml")
+        test_start = int(config["split"]["boundaries_ms"][1])
+        matching = pd.DataFrame([
+            {"prediction_id": "cross", "match_status": "matched", "case_id": "eligible",
+             "t_hat": test_start + 10_000},
+            {"prediction_id": "ok", "match_status": "matched", "case_id": "eligible-2",
+             "t_hat": test_start + 600_000},
+            {"prediction_id": None, "match_status": "miss", "case_id": "excluded",
+             "t_hat": None},
+        ])
+        registry = pd.DataFrame([
+            {"case_id": "eligible", "split": "test"},
+            {"case_id": "eligible-2", "split": "test"},
+        ])
+        retained, audit = _purge_rca_ineligible_matching(matching, registry, config)
+        self.assertEqual(retained["prediction_id"].tolist(), ["ok"])
+        self.assertEqual(audit["gt_w300_ineligible_rows"], 1)
+        self.assertEqual(audit["detected_anchor_w300_crossing_cases"], 1)
 
 
 if __name__ == "__main__":

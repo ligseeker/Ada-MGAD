@@ -221,14 +221,17 @@ def match_events(
     tolerance_ms = int(tolerance_seconds) * 1000
     predictions = predictions.sort_values(["t_hat", "prediction_id"], kind="stable").reset_index(drop=True)
     gt = gt.sort_values(["start_ms", "source_index", "case_id"], kind="stable").reset_index(drop=True)
-    unmatched = set(range(len(gt)))
+    # Search only the onset-sorted tolerance slice.  This is semantically
+    # identical to scanning every unmatched GT, but keeps validation threshold
+    # selection practical for the full month.
+    gt_starts = gt["start_ms"].to_numpy(dtype=np.int64)
+    unmatched = np.ones(len(gt), dtype=bool)
     rows: List[Dict[str, object]] = []
     for prediction in predictions.itertuples(index=False):
         t_hat = int(prediction.t_hat)
-        candidates = [
-            index for index in unmatched
-            if abs(int(gt.iloc[index]["start_ms"]) - t_hat) <= tolerance_ms
-        ]
+        left = int(np.searchsorted(gt_starts, t_hat - tolerance_ms, side="left"))
+        right = int(np.searchsorted(gt_starts, t_hat + tolerance_ms, side="right"))
+        candidates = np.flatnonzero(unmatched[left:right]).astype(np.int64) + left
         base = {
             "split": getattr(prediction, "split", "unknown"),
             "prediction_id": str(prediction.prediction_id),
@@ -238,7 +241,7 @@ def match_events(
             "system_score": getattr(prediction, "system_score", None),
             "threshold": getattr(prediction, "threshold", None),
         }
-        if not candidates:
+        if len(candidates) == 0:
             rows.append({
                 **base,
                 "match_status": "false_alarm",
@@ -262,7 +265,7 @@ def match_events(
             ),
         )
         target = gt.iloc[selected]
-        unmatched.remove(selected)
+        unmatched[selected] = False
         delay_seconds = (t_hat - int(target["start_ms"])) / 1000.0
         rows.append({
             **base,
@@ -276,7 +279,7 @@ def match_events(
             "detection_delay_seconds": float(delay_seconds),
             "absolute_onset_error_seconds": float(abs(delay_seconds)),
         })
-    for index in sorted(unmatched, key=lambda value: (
+    for index in sorted(np.flatnonzero(unmatched), key=lambda value: (
         int(gt.iloc[value]["start_ms"]),
         int(gt.iloc[value]["source_index"]),
         str(gt.iloc[value]["case_id"]),

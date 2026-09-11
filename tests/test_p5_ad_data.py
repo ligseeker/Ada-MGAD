@@ -13,6 +13,7 @@ from src.e2e.ad_data import (
     build_semisupervised_mask,
     save_split_arrays,
 )
+from src.e2e.ad_preprocess import _read_metric_group_strict
 from util.train import MY
 
 
@@ -68,6 +69,15 @@ class TimestampedDatasetTests(unittest.TestCase):
         fused = trainer._fuse_predict_with_reconstruction(probabilities, reconstruction)
         self.assertEqual(tuple(fused.shape), (2, 10, 2))
         self.assertTrue(torch.allclose(fused.sum(dim=-1), torch.ones((2, 10))))
+
+
+class MetricInputIntegrityTests(unittest.TestCase):
+    def test_e2e_metric_reader_rejects_partial_schema(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "bad.csv"
+            pd.DataFrame({"value": [1.0]}).to_csv(path, index=False)
+            with self.assertRaisesRegex(ValueError, "lacks columns"):
+                _read_metric_group_strict("dbservice1_cpu", [path], "cpu")
 
 
 if __name__ == "__main__":

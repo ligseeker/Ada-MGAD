@@ -217,6 +217,7 @@ def train_oracle(config: Mapping[str, object], feature_root: Path, case_path: Pa
         "status": "FORMAL_FULL_DATA",
         "git_commit": git_head(),
         "source_commit": SOURCE_COMMIT,
+        "random_seed": int(config["random_seed"]),
         "config_sha256": sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v1.yaml"),
         "case_registry": {"path": str(case_path.resolve()), "sha256": sha256_file(case_path)},
         "feature_bundle": {
@@ -279,6 +280,7 @@ def smoke(config: Mapping[str, object], artifact_root: Path):
         "fixture": "synthetic only",
         "git_commit": git_head(),
         "source_commit": SOURCE_COMMIT,
+        "random_seed": int(config["random_seed"]),
         "shape": list(features.shape),
         "split_counts": {
             name: int((split_names == name).sum())

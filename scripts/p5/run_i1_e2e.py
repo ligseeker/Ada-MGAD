@@ -27,7 +27,9 @@ from src.e2e.e2e_evaluation import (
     parse_ranking_row,
 )
 from src.e2e.gaia_rca_adapter import GaiaRcaRawIndex
-from src.e2e.protocol import GAIA_SERVICES, load_config, sha256_file, write_json
+from src.e2e.protocol import (
+    GAIA_SERVICES, load_config, sha256_file, temporal_blocks, write_json,
+)
 from src.e2e.rca_features import TemporalSpec, extract_case_features_from_indicators, flatten_features
 from src.e2e.rca_model import load_conditional_logit, predict_rankings, rca_metrics
 
@@ -40,6 +42,7 @@ def parse_args():
     parser.add_argument("--index-manifest", default="data/p5/i1/rca_raw_index/index_manifest.json")
     parser.add_argument("--model-path", default="data/p5/i1/rca_model/conditional_logit.npz")
     parser.add_argument("--detected-feature-path", default="data/p5/i1/rca_detected_features.npy")
+    parser.add_argument("--case-registry", default="artifacts/p5/i1/rca_case_registry.csv")
     parser.add_argument("--event-matching", default=None)
     parser.add_argument("--test-node-predictions", default=None)
     parser.add_argument("--oracle-predictions", default=None)
@@ -167,12 +170,51 @@ def _metrics(rankings, matched):
     )
 
 
+def _purge_rca_ineligible_matching(
+    matching: pd.DataFrame,
+    case_registry: pd.DataFrame,
+    config: Mapping[str, object],
+):
+    """Apply the frozen GT-anchor and detected-anchor W300 boundary purge."""
+
+    eligible_ids = set(case_registry.loc[
+        case_registry["split"].astype(str) == "test", "case_id"
+    ].astype(str))
+    status = matching["match_status"].astype(str)
+    has_gt = status.isin(("matched", "miss"))
+    gt_ineligible = has_gt & ~matching["case_id"].astype(str).isin(eligible_ids)
+    retained = matching.loc[~gt_ineligible].copy()
+    test_block = next(block for block in temporal_blocks(config) if block.name == "test")
+    radius_ms = int(config["rca"]["window_seconds"]) * 1000
+    detected_crossing = pd.Series(False, index=retained.index)
+    for index, row in retained.loc[
+        retained["match_status"].astype(str) == "matched"
+    ].iterrows():
+        anchor = int(row["t_hat"])
+        detected_crossing.loc[index] = not test_block.contains_interval(
+            anchor - radius_ms, anchor + radius_ms
+        )
+    detected_ids = retained.loc[detected_crossing, "prediction_id"].astype(str).tolist()
+    retained = retained.loc[~detected_crossing].reset_index(drop=True)
+    return retained, {
+        "gt_w300_ineligible_rows": int(gt_ineligible.sum()),
+        "gt_w300_ineligible_case_ids": sorted(
+            matching.loc[gt_ineligible, "case_id"].astype(str).unique().tolist()
+        ),
+        "detected_anchor_w300_crossing_cases": int(len(detected_ids)),
+        "detected_anchor_w300_crossing_prediction_ids": sorted(detected_ids),
+        "rule": "exclude GT or detected-anchor RCA context crossing the chronological Test boundary",
+    }
+
+
 def evaluate(config: Mapping[str, object], artifact_root: Path, index_manifest: Path,
              model_path: Path, detected_feature_path: Path, matching_path: Path,
-             node_path: Path, oracle_path: Path, frequency_path: Path):
+             node_path: Path, oracle_path: Path, frequency_path: Path,
+             case_registry_path: Path):
     source_paths = (
         index_manifest, model_path, model_path.with_suffix(".json"), matching_path,
-        node_path, oracle_path, frequency_path, artifact_root / "rca_metrics.json",
+        node_path, oracle_path, frequency_path, case_registry_path,
+        artifact_root / "rca_metrics.json",
     )
     missing = [str(path) for path in source_paths if not path.is_file()]
     if missing:
@@ -181,10 +223,18 @@ def evaluate(config: Mapping[str, object], artifact_root: Path, index_manifest: 
     matching_all = pd.read_csv(matching_path)
     if "split" not in matching_all:
         raise ValueError("event matching artifact lacks split")
-    matching = matching_all.loc[matching_all["split"].astype(str) == "test"].copy()
-    statuses = set(matching["match_status"].astype(str))
+    full_test_matching = matching_all.loc[
+        matching_all["split"].astype(str) == "test"
+    ].copy()
+    statuses = set(full_test_matching["match_status"].astype(str))
     if not statuses.issubset({"matched", "false_alarm", "miss"}):
         raise ValueError("event matching artifact contains an unknown status")
+    case_registry = pd.read_csv(case_registry_path)
+    if not {"case_id", "split"}.issubset(case_registry.columns):
+        raise ValueError("RCA case registry lacks case_id/split")
+    matching, boundary_purge = _purge_rca_ineligible_matching(
+        full_test_matching, case_registry, config
+    )
     matched = matching.loc[matching["match_status"].astype(str) == "matched"].copy()
     matched = matched.sort_values(["t_hat", "prediction_id"], kind="stable").reset_index(drop=True)
     if matched["prediction_id"].duplicated().any() or matched["case_id"].duplicated().any():
@@ -261,8 +311,14 @@ def evaluate(config: Mapping[str, object], artifact_root: Path, index_manifest: 
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "status": "FORMAL_FULL_DATA",
         "git_commit": git_head(),
-        "config_sha256": sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v1.yaml"),
         "random_seed": int(config["random_seed"]),
+        "config_sha256": sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v1.yaml"),
+        "evaluation_population": "W300-eligible Test GT and detected anchors after chronological boundary purge",
+        "event_detection_population": {
+            "matching_rows_before_rca_boundary_purge": int(len(full_test_matching)),
+            "note": "event_detection_metrics.json remains evaluated on all complete Test injections",
+        },
+        "rca_boundary_purge": boundary_purge,
         "source_artifacts": {
             path.name: {"path": str(path.resolve()), "sha256": sha256_file(path)}
             for path in source_paths[:-1]
@@ -338,6 +394,7 @@ def smoke(config: Mapping[str, object], artifact_root: Path):
         "formal_result": False,
         "fixture": "synthetic only",
         "git_commit": git_head(),
+        "random_seed": int(config["random_seed"]),
         "config_sha256": sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v1.yaml"),
         "detector_only_rankings": {key: list(value) for key, value in rankings.items()},
         "diagnosis": diagnosis_metrics(matching, rankings),
@@ -365,6 +422,7 @@ def main():
             Path(args.test_node_predictions or artifact_root / "ad_test_predictions.csv").resolve(),
             Path(args.oracle_predictions or artifact_root / "rca_oracle_predictions.csv").resolve(),
             Path(args.root_frequency_predictions or artifact_root / "root_frequency_predictions.csv").resolve(),
+            (PROJECT_ROOT / args.case_registry).resolve(),
         )
     print(json.dumps(result, sort_keys=True))
 
