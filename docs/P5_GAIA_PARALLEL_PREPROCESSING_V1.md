@@ -66,7 +66,8 @@ git rev-parse HEAD
 git status --short
 ulimit -n
 
-/usr/bin/time -v python scripts/p5/run_i1_pipeline.py preprocess \
+if test -x /usr/bin/time; then
+  /usr/bin/time -v python scripts/p5/run_i1_pipeline.py preprocess \
   --raw-root /home/zhangll24/RCA_project/datasets/GAIA/MicroSS \
   --raw-workers 8 \
   --feature-workers 24 \
@@ -74,6 +75,17 @@ ulimit -n
   --case-chunk-size 128 \
   --start-method spawn \
   --gpu false
+else
+  echo 'GNU /usr/bin/time is unavailable; using the shell time builtin.' >&2
+  time python scripts/p5/run_i1_pipeline.py preprocess \
+    --raw-root /home/zhangll24/RCA_project/datasets/GAIA/MicroSS \
+    --raw-workers 8 \
+    --feature-workers 24 \
+    --chunk-rows 150000 \
+    --case-chunk-size 128 \
+    --start-method spawn \
+    --gpu false
+fi
 ```
 
 If the source is on fast local NVMe and observed I/O utilization has headroom,
@@ -92,8 +104,9 @@ python scripts/p5/finalize_i1_manifest.py --pytest-result 'FULL_SUITE_PASS'
 
 The preprocessing manifests record requested/effective workers, task counts,
 chunk size, deterministic ordering policy, per-phase wall time, config hash, and
-source bindings.  Preserve `/usr/bin/time -v` output as external execution evidence
-if wall time and peak RSS are to be reported.
+source bindings.  `/usr/bin/time -v` is optional: when the image contains GNU
+`time`, preserve its output as external evidence for peak RSS; otherwise the shell
+`time` fallback still runs the job and the manifests retain phase timings.
 
 ## Known risks and operational limits
 

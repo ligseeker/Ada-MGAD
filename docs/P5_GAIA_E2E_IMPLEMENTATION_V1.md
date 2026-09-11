@@ -287,6 +287,10 @@ uses deterministic process-level parallelism documented in
 ```bash
 python scripts/p5/build_i1_protocol.py
 
+# /usr/bin/time -v is optional.  If it is absent, omit the wrapper (or use the
+# zsh/bash shell builtin `time python ...`); preprocessing itself does not depend
+# on GNU time.
+
 python scripts/p5/run_i1_ad.py preprocess \
   --raw-root /home/zhangll24/RCA_project/datasets/GAIA/MicroSS \
   --workers 8 --chunk-rows 150000 --start-method spawn
