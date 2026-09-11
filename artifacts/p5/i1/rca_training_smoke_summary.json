@@ -1,0 +1,164 @@
+{
+  "fit": {
+    "converged": true,
+    "final_loss": 1.376603053672364,
+    "gradient_norm": 9.615046980826492e-09,
+    "initial_loss": 27.631021115928558
+  },
+  "fixture": "synthetic only",
+  "formal_result": false,
+  "generated_at_utc": "2026-09-11T02:16:59.418261+00:00",
+  "git_commit": "99147f34c77ada5eb6147075f51beb22c8c3793b",
+  "root_frequency_fit_split": "train only",
+  "root_frequency_ranking": [
+    "dbservice1",
+    "dbservice2",
+    "logservice1",
+    "logservice2",
+    "mobservice1",
+    "mobservice2",
+    "redisservice1",
+    "redisservice2",
+    "webservice1",
+    "webservice2"
+  ],
+  "scaler_fit_case_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "schema_version": "p5_i1_rca_training_smoke_v1",
+  "shape": [
+    20,
+    10,
+    68
+  ],
+  "source_commit": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
+  "split_counts": {
+    "test": 4,
+    "train": 12,
+    "validation": 4
+  },
+  "status": "PASS",
+  "test_metrics": {
+    "case_metrics": [
+      {
+        "AC@1": 1.0,
+        "AC@3": 1.0,
+        "AC@5": 1.0,
+        "Avg@5": 1.0,
+        "MRR": 1.0
+      },
+      {
+        "AC@1": 1.0,
+        "AC@3": 1.0,
+        "AC@5": 1.0,
+        "Avg@5": 1.0,
+        "MRR": 1.0
+      },
+      {
+        "AC@1": 1.0,
+        "AC@3": 1.0,
+        "AC@5": 1.0,
+        "Avg@5": 1.0,
+        "MRR": 1.0
+      },
+      {
+        "AC@1": 1.0,
+        "AC@3": 1.0,
+        "AC@5": 1.0,
+        "Avg@5": 1.0,
+        "MRR": 1.0
+      }
+    ],
+    "fault_macro": {
+      "by_group": {
+        "smoke-a": {
+          "AC@1": 1.0,
+          "AC@3": 1.0,
+          "AC@5": 1.0,
+          "Avg@5": 1.0,
+          "MRR": 1.0,
+          "case_count": 2
+        },
+        "smoke-b": {
+          "AC@1": 1.0,
+          "AC@3": 1.0,
+          "AC@5": 1.0,
+          "Avg@5": 1.0,
+          "MRR": 1.0,
+          "case_count": 2
+        }
+      },
+      "group_count": 2,
+      "macro": {
+        "AC@1": 1.0,
+        "AC@3": 1.0,
+        "AC@5": 1.0,
+        "Avg@5": 1.0,
+        "MRR": 1.0
+      }
+    },
+    "overall": {
+      "AC@1": 1.0,
+      "AC@3": 1.0,
+      "AC@5": 1.0,
+      "Avg@5": 1.0,
+      "MRR": 1.0,
+      "case_count": 4
+    },
+    "root_macro": {
+      "by_group": {
+        "redisservice1": {
+          "AC@1": 1.0,
+          "AC@3": 1.0,
+          "AC@5": 1.0,
+          "Avg@5": 1.0,
+          "MRR": 1.0,
+          "case_count": 1
+        },
+        "redisservice2": {
+          "AC@1": 1.0,
+          "AC@3": 1.0,
+          "AC@5": 1.0,
+          "Avg@5": 1.0,
+          "MRR": 1.0,
+          "case_count": 1
+        },
+        "webservice1": {
+          "AC@1": 1.0,
+          "AC@3": 1.0,
+          "AC@5": 1.0,
+          "Avg@5": 1.0,
+          "MRR": 1.0,
+          "case_count": 1
+        },
+        "webservice2": {
+          "AC@1": 1.0,
+          "AC@3": 1.0,
+          "AC@5": 1.0,
+          "Avg@5": 1.0,
+          "MRR": 1.0,
+          "case_count": 1
+        }
+      },
+      "group_count": 4,
+      "macro": {
+        "AC@1": 1.0,
+        "AC@3": 1.0,
+        "AC@5": 1.0,
+        "Avg@5": 1.0,
+        "MRR": 1.0
+      }
+    }
+  }
+}

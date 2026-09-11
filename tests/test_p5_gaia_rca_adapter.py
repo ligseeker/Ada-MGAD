@@ -1,4 +1,6 @@
 import inspect
+from pathlib import Path
+import tempfile
 import unittest
 from types import SimpleNamespace
 
@@ -11,6 +13,7 @@ from src.e2e.gaia_rca_adapter import (
     binned_mean,
     build_raw_index,
     parse_trace_chunk,
+    _read_metric_group_strict,
 )
 
 
@@ -93,6 +96,15 @@ class LabelFirewallTests(unittest.TestCase):
             or "fault" in name or "label" in name
         }
         self.assertEqual(forbidden, set())
+
+
+class MetricReadIntegrityTests(unittest.TestCase):
+    def test_strict_metric_reader_rejects_missing_schema(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "bad.csv"
+            pd.DataFrame({"timestamp": [1]}).to_csv(path, index=False)
+            with self.assertRaisesRegex(ValueError, "lacks columns"):
+                _read_metric_group_strict("dbservice1_cpu", [path], "cpu")
 
 
 if __name__ == "__main__":

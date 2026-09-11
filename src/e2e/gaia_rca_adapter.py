@@ -16,7 +16,10 @@ from typing import Dict, Iterable, List, Mapping, MutableMapping, Optional, Sequ
 import numpy as np
 import pandas as pd
 
-from util.GAIA.pre_GAIA import _merge_metric_pair
+from util.GAIA.pre_GAIA import (
+    _metric_duplicate_reduce_mode,
+    _reduce_duplicate_timestamp_values,
+)
 
 from .ad_preprocess import _local_ms, _logical_metric_schema
 from .protocol import GAIA_SERVICES, layout_digest, sha256_file, write_json
@@ -221,6 +224,43 @@ def _save_array(path: Path, values: np.ndarray) -> Mapping[str, object]:
     }
 
 
+def _read_metric_group_strict(
+    full_name: str, paths: Sequence[Path], indicator: str
+) -> pd.DataFrame:
+    """Read every shard in a logical metric group without swallowing I/O errors.
+
+    The historical Ada-MGAD helper deliberately ignored unreadable shards.  A
+    formal RCA raw index must instead fail closed: accepting a partially read
+    group would make missing telemetry indistinguishable from real sparsity.
+    Duplicate reduction is kept identical to the historical helper.
+    """
+
+    frames = []
+    for path in paths:
+        frame = pd.read_csv(path)
+        missing = {"timestamp", "value"} - set(frame.columns)
+        if missing:
+            raise ValueError(
+                "metric shard {} for {} lacks columns {}".format(
+                    path, full_name, sorted(missing)
+                )
+            )
+        frames.append(frame)
+    if not frames:
+        raise ValueError("metric group {} contains no source shards".format(full_name))
+    merged = pd.concat(frames, ignore_index=True)
+    merged = merged.drop_duplicates(subset=["timestamp", "value"])
+    merged["timestamp"] = pd.to_numeric(merged["timestamp"], errors="coerce")
+    merged["value"] = pd.to_numeric(merged["value"], errors="coerce")
+    merged = merged.dropna(subset=["timestamp", "value"])
+    if merged.duplicated(subset=["timestamp"]).any():
+        reduce_mode = _metric_duplicate_reduce_mode(indicator)
+        merged = merged.groupby("timestamp", as_index=False)["value"].agg(
+            lambda values: _reduce_duplicate_timestamp_values(values, reduce_mode)
+        )
+    return merged.sort_values("timestamp").reset_index(drop=True)
+
+
 def _verify_raw_layout(raw_root: Path, expected_inventory: Mapping[str, object]) -> Mapping[str, object]:
     roots = {
         "metrics": raw_root / "metric/metric_split/metric",
@@ -257,14 +297,18 @@ def build_raw_index(
         for indicator in common:
             core_series = []
             for full_name, paths in sorted(groups[service][indicator].items()):
-                _, frame = _merge_metric_pair((full_name, paths, indicator))
-                if frame is not None and len(frame):
+                frame = _read_metric_group_strict(full_name, paths, indicator)
+                if len(frame):
                     core_series.append(pd.Series(
                         pd.to_numeric(frame["value"], errors="coerce").to_numpy(dtype=float),
                         index=pd.to_numeric(frame["timestamp"], errors="coerce").to_numpy(dtype=float),
                     ))
             if not core_series:
-                continue
+                raise ValueError(
+                    "metric series {}::{} has no finite observations".format(
+                        service, indicator
+                    )
+                )
             combined = pd.concat(core_series, axis=1).mean(axis=1, skipna=True).sort_index()
             valid = np.isfinite(combined.index.to_numpy(dtype=float)) & np.isfinite(combined.to_numpy(dtype=float))
             timestamps = combined.index.to_numpy(dtype=float)[valid].astype(np.int64)
