@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 import time
 import copy
 import numpy as np
@@ -9,6 +10,24 @@ from adabelief_pytorch import AdaBelief
 
 from tqdm import tqdm
 import util.util as util
+
+
+def _batch_progress_enabled(explicit=None, stream=None):
+    """Resolve batch-progress output without polluting redirected logs.
+
+    The legacy trainer remains interactive when attached to a TTY.  When its
+    stderr is redirected (for example ``2>&1 | tee logfile``), tqdm is
+    disabled so carriage-return updates do not become one log line per batch.
+    ``P5_AD_BATCH_PROGRESS`` is an explicit escape hatch for either mode.
+    """
+
+    if explicit is not None:
+        return bool(explicit)
+    override = os.environ.get("P5_AD_BATCH_PROGRESS")
+    if override is not None:
+        return override.strip().lower() in {"1", "true", "yes", "on"}
+    stream = sys.stderr if stream is None else stream
+    return bool(stream.isatty())
 
 class Base(nn.Module):
     def __init__(self, model, **args):
@@ -101,6 +120,7 @@ class MY(Base):
         self.contrast_summary_mode = args.get('contrast_summary_mode', 'last')
         self.score_fusion_alpha = float(args.get('score_fusion_alpha', 1.0))
         self.checkpoint_policy = str(args.get('checkpoint_policy', 'legacy'))
+        self.batch_progress = _batch_progress_enabled(args.get('batch_progress'))
 
     def _contrast_gamma(self, epoch):
         if self.contrast_weight <= 0 or epoch < self.contrast_start_epoch:
@@ -150,7 +170,10 @@ class MY(Base):
             epoch_cls_loss, epoch_rec_loss, epoch_loss = [], [], []
             epoch_contrast_loss, epoch_graph_reg_loss = [], []
             epoch_time_start = time.time()
-            with tqdm(train_loader) as tbar:
+            with tqdm(
+                train_loader, disable=not self.batch_progress,
+                desc='train', leave=False,
+            ) as tbar:
                 for batch_input in tbar:
                     batch_input = self.input2device(batch_input, self.use_gpu)
                     optimizer.zero_grad()
@@ -184,9 +207,10 @@ class MY(Base):
                     epoch_contrast_loss.append(contrast_loss.item())
                     epoch_graph_reg_loss.append(graph_reg_loss.item())
                     epoch_loss.append(loss.item())
-                    tbar.set_postfix(
-                        loss=f'{loss.item():.6f}', cls=f'{cls_loss.item():.6f}',
-                        rec=f'{rec_loss.item():.6f}', ctr=f'{contrast_loss.item():.4f}')
+                    if self.batch_progress:
+                        tbar.set_postfix(
+                            loss=f'{loss.item():.6f}', cls=f'{cls_loss.item():.6f}',
+                            rec=f'{rec_loss.item():.6f}', ctr=f'{contrast_loss.item():.4f}')
 
             epoch_time_elapsed = time.time() - epoch_time_start
             epoch_loss = torch.mean(torch.tensor(epoch_loss)).item() if epoch_loss else float("inf")
@@ -283,7 +307,10 @@ class MY(Base):
             self.model.reset_dynamic_graph_cache(reset_stats=True)
         with torch.no_grad():
             predict_list, label_list, rec_score_list, sample_indices = [], [], [], []
-            for batch_input in tqdm(test_loader):
+            for batch_input in tqdm(
+                test_loader, disable=not self.batch_progress,
+                desc='eval', leave=False,
+            ):
                     batch_input = self.input2device(batch_input,self.use_gpu)
                     if 'sample_index' in batch_input:
                         sample_indices.append(batch_input['sample_index'].reshape(-1).long().cpu())

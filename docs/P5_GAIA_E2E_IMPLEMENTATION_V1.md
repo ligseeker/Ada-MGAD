@@ -294,7 +294,9 @@ python scripts/p5/build_i1_protocol.py
 python scripts/p5/run_i1_ad.py preprocess \
   --raw-root /home/zhangll24/RCA_project/datasets/GAIA/MicroSS \
   --workers 8 --chunk-rows 150000 --start-method spawn
-python scripts/p5/run_i1_ad.py train --gpu true
+# Redirected training automatically disables batch-level tqdm updates.  The
+# environment variable is an explicit, reproducible override for a quiet log.
+P5_AD_BATCH_PROGRESS=0 python -u scripts/p5/run_i1_ad.py train --gpu true
 python scripts/p5/run_i1_events.py evaluate
 
 python scripts/p5/run_i1_rca_features.py index \
@@ -308,6 +310,23 @@ python scripts/p5/run_i1_e2e.py evaluate
 PYTHONDONTWRITEBYTECODE=1 pytest -q
 python scripts/p5/finalize_i1_manifest.py --pytest-result 'FULL_SUITE_PASS'
 ```
+
+To display the same concise epoch-level output while saving stdout and stderr
+to a file in zsh, use:
+
+```bash
+mkdir -p logs/p5/i1
+LOG="logs/p5/i1/train-evaluate_$(date +%Y%m%d_%H%M%S).log"
+P5_AD_BATCH_PROGRESS=0 python -u scripts/p5/run_i1_pipeline.py train-evaluate \
+  --gpu true 2>&1 | tee "$LOG"
+TRAIN_RC=${pipestatus[1]}
+echo "exit_code=${TRAIN_RC}" | tee -a "$LOG"
+exit "$TRAIN_RC"
+```
+
+`P5_AD_BATCH_PROGRESS=1` restores the interactive batch progress bar.  The
+setting only changes logging; it does not change model computation or
+checkpoint selection.
 
 If the canonical filesystem stalls, copy `MicroSS` to responsive local storage
 without changing names or byte sizes and pass that path with `--raw-root`; both AD
