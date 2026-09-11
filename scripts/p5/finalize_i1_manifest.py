@@ -83,7 +83,7 @@ def main():
     smoke = {name: _record(artifact_root / name, False) for name in SMOKE_ARTIFACTS}
     pending = [name for name, record in formal.items() if record["status"] != "COMPLETE"]
     manifest = {
-        "schema_version": "p5_i1_run_manifest_v1",
+        "schema_version": "p5_i1_run_manifest_v2",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "status": (
             "FORMAL_FULL_DATA_COMPLETE" if not pending
@@ -117,9 +117,26 @@ def main():
         "pending_formal_artifacts": pending,
         "smoke_artifacts": smoke,
         "manual_execution": {
-            "one_command": "python scripts/p5/run_i1_pipeline.py full --gpu true",
-            "note": "run the documented resumable commands when the 30 GB GAIA source is on responsive local storage",
+            "preprocess_command": (
+                "python scripts/p5/run_i1_pipeline.py preprocess --gpu false "
+                "--raw-workers 8 --feature-workers 24 --chunk-rows 150000 "
+                "--case-chunk-size 128 --start-method spawn"
+            ),
+            "train_evaluate_command": (
+                "python scripts/p5/run_i1_pipeline.py train-evaluate --gpu true"
+            ),
+            "one_command": (
+                "python scripts/p5/run_i1_pipeline.py full --gpu true "
+                "--raw-workers 8 --feature-workers 24 --chunk-rows 150000 "
+                "--case-chunk-size 128 --start-method spawn"
+            ),
+            "note": (
+                "run preprocessing sequentially by modality; prefer responsive local "
+                "storage and preserve the audited GAIA relative-path/byte-size layout"
+            ),
+            "documentation": "docs/P5_GAIA_PARALLEL_PREPROCESSING_V1.md",
         },
+        "preprocessing_profile": dict(config["preprocessing"]),
     }
     write_json(artifact_root / "run_manifest.json", manifest)
     print(manifest["status"])

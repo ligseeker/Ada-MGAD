@@ -1,14 +1,14 @@
 {
   "fit": {
     "converged": true,
-    "final_loss": 1.376603053672364,
-    "gradient_norm": 9.615046980826492e-09,
-    "initial_loss": 27.631021115928558
+    "final_loss": 1.3766030536723635,
+    "gradient_norm": 3.9968028886505635e-15,
+    "initial_loss": 27.63102111592855
   },
   "fixture": "synthetic only",
   "formal_result": false,
-  "generated_at_utc": "2026-09-11T02:37:37.111628+00:00",
-  "git_commit": "1e2f8801a38b24a0124f409056328cc2a7379fde",
+  "generated_at_utc": "2026-09-11T04:42:23.572925+00:00",
+  "git_commit": "d490e8c88431875c2093e90cc1e814c52da3f272",
   "random_seed": 42,
   "root_frequency_fit_split": "train only",
   "root_frequency_ranking": [

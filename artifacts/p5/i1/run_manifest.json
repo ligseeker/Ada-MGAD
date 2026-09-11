@@ -39,13 +39,13 @@
     "event_registry_manifest.json": {
       "bytes": 1828,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/event_registry_manifest.json",
-      "sha256": "1f625216cf940a9b9780d5d2cb427638202bab59ba89c528828d61b736644898",
+      "sha256": "32dbce987d572ca9e7a60dab49609898068a2cfc03c5d98f46ce892ddb06c193",
       "status": "COMPLETE"
     },
     "protocol_manifest.json": {
-      "bytes": 5501,
+      "bytes": 5908,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/protocol_manifest.json",
-      "sha256": "24f6d8ece411f0af8bd2340746a7c69b1d92f0f5563da9041bf9ac78325543b2",
+      "sha256": "9a9397c98ecf640d89c2dc68215a7ec9a6f7eb37874b14325f3cb535ebfb32aa",
       "status": "COMPLETE"
     },
     "rca_detected_predictions.csv": {
@@ -79,14 +79,17 @@
     "split_manifest.json": {
       "bytes": 4989,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/split_manifest.json",
-      "sha256": "68ade676eee258b054379dcfc413d33697d95eea75b29ded73766660378d3bf9",
+      "sha256": "c5dc209b9a41987558d9e7b354371bee1ec79bef9a2826916e0574aff59c631d",
       "status": "COMPLETE"
     }
   },
-  "generated_at_utc": "2026-09-11T02:38:06.048752+00:00",
+  "generated_at_utc": "2026-09-11T04:43:28.633350+00:00",
   "manual_execution": {
-    "note": "run the documented resumable commands when the 30 GB GAIA source is on responsive local storage",
-    "one_command": "python scripts/p5/run_i1_pipeline.py full --gpu true"
+    "documentation": "docs/P5_GAIA_PARALLEL_PREPROCESSING_V1.md",
+    "note": "run preprocessing sequentially by modality; prefer responsive local storage and preserve the audited GAIA relative-path/byte-size layout",
+    "one_command": "python scripts/p5/run_i1_pipeline.py full --gpu true --raw-workers 8 --feature-workers 24 --chunk-rows 150000 --case-chunk-size 128 --start-method spawn",
+    "preprocess_command": "python scripts/p5/run_i1_pipeline.py preprocess --gpu false --raw-workers 8 --feature-workers 24 --chunk-rows 150000 --case-chunk-size 128 --start-method spawn",
+    "train_evaluate_command": "python scripts/p5/run_i1_pipeline.py train-evaluate --gpu true"
   },
   "pending_formal_artifacts": [
     "ad_data_manifest.json",
@@ -106,42 +109,53 @@
     "rca_metrics.json",
     "e2e_diagnosis_metrics.json"
   ],
+  "preprocessing_profile": {
+    "ad_workers": 8,
+    "chunk_rows": 150000,
+    "cpu_budget": 30,
+    "execution_policy": "one modality pool at a time; deterministic submitted-order reduction; one native thread per worker",
+    "memory_budget_gb": 120,
+    "multiprocessing_start_method": "spawn",
+    "rca_case_chunk_size": 128,
+    "rca_feature_workers": 24,
+    "rca_index_workers": 8
+  },
   "repository": {
     "branch": "e2e",
-    "implementation_commit_before_manifest": "1e2f8801a38b24a0124f409056328cc2a7379fde",
+    "implementation_commit_before_manifest": "d490e8c88431875c2093e90cc1e814c52da3f272",
     "starting_commit": "cbe57512b6bd1ce772ab42d9b8ec0b292c3cb91b"
   },
   "result_scope": "protocol manifests plus non-formal synthetic smoke validation only",
-  "schema_version": "p5_i1_run_manifest_v1",
+  "schema_version": "p5_i1_run_manifest_v2",
   "smoke_artifacts": {
     "ad_smoke_summary.json": {
       "bytes": 1632,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/ad_smoke_summary.json",
-      "sha256": "ff83e335b9a0c34b90deb9625f2297cd8913f186f2432e2073e79f0de4c991a3",
+      "sha256": "0eb27bb8df802b4a5066819e2d761e28936d851651a6b11bf96db059afdfa2a0",
       "status": "COMPLETE"
     },
     "e2e_smoke_summary.json": {
       "bytes": 3090,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/e2e_smoke_summary.json",
-      "sha256": "d69f7b772bd569aceef8ba23b07869c6057a4f9bfbada4138799dda8d9d25990",
+      "sha256": "31abd08e8c34089e83adbf9da9d5dfc7fea6885f6b8f64cff1928077f0ec5e24",
       "status": "COMPLETE"
     },
     "event_smoke_summary.json": {
       "bytes": 1442,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/event_smoke_summary.json",
-      "sha256": "ca27017a08e2505500c10dbd7d14d5ab1b7da2a3df3b0eeb4fb2df92fb4894c3",
+      "sha256": "c2f344badb850074271da617ffc3cc7272bf7320da939b79e61ccab303790bdf",
       "status": "COMPLETE"
     },
     "rca_feature_smoke_summary.json": {
       "bytes": 588,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_feature_smoke_summary.json",
-      "sha256": "fa10d824380793f5dc6f1e204e214ac7ac55507a5db878c315e6a9dc6a26071e",
+      "sha256": "20d1a247be96aa43a1d0451d800ee940550618a2d9370dad0136b61a3d2f2f17",
       "status": "COMPLETE"
     },
     "rca_training_smoke_summary.json": {
-      "bytes": 3153,
+      "bytes": 3154,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_training_smoke_summary.json",
-      "sha256": "c86ca48a6f5284995aac9aef237cd798913f519650fd321828e49dd4baca16da",
+      "sha256": "63035cbbb9eb5a553eeaf4faa3bc959cdf5c514a41efdb00afdfddd80480fd2f",
       "status": "COMPLETE"
     }
   },
@@ -149,7 +163,7 @@
     "ada_rca_canonical_commit": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
     "config": {
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/configs/e2e/gaia_p5_v1.yaml",
-      "sha256": "171406d562b36b5513f0b5d011568a4a0831188041b45377068b6587d6e36f26"
+      "sha256": "9191c3bd68941ce14beff11a314a20a2a9a5b2f23244f63e56849327b16667af"
     },
     "random_seed": 42,
     "run_table_sha256": "ca8d44dd08319d940b0d607305165853da376208440b0e3ec07a80dac44e2820",
@@ -161,7 +175,7 @@
   "status": "IMPLEMENTATION_READY_FORMAL_FULL_DATA_PENDING_MANUAL_RUN",
   "validation": {
     "formal_metrics_available": false,
-    "pytest": "43 passed; 8 key CLI help checks passed; combined smoke passed",
+    "pytest": "51 passed; 3 changed CLI help checks passed; combined smoke passed; parallel fixture suite passed",
     "smoke_artifacts_complete": true
   }
 }
