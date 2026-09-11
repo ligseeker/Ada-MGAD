@@ -14,6 +14,7 @@ import logging
 from pathlib import Path
 import re
 import subprocess
+import time
 from typing import Dict, Mapping, MutableMapping, Sequence, Tuple
 
 import numpy as np
@@ -42,6 +43,7 @@ from .protocol import (
     temporal_blocks,
     write_json,
 )
+from .parallel import atomic_save_npy, atomic_write_json, ordered_process_map
 
 
 LOG_FEATURES = (
@@ -50,6 +52,10 @@ LOG_FEATURES = (
 )
 TRACE_STATUS_CODES = ("200", "300", "400", "500")
 HASH_DTYPE = np.dtype([("h1", "<u8"), ("h2", "<u8")])
+_METRIC_GRID = None
+_METRIC_GRID_MS = None
+_METRIC_TRAIN_BOUNDS = None
+_METRIC_CACHE_DIR = None
 
 
 def _read_metric_group_strict(full_name: str, paths: Sequence[Path], feature: str) -> pd.DataFrame:
@@ -156,6 +162,8 @@ def build_metric_arrays(
     cache_dir: Path,
     excluded_features: Sequence[str] = (),
     progress_every: int = 25,
+    workers: int = 1,
+    start_method: str = "spawn",
 ) -> Tuple[np.ndarray, Mapping[str, object]]:
     """Preserve the historical metric schema/aggregation with Train-only fit."""
 
@@ -167,7 +175,7 @@ def build_metric_arrays(
     series: Dict[Tuple[str, str], np.ndarray] = {}
     health: Dict[str, Dict[str, Mapping[str, object]]] = {service: {} for service in GAIA_SERVICES}
     total = len(GAIA_SERVICES) * len(schema_common)
-    processed = 0
+    tasks = []
     for service in GAIA_SERVICES:
         for base in schema_common:
             source_records = []
@@ -184,6 +192,7 @@ def build_metric_arrays(
                     ],
                 })
             cache_binding = {
+                "cache_schema": "p5_i1_ad_metric_series_v2",
                 "service": service,
                 "feature": base,
                 "grid_start_ms": int(grid[0]),
@@ -191,37 +200,33 @@ def build_metric_arrays(
                 "grid_rows": len(grid),
                 "sources": source_records,
             }
-            cache_key = hashlib.sha256(
-                json.dumps(cache_binding, sort_keys=True).encode("utf-8")
-            ).hexdigest()
-            cache_path = cache_dir / (cache_key + ".npy")
-            binding_path = cache_dir / (cache_key + ".json")
-            if cache_path.is_file() and binding_path.is_file():
-                cached_binding = json.loads(binding_path.read_text(encoding="utf-8"))
-                logical = np.load(cache_path, allow_pickle=False)
-                if cached_binding != cache_binding or logical.shape != (len(grid),):
-                    raise ValueError("metric resume-cache binding mismatch")
-            else:
-                sums = np.zeros(len(grid), dtype=np.float64)
-                counts = np.zeros(len(grid), dtype=np.int16)
-                for full_name, paths in sorted(groups[service][base].items()):
-                    frame = _read_metric_group_strict(full_name, paths, base)
-                    aligned = _aligned_mean(frame, grid, grid_ms)
-                    observed = np.isfinite(aligned)
-                    sums[observed] += aligned[observed]
-                    counts[observed] += 1
-                logical = np.full(len(grid), np.nan, dtype=np.float32)
-                observed = counts > 0
-                logical[observed] = (sums[observed] / counts[observed]).astype(np.float32)
-                np.save(cache_path, logical, allow_pickle=False)
-                binding_path.write_text(
-                    json.dumps(cache_binding, sort_keys=True) + "\n", encoding="utf-8"
-                )
-            series[(service, base)] = logical
-            health[service][base] = _quality(logical[train_slice])
-            processed += 1
-            if progress_every and (processed % progress_every == 0 or processed == total):
-                logging.info("Ada-MGAD metric logical series %d/%d", processed, total)
+            tasks.append({
+                "service": service,
+                "feature": base,
+                "groups": tuple(
+                    (full_name, tuple(str(Path(path)) for path in sorted(paths)))
+                    for full_name, paths in sorted(groups[service][base].items())
+                ),
+                "cache_binding": cache_binding,
+            })
+    results, parallel_metadata = ordered_process_map(
+        _materialize_metric_series, tasks, workers=workers, start_method=start_method,
+        initializer=_initialize_metric_worker,
+        initargs=(
+            np.asarray(grid, dtype=np.int64), grid_ms,
+            int(train_slice.start or 0), int(train_slice.stop), str(cache_dir),
+        ),
+    )
+    cache_hits = 0
+    for processed, result in enumerate(results, start=1):
+        service = str(result["service"])
+        base = str(result["feature"])
+        logical = np.load(result["cache_path"], allow_pickle=False)
+        series[(service, base)] = logical
+        health[service][base] = result["quality"]
+        cache_hits += int(bool(result["cache_hit"]))
+        if progress_every and (processed % progress_every == 0 or processed == total):
+            logging.info("Ada-MGAD metric logical series %d/%d", processed, total)
 
     kept = tuple(sorted(
         base for base in schema_common
@@ -265,10 +270,66 @@ def build_metric_arrays(
         "normalization": normalization,
         "resume_cache": {
             "path": str(cache_dir.resolve()),
-            "policy": "source-metadata and grid bound; execution-only and excluded from Git",
+            "policy": "source-metadata and grid bound; atomic publish; execution-only and excluded from Git",
+            "cache_hits": cache_hits,
         },
+        "parallel_execution": parallel_metadata,
     }
     return output, stats
+
+
+def _materialize_metric_series(task):
+    if (
+        _METRIC_GRID is None or _METRIC_GRID_MS is None
+        or _METRIC_TRAIN_BOUNDS is None or _METRIC_CACHE_DIR is None
+    ):
+        raise RuntimeError("Ada-MGAD metric preprocessing worker was not initialized")
+    service = str(task["service"])
+    feature = str(task["feature"])
+    grid = _METRIC_GRID
+    cache_binding = task["cache_binding"]
+    cache_key = hashlib.sha256(
+        json.dumps(cache_binding, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+    cache_dir = _METRIC_CACHE_DIR
+    cache_path = cache_dir / (cache_key + ".npy")
+    binding_path = cache_dir / (cache_key + ".json")
+    cache_hit = cache_path.is_file() and binding_path.is_file()
+    if cache_hit:
+        cached_binding = json.loads(binding_path.read_text(encoding="utf-8"))
+        logical = np.load(cache_path, allow_pickle=False)
+        if cached_binding != cache_binding or logical.shape != (len(grid),):
+            raise ValueError("metric resume-cache binding mismatch")
+    else:
+        sums = np.zeros(len(grid), dtype=np.float64)
+        counts = np.zeros(len(grid), dtype=np.int16)
+        for full_name, paths in task["groups"]:
+            frame = _read_metric_group_strict(full_name, tuple(Path(path) for path in paths), feature)
+            aligned = _aligned_mean(frame, grid, _METRIC_GRID_MS)
+            observed = np.isfinite(aligned)
+            sums[observed] += aligned[observed]
+            counts[observed] += 1
+        logical = np.full(len(grid), np.nan, dtype=np.float32)
+        observed = counts > 0
+        logical[observed] = (sums[observed] / counts[observed]).astype(np.float32)
+        atomic_save_npy(cache_path, logical)
+        atomic_write_json(binding_path, cache_binding)
+    train = logical[_METRIC_TRAIN_BOUNDS[0]:_METRIC_TRAIN_BOUNDS[1]]
+    return {
+        "service": service,
+        "feature": feature,
+        "cache_path": str(cache_path),
+        "cache_hit": cache_hit,
+        "quality": _quality(train),
+    }
+
+
+def _initialize_metric_worker(grid, grid_ms, train_start, train_stop, cache_dir):
+    global _METRIC_GRID, _METRIC_GRID_MS, _METRIC_TRAIN_BOUNDS, _METRIC_CACHE_DIR
+    _METRIC_GRID = np.asarray(grid, dtype=np.int64)
+    _METRIC_GRID_MS = int(grid_ms)
+    _METRIC_TRAIN_BOUNDS = (int(train_start), int(train_stop))
+    _METRIC_CACHE_DIR = Path(cache_dir)
 
 
 def _local_ms(values: pd.Series) -> Tuple[np.ndarray, np.ndarray]:
@@ -293,40 +354,31 @@ def build_log_arrays(
     grid: np.ndarray,
     slices: Mapping[str, slice],
     chunk_rows: int = 500000,
+    workers: int = 1,
+    start_method: str = "spawn",
 ) -> Tuple[np.ndarray, Mapping[str, object]]:
     """Vectorize GAIA message-prefix time and numeric level/volume indicators."""
 
     values = np.zeros((len(grid), len(GAIA_SERVICES), len(LOG_FEATURES)), dtype=np.float32)
-    rows_scanned = 0
-    invalid_timestamps = 0
-    retained = 0
-    for service_index, service in enumerate(GAIA_SERVICES):
-        path = Path(business_dir) / "business_table_{}_2021-07.csv".format(service)
-        for chunk_index, chunk in enumerate(pd.read_csv(
-            path, usecols=["message"], chunksize=chunk_rows,
-            keep_default_na=False, on_bad_lines="skip",
-        ), start=1):
-            messages = chunk["message"].astype("string")
-            rows_scanned += len(messages)
-            numeric, valid_time = _local_ms(messages.str.slice(0, 23))
-            invalid_timestamps += int((~valid_time).sum())
-            positions, in_grid = _grid_positions(numeric, grid)
-            wanted = valid_time & in_grid
-            if not np.any(wanted):
-                continue
-            selected = messages[wanted]
-            selected_pos = positions[wanted]
-            levels = np.full(len(selected), 4, dtype=np.int64)
-            for level_index, level in enumerate(("INFO", "WARNING", "ERROR", "DEBUG")):
-                is_level = selected.str.contains(
-                    "| {} |".format(level), regex=False, na=False
-                ).to_numpy(dtype=bool, na_value=False)
-                levels[is_level] = level_index
-            np.add.at(values, (selected_pos, service_index, levels), 1.0)
-            np.add.at(values, (selected_pos, service_index, np.full(len(selected_pos), 5)), 1.0)
-            retained += len(selected_pos)
-            if chunk_index % 20 == 0:
-                logging.info("Ada-MGAD logs %s rows %,d", service, rows_scanned)
+    tasks = tuple(
+        (
+            service_index,
+            service,
+            str(Path(business_dir) / "business_table_{}_2021-07.csv".format(service)),
+            np.asarray(grid, dtype=np.int64),
+            int(chunk_rows),
+        )
+        for service_index, service in enumerate(GAIA_SERVICES)
+    )
+    results, parallel_metadata = ordered_process_map(
+        _build_log_service, tasks, workers=workers, start_method=start_method
+    )
+    rows_scanned = invalid_timestamps = retained = 0
+    for service_index, service_values, stats in results:
+        values[:, service_index, :] = service_values
+        rows_scanned += int(stats["raw_rows_scanned"])
+        invalid_timestamps += int(stats["invalid_message_prefix_timestamps"])
+        retained += int(stats["retained_protocol_rows"])
 
     train = values[slices["train"]]
     maxima = np.max(train, axis=(0, 1))
@@ -342,6 +394,43 @@ def build_log_arrays(
         "normalization_fit_split": "train",
         "train_maxima": maxima.astype(float).tolist(),
         "adapter_compromise": "numeric level counts plus total count; no full-month Drain3 template learning",
+        "parallel_execution": parallel_metadata,
+    }
+
+
+def _build_log_service(task):
+    service_index, service, source_path, grid, chunk_rows = task
+    service_values = np.zeros((len(grid), len(LOG_FEATURES)), dtype=np.float32)
+    rows_scanned = invalid_timestamps = retained = 0
+    for chunk_index, chunk in enumerate(pd.read_csv(
+        source_path, usecols=["message"], chunksize=chunk_rows,
+        keep_default_na=False, on_bad_lines="skip",
+    ), start=1):
+        messages = chunk["message"].astype("string")
+        rows_scanned += len(messages)
+        numeric, valid_time = _local_ms(messages.str.slice(0, 23))
+        invalid_timestamps += int((~valid_time).sum())
+        positions, in_grid = _grid_positions(numeric, grid)
+        wanted = valid_time & in_grid
+        if not np.any(wanted):
+            continue
+        selected = messages[wanted]
+        selected_pos = positions[wanted]
+        levels = np.full(len(selected), 4, dtype=np.int64)
+        for level_index, level in enumerate(("INFO", "WARNING", "ERROR", "DEBUG")):
+            is_level = selected.str.contains(
+                "| {} |".format(level), regex=False, na=False
+            ).to_numpy(dtype=bool, na_value=False)
+            levels[is_level] = level_index
+        np.add.at(service_values, (selected_pos, levels), 1.0)
+        np.add.at(service_values, (selected_pos, np.full(len(selected_pos), 5)), 1.0)
+        retained += len(selected_pos)
+        if chunk_index % 20 == 0:
+            logging.info("Ada-MGAD logs %s rows %,d", service, rows_scanned)
+    return service_index, service_values, {
+        "raw_rows_scanned": rows_scanned,
+        "invalid_message_prefix_timestamps": invalid_timestamps,
+        "retained_protocol_rows": retained,
     }
 
 
@@ -366,13 +455,63 @@ def _membership(reference: np.ndarray, queries: np.ndarray) -> np.ndarray:
 
 
 def _build_span_hashes(
-    trace_dir: Path, cache_dir: Path, chunk_rows: int
-) -> Tuple[Mapping[str, np.ndarray], Mapping[str, object]]:
+    trace_dir: Path,
+    cache_dir: Path,
+    chunk_rows: int,
+    workers: int = 1,
+    start_method: str = "spawn",
+) -> Tuple[Mapping[str, np.ndarray], Mapping[str, object], Mapping[str, object]]:
     cache_dir.mkdir(parents=True, exist_ok=True)
     arrays = {}
     stats = {}
-    for service in GAIA_SERVICES:
-        source = Path(trace_dir) / "trace_table_{}_2021-07.csv".format(service)
+    tasks = tuple(
+        (
+            service,
+            str(Path(trace_dir) / "trace_table_{}_2021-07.csv".format(service)),
+            str(cache_dir),
+            int(chunk_rows),
+        )
+        for service in GAIA_SERVICES
+    )
+    results, parallel_metadata = ordered_process_map(
+        _build_span_hash_service, tasks, workers=workers, start_method=start_method
+    )
+    for service, path, service_stats in results:
+        arrays[service] = np.load(path, mmap_mode="r")
+        stats[service] = service_stats
+        logging.info("Ada-MGAD trace span index %s: %,d rows", service, service_stats["span_rows"])
+    return arrays, stats, parallel_metadata
+
+
+def _build_span_hash_service(task):
+    service, source_path, cache_dir_value, chunk_rows = task
+    source = Path(source_path)
+    binding = {
+        "schema": "p5_i1_span_hash_v1",
+        "service": service,
+        "source": {
+            "path": str(source.resolve()),
+            "size": source.stat().st_size,
+            "mtime_ns": source.stat().st_mtime_ns,
+        },
+        "dtype": str(HASH_DTYPE),
+        "hash_keys": ["p5i1spanhashkey1", "p5i1spanhashkey2"],
+    }
+    digest = hashlib.sha256(json.dumps(binding, sort_keys=True).encode("utf-8")).hexdigest()
+    cache_dir = Path(cache_dir_value)
+    path = cache_dir / (service + "-" + digest + ".npy")
+    binding_path = cache_dir / (service + "-" + digest + ".json")
+    metadata_path = cache_dir / (service + "-" + digest + ".stats.json")
+    cache_hit = path.is_file() and binding_path.is_file() and metadata_path.is_file()
+    if cache_hit:
+        if json.loads(binding_path.read_text(encoding="utf-8")) != binding:
+            raise ValueError("trace span resume-cache binding mismatch")
+        unique = np.load(path, allow_pickle=False)
+        if unique.ndim != 1 or unique.dtype != HASH_DTYPE:
+            raise ValueError("trace span resume-cache array mismatch")
+        cached_stats = json.loads(metadata_path.read_text(encoding="utf-8"))
+        rows = int(cached_stats["span_rows"])
+    else:
         parts = []
         rows = 0
         for chunk in pd.read_csv(
@@ -383,18 +522,20 @@ def _build_span_hashes(
             parts.append(_hash_pair(chunk["span_id"]))
         hashes = np.concatenate(parts) if parts else np.empty(0, dtype=HASH_DTYPE)
         unique = np.unique(hashes)
-        path = cache_dir / (service + ".npy")
-        np.save(path, unique, allow_pickle=False)
-        arrays[service] = np.load(path, mmap_mode="r")
-        stats[service] = {
-            "span_rows": rows,
-            "unique_128bit_span_hashes": len(unique),
-            "duplicate_span_rows": rows - len(unique),
-            "cache_path": str(path.resolve()),
-            "cache_sha256": sha256_file(path),
-        }
-        logging.info("Ada-MGAD trace span index %s: %,d rows", service, rows)
-    return arrays, stats
+        atomic_save_npy(path, unique)
+    stats = {
+        "span_rows": int(rows),
+        "unique_128bit_span_hashes": int(len(unique)),
+        "duplicate_span_rows": int(rows - len(unique)),
+        "cache_path": str(path.resolve()),
+        "cache_sha256": sha256_file(path),
+        "cache_hit": bool(cache_hit),
+    }
+    if not cache_hit:
+        atomic_write_json(metadata_path, stats)
+        # The binding file is the completion marker and is always published last.
+        atomic_write_json(binding_path, binding)
+    return service, str(path), stats
 
 
 def build_trace_arrays(
@@ -403,69 +544,49 @@ def build_trace_arrays(
     grid: np.ndarray,
     slices: Mapping[str, slice],
     chunk_rows: int = 500000,
+    workers: int = 1,
+    start_method: str = "spawn",
 ) -> Tuple[np.ndarray, np.ndarray, Mapping[str, object]]:
     """Build original directed duration-by-status tensors with bounded memory."""
 
-    span_hashes, span_stats = _build_span_hashes(trace_dir, cache_dir, chunk_rows)
+    span_hashes, span_stats, span_parallel = _build_span_hashes(
+        trace_dir, cache_dir, chunk_rows, workers, start_method
+    )
+    del span_hashes
     trace = np.zeros((
         len(grid), len(GAIA_SERVICES), len(GAIA_SERVICES), len(TRACE_STATUS_CODES)
     ), dtype=np.float32)
     graph = np.zeros((len(GAIA_SERVICES), len(GAIA_SERVICES)), dtype=np.float32)
-    status_index = {status: index for index, status in enumerate(TRACE_STATUS_CODES)}
     rows_scanned = invalid_timestamps = invalid_durations = negative_durations = 0
     unmatched_parents = retained_cross_service = unknown_status = 0
     train_stop = slices["train"].stop
-    for child_index, child in enumerate(GAIA_SERVICES):
-        source = Path(trace_dir) / "trace_table_{}_2021-07.csv".format(child)
-        for chunk_index, chunk in enumerate(pd.read_csv(
-            source,
-            usecols=["start_time", "end_time", "parent_id", "status_code"],
-            chunksize=chunk_rows, keep_default_na=False, on_bad_lines="skip",
-        ), start=1):
-            rows_scanned += len(chunk)
-            end_prefix = chunk["end_time"].astype("string").str.replace(".", ",", n=1, regex=False)
-            end_ms, valid_time = _local_ms(end_prefix)
-            start = pd.to_datetime(chunk["start_time"], errors="coerce")
-            end = pd.to_datetime(chunk["end_time"], errors="coerce")
-            durations = (end - start).dt.total_seconds().to_numpy(dtype=np.float64)
-            finite_duration = np.isfinite(durations)
-            invalid_durations += int((~finite_duration).sum())
-            negative_durations += int((finite_duration & (durations < 0)).sum())
-            invalid_timestamps += int((~valid_time).sum())
-            positions, in_grid = _grid_positions(end_ms, grid)
-            valid = valid_time & in_grid & finite_duration & (durations >= 0)
-            status = chunk["status_code"].astype("string").str.strip().to_numpy(dtype=str)
-            known_status = np.isin(status, TRACE_STATUS_CODES)
-            unknown_status += int((valid & ~known_status).sum())
-            valid &= known_status
-            if not np.any(valid):
-                continue
-            selected_rows = np.flatnonzero(valid)
-            parents = _hash_pair(chunk.loc[valid, "parent_id"])
-            sources = np.full(len(parents), -1, dtype=np.int16)
-            unresolved = np.ones(len(parents), dtype=bool)
-            for parent_index, parent_service in enumerate(GAIA_SERVICES):
-                found = unresolved & _membership(span_hashes[parent_service], parents)
-                sources[found] = parent_index
-                unresolved[found] = False
-            unmatched_parents += int(unresolved.sum())
-            selected_positions = positions[valid]
-            selected_durations = durations[valid]
-            selected_status = status[valid]
-            cross = (sources >= 0) & (sources != child_index)
-            retained_cross_service += int(cross.sum())
-            if np.any(cross):
-                src = sources[cross].astype(np.int64)
-                dst = np.full(int(cross.sum()), child_index, dtype=np.int64)
-                pos = selected_positions[cross]
-                status_ids = np.asarray([status_index[value] for value in selected_status[cross]], dtype=np.int64)
-                np.add.at(trace, (pos, src, dst, status_ids), selected_durations[cross].astype(np.float32))
-                train_edge = pos < train_stop
-                for source_index in np.unique(src[train_edge]):
-                    graph[int(source_index), child_index] = 1.0
-                    graph[child_index, int(source_index)] = 1.0
-            if chunk_index % 10 == 0:
-                logging.info("Ada-MGAD traces %s rows %,d", child, rows_scanned)
+    tasks = tuple(
+        (
+            child_index,
+            child,
+            str(Path(trace_dir) / "trace_table_{}_2021-07.csv".format(child)),
+            np.asarray(grid, dtype=np.int64),
+            tuple(str(Path(span_stats[service]["cache_path"])) for service in GAIA_SERVICES),
+            int(chunk_rows),
+            int(train_stop),
+        )
+        for child_index, child in enumerate(GAIA_SERVICES)
+    )
+    results, trace_parallel = ordered_process_map(
+        _build_trace_child, tasks, workers=workers, start_method=start_method
+    )
+    for child_index, child_trace, graph_sources, stats in results:
+        trace[:, :, child_index, :] = child_trace
+        for source_index in graph_sources:
+            graph[int(source_index), int(child_index)] = 1.0
+            graph[int(child_index), int(source_index)] = 1.0
+        rows_scanned += int(stats["raw_rows_scanned"])
+        invalid_timestamps += int(stats["invalid_timestamp_rows"])
+        invalid_durations += int(stats["invalid_duration_rows"])
+        negative_durations += int(stats["negative_duration_rows"])
+        unknown_status += int(stats["unknown_status_rows_in_protocol_grid"])
+        unmatched_parents += int(stats["unmatched_parent_rows_in_protocol_grid"])
+        retained_cross_service += int(stats["retained_cross_service_rows"])
 
     train_mean = np.mean(trace[slices["train"]], axis=0)
     trace /= (train_mean[None, :, :, :] * 10.0 + 1e-6)
@@ -487,7 +608,77 @@ def build_trace_arrays(
         "span_lookup": "two independent stable uint64 hashes; label-free parent span to service mapping",
         "span_indexes": span_stats,
         "graph_edges": int(graph.sum()),
+        "parallel_execution": {"span_index": span_parallel, "trace": trace_parallel},
     }
+
+
+def _build_trace_child(task):
+    child_index, child, source_path, grid, span_paths, chunk_rows, train_stop = task
+    span_hashes = tuple(np.load(path, mmap_mode="r") for path in span_paths)
+    child_trace = np.zeros(
+        (len(grid), len(GAIA_SERVICES), len(TRACE_STATUS_CODES)), dtype=np.float32
+    )
+    graph_sources = set()
+    status_index = {status: index for index, status in enumerate(TRACE_STATUS_CODES)}
+    stats = {
+        "raw_rows_scanned": 0,
+        "invalid_timestamp_rows": 0,
+        "invalid_duration_rows": 0,
+        "negative_duration_rows": 0,
+        "unknown_status_rows_in_protocol_grid": 0,
+        "unmatched_parent_rows_in_protocol_grid": 0,
+        "retained_cross_service_rows": 0,
+    }
+    for chunk_index, chunk in enumerate(pd.read_csv(
+        source_path,
+        usecols=["start_time", "end_time", "parent_id", "status_code"],
+        chunksize=chunk_rows, keep_default_na=False, on_bad_lines="skip",
+    ), start=1):
+        stats["raw_rows_scanned"] += len(chunk)
+        end_prefix = chunk["end_time"].astype("string").str.replace(".", ",", n=1, regex=False)
+        end_ms, valid_time = _local_ms(end_prefix)
+        start = pd.to_datetime(chunk["start_time"], errors="coerce")
+        end = pd.to_datetime(chunk["end_time"], errors="coerce")
+        durations = (end - start).dt.total_seconds().to_numpy(dtype=np.float64)
+        finite_duration = np.isfinite(durations)
+        stats["invalid_duration_rows"] += int((~finite_duration).sum())
+        stats["negative_duration_rows"] += int((finite_duration & (durations < 0)).sum())
+        stats["invalid_timestamp_rows"] += int((~valid_time).sum())
+        positions, in_grid = _grid_positions(end_ms, grid)
+        valid = valid_time & in_grid & finite_duration & (durations >= 0)
+        status = chunk["status_code"].astype("string").str.strip().to_numpy(dtype=str)
+        known_status = np.isin(status, TRACE_STATUS_CODES)
+        stats["unknown_status_rows_in_protocol_grid"] += int((valid & ~known_status).sum())
+        valid &= known_status
+        if not np.any(valid):
+            continue
+        parents = _hash_pair(chunk.loc[valid, "parent_id"])
+        sources = np.full(len(parents), -1, dtype=np.int16)
+        unresolved = np.ones(len(parents), dtype=bool)
+        for parent_index, reference in enumerate(span_hashes):
+            found = unresolved & _membership(reference, parents)
+            sources[found] = parent_index
+            unresolved[found] = False
+        stats["unmatched_parent_rows_in_protocol_grid"] += int(unresolved.sum())
+        selected_positions = positions[valid]
+        selected_durations = durations[valid]
+        selected_status = status[valid]
+        cross = (sources >= 0) & (sources != child_index)
+        stats["retained_cross_service_rows"] += int(cross.sum())
+        if np.any(cross):
+            src = sources[cross].astype(np.int64)
+            pos = selected_positions[cross]
+            status_ids = np.asarray(
+                [status_index[value] for value in selected_status[cross]], dtype=np.int64
+            )
+            np.add.at(
+                child_trace, (pos, src, status_ids),
+                selected_durations[cross].astype(np.float32),
+            )
+            graph_sources.update(int(value) for value in np.unique(src[pos < train_stop]))
+        if chunk_index % 10 == 0:
+            logging.info("Ada-MGAD traces %s rows %,d", child, stats["raw_rows_scanned"])
+    return int(child_index), child_trace, tuple(sorted(graph_sources)), stats
 
 
 def build_ad_data(
@@ -497,6 +688,8 @@ def build_ad_data(
     artifact_root: Path,
     chunk_rows: int = 500000,
     raw_root_override: Path = None,
+    workers: int = 1,
+    start_method: str = "spawn",
 ) -> Mapping[str, object]:
     blocks = temporal_blocks(config)
     grids = {
@@ -531,19 +724,28 @@ def build_ad_data(
     }
     if execution_inventory != expected_inventory:
         raise ValueError("execution GAIA raw root differs from the P5-G0R2 byte-layout binding")
+    phase_started = time.perf_counter()
     metric, metric_stats = build_metric_arrays(
         raw_root / "metric/metric_split/metric", grid, offsets,
         Path(data_root) / "metric_cache",
         tuple(config["ad_preprocessing"]["metric_excluded_features"]),
+        workers=workers,
+        start_method=start_method,
     )
+    metric_wall_seconds = time.perf_counter() - phase_started
     metric_stats["exclusions"] = list(config["ad_preprocessing"]["metric_exclusions"])
+    phase_started = time.perf_counter()
     logs, log_stats = build_log_arrays(
-        raw_root / "business/business_split/business", grid, offsets, chunk_rows
+        raw_root / "business/business_split/business", grid, offsets, chunk_rows,
+        workers=workers, start_method=start_method,
     )
+    log_wall_seconds = time.perf_counter() - phase_started
+    phase_started = time.perf_counter()
     trace, graph, trace_stats = build_trace_arrays(
         raw_root / "trace/trace_split/trace", Path(data_root) / "span_hashes",
-        grid, offsets, chunk_rows
+        grid, offsets, chunk_rows, workers=workers, start_method=start_method,
     )
+    trace_wall_seconds = time.perf_counter() - phase_started
 
     registry = load_registry(config, project_root)
     assigned, raw_purged = assign_event_blocks(registry, blocks)
@@ -616,6 +818,17 @@ def build_ad_data(
         "label_source": "frozen 16,200 supported injection registry only",
         "excluded_label_sources": ["normal", "ERROR", "normal memory freed label", "unsupported or unknown"],
         "normalization_firewall": "all telemetry scaling and quality decisions fit on Train only",
+        "preprocessing_runtime": {
+            "requested_workers": int(workers),
+            "chunk_rows": int(chunk_rows),
+            "start_method": str(start_method),
+            "pool_policy": "metric, log, span, and trace pools execute sequentially",
+            "phase_wall_seconds": {
+                "metric": metric_wall_seconds,
+                "logs": log_wall_seconds,
+                "traces_including_span_index": trace_wall_seconds,
+            },
+        },
     }
     write_json(Path(artifact_root) / "ad_data_manifest.json", manifest)
     return manifest

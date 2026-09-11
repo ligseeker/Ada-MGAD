@@ -15,11 +15,15 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("smoke", "full"))
+    parser.add_argument("action", choices=("smoke", "preprocess", "train-evaluate", "full"))
     parser.add_argument("--config", default="configs/e2e/gaia_p5_v1.yaml")
     parser.add_argument("--raw-root", default=None,
                         help="Optional byte-layout-verified mirror of GAIA MicroSS.")
-    parser.add_argument("--chunk-rows", default=500000, type=int)
+    parser.add_argument("--chunk-rows", default=None, type=int)
+    parser.add_argument("--raw-workers", default=None, type=int)
+    parser.add_argument("--feature-workers", default=None, type=int)
+    parser.add_argument("--case-chunk-size", default=None, type=int)
+    parser.add_argument("--start-method", choices=("spawn", "forkserver"), default=None)
     parser.add_argument("--gpu", default=True, type=lambda value: value.lower() == "true")
     return parser.parse_args()
 
@@ -40,16 +44,38 @@ def smoke(args):
     _run(["scripts/p5/run_i1_e2e.py", "smoke"] + common)
 
 
-def full(args):
+def preprocess(args):
     common = ["--config", args.config]
     raw = ["--raw-root", args.raw_root] if args.raw_root else []
-    chunk = ["--chunk-rows", str(args.chunk_rows)]
+    chunk = ["--chunk-rows", str(args.chunk_rows)] if args.chunk_rows is not None else []
+    method = ["--start-method", args.start_method] if args.start_method else []
+    raw_workers = ["--workers", str(args.raw_workers)] if args.raw_workers is not None else []
+    feature_workers = (
+        ["--workers", str(args.feature_workers)] if args.feature_workers is not None else []
+    )
+    case_chunk = (
+        ["--case-chunk-size", str(args.case_chunk_size)]
+        if args.case_chunk_size is not None else []
+    )
     _run(["scripts/p5/build_i1_protocol.py"] + common)
-    _run(["scripts/p5/run_i1_ad.py", "preprocess"] + common + raw + chunk)
+    _run(
+        ["scripts/p5/run_i1_ad.py", "preprocess"]
+        + common + raw + chunk + method + raw_workers
+    )
+    _run(
+        ["scripts/p5/run_i1_rca_features.py", "index"]
+        + common + raw + chunk + method + raw_workers
+    )
+    _run(
+        ["scripts/p5/run_i1_rca_features.py", "materialize"]
+        + common + method + feature_workers + case_chunk
+    )
+
+
+def train_evaluate(args):
+    common = ["--config", args.config]
     _run(["scripts/p5/run_i1_ad.py", "train"] + common + ["--gpu", str(args.gpu).lower()])
     _run(["scripts/p5/run_i1_events.py", "evaluate"] + common)
-    _run(["scripts/p5/run_i1_rca_features.py", "index"] + common + raw + chunk)
-    _run(["scripts/p5/run_i1_rca_features.py", "materialize"] + common)
     _run(["scripts/p5/run_i1_rca.py", "train-oracle"] + common)
     _run(["scripts/p5/run_i1_e2e.py", "evaluate"] + common)
     _run(["scripts/p5/finalize_i1_manifest.py"] + common)
@@ -59,12 +85,18 @@ def main():
     args = parse_args()
     if args.action == "smoke":
         smoke(args)
+    elif args.action == "preprocess":
+        preprocess(args)
+    elif args.action == "train-evaluate":
+        train_evaluate(args)
     else:
-        full(args)
+        preprocess(args)
+        train_evaluate(args)
     print(json.dumps({
         "status": "COMPLETE",
         "action": args.action,
-        "formal_result": args.action == "full",
+        "formal_result": args.action in ("train-evaluate", "full"),
+        "formal_preprocessing": args.action in ("preprocess", "full"),
     }, sort_keys=True))
 
 

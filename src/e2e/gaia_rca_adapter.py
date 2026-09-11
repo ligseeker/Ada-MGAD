@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
+import time
 from typing import Dict, Iterable, List, Mapping, MutableMapping, Optional, Sequence, Tuple
 
 import numpy as np
@@ -22,7 +23,8 @@ from util.GAIA.pre_GAIA import (
 )
 
 from .ad_preprocess import _local_ms, _logical_metric_schema
-from .protocol import GAIA_SERVICES, layout_digest, sha256_file, write_json
+from .parallel import atomic_save_npy, atomic_write_json, ordered_process_map
+from .protocol import GAIA_SERVICES, layout_digest, sha256_file
 
 
 LOG_LEVELS = ("INFO", "WARNING", "ERROR", "DEBUG", "UNKNOWN")
@@ -274,7 +276,7 @@ class GaiaRcaRawIndex:
 
 def _save_array(path: Path, values: np.ndarray) -> Mapping[str, object]:
     path.parent.mkdir(parents=True, exist_ok=True)
-    np.save(path, np.asarray(values), allow_pickle=False)
+    atomic_save_npy(path, np.asarray(values))
     return {
         "path": str(path.name),
         "shape": list(np.asarray(values).shape),
@@ -341,6 +343,8 @@ def build_raw_index(
     expected_inventory: Mapping[str, object],
     *,
     chunk_rows: int = 500000,
+    workers: int = 1,
+    start_method: str = "spawn",
     provenance: Optional[Mapping[str, object]] = None,
 ) -> Mapping[str, object]:
     """Build a reusable raw index; this is the intentionally long full-data step."""
@@ -349,137 +353,108 @@ def build_raw_index(
     output_root = Path(output_root)
     output_root.mkdir(parents=True, exist_ok=True)
     actual_inventory = _verify_raw_layout(raw_root, expected_inventory)
+    build_binding = {
+        "schema": "p5_i1_gaia_rca_raw_index_v2",
+        "raw_layout": actual_inventory,
+        "chunk_rows": int(chunk_rows),
+    }
+    build_id = hashlib.sha256(
+        json.dumps(build_binding, sort_keys=True).encode("utf-8")
+    ).hexdigest()[:20]
+    generation_root = output_root / "builds" / build_id
+    generation_root.mkdir(parents=True, exist_ok=True)
     metric_dir = raw_root / "metric/metric_split/metric"
     groups, common = _logical_metric_schema(metric_dir)
-    metric_records = []
+    metric_tasks = []
     for service in GAIA_SERVICES:
         for indicator in common:
-            core_series = []
-            for full_name, paths in sorted(groups[service][indicator].items()):
-                frame = _read_metric_group_strict(full_name, paths, indicator)
-                if len(frame):
-                    core_series.append(pd.Series(
-                        pd.to_numeric(frame["value"], errors="coerce").to_numpy(dtype=float),
-                        index=pd.to_numeric(frame["timestamp"], errors="coerce").to_numpy(dtype=float),
-                    ))
-            if not core_series:
-                raise ValueError(
-                    "metric series {}::{} has no finite observations".format(
-                        service, indicator
-                    )
-                )
-            combined = pd.concat(core_series, axis=1).mean(axis=1, skipna=True).sort_index()
-            valid = np.isfinite(combined.index.to_numpy(dtype=float)) & np.isfinite(combined.to_numpy(dtype=float))
-            timestamps = combined.index.to_numpy(dtype=float)[valid].astype(np.int64)
-            values = combined.to_numpy(dtype=float)[valid].astype(np.float32)
-            order = np.argsort(timestamps, kind="stable")
-            key = _safe_key(service, indicator)
-            ts_path = output_root / (key + ".metric.timestamps.npy")
-            value_path = output_root / (key + ".metric.values.npy")
-            ts_meta = _save_array(ts_path, timestamps[order])
-            value_meta = _save_array(value_path, values[order])
-            metric_records.append({
-                "service": service,
-                "indicator": indicator,
-                "timestamps": ts_path.name,
-                "values": value_path.name,
-                "rows": int(len(order)),
-                "timestamps_sha256": ts_meta["sha256"],
-                "values_sha256": value_meta["sha256"],
-            })
+            metric_tasks.append((
+                service,
+                indicator,
+                tuple(
+                    (full_name, tuple(str(Path(path)) for path in sorted(paths)))
+                    for full_name, paths in sorted(groups[service][indicator].items())
+                ),
+                str(generation_root),
+                str(output_root),
+            ))
+    phase_started = time.perf_counter()
+    metric_records, metric_parallel = ordered_process_map(
+        _build_raw_metric_series, metric_tasks,
+        workers=workers, start_method=start_method,
+    )
+    metric_wall_seconds = time.perf_counter() - phase_started
+    metric_records = list(metric_records)
 
+    log_tasks = tuple(
+        (
+            service,
+            str(raw_root / "business/business_split/business" / (
+                "business_table_{}_2021-07.csv".format(service)
+            )),
+            str(generation_root),
+            str(output_root),
+            int(chunk_rows),
+        )
+        for service in GAIA_SERVICES
+    )
+    phase_started = time.perf_counter()
+    log_results, log_parallel = ordered_process_map(
+        _build_raw_log_service, log_tasks,
+        workers=workers, start_method=start_method,
+    )
+    log_wall_seconds = time.perf_counter() - phase_started
     log_records = {}
     invalid_log_timestamps = 0
-    for service in GAIA_SERVICES:
-        source = raw_root / "business/business_split/business" / (
-            "business_table_{}_2021-07.csv".format(service)
-        )
-        timestamp_parts = []
-        level_parts = []
-        for chunk in pd.read_csv(
-            source, usecols=["message"], chunksize=chunk_rows,
-            keep_default_na=False, on_bad_lines="skip",
-        ):
-            messages = chunk["message"].astype("string")
-            timestamps, valid = _local_ms(messages.str.slice(0, 23))
-            invalid_log_timestamps += int((~valid).sum())
-            selected = messages[valid]
-            levels = np.full(len(selected), len(LOG_LEVELS) - 1, dtype=np.uint8)
-            for level_index, level in enumerate(LOG_LEVELS[:-1]):
-                found = selected.str.contains(
-                    "| {} |".format(level), regex=False, na=False
-                ).to_numpy(dtype=bool, na_value=False)
-                levels[found] = level_index
-            timestamp_parts.append(timestamps[valid].astype(np.int64))
-            level_parts.append(levels)
-        timestamps = np.concatenate(timestamp_parts) if timestamp_parts else np.empty(0, dtype=np.int64)
-        levels = np.concatenate(level_parts) if level_parts else np.empty(0, dtype=np.uint8)
-        order = np.argsort(timestamps, kind="stable")
-        ts_path = output_root / (service + ".log.timestamps.npy")
-        level_path = output_root / (service + ".log.levels.npy")
-        ts_meta = _save_array(ts_path, timestamps[order])
-        level_meta = _save_array(level_path, levels[order])
-        log_records[service] = {
-            "timestamps": ts_path.name,
-            "levels": level_path.name,
-            "rows": int(len(order)),
-            "timestamps_sha256": ts_meta["sha256"],
-            "levels_sha256": level_meta["sha256"],
-        }
+    for service, record, invalid_count in log_results:
+        log_records[service] = record
+        invalid_log_timestamps += int(invalid_count)
 
+    trace_dir = raw_root / "trace/trace_split/trace"
+    trace_tasks = tuple(
+        (
+            str(source), str(generation_root), str(output_root), int(chunk_rows)
+        )
+        for source in sorted(trace_dir.glob("trace_table_*_2021-07.csv"))
+    )
+    phase_started = time.perf_counter()
+    trace_results, trace_parallel = ordered_process_map(
+        _build_raw_trace_source, trace_tasks,
+        workers=workers, start_method=start_method,
+    )
+    trace_wall_seconds = time.perf_counter() - phase_started
     trace_parts = []
     trace_stats = defaultdict(int)
     trace_status_counts = defaultdict(int)
-    trace_dir = raw_root / "trace/trace_split/trace"
-    for source in sorted(trace_dir.glob("trace_table_*_2021-07.csv")):
-        part_number = 0
-        for chunk in pd.read_csv(
-            source,
-            usecols=["start_time", "end_time", "status_code", "service_name"],
-            chunksize=chunk_rows, keep_default_na=False, on_bad_lines="skip",
-        ):
-            arrays, stats = parse_trace_chunk(chunk)
-            for key, value in stats.items():
-                trace_stats[key] += int(value)
-            for status in arrays["status_code"]:
-                trace_status_counts[str(int(status))] += 1
-            for service in GAIA_SERVICES:
-                selected = arrays["service"] == service
-                if not np.any(selected):
-                    continue
-                prefix = "{}.{}.trace".format(source.stem, part_number)
-                ts_path = output_root / (prefix + ".{}.timestamps.npy".format(service))
-                error_path = output_root / (prefix + ".{}.errors.npy".format(service))
-                latency_path = output_root / (prefix + ".{}.latencies.npy".format(service))
-                timestamps = arrays["timestamp_ms"][selected]
-                order = np.argsort(timestamps, kind="stable")
-                ts_meta = _save_array(ts_path, timestamps[order])
-                error_meta = _save_array(
-                    error_path, arrays["trace_error"][selected][order].astype(np.uint8)
-                )
-                latency_meta = _save_array(
-                    latency_path, arrays["latency_seconds"][selected][order].astype(np.float32)
-                )
-                trace_parts.append({
-                    "service": service,
-                    "timestamps": ts_path.name,
-                    "errors": error_path.name,
-                    "latencies": latency_path.name,
-                    "rows": int(selected.sum()),
-                    "timestamps_sha256": ts_meta["sha256"],
-                    "errors_sha256": error_meta["sha256"],
-                    "latencies_sha256": latency_meta["sha256"],
-                })
-            part_number += 1
+    for source_parts, source_stats, source_status_counts in trace_results:
+        trace_parts.extend(source_parts)
+        for key, value in source_stats.items():
+            trace_stats[key] += int(value)
+        for status, value in source_status_counts.items():
+            trace_status_counts[status] += int(value)
 
     manifest = {
-        "schema_version": "p5_i1_gaia_rca_raw_index_v1",
+        "schema_version": "p5_i1_gaia_rca_raw_index_v2",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "build_id": build_id,
+        "build_binding": build_binding,
         "raw_root": str(raw_root.resolve()),
         "raw_layout": actual_inventory,
         "services": list(GAIA_SERVICES),
         "label_firewall": "no root service, fault type, event label, or Ada-MGAD tensor is accepted",
         "provenance": dict(provenance or {}),
+        "parallel_execution": {
+            "metric": metric_parallel,
+            "logs": log_parallel,
+            "traces": trace_parallel,
+            "chunk_rows": int(chunk_rows),
+            "phase_wall_seconds": {
+                "metric": metric_wall_seconds,
+                "logs": log_wall_seconds,
+                "traces": trace_wall_seconds,
+            },
+            "publication": "generation files first; index manifest atomically published last",
+        },
         "metric_mapping": "filename telemetry schema plus canonical service registry only",
         "metric_series": metric_records,
         "logs": log_records,
@@ -496,5 +471,140 @@ def build_raw_index(
         },
     }
     manifest_path = output_root / "index_manifest.json"
-    write_json(manifest_path, manifest)
+    atomic_write_json(manifest_path, manifest)
     return manifest
+
+
+def _manifest_relative(path: Path, manifest_root: Path) -> str:
+    return str(Path(path).relative_to(Path(manifest_root)))
+
+
+def _build_raw_metric_series(task):
+    service, indicator, groups, generation_root_value, manifest_root_value = task
+    core_series = []
+    for full_name, paths in groups:
+        frame = _read_metric_group_strict(
+            full_name, tuple(Path(path) for path in paths), indicator
+        )
+        if len(frame):
+            core_series.append(pd.Series(
+                pd.to_numeric(frame["value"], errors="coerce").to_numpy(dtype=float),
+                index=pd.to_numeric(frame["timestamp"], errors="coerce").to_numpy(dtype=float),
+            ))
+    if not core_series:
+        raise ValueError(
+            "metric series {}::{} has no finite observations".format(service, indicator)
+        )
+    combined = pd.concat(core_series, axis=1).mean(axis=1, skipna=True).sort_index()
+    valid = (
+        np.isfinite(combined.index.to_numpy(dtype=float))
+        & np.isfinite(combined.to_numpy(dtype=float))
+    )
+    timestamps = combined.index.to_numpy(dtype=float)[valid].astype(np.int64)
+    values = combined.to_numpy(dtype=float)[valid].astype(np.float32)
+    order = np.argsort(timestamps, kind="stable")
+    key = _safe_key(service, indicator)
+    generation_root = Path(generation_root_value)
+    manifest_root = Path(manifest_root_value)
+    ts_path = generation_root / (key + ".metric.timestamps.npy")
+    value_path = generation_root / (key + ".metric.values.npy")
+    ts_meta = _save_array(ts_path, timestamps[order])
+    value_meta = _save_array(value_path, values[order])
+    return {
+        "service": service,
+        "indicator": indicator,
+        "timestamps": _manifest_relative(ts_path, manifest_root),
+        "values": _manifest_relative(value_path, manifest_root),
+        "rows": int(len(order)),
+        "timestamps_sha256": ts_meta["sha256"],
+        "values_sha256": value_meta["sha256"],
+    }
+
+
+def _build_raw_log_service(task):
+    service, source_path, generation_root_value, manifest_root_value, chunk_rows = task
+    timestamp_parts = []
+    level_parts = []
+    invalid_timestamps = 0
+    for chunk in pd.read_csv(
+        source_path, usecols=["message"], chunksize=chunk_rows,
+        keep_default_na=False, on_bad_lines="skip",
+    ):
+        messages = chunk["message"].astype("string")
+        timestamps, valid = _local_ms(messages.str.slice(0, 23))
+        invalid_timestamps += int((~valid).sum())
+        selected = messages[valid]
+        levels = np.full(len(selected), len(LOG_LEVELS) - 1, dtype=np.uint8)
+        for level_index, level in enumerate(LOG_LEVELS[:-1]):
+            found = selected.str.contains(
+                "| {} |".format(level), regex=False, na=False
+            ).to_numpy(dtype=bool, na_value=False)
+            levels[found] = level_index
+        timestamp_parts.append(timestamps[valid].astype(np.int64))
+        level_parts.append(levels)
+    timestamps = (
+        np.concatenate(timestamp_parts) if timestamp_parts else np.empty(0, dtype=np.int64)
+    )
+    levels = np.concatenate(level_parts) if level_parts else np.empty(0, dtype=np.uint8)
+    order = np.argsort(timestamps, kind="stable")
+    generation_root = Path(generation_root_value)
+    manifest_root = Path(manifest_root_value)
+    ts_path = generation_root / (service + ".log.timestamps.npy")
+    level_path = generation_root / (service + ".log.levels.npy")
+    ts_meta = _save_array(ts_path, timestamps[order])
+    level_meta = _save_array(level_path, levels[order])
+    return service, {
+        "timestamps": _manifest_relative(ts_path, manifest_root),
+        "levels": _manifest_relative(level_path, manifest_root),
+        "rows": int(len(order)),
+        "timestamps_sha256": ts_meta["sha256"],
+        "levels_sha256": level_meta["sha256"],
+    }, invalid_timestamps
+
+
+def _build_raw_trace_source(task):
+    source_path, generation_root_value, manifest_root_value, chunk_rows = task
+    source = Path(source_path)
+    generation_root = Path(generation_root_value)
+    manifest_root = Path(manifest_root_value)
+    trace_parts = []
+    trace_stats = defaultdict(int)
+    trace_status_counts = defaultdict(int)
+    for part_number, chunk in enumerate(pd.read_csv(
+        source,
+        usecols=["start_time", "end_time", "status_code", "service_name"],
+        chunksize=chunk_rows, keep_default_na=False, on_bad_lines="skip",
+    )):
+        arrays, stats = parse_trace_chunk(chunk)
+        for key, value in stats.items():
+            trace_stats[key] += int(value)
+        for status in arrays["status_code"]:
+            trace_status_counts[str(int(status))] += 1
+        for service in GAIA_SERVICES:
+            selected = arrays["service"] == service
+            if not np.any(selected):
+                continue
+            prefix = "{}.{}.trace".format(source.stem, part_number)
+            ts_path = generation_root / (prefix + ".{}.timestamps.npy".format(service))
+            error_path = generation_root / (prefix + ".{}.errors.npy".format(service))
+            latency_path = generation_root / (prefix + ".{}.latencies.npy".format(service))
+            timestamps = arrays["timestamp_ms"][selected]
+            order = np.argsort(timestamps, kind="stable")
+            ts_meta = _save_array(ts_path, timestamps[order])
+            error_meta = _save_array(
+                error_path, arrays["trace_error"][selected][order].astype(np.uint8)
+            )
+            latency_meta = _save_array(
+                latency_path, arrays["latency_seconds"][selected][order].astype(np.float32)
+            )
+            trace_parts.append({
+                "service": service,
+                "timestamps": _manifest_relative(ts_path, manifest_root),
+                "errors": _manifest_relative(error_path, manifest_root),
+                "latencies": _manifest_relative(latency_path, manifest_root),
+                "rows": int(selected.sum()),
+                "timestamps_sha256": ts_meta["sha256"],
+                "errors_sha256": error_meta["sha256"],
+                "latencies_sha256": latency_meta["sha256"],
+            })
+    return trace_parts, dict(trace_stats), dict(trace_status_counts)

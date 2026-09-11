@@ -280,19 +280,24 @@ PYTHONDONTWRITEBYTECODE=1 pytest -q
 python scripts/p5/run_i1_pipeline.py smoke --gpu false
 ```
 
-The full run is intentionally separated into resumable commands:
+The full run is intentionally separated into commands.  Raw preprocessing now
+uses deterministic process-level parallelism documented in
+`docs/P5_GAIA_PARALLEL_PREPROCESSING_V1.md`:
 
 ```bash
 python scripts/p5/build_i1_protocol.py
 
 python scripts/p5/run_i1_ad.py preprocess \
-  --raw-root /home/zhangll24/RCA_project/datasets/GAIA/MicroSS
+  --raw-root /home/zhangll24/RCA_project/datasets/GAIA/MicroSS \
+  --workers 8 --chunk-rows 150000 --start-method spawn
 python scripts/p5/run_i1_ad.py train --gpu true
 python scripts/p5/run_i1_events.py evaluate
 
 python scripts/p5/run_i1_rca_features.py index \
-  --raw-root /home/zhangll24/RCA_project/datasets/GAIA/MicroSS
-python scripts/p5/run_i1_rca_features.py materialize
+  --raw-root /home/zhangll24/RCA_project/datasets/GAIA/MicroSS \
+  --workers 8 --chunk-rows 150000 --start-method spawn
+python scripts/p5/run_i1_rca_features.py materialize \
+  --workers 24 --case-chunk-size 128 --start-method spawn
 python scripts/p5/run_i1_rca.py train-oracle
 
 python scripts/p5/run_i1_e2e.py evaluate
@@ -307,8 +312,14 @@ For an uninterrupted run, the equivalent entry is:
 
 ```bash
 python scripts/p5/run_i1_pipeline.py full --gpu true \
-  --raw-root /home/zhangll24/RCA_project/datasets/GAIA/MicroSS
+  --raw-root /home/zhangll24/RCA_project/datasets/GAIA/MicroSS \
+  --raw-workers 8 --feature-workers 24 \
+  --chunk-rows 150000 --case-chunk-size 128 --start-method spawn
 ```
+
+For separate CPU/GPU allocations, run `run_i1_pipeline.py preprocess --gpu false`
+in the CPU container, then run `run_i1_pipeline.py train-evaluate --gpu true` in
+the GPU environment against the same `data/p5/i1/` outputs.
 
 ## 16. Artifact Manifest
 

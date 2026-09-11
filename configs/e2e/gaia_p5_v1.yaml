@@ -79,6 +79,17 @@
     "metric_excluded_features": [],
     "metric_exclusions": []
   },
+  "preprocessing": {
+    "multiprocessing_start_method": "spawn",
+    "chunk_rows": 150000,
+    "ad_workers": 8,
+    "rca_index_workers": 8,
+    "rca_feature_workers": 24,
+    "rca_case_chunk_size": 128,
+    "cpu_budget": 30,
+    "memory_budget_gb": 120,
+    "execution_policy": "one modality pool at a time; deterministic submitted-order reduction; one native thread per worker"
+  },
   "event_trigger": {
     "system_score": "max service anomaly probability",
     "episode_rule": "consecutive positive 30-second timestamps",

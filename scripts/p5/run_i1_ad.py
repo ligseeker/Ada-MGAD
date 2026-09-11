@@ -32,7 +32,9 @@ from src.e2e.ad_data import (
     save_split_arrays,
 )
 from src.e2e.ad_preprocess import build_ad_data
-from src.e2e.protocol import GAIA_SERVICES, load_config, sha256_file, write_json
+from src.e2e.protocol import (
+    GAIA_SERVICES, load_config, preprocessing_runtime, sha256_file, write_json,
+)
 from src.model import MyModel
 from util.train import MY
 from util.util import seed_everything
@@ -49,7 +51,10 @@ def parse_args():
         "--raw-root", default=None,
         help="Optional byte-layout-verified execution mirror of the canonical GAIA raw root.",
     )
-    parser.add_argument("--chunk-rows", default=500000, type=int)
+    parser.add_argument("--chunk-rows", default=None, type=int)
+    parser.add_argument("--workers", default=None, type=int,
+                        help="Raw preprocessing processes; defaults to frozen config.")
+    parser.add_argument("--start-method", choices=("spawn", "forkserver"), default=None)
     parser.add_argument("--gpu", default=True, type=lambda value: value.lower() == "true")
     return parser.parse_args()
 
@@ -352,10 +357,15 @@ def main():
     artifact_root = (PROJECT_ROOT / args.artifact_root).resolve()
     checkpoint_dir = (PROJECT_ROOT / args.checkpoint_dir).resolve()
     artifact_root.mkdir(parents=True, exist_ok=True)
+    runtime = preprocessing_runtime(
+        config, "ad", workers=args.workers, chunk_rows=args.chunk_rows,
+        start_method=args.start_method,
+    )
     if args.action in ("preprocess", "all"):
         build_ad_data(
-            config, PROJECT_ROOT, data_root, artifact_root, args.chunk_rows,
+            config, PROJECT_ROOT, data_root, artifact_root, runtime["chunk_rows"],
             Path(args.raw_root).resolve() if args.raw_root else None,
+            workers=runtime["workers"], start_method=runtime["start_method"],
         )
     if args.action == "smoke":
         result = smoke(config, data_root, artifact_root, args.gpu)

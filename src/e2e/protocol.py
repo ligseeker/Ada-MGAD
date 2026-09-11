@@ -92,7 +92,71 @@ def load_config(path: Path) -> Mapping[str, object]:
     rca = data["rca"]
     if int(rca["window_seconds"]) != 300 or int(rca["bin_seconds"]) != 15:
         raise ValueError("P5-I1 requires W300-B15")
+    preprocessing = data["preprocessing"]
+    cpu_budget = int(preprocessing["cpu_budget"])
+    if cpu_budget < 1:
+        raise ValueError("preprocessing CPU budget must be positive")
+    for key in ("ad_workers", "rca_index_workers", "rca_feature_workers"):
+        value = int(preprocessing[key])
+        if value < 1 or value > cpu_budget:
+            raise ValueError("{} must be within the preprocessing CPU budget".format(key))
+    if str(preprocessing["multiprocessing_start_method"]) not in ("spawn", "forkserver"):
+        raise ValueError("unsupported preprocessing multiprocessing start method")
     return data
+
+
+def preprocessing_runtime(
+    config: Mapping[str, object],
+    stage: str,
+    *,
+    workers: int = None,
+    chunk_rows: int = None,
+    case_chunk_size: int = None,
+    start_method: str = None,
+) -> Mapping[str, object]:
+    """Resolve bounded runtime controls without changing scientific protocol."""
+
+    keys = {
+        "ad": "ad_workers",
+        "rca_index": "rca_index_workers",
+        "rca_features": "rca_feature_workers",
+    }
+    if stage not in keys:
+        raise ValueError("unknown preprocessing stage: {}".format(stage))
+    frozen = config["preprocessing"]
+    resolved_workers = int(
+        frozen[keys[stage]] if workers is None else workers
+    )
+    cpu_budget = int(frozen["cpu_budget"])
+    if resolved_workers < 1 or resolved_workers > cpu_budget:
+        raise ValueError(
+            "preprocessing workers must be between 1 and configured CPU budget {}".format(
+                cpu_budget
+            )
+        )
+    resolved_chunk_rows = int(
+        frozen["chunk_rows"] if chunk_rows is None else chunk_rows
+    )
+    if resolved_chunk_rows < 1:
+        raise ValueError("preprocessing chunk rows must be positive")
+    resolved_start = str(
+        frozen["multiprocessing_start_method"] if start_method is None else start_method
+    )
+    if resolved_start not in ("spawn", "forkserver"):
+        raise ValueError("unsupported preprocessing multiprocessing start method")
+    resolved_case_chunk = int(
+        frozen["rca_case_chunk_size"] if case_chunk_size is None else case_chunk_size
+    )
+    if resolved_case_chunk < 1:
+        raise ValueError("RCA case chunk size must be positive")
+    return {
+        "workers": resolved_workers,
+        "chunk_rows": resolved_chunk_rows,
+        "case_chunk_size": resolved_case_chunk,
+        "start_method": resolved_start,
+        "cpu_budget": cpu_budget,
+        "memory_budget_gb": int(frozen["memory_budget_gb"]),
+    }
 
 
 def temporal_blocks(config: Mapping[str, object]) -> Tuple[TemporalBlock, ...]:
