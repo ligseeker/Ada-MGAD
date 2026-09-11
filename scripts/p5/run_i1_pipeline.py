@@ -4,13 +4,41 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
+import fcntl
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_LOCK_PATH = PROJECT_ROOT / "data/p5/i1/.pipeline.lock"
+
+
+@contextmanager
+def exclusive_pipeline_lock(path: Path = DEFAULT_LOCK_PATH):
+    """Fail fast when another container is writing the canonical run outputs."""
+
+    lock_path = Path(path)
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    handle = lock_path.open("a+")
+    try:
+        try:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as exc:
+            raise RuntimeError(
+                "another P5-I1 pipeline owns the shared output lock: {}".format(lock_path)
+            ) from exc
+        handle.seek(0)
+        handle.truncate()
+        handle.write("pid={}\n".format(os.getpid()))
+        handle.flush()
+        yield
+    finally:
+        fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+        handle.close()
 
 
 def parse_args():
@@ -22,6 +50,7 @@ def parse_args():
     parser.add_argument("--chunk-rows", default=None, type=int)
     parser.add_argument("--raw-workers", default=None, type=int)
     parser.add_argument("--feature-workers", default=None, type=int)
+    parser.add_argument("--event-workers", default=None, type=int)
     parser.add_argument("--case-chunk-size", default=None, type=int)
     parser.add_argument("--start-method", choices=("spawn", "forkserver"), default=None)
     parser.add_argument("--gpu", default=True, type=lambda value: value.lower() == "true")
@@ -75,7 +104,11 @@ def preprocess(args):
 def train_evaluate(args):
     common = ["--config", args.config]
     _run(["scripts/p5/run_i1_ad.py", "train"] + common + ["--gpu", str(args.gpu).lower()])
-    _run(["scripts/p5/run_i1_events.py", "evaluate"] + common)
+    event_workers = (
+        ["--workers", str(args.event_workers)] if args.event_workers is not None else []
+    )
+    event_method = ["--start-method", args.start_method] if args.start_method else []
+    _run(["scripts/p5/run_i1_events.py", "evaluate"] + common + event_workers + event_method)
     _run(["scripts/p5/run_i1_rca.py", "train-oracle"] + common)
     _run(["scripts/p5/run_i1_e2e.py", "evaluate"] + common)
     _run(["scripts/p5/finalize_i1_manifest.py"] + common)
@@ -85,13 +118,15 @@ def main():
     args = parse_args()
     if args.action == "smoke":
         smoke(args)
-    elif args.action == "preprocess":
-        preprocess(args)
-    elif args.action == "train-evaluate":
-        train_evaluate(args)
     else:
-        preprocess(args)
-        train_evaluate(args)
+        with exclusive_pipeline_lock():
+            if args.action == "preprocess":
+                preprocess(args)
+            elif args.action == "train-evaluate":
+                train_evaluate(args)
+            else:
+                preprocess(args)
+                train_evaluate(args)
     print(json.dumps({
         "status": "COMPLETE",
         "action": args.action,

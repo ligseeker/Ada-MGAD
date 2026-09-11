@@ -17,8 +17,11 @@ by :func:`select_validation_threshold`.
 
 from __future__ import annotations
 
+import bisect
+from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass
 import math
+import multiprocessing as mp
 from pathlib import Path
 from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
@@ -362,12 +365,158 @@ def evaluate_threshold(
     return episodes, matching, event_metrics(matching)
 
 
+def _event_confusion_counts(
+    timestamps: np.ndarray,
+    system_scores: np.ndarray,
+    gt_starts: np.ndarray,
+    threshold: float,
+    *,
+    grid_seconds: int,
+    tolerance_seconds: int,
+) -> Tuple[int, int, int]:
+    """Return event TP/FP/FN without materializing matching data frames.
+
+    This is the selection-only equivalent of ``construct_predicted_episodes``
+    followed by ``match_events``.  Ground-truth onsets enter an ordered active
+    set as predictions are scanned chronologically.  Only the nearest onset on
+    either side of an anchor can win the frozen distance/timestamp tie-break.
+    The full matching table is still constructed once after the winning
+    validation threshold has been selected.
+    """
+
+    timestamp_values = np.asarray(timestamps, dtype=np.int64)
+    score_values = np.asarray(system_scores, dtype=float)
+    onset_values = np.sort(np.asarray(gt_starts, dtype=np.int64), kind="stable")
+    if timestamp_values.shape != score_values.shape:
+        raise ValueError("timestamp and system-score arrays must have identical shape")
+    if not np.isfinite(score_values).all():
+        raise ValueError("system scores contain non-finite values")
+
+    positive = score_values >= float(threshold)
+    step_ms = int(grid_seconds) * 1000
+    starts = positive.copy()
+    if len(starts) > 1:
+        starts[1:] &= (~positive[:-1]) | (
+            (timestamp_values[1:] - timestamp_values[:-1]) != step_ms
+        )
+    anchors = timestamp_values[np.flatnonzero(starts)]
+
+    tolerance_ms = int(tolerance_seconds) * 1000
+    available: List[Tuple[int, int]] = []
+    next_gt = 0
+    matched = 0
+    for anchor_value in anchors:
+        anchor = int(anchor_value)
+        upper = anchor + tolerance_ms
+        while next_gt < len(onset_values) and int(onset_values[next_gt]) <= upper:
+            available.append((int(onset_values[next_gt]), next_gt))
+            next_gt += 1
+
+        expired = bisect.bisect_left(available, (anchor - tolerance_ms, -1))
+        if expired:
+            del available[:expired]
+        if not available:
+            continue
+
+        right = bisect.bisect_left(available, (anchor, -1))
+        candidate_positions: List[int] = []
+        if right < len(available):
+            candidate_positions.append(right)
+        if right:
+            predecessor_start = available[right - 1][0]
+            candidate_positions.append(
+                bisect.bisect_left(available, (predecessor_start, -1), 0, right)
+            )
+        selected = min(
+            candidate_positions,
+            key=lambda position: (
+                abs(available[position][0] - anchor),
+                available[position][0],
+                available[position][1],
+            ),
+        )
+        available.pop(selected)
+        matched += 1
+
+    predicted = int(len(anchors))
+    return matched, predicted - matched, int(len(onset_values)) - matched
+
+
+def _threshold_chunk(arguments):
+    """Evaluate an ordered threshold chunk in a worker process."""
+
+    (
+        indexed_candidates,
+        timestamps,
+        system_scores,
+        gt_starts,
+        grid_seconds,
+        tolerance_seconds,
+    ) = arguments
+    rows = []
+    for index, threshold in indexed_candidates:
+        tp, fp, fn = _event_confusion_counts(
+            timestamps,
+            system_scores,
+            gt_starts,
+            threshold,
+            grid_seconds=grid_seconds,
+            tolerance_seconds=tolerance_seconds,
+        )
+        denominator = 2 * tp + fp + fn
+        f1 = (2.0 * tp / denominator) if denominator else 0.0
+        rows.append((index, float(threshold), float(f1)))
+    return rows
+
+
+def _evaluate_threshold_candidates(
+    candidates: Sequence[float],
+    timestamps: np.ndarray,
+    system_scores: np.ndarray,
+    gt_starts: np.ndarray,
+    *,
+    grid_seconds: int,
+    tolerance_seconds: int,
+    workers: int,
+    start_method: str,
+) -> List[Tuple[int, float, float]]:
+    """Evaluate exact threshold candidates, optionally in deterministic chunks."""
+
+    indexed = list(enumerate(float(value) for value in candidates))
+    worker_count = max(1, min(int(workers), len(indexed)))
+    if worker_count == 1:
+        return _threshold_chunk((
+            indexed, timestamps, system_scores, gt_starts,
+            grid_seconds, tolerance_seconds,
+        ))
+
+    # Several chunks per worker balance candidate-dependent episode counts.
+    chunk_size = max(1, math.ceil(len(indexed) / (worker_count * 4)))
+    tasks = [
+        (
+            indexed[offset:offset + chunk_size],
+            timestamps,
+            system_scores,
+            gt_starts,
+            grid_seconds,
+            tolerance_seconds,
+        )
+        for offset in range(0, len(indexed), chunk_size)
+    ]
+    context = mp.get_context(str(start_method))
+    with ProcessPoolExecutor(max_workers=worker_count, mp_context=context) as pool:
+        chunks = list(pool.map(_threshold_chunk, tasks))
+    return sorted((row for chunk in chunks for row in chunk), key=lambda row: row[0])
+
+
 def select_validation_threshold(
     validation_predictions: pd.DataFrame,
     validation_ground_truth: pd.DataFrame,
     *,
     grid_seconds: int = 30,
     tolerance_seconds: int = 60,
+    workers: int = 1,
+    start_method: str = "spawn",
 ) -> ThresholdSelection:
     """Select a threshold by validation Event F1 only.
 
@@ -386,21 +535,30 @@ def select_validation_threshold(
         candidates.insert(0, float(np.nextafter(max(candidates), math.inf)))
     else:
         candidates = [float("inf")]
-    best_threshold = candidates[0]
-    best_metrics: Optional[Dict[str, object]] = None
-    for candidate in candidates:
-        episodes = construct_predicted_episodes(scores, candidate, grid_seconds=grid_seconds)
-        matching = match_events(episodes, validation_ground_truth, tolerance_seconds=tolerance_seconds)
-        metrics = event_metrics(matching)
-        if best_metrics is None or float(metrics["event_f1"]) > float(best_metrics["event_f1"]):
-            best_threshold = float(candidate)
-            best_metrics = metrics
-    if best_metrics is None:
-        best_metrics = event_metrics(match_events(
-            construct_predicted_episodes(scores, best_threshold, grid_seconds=grid_seconds),
-            validation_ground_truth,
-            tolerance_seconds=tolerance_seconds,
-        ))
+    gt = _as_frame(validation_ground_truth)
+    if "start_ms" not in gt:
+        raise ValueError("event registry is missing columns: ['start_ms']")
+    evaluated = _evaluate_threshold_candidates(
+        candidates,
+        scores["prediction_timestamp"].to_numpy(dtype=np.int64),
+        scores["system_score"].to_numpy(dtype=float),
+        gt["start_ms"].to_numpy(dtype=np.int64),
+        grid_seconds=grid_seconds,
+        tolerance_seconds=tolerance_seconds,
+        workers=workers,
+        start_method=start_method,
+    )
+    # Candidates are descending.  Strict improvement preserves the frozen
+    # highest-threshold tie-break.
+    best_index, best_threshold, _ = max(evaluated, key=lambda row: (row[2], -row[0]))
+    del best_index
+    _, matching, best_metrics = evaluate_threshold(
+        validation_predictions,
+        validation_ground_truth,
+        best_threshold,
+        grid_seconds=grid_seconds,
+        tolerance_seconds=tolerance_seconds,
+    )
     return ThresholdSelection(
         threshold=float(best_threshold),
         validation_metrics=best_metrics,
@@ -416,6 +574,8 @@ def run_event_detection(
     *,
     grid_seconds: int = 30,
     tolerance_seconds: int = 60,
+    threshold_workers: int = 1,
+    threshold_start_method: str = "spawn",
 ) -> Mapping[str, object]:
     """Run validation threshold selection and test event evaluation."""
 
@@ -426,6 +586,8 @@ def run_event_detection(
         validation_gt,
         grid_seconds=grid_seconds,
         tolerance_seconds=tolerance_seconds,
+        workers=threshold_workers,
+        start_method=threshold_start_method,
     )
     val_episodes, val_matching, val_metrics = evaluate_threshold(
         validation_predictions,

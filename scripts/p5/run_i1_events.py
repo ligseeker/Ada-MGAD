@@ -50,6 +50,14 @@ def parse_args():
         "--registry", default=None,
         help="supported injection registry; defaults to the path bound by config",
     )
+    parser.add_argument(
+        "--workers", default=1, type=int,
+        help="Processes for the exact validation threshold sweep (default: 1).",
+    )
+    parser.add_argument(
+        "--start-method", choices=("spawn", "forkserver"), default="spawn",
+        help="Multiprocessing method for the threshold sweep.",
+    )
     return parser.parse_args()
 
 
@@ -154,7 +162,10 @@ def _write_outputs(result, artifact_root: Path, metadata: Dict[str, object]):
     return metrics
 
 
-def evaluate(config, artifact_root: Path, validation_path: Path, test_path: Path, registry_path: Path):
+def evaluate(
+    config, artifact_root: Path, validation_path: Path, test_path: Path,
+    registry_path: Path, workers: int = 1, start_method: str = "spawn",
+):
     validation = load_prediction_table(validation_path)
     test = load_prediction_table(test_path)
     registry = load_registry(config, PROJECT_ROOT) if registry_path is None else pd.read_csv(registry_path)
@@ -165,6 +176,8 @@ def evaluate(config, artifact_root: Path, validation_path: Path, test_path: Path
         temporal_blocks(config),
         grid_seconds=int(config["ad"]["grid_seconds"]),
         tolerance_seconds=int(config["event_trigger"]["matching_tolerance_seconds"]),
+        threshold_workers=int(workers),
+        threshold_start_method=str(start_method),
     )
     metrics = _write_outputs(result, artifact_root, {
         "git_commit": git_head(),
@@ -180,6 +193,11 @@ def evaluate(config, artifact_root: Path, validation_path: Path, test_path: Path
         "registry_event_count": int(len(registry)),
         "random_seed": int(config["random_seed"]),
         "test_not_used_for_threshold_selection": True,
+        "threshold_execution": {
+            "workers": int(workers),
+            "start_method": str(start_method),
+            "selection_semantics": "exact all-unique-score sweep",
+        },
     })
     return metrics
 
@@ -230,7 +248,10 @@ def main():
         validation_path = Path(args.validation_predictions or (artifact_root / "ad_validation_predictions.csv"))
         test_path = Path(args.test_predictions or (artifact_root / "ad_test_predictions.csv"))
         registry_path = Path(args.registry).resolve() if args.registry else None
-        result = evaluate(config, artifact_root, validation_path.resolve(), test_path.resolve(), registry_path)
+        result = evaluate(
+            config, artifact_root, validation_path.resolve(), test_path.resolve(),
+            registry_path, workers=args.workers, start_method=args.start_method,
+        )
     print(json.dumps(result, sort_keys=True))
 
 

@@ -297,7 +297,8 @@ python scripts/p5/run_i1_ad.py preprocess \
 # Redirected training automatically disables batch-level tqdm updates.  The
 # environment variable is an explicit, reproducible override for a quiet log.
 P5_AD_BATCH_PROGRESS=0 python -u scripts/p5/run_i1_ad.py train --gpu true
-python scripts/p5/run_i1_events.py evaluate
+python scripts/p5/run_i1_events.py evaluate \
+  --workers 24 --start-method spawn
 
 python scripts/p5/run_i1_rca_features.py index \
   --raw-root /home/zhangll24/RCA_project/datasets/GAIA/MicroSS \
@@ -318,7 +319,7 @@ to a file in zsh, use:
 mkdir -p logs/p5/i1
 LOG="logs/p5/i1/train-evaluate_$(date +%Y%m%d_%H%M%S).log"
 P5_AD_BATCH_PROGRESS=0 python -u scripts/p5/run_i1_pipeline.py train-evaluate \
-  --gpu true 2>&1 | tee "$LOG"
+  --gpu true --event-workers 24 --start-method spawn 2>&1 | tee "$LOG"
 TRAIN_RC=${pipestatus[1]}
 echo "exit_code=${TRAIN_RC}" | tee -a "$LOG"
 exit "$TRAIN_RC"
@@ -327,6 +328,17 @@ exit "$TRAIN_RC"
 `P5_AD_BATCH_PROGRESS=1` restores the interactive batch progress bar.  The
 setting only changes logging; it does not change model computation or
 checkpoint selection.
+
+The event workers parallelize the exact all-unique-score Validation threshold
+sweep.  They do not subsample thresholds or change the highest-threshold
+tie-break.  The selected threshold is re-evaluated through the full episode and
+matching path before artifacts are written.
+
+Mutating pipeline actions acquire `data/p5/i1/.pipeline.lock`.  A second
+container pointed at the same checkout therefore fails fast instead of
+overwriting the shared checkpoint and artifact paths.  Parallel raw/feature
+workers within one pipeline remain supported; two independent training
+pipelines must not share output paths.
 
 If the canonical filesystem stalls, copy `MicroSS` to responsive local storage
 without changing names or byte sizes and pass that path with `--raw-root`; both AD

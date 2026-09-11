@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 from src.e2e.event_detection import (
+    _event_confusion_counts,
     aggregate_system_scores,
     construct_predicted_episodes,
     event_metrics,
@@ -99,6 +100,33 @@ class MatchingTests(unittest.TestCase):
 
 
 class ThresholdTests(unittest.TestCase):
+    def test_fast_confusion_counts_match_materialized_protocol(self):
+        timestamps = np.asarray([0, 30_000, 60_000, 120_000, 150_000, 180_000])
+        raw_scores = [0.2, 0.9, 0.8, 0.7, 0.1, 0.85]
+        predictions = prediction_rows(timestamps, raw_scores, split="validation")
+        ground_truth = gt_rows([
+            {"case_id": "a", "source_index": 2, "service": "dbservice1", "fault_type": "login failure", "start_ms": 30_000, "end_ms": 60_000, "split": "validation"},
+            {"case_id": "b", "source_index": 1, "service": "dbservice2", "fault_type": "login failure", "start_ms": 90_000, "end_ms": 120_000, "split": "validation"},
+            {"case_id": "c", "source_index": 0, "service": "webservice1", "fault_type": "cpu anomalies", "start_ms": 240_000, "end_ms": 270_000, "split": "validation"},
+        ])
+        aggregated = aggregate_system_scores(predictions)
+        for threshold in [1.0, 0.9, 0.85, 0.7, 0.2, 0.1]:
+            episodes = construct_predicted_episodes(aggregated, threshold)
+            materialized = event_metrics(match_events(episodes, ground_truth))
+            counts = _event_confusion_counts(
+                aggregated["prediction_timestamp"].to_numpy(),
+                aggregated["system_score"].to_numpy(),
+                ground_truth["start_ms"].to_numpy(),
+                threshold,
+                grid_seconds=30,
+                tolerance_seconds=60,
+            )
+            self.assertEqual(counts, (
+                materialized["true_positive_events"],
+                materialized["false_positive_events"],
+                materialized["false_negative_events"],
+            ))
+
     def test_threshold_is_selected_from_validation_only(self):
         timestamps = np.arange(5, dtype=np.int64) * 30_000
         validation = prediction_rows(timestamps, [0.1, 0.8, 0.8, 0.1, 0.2], split="validation")
@@ -108,6 +136,21 @@ class ThresholdTests(unittest.TestCase):
         selection = select_validation_threshold(validation, validation_gt)
         self.assertAlmostEqual(selection.threshold, 0.8)
         self.assertEqual(selection.validation_metrics["event_f1"], 1.0)
+
+    def test_parallel_threshold_selection_matches_single_process(self):
+        timestamps = np.arange(8, dtype=np.int64) * 30_000
+        validation = prediction_rows(
+            timestamps, [0.1, 0.8, 0.8, 0.2, 0.9, 0.1, 0.7, 0.1],
+            split="validation",
+        )
+        validation_gt = gt_rows([
+            {"case_id": "v0", "source_index": 0, "service": "dbservice1", "fault_type": "login failure", "start_ms": 30_000, "end_ms": 60_000, "split": "validation"},
+            {"case_id": "v1", "source_index": 1, "service": "dbservice2", "fault_type": "memory anomalies", "start_ms": 120_000, "end_ms": 150_000, "split": "validation"},
+        ])
+        single = select_validation_threshold(validation, validation_gt, workers=1)
+        parallel = select_validation_threshold(validation, validation_gt, workers=2)
+        self.assertEqual(parallel.threshold, single.threshold)
+        self.assertEqual(parallel.validation_metrics, single.validation_metrics)
 
     def test_run_uses_split_gt_and_never_test_scores_for_threshold(self):
         timestamps = np.arange(5, dtype=np.int64) * 30_000
