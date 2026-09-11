@@ -1,8 +1,10 @@
 {
   "formal_artifacts": {
     "ad_data_manifest.json": {
+      "bytes": 120624,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/ad_data_manifest.json",
-      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+      "sha256": "9670a2229ae3440ce9d45e9a7599556eff64c65da554fb303992d6d334f7809b",
+      "status": "COMPLETE"
     },
     "ad_event_predictions.csv": {
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/ad_event_predictions.csv",
@@ -39,13 +41,13 @@
     "event_registry_manifest.json": {
       "bytes": 1828,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/event_registry_manifest.json",
-      "sha256": "32dbce987d572ca9e7a60dab49609898068a2cfc03c5d98f46ce892ddb06c193",
+      "sha256": "a7d05ea8813bba9a467c296646dfa30d9ee28a8354ce99d90ab0c77e7a1b1f19",
       "status": "COMPLETE"
     },
     "protocol_manifest.json": {
       "bytes": 5908,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/protocol_manifest.json",
-      "sha256": "9a9397c98ecf640d89c2dc68215a7ec9a6f7eb37874b14325f3cb535ebfb32aa",
+      "sha256": "ccebbecdbf1d3a2946f92d9d1eaa7ca743b8cbeb034ad34c3a67099a200da98f",
       "status": "COMPLETE"
     },
     "rca_detected_predictions.csv": {
@@ -53,12 +55,16 @@
       "status": "PENDING_MANUAL_FULL_GAIA_RUN"
     },
     "rca_feature_health.json": {
+      "bytes": 1804,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_feature_health.json",
-      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+      "sha256": "861170f7999e0dd41443ec78835eb3201af4a6f5490ae6e90102812613c2a4ca",
+      "status": "COMPLETE"
     },
     "rca_feature_manifest.json": {
+      "bytes": 2502,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_feature_manifest.json",
-      "status": "PENDING_MANUAL_FULL_GAIA_RUN"
+      "sha256": "9770928d609ee92eda0847fa94a4399a518951f92757c7b92d9932173df0e4ca",
+      "status": "COMPLETE"
     },
     "rca_metrics.json": {
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_metrics.json",
@@ -79,11 +85,11 @@
     "split_manifest.json": {
       "bytes": 4989,
       "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/split_manifest.json",
-      "sha256": "c5dc209b9a41987558d9e7b354371bee1ec79bef9a2826916e0574aff59c631d",
+      "sha256": "dffde06404f131bd486bd3668ceec56e1153ee57d2a15eb454e59df60402a47b",
       "status": "COMPLETE"
     }
   },
-  "generated_at_utc": "2026-09-11T04:43:28.633350+00:00",
+  "generated_at_utc": "2026-09-11T09:59:55.824638+00:00",
   "manual_execution": {
     "documentation": "docs/P5_GAIA_PARALLEL_PREPROCESSING_V1.md",
     "note": "run preprocessing sequentially by modality; prefer responsive local storage and preserve the audited GAIA relative-path/byte-size layout",
@@ -92,15 +98,12 @@
     "train_evaluate_command": "python scripts/p5/run_i1_pipeline.py train-evaluate --gpu true"
   },
   "pending_formal_artifacts": [
-    "ad_data_manifest.json",
     "ad_training_summary.json",
     "ad_validation_predictions.csv",
     "ad_test_predictions.csv",
     "ad_event_predictions.csv",
     "event_matching.csv",
     "event_detection_metrics.json",
-    "rca_feature_health.json",
-    "rca_feature_manifest.json",
     "rca_train_manifest.json",
     "rca_oracle_predictions.csv",
     "rca_detected_predictions.csv",
@@ -122,7 +125,7 @@
   },
   "repository": {
     "branch": "e2e",
-    "implementation_commit_before_manifest": "d490e8c88431875c2093e90cc1e814c52da3f272",
+    "implementation_commit_before_manifest": "a2f6e6c12f610c661807283ee9d64db6878aad7a",
     "starting_commit": "cbe57512b6bd1ce772ab42d9b8ec0b292c3cb91b"
   },
   "result_scope": "protocol manifests plus non-formal synthetic smoke validation only",
@@ -175,7 +178,7 @@
   "status": "IMPLEMENTATION_READY_FORMAL_FULL_DATA_PENDING_MANUAL_RUN",
   "validation": {
     "formal_metrics_available": false,
-    "pytest": "51 passed; 3 changed CLI help checks passed; combined smoke passed; parallel fixture suite passed",
+    "pytest": "FULL_SUITE_PASS; preprocessing integrity PASS; raw-index arrays 2408/2408 checksums verified",
     "smoke_artifacts_complete": true
   }
 }

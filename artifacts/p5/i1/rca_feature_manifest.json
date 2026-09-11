@@ -1,0 +1,63 @@
+{
+  "case_registry_sha256": "7320abfbcd79757eb4a640fb5b84373388a3cd2329adc444a03fdb68cf0c0560",
+  "config_sha256": "9191c3bd68941ce14beff11a314a20a2a9a5b2f23244f63e56849327b16667af",
+  "difference_from_canonical": "temporal constants parameterized to W300-B15 only",
+  "feature_variant": "z2",
+  "files": {
+    "anchors_ms": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/rca_features/anchors_ms.npy",
+      "sha256": "a887e8d6582c571952bdaf188d4ba13a4cb098ec0432606b75968ee09b2f55a2"
+    },
+    "case_ids": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/rca_features/case_ids.npy",
+      "sha256": "5aa0cca9a80b8af77da27636eeeb34cc8aeef40f984c5183b8c8b112cd381e4f"
+    },
+    "features": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/rca_features/z2_features.npy",
+      "sha256": "b1a159106b08c3a7cf247cb789f06ce77d37371c8a1127584294501d9a928a8c"
+    },
+    "splits": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/rca_features/splits.npy",
+      "sha256": "cbd3ba9db754285df5cc08d76e0057b1eb4e189ac7eeece625dc7af50d9ed5a9"
+    }
+  },
+  "generated_at_utc": "2026-09-11T06:31:16.988734+00:00",
+  "git_commit": "ceac04b3f40c4c515d352a8b780e63e88de660a2",
+  "health_artifact": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/artifacts/p5/i1/rca_feature_health.json",
+  "label_firewall": "feature construction received case_id/start_ms/split only; service and fault labels remain in the separate registry",
+  "parallel_execution": {
+    "effective_workers": 24,
+    "phase_wall_seconds": {
+      "case_shards": 635.953138677869,
+      "deterministic_merge": 0.3622014340944588,
+      "total": 636.3153401119635
+    },
+    "requested_workers": 24,
+    "result_order": "submitted task order",
+    "start_method": "spawn",
+    "task_count": 127,
+    "worker_native_threads": 1
+  },
+  "prediction_visible_case_inputs_sha256": "5467d1c930038113ce0a17545b4f9a1d24443bd3110c2f7cad5b2cdcd4b5c6eb",
+  "random_seed": 42,
+  "schema_version": "p5_i1_rca_feature_manifest_v1",
+  "shape": [
+    16198,
+    10,
+    68
+  ],
+  "shard_cache": {
+    "cache_hits": 0,
+    "policy": "binding and checksum validated; shard JSON is completion marker",
+    "run_key": "377372f9db33e5b83680",
+    "task_count": 127
+  },
+  "source_commit": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
+  "source_files": [
+    "docs/REPRESENTATION_FREEZE.md",
+    "src/rca/features.py",
+    "src/rca/final_method.py",
+    "src/rca/p4.py"
+  ],
+  "status": "FORMAL"
+}

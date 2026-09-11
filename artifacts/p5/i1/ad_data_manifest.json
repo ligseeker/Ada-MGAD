@@ -1,0 +1,3720 @@
+{
+  "canonical_raw_root": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS",
+  "config_sha256": "9191c3bd68941ce14beff11a314a20a2a9a5b2f23244f63e56849327b16667af",
+  "dimensions": {
+    "log_len": 6,
+    "raw_edge": 4,
+    "raw_node": 63
+  },
+  "event_registry_sha256": "b95556a0ce7e274c16d52bb55aa5d8dc202f8878305744fc786befafc23ba4b5",
+  "excluded_label_sources": [
+    "normal",
+    "ERROR",
+    "normal memory freed label",
+    "unsupported or unknown"
+  ],
+  "execution_raw_layout": {
+    "logs": {
+      "bytes": 18445461523,
+      "digest_scope": "sha256(sorted relative_path + NUL + byte_size)",
+      "files": 10,
+      "layout_sha256": "ee10c7afacf40bb9eddb00a3cdfa2d99ce73d531654066b27595e579663c409b"
+    },
+    "metrics": {
+      "bytes": 4790077103,
+      "digest_scope": "sha256(sorted relative_path + NUL + byte_size)",
+      "files": 6640,
+      "layout_sha256": "38cabf0c6582a900a5ae80489eb0af392dedc00b4383ab7c4fabe1463eefd556"
+    },
+    "traces": {
+      "bytes": 8343966340,
+      "digest_scope": "sha256(sorted relative_path + NUL + byte_size)",
+      "files": 10,
+      "layout_sha256": "a12ae950f613c8f119742e7d1d149b56407cd76437020c4d31736e356e1fd08d"
+    }
+  },
+  "execution_raw_root": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS",
+  "generated_at_utc": "2026-09-11T06:16:28.487870+00:00",
+  "git_commit": "ceac04b3f40c4c515d352a8b780e63e88de660a2",
+  "graph": {
+    "edges": 58,
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/graph.npy",
+    "sha256": "04cf2a6bdbd4a2137cafe8140794750875c690b210f1d1f8347a14a34804a809",
+    "shape": [
+      10,
+      10
+    ]
+  },
+  "grid_seconds": 30,
+  "label_source": "frozen 16,200 supported injection registry only",
+  "logs": {
+    "adapter_compromise": "numeric level counts plus total count; no full-month Drain3 template learning",
+    "feature_names": [
+      "level_INFO",
+      "level_WARNING",
+      "level_ERROR",
+      "level_DEBUG",
+      "level_UNKNOWN",
+      "log_total"
+    ],
+    "invalid_message_prefix_timestamps": 294,
+    "normalization_fit_split": "train",
+    "parallel_execution": {
+      "effective_workers": 8,
+      "requested_workers": 8,
+      "result_order": "submitted task order",
+      "start_method": "spawn",
+      "task_count": 10,
+      "worker_native_threads": 1
+    },
+    "raw_rows_scanned": 87974871,
+    "raw_text_model_input": false,
+    "retained_protocol_rows": 87974508,
+    "timestamp_source": "message prefix YYYY-MM-DD HH:MM:SS,mmm",
+    "train_maxima": [
+      272.0,
+      36.0,
+      70.0,
+      1.0,
+      1.0,
+      339.0
+    ]
+  },
+  "metric": {
+    "exclusions": [],
+    "feature_names": [
+      "docker_cpu_core_X_norm_pct",
+      "docker_cpu_core_X_pct",
+      "docker_cpu_core_X_ticks",
+      "docker_cpu_kernel_norm_pct",
+      "docker_cpu_kernel_pct",
+      "docker_cpu_kernel_ticks",
+      "docker_cpu_system_ticks",
+      "docker_cpu_total_norm_pct",
+      "docker_cpu_total_pct",
+      "docker_cpu_user_norm_pct",
+      "docker_cpu_user_pct",
+      "docker_cpu_user_ticks",
+      "docker_diskio_read_bytes",
+      "docker_diskio_read_ops",
+      "docker_diskio_read_service_time",
+      "docker_diskio_read_wait_time",
+      "docker_diskio_summary_bytes",
+      "docker_diskio_summary_ops",
+      "docker_diskio_summary_service_time",
+      "docker_diskio_summary_wait_time",
+      "docker_diskio_write_bytes",
+      "docker_diskio_write_ops",
+      "docker_diskio_write_service_time",
+      "docker_diskio_write_wait_time",
+      "docker_memory_rss_pct",
+      "docker_memory_rss_total",
+      "docker_memory_stats_active_anon",
+      "docker_memory_stats_active_file",
+      "docker_memory_stats_cache",
+      "docker_memory_stats_dirty",
+      "docker_memory_stats_inactive_anon",
+      "docker_memory_stats_inactive_file",
+      "docker_memory_stats_mapped_file",
+      "docker_memory_stats_pgfault",
+      "docker_memory_stats_pgmajfault",
+      "docker_memory_stats_pgpgin",
+      "docker_memory_stats_pgpgout",
+      "docker_memory_stats_rss",
+      "docker_memory_stats_rss_huge",
+      "docker_memory_stats_total_active_anon",
+      "docker_memory_stats_total_active_file",
+      "docker_memory_stats_total_cache",
+      "docker_memory_stats_total_dirty",
+      "docker_memory_stats_total_inactive_anon",
+      "docker_memory_stats_total_inactive_file",
+      "docker_memory_stats_total_mapped_file",
+      "docker_memory_stats_total_pgfault",
+      "docker_memory_stats_total_pgmajfault",
+      "docker_memory_stats_total_pgpgin",
+      "docker_memory_stats_total_pgpgout",
+      "docker_memory_stats_total_rss",
+      "docker_memory_stats_total_rss_huge",
+      "docker_memory_usage_max",
+      "docker_memory_usage_pct",
+      "docker_memory_usage_total",
+      "docker_network_in_bytes",
+      "docker_network_in_packets",
+      "docker_network_inbound_bytes",
+      "docker_network_inbound_packets",
+      "docker_network_out_bytes",
+      "docker_network_out_packets",
+      "docker_network_outbound_bytes",
+      "docker_network_outbound_packets"
+    ],
+    "features_per_node_after_train_quality": 63,
+    "globally_excluded_features": [],
+    "normalization": {
+      "dbservice1::docker_cpu_core_X_norm_pct": {
+        "scale": 0.030600839665339663,
+        "train_max": 0.030604582279920578,
+        "train_min": 3.7426145809149602e-06
+      },
+      "dbservice1::docker_cpu_core_X_pct": {
+        "scale": 0.12240335866135865,
+        "train_max": 0.12241832911968231,
+        "train_min": 1.4970458323659841e-05
+      },
+      "dbservice1::docker_cpu_core_X_ticks": {
+        "scale": 90462395739136.0,
+        "train_max": 90476120113152.0,
+        "train_min": 13724374016.0
+      },
+      "dbservice1::docker_cpu_kernel_norm_pct": {
+        "scale": 0.09382715821266174,
+        "train_max": 0.09382715821266174,
+        "train_min": 0.0
+      },
+      "dbservice1::docker_cpu_kernel_pct": {
+        "scale": 0.375308632850647,
+        "train_max": 0.375308632850647,
+        "train_min": 0.0
+      },
+      "dbservice1::docker_cpu_kernel_ticks": {
+        "scale": 34399889856512.0,
+        "train_max": 34424399855616.0,
+        "train_min": 24509999104.0
+      },
+      "dbservice1::docker_cpu_system_ticks": {
+        "scale": 6293354878861312.0,
+        "train_max": 6672920499716096.0,
+        "train_min": 379565620854784.0
+      },
+      "dbservice1::docker_cpu_total_norm_pct": {
+        "scale": 0.7145867958242889,
+        "train_max": 0.7146766185760498,
+        "train_min": 8.982275176094845e-05
+      },
+      "dbservice1::docker_cpu_total_pct": {
+        "scale": 2.8583471832971554,
+        "train_max": 2.858706474304199,
+        "train_min": 0.0003592910070437938
+      },
+      "dbservice1::docker_cpu_user_norm_pct": {
+        "scale": 0.708469033241272,
+        "train_max": 0.708469033241272,
+        "train_min": 0.0
+      },
+      "dbservice1::docker_cpu_user_pct": {
+        "scale": 2.833876132965088,
+        "train_max": 2.833876132965088,
+        "train_min": 0.0
+      },
+      "dbservice1::docker_cpu_user_ticks": {
+        "scale": 2138092818497536.0,
+        "train_max": 2138390128492544.0,
+        "train_min": 297309995008.0
+      },
+      "dbservice1::docker_diskio_read_bytes": {
+        "scale": 2488016896.0,
+        "train_max": 2551242752.0,
+        "train_min": 63225856.0
+      },
+      "dbservice1::docker_diskio_read_ops": {
+        "scale": 269590.0,
+        "train_max": 271619.0,
+        "train_min": 2029.0
+      },
+      "dbservice1::docker_diskio_read_service_time": {
+        "scale": 246901978112.0,
+        "train_max": 252681338880.0,
+        "train_min": 5779360768.0
+      },
+      "dbservice1::docker_diskio_read_wait_time": {
+        "scale": 306210046976.0,
+        "train_max": 313914228736.0,
+        "train_min": 7704181760.0
+      },
+      "dbservice1::docker_diskio_summary_bytes": {
+        "scale": 2725154816.0,
+        "train_max": 2789384192.0,
+        "train_min": 64229376.0
+      },
+      "dbservice1::docker_diskio_summary_ops": {
+        "scale": 327473.0,
+        "train_max": 329747.0,
+        "train_min": 2274.0
+      },
+      "dbservice1::docker_diskio_summary_service_time": {
+        "scale": 249809128960.0,
+        "train_max": 255601704960.0,
+        "train_min": 5792576000.0
+      },
+      "dbservice1::docker_diskio_summary_wait_time": {
+        "scale": 3656976434176.0,
+        "train_max": 3664813752320.0,
+        "train_min": 7837318144.0
+      },
+      "dbservice1::docker_diskio_write_bytes": {
+        "scale": 237137920.0,
+        "train_max": 238141440.0,
+        "train_min": 1003520.0
+      },
+      "dbservice1::docker_diskio_write_ops": {
+        "scale": 57883.0,
+        "train_max": 58128.0,
+        "train_min": 245.0
+      },
+      "dbservice1::docker_diskio_write_service_time": {
+        "scale": 2907140763.0,
+        "train_max": 2920355584.0,
+        "train_min": 13214821.0
+      },
+      "dbservice1::docker_diskio_write_wait_time": {
+        "scale": 3350766321552.0,
+        "train_max": 3350899458048.0,
+        "train_min": 133136496.0
+      },
+      "dbservice1::docker_memory_rss_pct": {
+        "scale": 0.6331166308373213,
+        "train_max": 0.6617226600646973,
+        "train_min": 0.028606029227375984
+      },
+      "dbservice1::docker_memory_rss_total": {
+        "scale": 2610376704.0,
+        "train_max": 2728321024.0,
+        "train_min": 117944320.0
+      },
+      "dbservice1::docker_memory_stats_active_anon": {
+        "scale": 2477203456.0,
+        "train_max": 2536095744.0,
+        "train_min": 58892288.0
+      },
+      "dbservice1::docker_memory_stats_active_file": {
+        "scale": 71307264.0,
+        "train_max": 72957952.0,
+        "train_min": 1650688.0
+      },
+      "dbservice1::docker_memory_stats_cache": {
+        "scale": 138711040.0,
+        "train_max": 140718080.0,
+        "train_min": 2007040.0
+      },
+      "dbservice1::docker_memory_stats_dirty": {
+        "scale": 270336.0,
+        "train_max": 270336.0,
+        "train_min": 0.0
+      },
+      "dbservice1::docker_memory_stats_inactive_anon": {
+        "scale": 521093120.0,
+        "train_max": 522477568.0,
+        "train_min": 1384448.0
+      },
+      "dbservice1::docker_memory_stats_inactive_file": {
+        "scale": 97660928.0,
+        "train_max": 98082816.0,
+        "train_min": 421888.0
+      },
+      "dbservice1::docker_memory_stats_mapped_file": {
+        "scale": 29331456.0,
+        "train_max": 31223808.0,
+        "train_min": 1892352.0
+      },
+      "dbservice1::docker_memory_stats_pgfault": {
+        "scale": 15594247498.0,
+        "train_max": 15595193344.0,
+        "train_min": 945846.0
+      },
+      "dbservice1::docker_memory_stats_pgmajfault": {
+        "scale": 89694.0,
+        "train_max": 90222.0,
+        "train_min": 528.0
+      },
+      "dbservice1::docker_memory_stats_pgpgin": {
+        "scale": 15594545612.0,
+        "train_max": 15595489280.0,
+        "train_min": 943668.0
+      },
+      "dbservice1::docker_memory_stats_pgpgout": {
+        "scale": 15594486904.0,
+        "train_max": 15595121664.0,
+        "train_min": 634760.0
+      },
+      "dbservice1::docker_memory_stats_rss": {
+        "scale": 2610376704.0,
+        "train_max": 2728321024.0,
+        "train_min": 117944320.0
+      },
+      "dbservice1::docker_memory_stats_rss_huge": {
+        "scale": 48234496.0,
+        "train_max": 48234496.0,
+        "train_min": 0.0
+      },
+      "dbservice1::docker_memory_stats_total_active_anon": {
+        "scale": 2477203456.0,
+        "train_max": 2536095744.0,
+        "train_min": 58892288.0
+      },
+      "dbservice1::docker_memory_stats_total_active_file": {
+        "scale": 71307264.0,
+        "train_max": 72957952.0,
+        "train_min": 1650688.0
+      },
+      "dbservice1::docker_memory_stats_total_cache": {
+        "scale": 138711040.0,
+        "train_max": 140718080.0,
+        "train_min": 2007040.0
+      },
+      "dbservice1::docker_memory_stats_total_dirty": {
+        "scale": 270336.0,
+        "train_max": 270336.0,
+        "train_min": 0.0
+      },
+      "dbservice1::docker_memory_stats_total_inactive_anon": {
+        "scale": 521093120.0,
+        "train_max": 522477568.0,
+        "train_min": 1384448.0
+      },
+      "dbservice1::docker_memory_stats_total_inactive_file": {
+        "scale": 97660928.0,
+        "train_max": 98082816.0,
+        "train_min": 421888.0
+      },
+      "dbservice1::docker_memory_stats_total_mapped_file": {
+        "scale": 29331456.0,
+        "train_max": 31223808.0,
+        "train_min": 1892352.0
+      },
+      "dbservice1::docker_memory_stats_total_pgfault": {
+        "scale": 15594247498.0,
+        "train_max": 15595193344.0,
+        "train_min": 945846.0
+      },
+      "dbservice1::docker_memory_stats_total_pgmajfault": {
+        "scale": 89694.0,
+        "train_max": 90222.0,
+        "train_min": 528.0
+      },
+      "dbservice1::docker_memory_stats_total_pgpgin": {
+        "scale": 15594545612.0,
+        "train_max": 15595489280.0,
+        "train_min": 943668.0
+      },
+      "dbservice1::docker_memory_stats_total_pgpgout": {
+        "scale": 15594486904.0,
+        "train_max": 15595121664.0,
+        "train_min": 634760.0
+      },
+      "dbservice1::docker_memory_stats_total_rss": {
+        "scale": 2610376704.0,
+        "train_max": 2728321024.0,
+        "train_min": 117944320.0
+      },
+      "dbservice1::docker_memory_stats_total_rss_huge": {
+        "scale": 48234496.0,
+        "train_max": 48234496.0,
+        "train_min": 0.0
+      },
+      "dbservice1::docker_memory_usage_max": {
+        "scale": 395001856.0,
+        "train_max": 2757771264.0,
+        "train_min": 2362769408.0
+      },
+      "dbservice1::docker_memory_usage_pct": {
+        "scale": 0.6348243691027164,
+        "train_max": 0.6669223308563232,
+        "train_min": 0.032097961753606796
+      },
+      "dbservice1::docker_memory_usage_total": {
+        "scale": 2617417728.0,
+        "train_max": 2749759488.0,
+        "train_min": 132341760.0
+      },
+      "dbservice1::docker_network_in_bytes": {
+        "scale": 37246.3515625,
+        "train_max": 37246.3515625,
+        "train_min": 0.0
+      },
+      "dbservice1::docker_network_in_packets": {
+        "scale": 527.7752075195312,
+        "train_max": 527.7752075195312,
+        "train_min": 0.0
+      },
+      "dbservice1::docker_network_inbound_bytes": {
+        "scale": 3822945712.0,
+        "train_max": 3855007744.0,
+        "train_min": 32062032.0
+      },
+      "dbservice1::docker_network_inbound_packets": {
+        "scale": 26664878.0,
+        "train_max": 26890564.0,
+        "train_min": 225686.0
+      },
+      "dbservice1::docker_network_out_bytes": {
+        "scale": 1473796.25,
+        "train_max": 1473796.25,
+        "train_min": 0.0
+      },
+      "dbservice1::docker_network_out_packets": {
+        "scale": 573.6162109375,
+        "train_max": 573.6162109375,
+        "train_min": 0.0
+      },
+      "dbservice1::docker_network_outbound_bytes": {
+        "scale": 4496806510.0,
+        "train_max": 4524323840.0,
+        "train_min": 27517330.0
+      },
+      "dbservice1::docker_network_outbound_packets": {
+        "scale": 31108626.0,
+        "train_max": 31371834.0,
+        "train_min": 263208.0
+      },
+      "dbservice2::docker_cpu_core_X_norm_pct": {
+        "scale": 0.012025479374528913,
+        "train_max": 0.012027386575937271,
+        "train_min": 1.9072014083576505e-06
+      },
+      "dbservice2::docker_cpu_core_X_pct": {
+        "scale": 0.09620383499623131,
+        "train_max": 0.09621909260749817,
+        "train_min": 1.5257611266861204e-05
+      },
+      "dbservice2::docker_cpu_core_X_ticks": {
+        "scale": 114382254366720.0,
+        "train_max": 114393517916160.0,
+        "train_min": 11263549440.0
+      },
+      "dbservice2::docker_cpu_kernel_norm_pct": {
+        "scale": 0.06585365533828735,
+        "train_max": 0.06585365533828735,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_cpu_kernel_pct": {
+        "scale": 0.5268292427062988,
+        "train_max": 0.5268292427062988,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_cpu_kernel_ticks": {
+        "scale": 23781099626496.0,
+        "train_max": 23810239627264.0,
+        "train_min": 29140000768.0
+      },
+      "dbservice2::docker_cpu_system_ticks": {
+        "scale": 1.253757862019072e+16,
+        "train_max": 2.686745783042048e+16,
+        "train_min": 1.432987921022976e+16
+      },
+      "dbservice2::docker_cpu_total_norm_pct": {
+        "scale": 0.38481533998492523,
+        "train_max": 0.3848763704299927,
+        "train_min": 6.1030445067444816e-05
+      },
+      "dbservice2::docker_cpu_total_pct": {
+        "scale": 3.078522719879402,
+        "train_max": 3.0790109634399414,
+        "train_min": 0.00048824356053955853
+      },
+      "dbservice2::docker_cpu_user_norm_pct": {
+        "scale": 0.3804877996444702,
+        "train_max": 0.3804877996444702,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_cpu_user_pct": {
+        "scale": 3.0439023971557617,
+        "train_max": 3.0439023971557617,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_cpu_user_ticks": {
+        "scale": 3642056273559552.0,
+        "train_max": 3642381643546624.0,
+        "train_min": 325369987072.0
+      },
+      "dbservice2::docker_diskio_read_bytes": {
+        "scale": 641851392.0,
+        "train_max": 642465792.0,
+        "train_min": 614400.0
+      },
+      "dbservice2::docker_diskio_read_ops": {
+        "scale": 43088.0,
+        "train_max": 43111.0,
+        "train_min": 23.0
+      },
+      "dbservice2::docker_diskio_read_service_time": {
+        "scale": 25087380376.0,
+        "train_max": 25158606848.0,
+        "train_min": 71226472.0
+      },
+      "dbservice2::docker_diskio_read_wait_time": {
+        "scale": 160962134944.0,
+        "train_max": 161107804160.0,
+        "train_min": 145669216.0
+      },
+      "dbservice2::docker_diskio_summary_bytes": {
+        "scale": 820277248.0,
+        "train_max": 820895744.0,
+        "train_min": 618496.0
+      },
+      "dbservice2::docker_diskio_summary_ops": {
+        "scale": 86638.0,
+        "train_max": 86662.0,
+        "train_min": 24.0
+      },
+      "dbservice2::docker_diskio_summary_service_time": {
+        "scale": 33110827824.0,
+        "train_max": 33188173824.0,
+        "train_min": 77346000.0
+      },
+      "dbservice2::docker_diskio_summary_wait_time": {
+        "scale": 3724869385312.0,
+        "train_max": 3725023248384.0,
+        "train_min": 153863072.0
+      },
+      "dbservice2::docker_diskio_write_bytes": {
+        "scale": 178425856.0,
+        "train_max": 178429952.0,
+        "train_min": 4096.0
+      },
+      "dbservice2::docker_diskio_write_ops": {
+        "scale": 43550.0,
+        "train_max": 43551.0,
+        "train_min": 1.0
+      },
+      "dbservice2::docker_diskio_write_service_time": {
+        "scale": 8023447960.0,
+        "train_max": 8029567488.0,
+        "train_min": 6119528.0
+      },
+      "dbservice2::docker_diskio_write_wait_time": {
+        "scale": 3563907381455.0,
+        "train_max": 3563915575296.0,
+        "train_min": 8193841.0
+      },
+      "dbservice2::docker_memory_rss_pct": {
+        "scale": 0.4792060852050781,
+        "train_max": 0.6689558029174805,
+        "train_min": 0.18974971771240234
+      },
+      "dbservice2::docker_memory_rss_total": {
+        "scale": 2058174464.0,
+        "train_max": 2873143296.0,
+        "train_min": 814968832.0
+      },
+      "dbservice2::docker_memory_stats_active_anon": {
+        "scale": 1964474368.0,
+        "train_max": 2526871552.0,
+        "train_min": 562397184.0
+      },
+      "dbservice2::docker_memory_stats_active_file": {
+        "scale": 87191552.0,
+        "train_max": 87281664.0,
+        "train_min": 90112.0
+      },
+      "dbservice2::docker_memory_stats_cache": {
+        "scale": 239869952.0,
+        "train_max": 247468032.0,
+        "train_min": 7598080.0
+      },
+      "dbservice2::docker_memory_stats_dirty": {
+        "scale": 675840.0,
+        "train_max": 675840.0,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_memory_stats_inactive_anon": {
+        "scale": 453279744.0,
+        "train_max": 455979008.0,
+        "train_min": 2699264.0
+      },
+      "dbservice2::docker_memory_stats_inactive_file": {
+        "scale": 202285056.0,
+        "train_max": 207466496.0,
+        "train_min": 5181440.0
+      },
+      "dbservice2::docker_memory_stats_mapped_file": {
+        "scale": 29196288.0,
+        "train_max": 29466624.0,
+        "train_min": 270336.0
+      },
+      "dbservice2::docker_memory_stats_pgfault": {
+        "scale": 7720949425.0,
+        "train_max": 7722042880.0,
+        "train_min": 1093455.0
+      },
+      "dbservice2::docker_memory_stats_pgmajfault": {
+        "scale": 10065.0,
+        "train_max": 10065.0,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_memory_stats_pgpgin": {
+        "scale": 7721237020.0,
+        "train_max": 7722313216.0,
+        "train_min": 1076196.0
+      },
+      "dbservice2::docker_memory_stats_pgpgout": {
+        "scale": 7721088798.0,
+        "train_max": 7721841152.0,
+        "train_min": 752354.0
+      },
+      "dbservice2::docker_memory_stats_rss": {
+        "scale": 2058174464.0,
+        "train_max": 2873143296.0,
+        "train_min": 814968832.0
+      },
+      "dbservice2::docker_memory_stats_rss_huge": {
+        "scale": 54525952.0,
+        "train_max": 54525952.0,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_memory_stats_total_active_anon": {
+        "scale": 1964474368.0,
+        "train_max": 2526871552.0,
+        "train_min": 562397184.0
+      },
+      "dbservice2::docker_memory_stats_total_active_file": {
+        "scale": 87191552.0,
+        "train_max": 87281664.0,
+        "train_min": 90112.0
+      },
+      "dbservice2::docker_memory_stats_total_cache": {
+        "scale": 239869952.0,
+        "train_max": 247468032.0,
+        "train_min": 7598080.0
+      },
+      "dbservice2::docker_memory_stats_total_dirty": {
+        "scale": 675840.0,
+        "train_max": 675840.0,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_memory_stats_total_inactive_anon": {
+        "scale": 453279744.0,
+        "train_max": 455979008.0,
+        "train_min": 2699264.0
+      },
+      "dbservice2::docker_memory_stats_total_inactive_file": {
+        "scale": 202285056.0,
+        "train_max": 207466496.0,
+        "train_min": 5181440.0
+      },
+      "dbservice2::docker_memory_stats_total_mapped_file": {
+        "scale": 29196288.0,
+        "train_max": 29466624.0,
+        "train_min": 270336.0
+      },
+      "dbservice2::docker_memory_stats_total_pgfault": {
+        "scale": 7720949425.0,
+        "train_max": 7722042880.0,
+        "train_min": 1093455.0
+      },
+      "dbservice2::docker_memory_stats_total_pgmajfault": {
+        "scale": 10065.0,
+        "train_max": 10065.0,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_memory_stats_total_pgpgin": {
+        "scale": 7721237020.0,
+        "train_max": 7722313216.0,
+        "train_min": 1076196.0
+      },
+      "dbservice2::docker_memory_stats_total_pgpgout": {
+        "scale": 7721088798.0,
+        "train_max": 7721841152.0,
+        "train_min": 752354.0
+      },
+      "dbservice2::docker_memory_stats_total_rss": {
+        "scale": 2058174464.0,
+        "train_max": 2873143296.0,
+        "train_min": 814968832.0
+      },
+      "dbservice2::docker_memory_stats_total_rss_huge": {
+        "scale": 54525952.0,
+        "train_max": 54525952.0,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_memory_usage_max": {
+        "scale": 554164224.0,
+        "train_max": 3008344064.0,
+        "train_min": 2454179840.0
+      },
+      "dbservice2::docker_memory_usage_pct": {
+        "scale": 0.48337650299072266,
+        "train_max": 0.700343132019043,
+        "train_min": 0.2169666290283203
+      },
+      "dbservice2::docker_memory_usage_total": {
+        "scale": 2076086272.0,
+        "train_max": 3007950848.0,
+        "train_min": 931864576.0
+      },
+      "dbservice2::docker_network_in_bytes": {
+        "scale": 38814.62890625,
+        "train_max": 38814.62890625,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_network_in_packets": {
+        "scale": 546.2130737304688,
+        "train_max": 546.2130737304688,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_network_inbound_bytes": {
+        "scale": 3902803684.0,
+        "train_max": 3937176576.0,
+        "train_min": 34372892.0
+      },
+      "dbservice2::docker_network_inbound_packets": {
+        "scale": 27849774.0,
+        "train_max": 28098708.0,
+        "train_min": 248934.0
+      },
+      "dbservice2::docker_network_out_bytes": {
+        "scale": 1486780.25,
+        "train_max": 1486780.25,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_network_out_packets": {
+        "scale": 584.247314453125,
+        "train_max": 584.247314453125,
+        "train_min": 0.0
+      },
+      "dbservice2::docker_network_outbound_bytes": {
+        "scale": 4573415398.0,
+        "train_max": 4603014656.0,
+        "train_min": 29599258.0
+      },
+      "dbservice2::docker_network_outbound_packets": {
+        "scale": 32264819.0,
+        "train_max": 32552628.0,
+        "train_min": 287809.0
+      },
+      "logservice1::docker_cpu_core_X_norm_pct": {
+        "scale": 0.009877301302083197,
+        "train_max": 0.009878110140562057,
+        "train_min": 8.088384788607073e-07
+      },
+      "logservice1::docker_cpu_core_X_pct": {
+        "scale": 0.15803682083333115,
+        "train_max": 0.15804976224899292,
+        "train_min": 1.2941415661771316e-05
+      },
+      "logservice1::docker_cpu_core_X_ticks": {
+        "scale": 204768268853248.0,
+        "train_max": 204786876022784.0,
+        "train_min": 18607169536.0
+      },
+      "logservice1::docker_cpu_kernel_norm_pct": {
+        "scale": 0.03469640761613846,
+        "train_max": 0.03469640761613846,
+        "train_min": 0.0
+      },
+      "logservice1::docker_cpu_kernel_pct": {
+        "scale": 0.5551425218582153,
+        "train_max": 0.5551425218582153,
+        "train_min": 0.0
+      },
+      "logservice1::docker_cpu_kernel_ticks": {
+        "scale": 46492278956032.0,
+        "train_max": 46531918954496.0,
+        "train_min": 39639998464.0
+      },
+      "logservice1::docker_cpu_system_ticks": {
+        "scale": 2.4956751434481664e+16,
+        "train_max": 4.749623514523238e+16,
+        "train_min": 2.253948371075072e+16
+      },
+      "logservice1::docker_cpu_total_norm_pct": {
+        "scale": 0.3160736416666623,
+        "train_max": 0.31609952449798584,
+        "train_min": 2.5882831323542632e-05
+      },
+      "logservice1::docker_cpu_total_pct": {
+        "scale": 5.057178266666597,
+        "train_max": 5.057592391967773,
+        "train_min": 0.0004141253011766821
+      },
+      "logservice1::docker_cpu_user_norm_pct": {
+        "scale": 0.31553396582603455,
+        "train_max": 0.31553396582603455,
+        "train_min": 0.0
+      },
+      "logservice1::docker_cpu_user_pct": {
+        "scale": 5.048543453216553,
+        "train_max": 5.048543453216553,
+        "train_min": 0.0
+      },
+      "logservice1::docker_cpu_user_ticks": {
+        "scale": 6513149100294144.0,
+        "train_max": 6513692640280576.0,
+        "train_min": 543539986432.0
+      },
+      "logservice1::docker_diskio_read_bytes": {
+        "scale": 867479552.0,
+        "train_max": 868691968.0,
+        "train_min": 1212416.0
+      },
+      "logservice1::docker_diskio_read_ops": {
+        "scale": 94265.0,
+        "train_max": 94341.0,
+        "train_min": 76.0
+      },
+      "logservice1::docker_diskio_read_service_time": {
+        "scale": 27264088224.0,
+        "train_max": 27464675328.0,
+        "train_min": 200587104.0
+      },
+      "logservice1::docker_diskio_read_wait_time": {
+        "scale": 32275714468.0,
+        "train_max": 32331071488.0,
+        "train_min": 55357020.0
+      },
+      "logservice1::docker_diskio_summary_bytes": {
+        "scale": 876736512.0,
+        "train_max": 877957120.0,
+        "train_min": 1220608.0
+      },
+      "logservice1::docker_diskio_summary_ops": {
+        "scale": 96523.0,
+        "train_max": 96601.0,
+        "train_min": 78.0
+      },
+      "logservice1::docker_diskio_summary_service_time": {
+        "scale": 27691813216.0,
+        "train_max": 27910166528.0,
+        "train_min": 218353312.0
+      },
+      "logservice1::docker_diskio_summary_wait_time": {
+        "scale": 75320377016.0,
+        "train_max": 75384201216.0,
+        "train_min": 63824200.0
+      },
+      "logservice1::docker_diskio_write_bytes": {
+        "scale": 9256960.0,
+        "train_max": 9265152.0,
+        "train_min": 8192.0
+      },
+      "logservice1::docker_diskio_write_ops": {
+        "scale": 2258.0,
+        "train_max": 2260.0,
+        "train_min": 2.0
+      },
+      "logservice1::docker_diskio_write_service_time": {
+        "scale": 427724664.0,
+        "train_max": 445490880.0,
+        "train_min": 17766216.0
+      },
+      "logservice1::docker_diskio_write_wait_time": {
+        "scale": 43044662550.0,
+        "train_max": 43053129728.0,
+        "train_min": 8467178.0
+      },
+      "logservice1::docker_memory_rss_pct": {
+        "scale": 0.531707763671875,
+        "train_max": 0.6810531616210938,
+        "train_min": 0.14934539794921875
+      },
+      "logservice1::docker_memory_rss_total": {
+        "scale": 2283667456.0,
+        "train_max": 2925101056.0,
+        "train_min": 641433600.0
+      },
+      "logservice1::docker_memory_stats_active_anon": {
+        "scale": 2375131136.0,
+        "train_max": 2559434752.0,
+        "train_min": 184303616.0
+      },
+      "logservice1::docker_memory_stats_active_file": {
+        "scale": 73789440.0,
+        "train_max": 74653696.0,
+        "train_min": 864256.0
+      },
+      "logservice1::docker_memory_stats_cache": {
+        "scale": 310775808.0,
+        "train_max": 327942144.0,
+        "train_min": 17166336.0
+      },
+      "logservice1::docker_memory_stats_dirty": {
+        "scale": 946176.0,
+        "train_max": 946176.0,
+        "train_min": 0.0
+      },
+      "logservice1::docker_memory_stats_inactive_anon": {
+        "scale": 626794496.0,
+        "train_max": 626794496.0,
+        "train_min": 0.0
+      },
+      "logservice1::docker_memory_stats_inactive_file": {
+        "scale": 263426048.0,
+        "train_max": 277176320.0,
+        "train_min": 13750272.0
+      },
+      "logservice1::docker_memory_stats_mapped_file": {
+        "scale": 19599360.0,
+        "train_max": 19734528.0,
+        "train_min": 135168.0
+      },
+      "logservice1::docker_memory_stats_pgfault": {
+        "scale": 15695996178.0,
+        "train_max": 15696648192.0,
+        "train_min": 652014.0
+      },
+      "logservice1::docker_memory_stats_pgmajfault": {
+        "scale": 21747.0,
+        "train_max": 21747.0,
+        "train_min": 0.0
+      },
+      "logservice1::docker_memory_stats_pgpgin": {
+        "scale": 15494662470.0,
+        "train_max": 15495063552.0,
+        "train_min": 401082.0
+      },
+      "logservice1::docker_memory_stats_pgpgout": {
+        "scale": 15494465435.0,
+        "train_max": 15494551552.0,
+        "train_min": 86117.0
+      },
+      "logservice1::docker_memory_stats_rss": {
+        "scale": 2283667456.0,
+        "train_max": 2925101056.0,
+        "train_min": 641433600.0
+      },
+      "logservice1::docker_memory_stats_rss_huge": {
+        "scale": 62914560.0,
+        "train_max": 62914560.0,
+        "train_min": 0.0
+      },
+      "logservice1::docker_memory_stats_total_active_anon": {
+        "scale": 2375131136.0,
+        "train_max": 2559434752.0,
+        "train_min": 184303616.0
+      },
+      "logservice1::docker_memory_stats_total_active_file": {
+        "scale": 73789440.0,
+        "train_max": 74653696.0,
+        "train_min": 864256.0
+      },
+      "logservice1::docker_memory_stats_total_cache": {
+        "scale": 310775808.0,
+        "train_max": 327942144.0,
+        "train_min": 17166336.0
+      },
+      "logservice1::docker_memory_stats_total_dirty": {
+        "scale": 946176.0,
+        "train_max": 946176.0,
+        "train_min": 0.0
+      },
+      "logservice1::docker_memory_stats_total_inactive_anon": {
+        "scale": 626794496.0,
+        "train_max": 626794496.0,
+        "train_min": 0.0
+      },
+      "logservice1::docker_memory_stats_total_inactive_file": {
+        "scale": 263426048.0,
+        "train_max": 277176320.0,
+        "train_min": 13750272.0
+      },
+      "logservice1::docker_memory_stats_total_mapped_file": {
+        "scale": 19599360.0,
+        "train_max": 19734528.0,
+        "train_min": 135168.0
+      },
+      "logservice1::docker_memory_stats_total_pgfault": {
+        "scale": 15695996178.0,
+        "train_max": 15696648192.0,
+        "train_min": 652014.0
+      },
+      "logservice1::docker_memory_stats_total_pgmajfault": {
+        "scale": 21747.0,
+        "train_max": 21747.0,
+        "train_min": 0.0
+      },
+      "logservice1::docker_memory_stats_total_pgpgin": {
+        "scale": 15494662470.0,
+        "train_max": 15495063552.0,
+        "train_min": 401082.0
+      },
+      "logservice1::docker_memory_stats_total_pgpgout": {
+        "scale": 15494465435.0,
+        "train_max": 15494551552.0,
+        "train_min": 86117.0
+      },
+      "logservice1::docker_memory_stats_total_rss": {
+        "scale": 2283667456.0,
+        "train_max": 2925101056.0,
+        "train_min": 641433600.0
+      },
+      "logservice1::docker_memory_stats_total_rss_huge": {
+        "scale": 62914560.0,
+        "train_max": 62914560.0,
+        "train_min": 0.0
+      },
+      "logservice1::docker_memory_usage_max": {
+        "scale": 1830526976.0,
+        "train_max": 3166912512.0,
+        "train_min": 1336385536.0
+      },
+      "logservice1::docker_memory_usage_pct": {
+        "scale": 0.5232372283935547,
+        "train_max": 0.7350378036499023,
+        "train_min": 0.21180057525634766
+      },
+      "logservice1::docker_memory_usage_total": {
+        "scale": 2247286784.0,
+        "train_max": 3156963328.0,
+        "train_min": 909676544.0
+      },
+      "logservice1::docker_network_in_bytes": {
+        "scale": 42980.953125,
+        "train_max": 42980.953125,
+        "train_min": 0.0
+      },
+      "logservice1::docker_network_in_packets": {
+        "scale": 597.1991577148438,
+        "train_max": 597.1991577148438,
+        "train_min": 0.0
+      },
+      "logservice1::docker_network_inbound_bytes": {
+        "scale": 6084412848.0,
+        "train_max": 6130841600.0,
+        "train_min": 46428752.0
+      },
+      "logservice1::docker_network_inbound_packets": {
+        "scale": 35831273.0,
+        "train_max": 36102056.0,
+        "train_min": 270783.0
+      },
+      "logservice1::docker_network_out_bytes": {
+        "scale": 1754294.75,
+        "train_max": 1754294.75,
+        "train_min": 0.0
+      },
+      "logservice1::docker_network_out_packets": {
+        "scale": 656.688232421875,
+        "train_max": 656.688232421875,
+        "train_min": 0.0
+      },
+      "logservice1::docker_network_outbound_bytes": {
+        "scale": 6545270216.0,
+        "train_max": 6579634176.0,
+        "train_min": 34363960.0
+      },
+      "logservice1::docker_network_outbound_packets": {
+        "scale": 40741134.0,
+        "train_max": 41042464.0,
+        "train_min": 301330.0
+      },
+      "logservice2::docker_cpu_core_X_norm_pct": {
+        "scale": 0.011880720813451262,
+        "train_max": 0.011882105842232704,
+        "train_min": 1.385028781442088e-06
+      },
+      "logservice2::docker_cpu_core_X_pct": {
+        "scale": 0.0950457665076101,
+        "train_max": 0.09505684673786163,
+        "train_min": 1.1080230251536705e-05
+      },
+      "logservice2::docker_cpu_core_X_ticks": {
+        "scale": 105370668845056.0,
+        "train_max": 105388464668672.0,
+        "train_min": 17795823616.0
+      },
+      "logservice2::docker_cpu_kernel_norm_pct": {
+        "scale": 0.057387057691812515,
+        "train_max": 0.057387057691812515,
+        "train_min": 0.0
+      },
+      "logservice2::docker_cpu_kernel_pct": {
+        "scale": 0.4590964615345001,
+        "train_max": 0.4590964615345001,
+        "train_min": 0.0
+      },
+      "logservice2::docker_cpu_kernel_ticks": {
+        "scale": 44423868268544.0,
+        "train_max": 44463548268544.0,
+        "train_min": 39680000000.0
+      },
+      "logservice2::docker_cpu_system_ticks": {
+        "scale": 1.253757862019072e+16,
+        "train_max": 2.686745783042048e+16,
+        "train_min": 1.432987921022976e+16
+      },
+      "logservice2::docker_cpu_total_norm_pct": {
+        "scale": 0.380183036228118,
+        "train_max": 0.38022735714912415,
+        "train_min": 4.432092100614682e-05
+      },
+      "logservice2::docker_cpu_total_pct": {
+        "scale": 3.041464289824944,
+        "train_max": 3.041818857192993,
+        "train_min": 0.00035456736804917455
+      },
+      "logservice2::docker_cpu_user_norm_pct": {
+        "scale": 0.37914109230041504,
+        "train_max": 0.37914109230041504,
+        "train_min": 0.0
+      },
+      "logservice2::docker_cpu_user_pct": {
+        "scale": 3.0331287384033203,
+        "train_max": 3.0331287384033203,
+        "train_min": 0.0
+      },
+      "logservice2::docker_cpu_user_ticks": {
+        "scale": 3333587358679040.0,
+        "train_max": 3334113318666240.0,
+        "train_min": 525959987200.0
+      },
+      "logservice2::docker_diskio_read_bytes": {
+        "scale": 1343111168.0,
+        "train_max": 1343471616.0,
+        "train_min": 360448.0
+      },
+      "logservice2::docker_diskio_read_ops": {
+        "scale": 97427.0,
+        "train_max": 97436.0,
+        "train_min": 9.0
+      },
+      "logservice2::docker_diskio_read_service_time": {
+        "scale": 49095869132.0,
+        "train_max": 49119379456.0,
+        "train_min": 23510324.0
+      },
+      "logservice2::docker_diskio_read_wait_time": {
+        "scale": 181748997120.0,
+        "train_max": 181824880640.0,
+        "train_min": 75883520.0
+      },
+      "logservice2::docker_diskio_summary_bytes": {
+        "scale": 1371525120.0,
+        "train_max": 1371885568.0,
+        "train_min": 360448.0
+      },
+      "logservice2::docker_diskio_summary_ops": {
+        "scale": 104363.0,
+        "train_max": 104372.0,
+        "train_min": 9.0
+      },
+      "logservice2::docker_diskio_summary_service_time": {
+        "scale": 55870284492.0,
+        "train_max": 55893794816.0,
+        "train_min": 23510324.0
+      },
+      "logservice2::docker_diskio_summary_wait_time": {
+        "scale": 8312692808704.0,
+        "train_max": 8312768692224.0,
+        "train_min": 75883520.0
+      },
+      "logservice2::docker_diskio_write_bytes": {
+        "scale": 28413952.0,
+        "train_max": 28413952.0,
+        "train_min": 0.0
+      },
+      "logservice2::docker_diskio_write_ops": {
+        "scale": 6936.0,
+        "train_max": 6936.0,
+        "train_min": 0.0
+      },
+      "logservice2::docker_diskio_write_service_time": {
+        "scale": 6774412800.0,
+        "train_max": 6774412800.0,
+        "train_min": 0.0
+      },
+      "logservice2::docker_diskio_write_wait_time": {
+        "scale": 8130944040960.0,
+        "train_max": 8130944040960.0,
+        "train_min": 0.0
+      },
+      "logservice2::docker_memory_rss_pct": {
+        "scale": 0.48119640350341797,
+        "train_max": 0.6601524353027344,
+        "train_min": 0.1789560317993164
+      },
+      "logservice2::docker_memory_rss_total": {
+        "scale": 2066722816.0,
+        "train_max": 2835333120.0,
+        "train_min": 768610304.0
+      },
+      "logservice2::docker_memory_stats_active_anon": {
+        "scale": 1805017088.0,
+        "train_max": 2411421696.0,
+        "train_min": 606404608.0
+      },
+      "logservice2::docker_memory_stats_active_file": {
+        "scale": 115064832.0,
+        "train_max": 115089408.0,
+        "train_min": 24576.0
+      },
+      "logservice2::docker_memory_stats_cache": {
+        "scale": 333029376.0,
+        "train_max": 345731072.0,
+        "train_min": 12701696.0
+      },
+      "logservice2::docker_memory_stats_dirty": {
+        "scale": 675840.0,
+        "train_max": 675840.0,
+        "train_min": 0.0
+      },
+      "logservice2::docker_memory_stats_inactive_anon": {
+        "scale": 508780544.0,
+        "train_max": 517033984.0,
+        "train_min": 8253440.0
+      },
+      "logservice2::docker_memory_stats_inactive_file": {
+        "scale": 318074880.0,
+        "train_max": 327532544.0,
+        "train_min": 9457664.0
+      },
+      "logservice2::docker_memory_stats_mapped_file": {
+        "scale": 23924736.0,
+        "train_max": 24059904.0,
+        "train_min": 135168.0
+      },
+      "logservice2::docker_memory_stats_pgfault": {
+        "scale": 15480627170.0,
+        "train_max": 15481035776.0,
+        "train_min": 408606.0
+      },
+      "logservice2::docker_memory_stats_pgmajfault": {
+        "scale": 25509.0,
+        "train_max": 25509.0,
+        "train_min": 0.0
+      },
+      "logservice2::docker_memory_stats_pgpgin": {
+        "scale": 15481307588.0,
+        "train_max": 15481702400.0,
+        "train_min": 394812.0
+      },
+      "logservice2::docker_memory_stats_pgpgout": {
+        "scale": 15481186493.0,
+        "train_max": 15481266176.0,
+        "train_min": 79683.0
+      },
+      "logservice2::docker_memory_stats_rss": {
+        "scale": 2066722816.0,
+        "train_max": 2835333120.0,
+        "train_min": 768610304.0
+      },
+      "logservice2::docker_memory_stats_rss_huge": {
+        "scale": 58720256.0,
+        "train_max": 58720256.0,
+        "train_min": 0.0
+      },
+      "logservice2::docker_memory_stats_total_active_anon": {
+        "scale": 1805017088.0,
+        "train_max": 2411421696.0,
+        "train_min": 606404608.0
+      },
+      "logservice2::docker_memory_stats_total_active_file": {
+        "scale": 115064832.0,
+        "train_max": 115089408.0,
+        "train_min": 24576.0
+      },
+      "logservice2::docker_memory_stats_total_cache": {
+        "scale": 333029376.0,
+        "train_max": 345731072.0,
+        "train_min": 12701696.0
+      },
+      "logservice2::docker_memory_stats_total_dirty": {
+        "scale": 675840.0,
+        "train_max": 675840.0,
+        "train_min": 0.0
+      },
+      "logservice2::docker_memory_stats_total_inactive_anon": {
+        "scale": 508780544.0,
+        "train_max": 517033984.0,
+        "train_min": 8253440.0
+      },
+      "logservice2::docker_memory_stats_total_inactive_file": {
+        "scale": 318074880.0,
+        "train_max": 327532544.0,
+        "train_min": 9457664.0
+      },
+      "logservice2::docker_memory_stats_total_mapped_file": {
+        "scale": 23924736.0,
+        "train_max": 24059904.0,
+        "train_min": 135168.0
+      },
+      "logservice2::docker_memory_stats_total_pgfault": {
+        "scale": 15480627170.0,
+        "train_max": 15481035776.0,
+        "train_min": 408606.0
+      },
+      "logservice2::docker_memory_stats_total_pgmajfault": {
+        "scale": 25509.0,
+        "train_max": 25509.0,
+        "train_min": 0.0
+      },
+      "logservice2::docker_memory_stats_total_pgpgin": {
+        "scale": 15481307588.0,
+        "train_max": 15481702400.0,
+        "train_min": 394812.0
+      },
+      "logservice2::docker_memory_stats_total_pgpgout": {
+        "scale": 15481186493.0,
+        "train_max": 15481266176.0,
+        "train_min": 79683.0
+      },
+      "logservice2::docker_memory_stats_total_rss": {
+        "scale": 2066722816.0,
+        "train_max": 2835333120.0,
+        "train_min": 768610304.0
+      },
+      "logservice2::docker_memory_stats_total_rss_huge": {
+        "scale": 58720256.0,
+        "train_max": 58720256.0,
+        "train_min": 0.0
+      },
+      "logservice2::docker_memory_usage_max": {
+        "scale": 1726648320.0,
+        "train_max": 3058266112.0,
+        "train_min": 1331617792.0
+      },
+      "logservice2::docker_memory_usage_pct": {
+        "scale": 0.5156745910644531,
+        "train_max": 0.7036190032958984,
+        "train_min": 0.1879444122314453
+      },
+      "logservice2::docker_memory_usage_total": {
+        "scale": 2214805504.0,
+        "train_max": 3022020608.0,
+        "train_min": 807215104.0
+      },
+      "logservice2::docker_network_in_bytes": {
+        "scale": 44833.21875,
+        "train_max": 44833.21875,
+        "train_min": 0.0
+      },
+      "logservice2::docker_network_in_packets": {
+        "scale": 627.149658203125,
+        "train_max": 627.149658203125,
+        "train_min": 0.0
+      },
+      "logservice2::docker_network_inbound_bytes": {
+        "scale": 6097070356.0,
+        "train_max": 6143896064.0,
+        "train_min": 46825708.0
+      },
+      "logservice2::docker_network_inbound_packets": {
+        "scale": 36013553.0,
+        "train_max": 36288452.0,
+        "train_min": 274899.0
+      },
+      "logservice2::docker_network_out_bytes": {
+        "scale": 1799195.0,
+        "train_max": 1799195.0,
+        "train_min": 0.0
+      },
+      "logservice2::docker_network_out_packets": {
+        "scale": 663.9192504882812,
+        "train_max": 663.9192504882812,
+        "train_min": 0.0
+      },
+      "logservice2::docker_network_outbound_bytes": {
+        "scale": 6646102220.0,
+        "train_max": 6681035264.0,
+        "train_min": 34933044.0
+      },
+      "logservice2::docker_network_outbound_packets": {
+        "scale": 41139184.0,
+        "train_max": 41447908.0,
+        "train_min": 308724.0
+      },
+      "mobservice1::docker_cpu_core_X_norm_pct": {
+        "scale": 0.005463721230626106,
+        "train_max": 0.010619694367051125,
+        "train_min": 0.005155973136425018
+      },
+      "mobservice1::docker_cpu_core_X_pct": {
+        "scale": 0.0874195396900177,
+        "train_max": 0.169915109872818,
+        "train_min": 0.08249557018280029
+      },
+      "mobservice1::docker_cpu_core_X_ticks": {
+        "scale": 208034764685312.0,
+        "train_max": 210728359297024.0,
+        "train_min": 2693594611712.0
+      },
+      "mobservice1::docker_cpu_kernel_norm_pct": {
+        "scale": 0.028915662318468094,
+        "train_max": 0.028915662318468094,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_cpu_kernel_pct": {
+        "scale": 0.4626505970954895,
+        "train_max": 0.4626505970954895,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_cpu_kernel_ticks": {
+        "scale": 25988550631424.0,
+        "train_max": 26032570630144.0,
+        "train_min": 44019998720.0
+      },
+      "mobservice1::docker_cpu_system_ticks": {
+        "scale": 2.500073619456e+16,
+        "train_max": 5.374828159906611e+16,
+        "train_min": 2.874754540450611e+16
+      },
+      "mobservice1::docker_cpu_total_norm_pct": {
+        "scale": 0.13112931698560715,
+        "train_max": 0.2548726797103882,
+        "train_min": 0.12374336272478104
+      },
+      "mobservice1::docker_cpu_total_pct": {
+        "scale": 2.0980690717697144,
+        "train_max": 4.077962875366211,
+        "train_min": 1.9798938035964966
+      },
+      "mobservice1::docker_cpu_user_norm_pct": {
+        "scale": 0.13140647113323212,
+        "train_max": 0.2551928758621216,
+        "train_min": 0.12378640472888947
+      },
+      "mobservice1::docker_cpu_user_pct": {
+        "scale": 2.102503538131714,
+        "train_max": 4.083086013793945,
+        "train_min": 1.9805824756622314
+      },
+      "mobservice1::docker_cpu_user_ticks": {
+        "scale": 4970699106025472.0,
+        "train_max": 5035321947324416.0,
+        "train_min": 64622841298944.0
+      },
+      "mobservice1::docker_diskio_read_bytes": {
+        "scale": 54419456.0,
+        "train_max": 54419456.0,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_diskio_read_ops": {
+        "scale": 2845.0,
+        "train_max": 2845.0,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_diskio_read_service_time": {
+        "scale": 3781362176.0,
+        "train_max": 3781362176.0,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_diskio_read_wait_time": {
+        "scale": 7544676352.0,
+        "train_max": 7544676352.0,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_diskio_summary_bytes": {
+        "scale": 54444032.0,
+        "train_max": 54448128.0,
+        "train_min": 4096.0
+      },
+      "mobservice1::docker_diskio_summary_ops": {
+        "scale": 2849.0,
+        "train_max": 2850.0,
+        "train_min": 1.0
+      },
+      "mobservice1::docker_diskio_summary_service_time": {
+        "scale": 3782516585.0,
+        "train_max": 3782884608.0,
+        "train_min": 368023.0
+      },
+      "mobservice1::docker_diskio_summary_wait_time": {
+        "scale": 7691474826.0,
+        "train_max": 7691495424.0,
+        "train_min": 20598.0
+      },
+      "mobservice1::docker_diskio_write_bytes": {
+        "scale": 24576.0,
+        "train_max": 28672.0,
+        "train_min": 4096.0
+      },
+      "mobservice1::docker_diskio_write_ops": {
+        "scale": 4.0,
+        "train_max": 5.0,
+        "train_min": 1.0
+      },
+      "mobservice1::docker_diskio_write_service_time": {
+        "scale": 1154488.0,
+        "train_max": 1522511.0,
+        "train_min": 368023.0
+      },
+      "mobservice1::docker_diskio_write_wait_time": {
+        "scale": 146798266.0,
+        "train_max": 146818864.0,
+        "train_min": 20598.0
+      },
+      "mobservice1::docker_memory_rss_pct": {
+        "scale": 0.4120400920510292,
+        "train_max": 0.5142485499382019,
+        "train_min": 0.1022084578871727
+      },
+      "mobservice1::docker_memory_rss_total": {
+        "scale": 2654547968.0,
+        "train_max": 3313020928.0,
+        "train_min": 658472960.0
+      },
+      "mobservice1::docker_memory_stats_active_anon": {
+        "scale": 2767667200.0,
+        "train_max": 3244556288.0,
+        "train_min": 476889088.0
+      },
+      "mobservice1::docker_memory_stats_active_file": {
+        "scale": 27779072.0,
+        "train_max": 27799552.0,
+        "train_min": 20480.0
+      },
+      "mobservice1::docker_memory_stats_cache": {
+        "scale": 235859968.0,
+        "train_max": 244510720.0,
+        "train_min": 8650752.0
+      },
+      "mobservice1::docker_memory_stats_dirty": {
+        "scale": 946176.0,
+        "train_max": 946176.0,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_memory_stats_inactive_anon": {
+        "scale": 458727424.0,
+        "train_max": 458752000.0,
+        "train_min": 24576.0
+      },
+      "mobservice1::docker_memory_stats_inactive_file": {
+        "scale": 222474240.0,
+        "train_max": 231280640.0,
+        "train_min": 8806400.0
+      },
+      "mobservice1::docker_memory_stats_mapped_file": {
+        "scale": 9191424.0,
+        "train_max": 9191424.0,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_memory_stats_pgfault": {
+        "scale": 7919120967.0,
+        "train_max": 7925157888.0,
+        "train_min": 6036921.0
+      },
+      "mobservice1::docker_memory_stats_pgmajfault": {
+        "scale": 297.0,
+        "train_max": 297.0,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_memory_stats_pgpgin": {
+        "scale": 7786421858.0,
+        "train_max": 7787738624.0,
+        "train_min": 1316766.0
+      },
+      "mobservice1::docker_memory_stats_pgpgout": {
+        "scale": 7786508251.0,
+        "train_max": 7787207680.0,
+        "train_min": 699429.0
+      },
+      "mobservice1::docker_memory_stats_rss": {
+        "scale": 2654547968.0,
+        "train_max": 3313020928.0,
+        "train_min": 658472960.0
+      },
+      "mobservice1::docker_memory_stats_rss_huge": {
+        "scale": 48234496.0,
+        "train_max": 48234496.0,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_memory_stats_total_active_anon": {
+        "scale": 2767667200.0,
+        "train_max": 3244556288.0,
+        "train_min": 476889088.0
+      },
+      "mobservice1::docker_memory_stats_total_active_file": {
+        "scale": 27779072.0,
+        "train_max": 27799552.0,
+        "train_min": 20480.0
+      },
+      "mobservice1::docker_memory_stats_total_cache": {
+        "scale": 235859968.0,
+        "train_max": 244510720.0,
+        "train_min": 8650752.0
+      },
+      "mobservice1::docker_memory_stats_total_dirty": {
+        "scale": 946176.0,
+        "train_max": 946176.0,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_memory_stats_total_inactive_anon": {
+        "scale": 458727424.0,
+        "train_max": 458752000.0,
+        "train_min": 24576.0
+      },
+      "mobservice1::docker_memory_stats_total_inactive_file": {
+        "scale": 222474240.0,
+        "train_max": 231280640.0,
+        "train_min": 8806400.0
+      },
+      "mobservice1::docker_memory_stats_total_mapped_file": {
+        "scale": 9191424.0,
+        "train_max": 9191424.0,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_memory_stats_total_pgfault": {
+        "scale": 7919120967.0,
+        "train_max": 7925157888.0,
+        "train_min": 6036921.0
+      },
+      "mobservice1::docker_memory_stats_total_pgmajfault": {
+        "scale": 297.0,
+        "train_max": 297.0,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_memory_stats_total_pgpgin": {
+        "scale": 7786421858.0,
+        "train_max": 7787738624.0,
+        "train_min": 1316766.0
+      },
+      "mobservice1::docker_memory_stats_total_pgpgout": {
+        "scale": 7786508251.0,
+        "train_max": 7787207680.0,
+        "train_min": 699429.0
+      },
+      "mobservice1::docker_memory_stats_total_rss": {
+        "scale": 2654547968.0,
+        "train_max": 3313020928.0,
+        "train_min": 658472960.0
+      },
+      "mobservice1::docker_memory_stats_total_rss_huge": {
+        "scale": 48234496.0,
+        "train_max": 48234496.0,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_memory_usage_max": {
+        "scale": 887775232.0,
+        "train_max": 3458859008.0,
+        "train_min": 2571083776.0
+      },
+      "mobservice1::docker_memory_usage_pct": {
+        "scale": 0.4026063531637192,
+        "train_max": 0.5358511805534363,
+        "train_min": 0.1332448273897171
+      },
+      "mobservice1::docker_memory_usage_total": {
+        "scale": 2593771520.0,
+        "train_max": 3452194816.0,
+        "train_min": 858423296.0
+      },
+      "mobservice1::docker_network_in_bytes": {
+        "scale": 39509.65625,
+        "train_max": 39509.65625,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_network_in_packets": {
+        "scale": 575.5498657226562,
+        "train_max": 575.5498657226562,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_network_inbound_bytes": {
+        "scale": 3066194472.0,
+        "train_max": 3089278976.0,
+        "train_min": 23084504.0
+      },
+      "mobservice1::docker_network_inbound_packets": {
+        "scale": 21009354.0,
+        "train_max": 21164178.0,
+        "train_min": 154824.0
+      },
+      "mobservice1::docker_network_out_bytes": {
+        "scale": 1681495.125,
+        "train_max": 1681495.125,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_network_out_packets": {
+        "scale": 604.4141235351562,
+        "train_max": 604.4141235351562,
+        "train_min": 0.0
+      },
+      "mobservice1::docker_network_outbound_bytes": {
+        "scale": 3633710502.0,
+        "train_max": 3652204800.0,
+        "train_min": 18494298.0
+      },
+      "mobservice1::docker_network_outbound_packets": {
+        "scale": 22879739.0,
+        "train_max": 23054148.0,
+        "train_min": 174409.0
+      },
+      "mobservice2::docker_cpu_core_X_norm_pct": {
+        "scale": 0.02091074678833138,
+        "train_max": 0.02091359533369541,
+        "train_min": 2.8485453640314518e-06
+      },
+      "mobservice2::docker_cpu_core_X_pct": {
+        "scale": 0.08364298715332552,
+        "train_max": 0.08365438133478165,
+        "train_min": 1.1394181456125807e-05
+      },
+      "mobservice2::docker_cpu_core_X_ticks": {
+        "scale": 63885365097472.0,
+        "train_max": 63898094927872.0,
+        "train_min": 12729830400.0
+      },
+      "mobservice2::docker_cpu_kernel_norm_pct": {
+        "scale": 0.0925000011920929,
+        "train_max": 0.0925000011920929,
+        "train_min": 0.0
+      },
+      "mobservice2::docker_cpu_kernel_pct": {
+        "scale": 0.3700000047683716,
+        "train_max": 0.3700000047683716,
+        "train_min": 0.0
+      },
+      "mobservice2::docker_cpu_kernel_ticks": {
+        "scale": 33875920214016.0,
+        "train_max": 33897270214656.0,
+        "train_min": 21350000640.0
+      },
+      "mobservice2::docker_cpu_system_ticks": {
+        "scale": 6293354845306880.0,
+        "train_max": 6672920499716096.0,
+        "train_min": 379565654409216.0
+      },
+      "mobservice2::docker_cpu_total_norm_pct": {
+        "scale": 0.5018579378229333,
+        "train_max": 0.5019263029098511,
+        "train_min": 6.836508691776544e-05
+      },
+      "mobservice2::docker_cpu_total_pct": {
+        "scale": 2.0074317512917332,
+        "train_max": 2.0077052116394043,
+        "train_min": 0.00027346034767106175
+      },
+      "mobservice2::docker_cpu_user_norm_pct": {
+        "scale": 0.5012468695640564,
+        "train_max": 0.5012468695640564,
+        "train_min": 0.0
+      },
+      "mobservice2::docker_cpu_user_pct": {
+        "scale": 2.0049874782562256,
+        "train_max": 2.0049874782562256,
+        "train_min": 0.0
+      },
+      "mobservice2::docker_cpu_user_ticks": {
+        "scale": 1500854961799168.0,
+        "train_max": 1501135361802240.0,
+        "train_min": 280400003072.0
+      },
+      "mobservice2::docker_diskio_read_bytes": {
+        "scale": 2428981248.0,
+        "train_max": 2448961536.0,
+        "train_min": 19980288.0
+      },
+      "mobservice2::docker_diskio_read_ops": {
+        "scale": 294571.0,
+        "train_max": 295960.0,
+        "train_min": 1389.0
+      },
+      "mobservice2::docker_diskio_read_service_time": {
+        "scale": 211570811904.0,
+        "train_max": 216006361088.0,
+        "train_min": 4435549184.0
+      },
+      "mobservice2::docker_diskio_read_wait_time": {
+        "scale": 226373462016.0,
+        "train_max": 234657366016.0,
+        "train_min": 8283904000.0
+      },
+      "mobservice2::docker_diskio_summary_bytes": {
+        "scale": 2754404352.0,
+        "train_max": 2789535744.0,
+        "train_min": 35131392.0
+      },
+      "mobservice2::docker_diskio_summary_ops": {
+        "scale": 614524.0,
+        "train_max": 619612.0,
+        "train_min": 5088.0
+      },
+      "mobservice2::docker_diskio_summary_service_time": {
+        "scale": 214923853824.0,
+        "train_max": 219785052160.0,
+        "train_min": 4861198336.0
+      },
+      "mobservice2::docker_diskio_summary_wait_time": {
+        "scale": 3354055598080.0,
+        "train_max": 3405799227392.0,
+        "train_min": 51743629312.0
+      },
+      "mobservice2::docker_diskio_write_bytes": {
+        "scale": 325423104.0,
+        "train_max": 340574208.0,
+        "train_min": 15151104.0
+      },
+      "mobservice2::docker_diskio_write_ops": {
+        "scale": 319953.0,
+        "train_max": 323652.0,
+        "train_min": 3699.0
+      },
+      "mobservice2::docker_diskio_write_service_time": {
+        "scale": 3353040064.0,
+        "train_max": 3778689280.0,
+        "train_min": 425649216.0
+      },
+      "mobservice2::docker_diskio_write_wait_time": {
+        "scale": 3127682088960.0,
+        "train_max": 3171141812224.0,
+        "train_min": 43459723264.0
+      },
+      "mobservice2::docker_memory_rss_pct": {
+        "scale": 0.5394821669906378,
+        "train_max": 0.5591363310813904,
+        "train_min": 0.0196541640907526
+      },
+      "mobservice2::docker_memory_rss_total": {
+        "scale": 2224316416.0,
+        "train_max": 2305351680.0,
+        "train_min": 81035264.0
+      },
+      "mobservice2::docker_memory_stats_active_anon": {
+        "scale": 2001768448.0,
+        "train_max": 2044342272.0,
+        "train_min": 42573824.0
+      },
+      "mobservice2::docker_memory_stats_active_file": {
+        "scale": 43528192.0,
+        "train_max": 44879872.0,
+        "train_min": 1351680.0
+      },
+      "mobservice2::docker_memory_stats_cache": {
+        "scale": 138833920.0,
+        "train_max": 140709888.0,
+        "train_min": 1875968.0
+      },
+      "mobservice2::docker_memory_stats_dirty": {
+        "scale": 405504.0,
+        "train_max": 405504.0,
+        "train_min": 0.0
+      },
+      "mobservice2::docker_memory_stats_inactive_anon": {
+        "scale": 508370944.0,
+        "train_max": 508387328.0,
+        "train_min": 16384.0
+      },
+      "mobservice2::docker_memory_stats_inactive_file": {
+        "scale": 138866688.0,
+        "train_max": 139292672.0,
+        "train_min": 425984.0
+      },
+      "mobservice2::docker_memory_stats_mapped_file": {
+        "scale": 22437888.0,
+        "train_max": 24195072.0,
+        "train_min": 1757184.0
+      },
+      "mobservice2::docker_memory_stats_pgfault": {
+        "scale": 15493911352.0,
+        "train_max": 15494652928.0,
+        "train_min": 741576.0
+      },
+      "mobservice2::docker_memory_stats_pgmajfault": {
+        "scale": 94182.0,
+        "train_max": 94974.0,
+        "train_min": 792.0
+      },
+      "mobservice2::docker_memory_stats_pgpgin": {
+        "scale": 15494279297.0,
+        "train_max": 15495019520.0,
+        "train_min": 740223.0
+      },
+      "mobservice2::docker_memory_stats_pgpgout": {
+        "scale": 15494334187.0,
+        "train_max": 15494792192.0,
+        "train_min": 458005.0
+      },
+      "mobservice2::docker_memory_stats_rss": {
+        "scale": 2224316416.0,
+        "train_max": 2305351680.0,
+        "train_min": 81035264.0
+      },
+      "mobservice2::docker_memory_stats_rss_huge": {
+        "scale": 33554432.0,
+        "train_max": 33554432.0,
+        "train_min": 0.0
+      },
+      "mobservice2::docker_memory_stats_total_active_anon": {
+        "scale": 2001768448.0,
+        "train_max": 2044342272.0,
+        "train_min": 42573824.0
+      },
+      "mobservice2::docker_memory_stats_total_active_file": {
+        "scale": 43528192.0,
+        "train_max": 44879872.0,
+        "train_min": 1351680.0
+      },
+      "mobservice2::docker_memory_stats_total_cache": {
+        "scale": 138833920.0,
+        "train_max": 140709888.0,
+        "train_min": 1875968.0
+      },
+      "mobservice2::docker_memory_stats_total_dirty": {
+        "scale": 405504.0,
+        "train_max": 405504.0,
+        "train_min": 0.0
+      },
+      "mobservice2::docker_memory_stats_total_inactive_anon": {
+        "scale": 508370944.0,
+        "train_max": 508387328.0,
+        "train_min": 16384.0
+      },
+      "mobservice2::docker_memory_stats_total_inactive_file": {
+        "scale": 138866688.0,
+        "train_max": 139292672.0,
+        "train_min": 425984.0
+      },
+      "mobservice2::docker_memory_stats_total_mapped_file": {
+        "scale": 22437888.0,
+        "train_max": 24195072.0,
+        "train_min": 1757184.0
+      },
+      "mobservice2::docker_memory_stats_total_pgfault": {
+        "scale": 15493911352.0,
+        "train_max": 15494652928.0,
+        "train_min": 741576.0
+      },
+      "mobservice2::docker_memory_stats_total_pgmajfault": {
+        "scale": 94182.0,
+        "train_max": 94974.0,
+        "train_min": 792.0
+      },
+      "mobservice2::docker_memory_stats_total_pgpgin": {
+        "scale": 15494279297.0,
+        "train_max": 15495019520.0,
+        "train_min": 740223.0
+      },
+      "mobservice2::docker_memory_stats_total_pgpgout": {
+        "scale": 15494334187.0,
+        "train_max": 15494792192.0,
+        "train_min": 458005.0
+      },
+      "mobservice2::docker_memory_stats_total_rss": {
+        "scale": 2224316416.0,
+        "train_max": 2305351680.0,
+        "train_min": 81035264.0
+      },
+      "mobservice2::docker_memory_stats_total_rss_huge": {
+        "scale": 33554432.0,
+        "train_max": 33554432.0,
+        "train_min": 0.0
+      },
+      "mobservice2::docker_memory_usage_max": {
+        "scale": 111259648.0,
+        "train_max": 2451255296.0,
+        "train_min": 2339995648.0
+      },
+      "mobservice2::docker_memory_usage_pct": {
+        "scale": 0.5342209413647652,
+        "train_max": 0.562846839427948,
+        "train_min": 0.02862589806318283
+      },
+      "mobservice2::docker_memory_usage_total": {
+        "scale": 2202624000.0,
+        "train_max": 2320650240.0,
+        "train_min": 118026240.0
+      },
+      "mobservice2::docker_network_in_bytes": {
+        "scale": 34390.96484375,
+        "train_max": 34390.96484375,
+        "train_min": 0.0
+      },
+      "mobservice2::docker_network_in_packets": {
+        "scale": 490.4007568359375,
+        "train_max": 490.4007568359375,
+        "train_min": 0.0
+      },
+      "mobservice2::docker_network_inbound_bytes": {
+        "scale": 2954500532.0,
+        "train_max": 2977465344.0,
+        "train_min": 22964812.0
+      },
+      "mobservice2::docker_network_inbound_packets": {
+        "scale": 19353602.0,
+        "train_max": 19504528.0,
+        "train_min": 150926.0
+      },
+      "mobservice2::docker_network_out_bytes": {
+        "scale": 1476847.25,
+        "train_max": 1476847.25,
+        "train_min": 0.0
+      },
+      "mobservice2::docker_network_out_packets": {
+        "scale": 537.2643432617188,
+        "train_max": 537.2643432617188,
+        "train_min": 0.0
+      },
+      "mobservice2::docker_network_outbound_bytes": {
+        "scale": 3595216054.0,
+        "train_max": 3613448960.0,
+        "train_min": 18232906.0
+      },
+      "mobservice2::docker_network_outbound_packets": {
+        "scale": 21256665.0,
+        "train_max": 21426120.0,
+        "train_min": 169455.0
+      },
+      "redisservice1::docker_cpu_core_X_norm_pct": {
+        "scale": 0.01066783393980586,
+        "train_max": 0.010668803937733173,
+        "train_min": 9.699979273136705e-07
+      },
+      "redisservice1::docker_cpu_core_X_pct": {
+        "scale": 0.17068534303689376,
+        "train_max": 0.17070086300373077,
+        "train_min": 1.5519966837018728e-05
+      },
+      "redisservice1::docker_cpu_core_X_ticks": {
+        "scale": 204634729267200.0,
+        "train_max": 204669720723456.0,
+        "train_min": 34991456256.0
+      },
+      "redisservice1::docker_cpu_kernel_norm_pct": {
+        "scale": 0.02299528382718563,
+        "train_max": 0.02299528382718563,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_cpu_kernel_pct": {
+        "scale": 0.3679245412349701,
+        "train_max": 0.3679245412349701,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_cpu_kernel_ticks": {
+        "scale": 101369590833152.0,
+        "train_max": 101409940832256.0,
+        "train_min": 40349999104.0
+      },
+      "redisservice1::docker_cpu_system_ticks": {
+        "scale": 2.5000751226945536e+16,
+        "train_max": 5.374828159906611e+16,
+        "train_min": 2.8747530372120576e+16
+      },
+      "redisservice1::docker_cpu_total_norm_pct": {
+        "scale": 0.25602802200592123,
+        "train_max": 0.25605130195617676,
+        "train_min": 2.3279950255528092e-05
+      },
+      "redisservice1::docker_cpu_total_pct": {
+        "scale": 4.09644835209474,
+        "train_max": 4.096820831298828,
+        "train_min": 0.0003724792040884495
+      },
+      "redisservice1::docker_cpu_user_norm_pct": {
+        "scale": 0.2564255893230438,
+        "train_max": 0.2564255893230438,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_cpu_user_pct": {
+        "scale": 4.102809429168701,
+        "train_max": 4.102809429168701,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_cpu_user_ticks": {
+        "scale": 4813390640513024.0,
+        "train_max": 4814189650509824.0,
+        "train_min": 799009996800.0
+      },
+      "redisservice1::docker_diskio_read_bytes": {
+        "scale": 94699520.0,
+        "train_max": 94699520.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_diskio_read_ops": {
+        "scale": 1862.0,
+        "train_max": 1862.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_diskio_read_service_time": {
+        "scale": 3788774656.0,
+        "train_max": 3788774656.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_diskio_read_wait_time": {
+        "scale": 7297825280.0,
+        "train_max": 7297825280.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_diskio_summary_bytes": {
+        "scale": 94748672.0,
+        "train_max": 94752768.0,
+        "train_min": 4096.0
+      },
+      "redisservice1::docker_diskio_summary_ops": {
+        "scale": 1872.0,
+        "train_max": 1873.0,
+        "train_min": 1.0
+      },
+      "redisservice1::docker_diskio_summary_service_time": {
+        "scale": 3790852132.0,
+        "train_max": 3791215872.0,
+        "train_min": 363740.0
+      },
+      "redisservice1::docker_diskio_summary_wait_time": {
+        "scale": 7440951685.0,
+        "train_max": 7440972800.0,
+        "train_min": 21115.0
+      },
+      "redisservice1::docker_diskio_write_bytes": {
+        "scale": 49152.0,
+        "train_max": 53248.0,
+        "train_min": 4096.0
+      },
+      "redisservice1::docker_diskio_write_ops": {
+        "scale": 10.0,
+        "train_max": 11.0,
+        "train_min": 1.0
+      },
+      "redisservice1::docker_diskio_write_service_time": {
+        "scale": 2077353.0,
+        "train_max": 2441093.0,
+        "train_min": 363740.0
+      },
+      "redisservice1::docker_diskio_write_wait_time": {
+        "scale": 143126149.0,
+        "train_max": 143147264.0,
+        "train_min": 21115.0
+      },
+      "redisservice1::docker_memory_rss_pct": {
+        "scale": 0.4472656100988388,
+        "train_max": 0.6060231328010559,
+        "train_min": 0.1587575227022171
+      },
+      "redisservice1::docker_memory_rss_total": {
+        "scale": 2881486848.0,
+        "train_max": 3904274432.0,
+        "train_min": 1022787584.0
+      },
+      "redisservice1::docker_memory_stats_active_anon": {
+        "scale": 2868670464.0,
+        "train_max": 3755671552.0,
+        "train_min": 887001088.0
+      },
+      "redisservice1::docker_memory_stats_active_file": {
+        "scale": 54550528.0,
+        "train_max": 54571008.0,
+        "train_min": 20480.0
+      },
+      "redisservice1::docker_memory_stats_cache": {
+        "scale": 415670272.0,
+        "train_max": 422854656.0,
+        "train_min": 7184384.0
+      },
+      "redisservice1::docker_memory_stats_dirty": {
+        "scale": 811008.0,
+        "train_max": 811008.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_memory_stats_inactive_anon": {
+        "scale": 502714368.0,
+        "train_max": 502714368.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_memory_stats_inactive_file": {
+        "scale": 399683584.0,
+        "train_max": 405106688.0,
+        "train_min": 5423104.0
+      },
+      "redisservice1::docker_memory_stats_mapped_file": {
+        "scale": 12570624.0,
+        "train_max": 12570624.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_memory_stats_pgfault": {
+        "scale": 38689509567.0,
+        "train_max": 38690820096.0,
+        "train_min": 1310529.0
+      },
+      "redisservice1::docker_memory_stats_pgmajfault": {
+        "scale": 231.0,
+        "train_max": 231.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_memory_stats_pgpgin": {
+        "scale": 38687329147.0,
+        "train_max": 38688477184.0,
+        "train_min": 1148037.0
+      },
+      "redisservice1::docker_memory_stats_pgpgout": {
+        "scale": 38687283375.0,
+        "train_max": 38687854592.0,
+        "train_min": 571217.0
+      },
+      "redisservice1::docker_memory_stats_rss": {
+        "scale": 2881486848.0,
+        "train_max": 3904274432.0,
+        "train_min": 1022787584.0
+      },
+      "redisservice1::docker_memory_stats_rss_huge": {
+        "scale": 41943040.0,
+        "train_max": 41943040.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_memory_stats_total_active_anon": {
+        "scale": 2868670464.0,
+        "train_max": 3755671552.0,
+        "train_min": 887001088.0
+      },
+      "redisservice1::docker_memory_stats_total_active_file": {
+        "scale": 54550528.0,
+        "train_max": 54571008.0,
+        "train_min": 20480.0
+      },
+      "redisservice1::docker_memory_stats_total_cache": {
+        "scale": 415670272.0,
+        "train_max": 422854656.0,
+        "train_min": 7184384.0
+      },
+      "redisservice1::docker_memory_stats_total_dirty": {
+        "scale": 811008.0,
+        "train_max": 811008.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_memory_stats_total_inactive_anon": {
+        "scale": 502714368.0,
+        "train_max": 502714368.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_memory_stats_total_inactive_file": {
+        "scale": 399683584.0,
+        "train_max": 405106688.0,
+        "train_min": 5423104.0
+      },
+      "redisservice1::docker_memory_stats_total_mapped_file": {
+        "scale": 12570624.0,
+        "train_max": 12570624.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_memory_stats_total_pgfault": {
+        "scale": 38689509567.0,
+        "train_max": 38690820096.0,
+        "train_min": 1310529.0
+      },
+      "redisservice1::docker_memory_stats_total_pgmajfault": {
+        "scale": 231.0,
+        "train_max": 231.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_memory_stats_total_pgpgin": {
+        "scale": 38687329147.0,
+        "train_max": 38688477184.0,
+        "train_min": 1148037.0
+      },
+      "redisservice1::docker_memory_stats_total_pgpgout": {
+        "scale": 38687283375.0,
+        "train_max": 38687854592.0,
+        "train_min": 571217.0
+      },
+      "redisservice1::docker_memory_stats_total_rss": {
+        "scale": 2881486848.0,
+        "train_max": 3904274432.0,
+        "train_min": 1022787584.0
+      },
+      "redisservice1::docker_memory_stats_total_rss_huge": {
+        "scale": 41943040.0,
+        "train_max": 41943040.0,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_memory_usage_max": {
+        "scale": 709976064.0,
+        "train_max": 4172939264.0,
+        "train_min": 3462963200.0
+      },
+      "redisservice1::docker_memory_usage_pct": {
+        "scale": 0.4264482110738754,
+        "train_max": 0.6348978877067566,
+        "train_min": 0.20844967663288116
+      },
+      "redisservice1::docker_memory_usage_total": {
+        "scale": 2747371520.0,
+        "train_max": 4090298368.0,
+        "train_min": 1342926848.0
+      },
+      "redisservice1::docker_network_in_bytes": {
+        "scale": 39618.453125,
+        "train_max": 39618.453125,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_network_in_packets": {
+        "scale": 578.5665283203125,
+        "train_max": 578.5665283203125,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_network_inbound_bytes": {
+        "scale": 4640960992.0,
+        "train_max": 4677443584.0,
+        "train_min": 36482592.0
+      },
+      "redisservice1::docker_network_inbound_packets": {
+        "scale": 50170933.0,
+        "train_max": 50568208.0,
+        "train_min": 397275.0
+      },
+      "redisservice1::docker_network_out_bytes": {
+        "scale": 1677200.75,
+        "train_max": 1677200.75,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_network_out_packets": {
+        "scale": 588.4335327148438,
+        "train_max": 588.4335327148438,
+        "train_min": 0.0
+      },
+      "redisservice1::docker_network_outbound_bytes": {
+        "scale": 7684642472.0,
+        "train_max": 7728027136.0,
+        "train_min": 43384664.0
+      },
+      "redisservice1::docker_network_outbound_packets": {
+        "scale": 59320919.0,
+        "train_max": 59793340.0,
+        "train_min": 472421.0
+      },
+      "redisservice2::docker_cpu_core_X_norm_pct": {
+        "scale": 0.0045956699177622795,
+        "train_max": 0.01206297893077135,
+        "train_min": 0.007467309013009071
+      },
+      "redisservice2::docker_cpu_core_X_pct": {
+        "scale": 0.036765359342098236,
+        "train_max": 0.0965038314461708,
+        "train_min": 0.05973847210407257
+      },
+      "redisservice2::docker_cpu_core_X_ticks": {
+        "scale": 105133873168384.0,
+        "train_max": 106404551589888.0,
+        "train_min": 1270678421504.0
+      },
+      "redisservice2::docker_cpu_kernel_norm_pct": {
+        "scale": 0.04545454680919647,
+        "train_max": 0.04545454680919647,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_cpu_kernel_pct": {
+        "scale": 0.3636363744735718,
+        "train_max": 0.3636363744735718,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_cpu_kernel_ticks": {
+        "scale": 80083282751488.0,
+        "train_max": 80133922750464.0,
+        "train_min": 50639998976.0
+      },
+      "redisservice2::docker_cpu_system_ticks": {
+        "scale": 1.2537570030256128e+16,
+        "train_max": 2.686744924048589e+16,
+        "train_min": 1.432987921022976e+16
+      },
+      "redisservice2::docker_cpu_total_norm_pct": {
+        "scale": 0.14706143736839294,
+        "train_max": 0.3860153257846832,
+        "train_min": 0.23895388841629028
+      },
+      "redisservice2::docker_cpu_total_pct": {
+        "scale": 1.1764914989471436,
+        "train_max": 3.088122606277466,
+        "train_min": 1.9116311073303223
+      },
+      "redisservice2::docker_cpu_user_norm_pct": {
+        "scale": 0.15973228216171265,
+        "train_max": 0.37791410088539124,
+        "train_min": 0.2181818187236786
+      },
+      "redisservice2::docker_cpu_user_pct": {
+        "scale": 1.2778582572937012,
+        "train_max": 3.02331280708313,
+        "train_min": 1.7454545497894287
+      },
+      "redisservice2::docker_cpu_user_ticks": {
+        "scale": 3288593250385920.0,
+        "train_max": 3329235041124352.0,
+        "train_min": 40641790738432.0
+      },
+      "redisservice2::docker_diskio_read_bytes": {
+        "scale": 1211830272.0,
+        "train_max": 1212223488.0,
+        "train_min": 393216.0
+      },
+      "redisservice2::docker_diskio_read_ops": {
+        "scale": 97518.0,
+        "train_max": 97536.0,
+        "train_min": 18.0
+      },
+      "redisservice2::docker_diskio_read_service_time": {
+        "scale": 35447996320.0,
+        "train_max": 35521298432.0,
+        "train_min": 73302112.0
+      },
+      "redisservice2::docker_diskio_read_wait_time": {
+        "scale": 167139525184.0,
+        "train_max": 167778254848.0,
+        "train_min": 638729664.0
+      },
+      "redisservice2::docker_diskio_summary_bytes": {
+        "scale": 1227358208.0,
+        "train_max": 1227751424.0,
+        "train_min": 393216.0
+      },
+      "redisservice2::docker_diskio_summary_ops": {
+        "scale": 101307.0,
+        "train_max": 101325.0,
+        "train_min": 18.0
+      },
+      "redisservice2::docker_diskio_summary_service_time": {
+        "scale": 39484194720.0,
+        "train_max": 39557496832.0,
+        "train_min": 73302112.0
+      },
+      "redisservice2::docker_diskio_summary_wait_time": {
+        "scale": 2724898390592.0,
+        "train_max": 2725537120256.0,
+        "train_min": 638729664.0
+      },
+      "redisservice2::docker_diskio_write_bytes": {
+        "scale": 15527936.0,
+        "train_max": 15527936.0,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_diskio_write_ops": {
+        "scale": 3789.0,
+        "train_max": 3789.0,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_diskio_write_service_time": {
+        "scale": 4036196352.0,
+        "train_max": 4036196352.0,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_diskio_write_wait_time": {
+        "scale": 2557758930944.0,
+        "train_max": 2557758930944.0,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_memory_rss_pct": {
+        "scale": 0.5650339126586914,
+        "train_max": 0.7722387313842773,
+        "train_min": 0.20720481872558594
+      },
+      "redisservice2::docker_memory_rss_total": {
+        "scale": 2426802176.0,
+        "train_max": 3316740096.0,
+        "train_min": 889937920.0
+      },
+      "redisservice2::docker_memory_stats_active_anon": {
+        "scale": 1935859712.0,
+        "train_max": 2774515712.0,
+        "train_min": 838656000.0
+      },
+      "redisservice2::docker_memory_stats_active_file": {
+        "scale": 88952832.0,
+        "train_max": 89161728.0,
+        "train_min": 208896.0
+      },
+      "redisservice2::docker_memory_stats_cache": {
+        "scale": 307560448.0,
+        "train_max": 309764096.0,
+        "train_min": 2203648.0
+      },
+      "redisservice2::docker_memory_stats_dirty": {
+        "scale": 675840.0,
+        "train_max": 675840.0,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_memory_stats_inactive_anon": {
+        "scale": 582172672.0,
+        "train_max": 590450688.0,
+        "train_min": 8278016.0
+      },
+      "redisservice2::docker_memory_stats_inactive_file": {
+        "scale": 307552256.0,
+        "train_max": 307572736.0,
+        "train_min": 20480.0
+      },
+      "redisservice2::docker_memory_stats_mapped_file": {
+        "scale": 20275200.0,
+        "train_max": 20275200.0,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_memory_stats_pgfault": {
+        "scale": 30983386173.0,
+        "train_max": 30984056832.0,
+        "train_min": 670659.0
+      },
+      "redisservice2::docker_memory_stats_pgmajfault": {
+        "scale": 16599.0,
+        "train_max": 16599.0,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_memory_stats_pgpgin": {
+        "scale": 30984006703.0,
+        "train_max": 30984663040.0,
+        "train_min": 656337.0
+      },
+      "redisservice2::docker_memory_stats_pgpgout": {
+        "scale": 30983846027.0,
+        "train_max": 30984155136.0,
+        "train_min": 309109.0
+      },
+      "redisservice2::docker_memory_stats_rss": {
+        "scale": 2426802176.0,
+        "train_max": 3316740096.0,
+        "train_min": 889937920.0
+      },
+      "redisservice2::docker_memory_stats_rss_huge": {
+        "scale": 44040192.0,
+        "train_max": 44040192.0,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_memory_stats_total_active_anon": {
+        "scale": 1935859712.0,
+        "train_max": 2774515712.0,
+        "train_min": 838656000.0
+      },
+      "redisservice2::docker_memory_stats_total_active_file": {
+        "scale": 88952832.0,
+        "train_max": 89161728.0,
+        "train_min": 208896.0
+      },
+      "redisservice2::docker_memory_stats_total_cache": {
+        "scale": 307560448.0,
+        "train_max": 309764096.0,
+        "train_min": 2203648.0
+      },
+      "redisservice2::docker_memory_stats_total_dirty": {
+        "scale": 675840.0,
+        "train_max": 675840.0,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_memory_stats_total_inactive_anon": {
+        "scale": 582172672.0,
+        "train_max": 590450688.0,
+        "train_min": 8278016.0
+      },
+      "redisservice2::docker_memory_stats_total_inactive_file": {
+        "scale": 307552256.0,
+        "train_max": 307572736.0,
+        "train_min": 20480.0
+      },
+      "redisservice2::docker_memory_stats_total_mapped_file": {
+        "scale": 20275200.0,
+        "train_max": 20275200.0,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_memory_stats_total_pgfault": {
+        "scale": 30983386173.0,
+        "train_max": 30984056832.0,
+        "train_min": 670659.0
+      },
+      "redisservice2::docker_memory_stats_total_pgmajfault": {
+        "scale": 16599.0,
+        "train_max": 16599.0,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_memory_stats_total_pgpgin": {
+        "scale": 30984006703.0,
+        "train_max": 30984663040.0,
+        "train_min": 656337.0
+      },
+      "redisservice2::docker_memory_stats_total_pgpgout": {
+        "scale": 30983846027.0,
+        "train_max": 30984155136.0,
+        "train_min": 309109.0
+      },
+      "redisservice2::docker_memory_stats_total_rss": {
+        "scale": 2426802176.0,
+        "train_max": 3316740096.0,
+        "train_min": 889937920.0
+      },
+      "redisservice2::docker_memory_stats_total_rss_huge": {
+        "scale": 44040192.0,
+        "train_max": 44040192.0,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_memory_usage_max": {
+        "scale": 1008472064.0,
+        "train_max": 3524685824.0,
+        "train_min": 2516213760.0
+      },
+      "redisservice2::docker_memory_usage_pct": {
+        "scale": 0.5798120498657227,
+        "train_max": 0.7959365844726562,
+        "train_min": 0.2161245346069336
+      },
+      "redisservice2::docker_memory_usage_total": {
+        "scale": 2490273792.0,
+        "train_max": 3418521600.0,
+        "train_min": 928247808.0
+      },
+      "redisservice2::docker_network_in_bytes": {
+        "scale": 39366.4921875,
+        "train_max": 39366.4921875,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_network_in_packets": {
+        "scale": 576.276611328125,
+        "train_max": 576.276611328125,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_network_inbound_bytes": {
+        "scale": 4634358180.0,
+        "train_max": 4668559360.0,
+        "train_min": 34201180.0
+      },
+      "redisservice2::docker_network_inbound_packets": {
+        "scale": 50085944.0,
+        "train_max": 50449168.0,
+        "train_min": 363224.0
+      },
+      "redisservice2::docker_network_out_bytes": {
+        "scale": 1626118.625,
+        "train_max": 1626118.625,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_network_out_packets": {
+        "scale": 579.6768798828125,
+        "train_max": 579.6768798828125,
+        "train_min": 0.0
+      },
+      "redisservice2::docker_network_outbound_bytes": {
+        "scale": 7666369388.0,
+        "train_max": 7707433984.0,
+        "train_min": 41064596.0
+      },
+      "redisservice2::docker_network_outbound_packets": {
+        "scale": 59082620.0,
+        "train_max": 59520344.0,
+        "train_min": 437724.0
+      },
+      "webservice1::docker_cpu_core_X_norm_pct": {
+        "scale": 0.013327678015798483,
+        "train_max": 0.013328812085092068,
+        "train_min": 1.1340692935846164e-06
+      },
+      "webservice1::docker_cpu_core_X_pct": {
+        "scale": 0.21324284825277573,
+        "train_max": 0.21326099336147308,
+        "train_min": 1.8145108697353862e-05
+      },
+      "webservice1::docker_cpu_core_X_ticks": {
+        "scale": 301827619608576.0,
+        "train_max": 301844261765120.0,
+        "train_min": 16642156544.0
+      },
+      "webservice1::docker_cpu_kernel_norm_pct": {
+        "scale": 0.016548464074730873,
+        "train_max": 0.016548464074730873,
+        "train_min": 0.0
+      },
+      "webservice1::docker_cpu_kernel_pct": {
+        "scale": 0.26477542519569397,
+        "train_max": 0.26477542519569397,
+        "train_min": 0.0
+      },
+      "webservice1::docker_cpu_kernel_ticks": {
+        "scale": 27183259811840.0,
+        "train_max": 27219669811200.0,
+        "train_min": 36409999360.0
+      },
+      "webservice1::docker_cpu_system_ticks": {
+        "scale": 2.500073619456e+16,
+        "train_max": 5.374828159906611e+16,
+        "train_min": 2.874754540450611e+16
+      },
+      "webservice1::docker_cpu_total_norm_pct": {
+        "scale": 0.3198642947318149,
+        "train_max": 0.3198915123939514,
+        "train_min": 2.721766213653609e-05
+      },
+      "webservice1::docker_cpu_total_pct": {
+        "scale": 5.117828715709038,
+        "train_max": 5.118264198303223,
+        "train_min": 0.00043548259418457747
+      },
+      "webservice1::docker_cpu_user_norm_pct": {
+        "scale": 0.31980618834495544,
+        "train_max": 0.31980618834495544,
+        "train_min": 0.0
+      },
+      "webservice1::docker_cpu_user_pct": {
+        "scale": 5.116899013519287,
+        "train_max": 5.116899013519287,
+        "train_min": 0.0
+      },
+      "webservice1::docker_cpu_user_ticks": {
+        "scale": 7222790218153984.0,
+        "train_max": 7223143928168448.0,
+        "train_min": 353710014464.0
+      },
+      "webservice1::docker_diskio_read_bytes": {
+        "scale": 82124800.0,
+        "train_max": 82124800.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_diskio_read_ops": {
+        "scale": 4188.0,
+        "train_max": 4188.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_diskio_read_service_time": {
+        "scale": 5608789504.0,
+        "train_max": 5608789504.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_diskio_read_wait_time": {
+        "scale": 11129906176.0,
+        "train_max": 11129906176.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_diskio_summary_bytes": {
+        "scale": 82247680.0,
+        "train_max": 82251776.0,
+        "train_min": 4096.0
+      },
+      "webservice1::docker_diskio_summary_ops": {
+        "scale": 4207.0,
+        "train_max": 4208.0,
+        "train_min": 1.0
+      },
+      "webservice1::docker_diskio_summary_service_time": {
+        "scale": 5614580451.0,
+        "train_max": 5614883328.0,
+        "train_min": 302877.0
+      },
+      "webservice1::docker_diskio_summary_wait_time": {
+        "scale": 11240579989.0,
+        "train_max": 11240605696.0,
+        "train_min": 25707.0
+      },
+      "webservice1::docker_diskio_write_bytes": {
+        "scale": 122880.0,
+        "train_max": 126976.0,
+        "train_min": 4096.0
+      },
+      "webservice1::docker_diskio_write_ops": {
+        "scale": 19.0,
+        "train_max": 20.0,
+        "train_min": 1.0
+      },
+      "webservice1::docker_diskio_write_service_time": {
+        "scale": 5790675.0,
+        "train_max": 6093552.0,
+        "train_min": 302877.0
+      },
+      "webservice1::docker_diskio_write_wait_time": {
+        "scale": 110674557.0,
+        "train_max": 110700264.0,
+        "train_min": 25707.0
+      },
+      "webservice1::docker_memory_rss_pct": {
+        "scale": 0.5632476806640625,
+        "train_max": 0.5892596244812012,
+        "train_min": 0.026011943817138672
+      },
+      "webservice1::docker_memory_rss_total": {
+        "scale": 4838260736.0,
+        "train_max": 5061701632.0,
+        "train_min": 223440896.0
+      },
+      "webservice1::docker_memory_stats_active_anon": {
+        "scale": 4545798144.0,
+        "train_max": 4769406976.0,
+        "train_min": 223608832.0
+      },
+      "webservice1::docker_memory_stats_active_file": {
+        "scale": 24899584.0,
+        "train_max": 24932352.0,
+        "train_min": 32768.0
+      },
+      "webservice1::docker_memory_stats_cache": {
+        "scale": 317833216.0,
+        "train_max": 328105984.0,
+        "train_min": 10272768.0
+      },
+      "webservice1::docker_memory_stats_dirty": {
+        "scale": 811008.0,
+        "train_max": 811008.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_memory_stats_inactive_anon": {
+        "scale": 587423744.0,
+        "train_max": 587423744.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_memory_stats_inactive_file": {
+        "scale": 293990400.0,
+        "train_max": 304631808.0,
+        "train_min": 10641408.0
+      },
+      "webservice1::docker_memory_stats_mapped_file": {
+        "scale": 11624448.0,
+        "train_max": 11624448.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_memory_stats_pgfault": {
+        "scale": 8648007036.0,
+        "train_max": 8648361984.0,
+        "train_min": 354948.0
+      },
+      "webservice1::docker_memory_stats_pgmajfault": {
+        "scale": 495.0,
+        "train_max": 495.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_memory_stats_pgpgin": {
+        "scale": 7973492801.0,
+        "train_max": 7973660672.0,
+        "train_min": 167871.0
+      },
+      "webservice1::docker_memory_stats_pgpgout": {
+        "scale": 7972706501.0,
+        "train_max": 7972822016.0,
+        "train_min": 115515.0
+      },
+      "webservice1::docker_memory_stats_rss": {
+        "scale": 4838260736.0,
+        "train_max": 5061701632.0,
+        "train_min": 223440896.0
+      },
+      "webservice1::docker_memory_stats_rss_huge": {
+        "scale": 94371840.0,
+        "train_max": 94371840.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_memory_stats_total_active_anon": {
+        "scale": 4545798144.0,
+        "train_max": 4769406976.0,
+        "train_min": 223608832.0
+      },
+      "webservice1::docker_memory_stats_total_active_file": {
+        "scale": 24899584.0,
+        "train_max": 24932352.0,
+        "train_min": 32768.0
+      },
+      "webservice1::docker_memory_stats_total_cache": {
+        "scale": 317833216.0,
+        "train_max": 328105984.0,
+        "train_min": 10272768.0
+      },
+      "webservice1::docker_memory_stats_total_dirty": {
+        "scale": 811008.0,
+        "train_max": 811008.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_memory_stats_total_inactive_anon": {
+        "scale": 587423744.0,
+        "train_max": 587423744.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_memory_stats_total_inactive_file": {
+        "scale": 293990400.0,
+        "train_max": 304631808.0,
+        "train_min": 10641408.0
+      },
+      "webservice1::docker_memory_stats_total_mapped_file": {
+        "scale": 11624448.0,
+        "train_max": 11624448.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_memory_stats_total_pgfault": {
+        "scale": 8648007036.0,
+        "train_max": 8648361984.0,
+        "train_min": 354948.0
+      },
+      "webservice1::docker_memory_stats_total_pgmajfault": {
+        "scale": 495.0,
+        "train_max": 495.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_memory_stats_total_pgpgin": {
+        "scale": 7973492801.0,
+        "train_max": 7973660672.0,
+        "train_min": 167871.0
+      },
+      "webservice1::docker_memory_stats_total_pgpgout": {
+        "scale": 7972706501.0,
+        "train_max": 7972822016.0,
+        "train_min": 115515.0
+      },
+      "webservice1::docker_memory_stats_total_rss": {
+        "scale": 4838260736.0,
+        "train_max": 5061701632.0,
+        "train_min": 223440896.0
+      },
+      "webservice1::docker_memory_stats_total_rss_huge": {
+        "scale": 94371840.0,
+        "train_max": 94371840.0,
+        "train_min": 0.0
+      },
+      "webservice1::docker_memory_usage_max": {
+        "scale": 4972326912.0,
+        "train_max": 5235073024.0,
+        "train_min": 262746112.0
+      },
+      "webservice1::docker_memory_usage_pct": {
+        "scale": 0.5806803703308105,
+        "train_max": 0.6091718673706055,
+        "train_min": 0.028491497039794922
+      },
+      "webservice1::docker_memory_usage_total": {
+        "scale": 4988006400.0,
+        "train_max": 5232746496.0,
+        "train_min": 244740096.0
+      },
+      "webservice1::docker_network_in_bytes": {
+        "scale": 38975.4140625,
+        "train_max": 38975.4140625,
+        "train_min": 0.0
+      },
+      "webservice1::docker_network_in_packets": {
+        "scale": 532.7156372070312,
+        "train_max": 532.7156372070312,
+        "train_min": 0.0
+      },
+      "webservice1::docker_network_inbound_bytes": {
+        "scale": 5961956476.0,
+        "train_max": 6007542272.0,
+        "train_min": 45585796.0
+      },
+      "webservice1::docker_network_inbound_packets": {
+        "scale": 33657361.0,
+        "train_max": 33912512.0,
+        "train_min": 255151.0
+      },
+      "webservice1::docker_network_out_bytes": {
+        "scale": 1523368.375,
+        "train_max": 1523368.375,
+        "train_min": 0.0
+      },
+      "webservice1::docker_network_out_packets": {
+        "scale": 569.4432983398438,
+        "train_max": 569.4432983398438,
+        "train_min": 0.0
+      },
+      "webservice1::docker_network_outbound_bytes": {
+        "scale": 5669003176.0,
+        "train_max": 5700555776.0,
+        "train_min": 31552600.0
+      },
+      "webservice1::docker_network_outbound_packets": {
+        "scale": 37219194.0,
+        "train_max": 37506632.0,
+        "train_min": 287438.0
+      },
+      "webservice2::docker_cpu_core_X_norm_pct": {
+        "scale": 0.0042127384804189205,
+        "train_max": 0.011898287571966648,
+        "train_min": 0.007685549091547728
+      },
+      "webservice2::docker_cpu_core_X_pct": {
+        "scale": 0.06740381568670273,
+        "train_max": 0.19037260115146637,
+        "train_min": 0.12296878546476364
+      },
+      "webservice2::docker_cpu_core_X_ticks": {
+        "scale": 265321594388480.0,
+        "train_max": 265867048779776.0,
+        "train_min": 545454391296.0
+      },
+      "webservice2::docker_cpu_kernel_norm_pct": {
+        "scale": 0.031172070652246475,
+        "train_max": 0.031172070652246475,
+        "train_min": 0.0
+      },
+      "webservice2::docker_cpu_kernel_pct": {
+        "scale": 0.4987531304359436,
+        "train_max": 0.4987531304359436,
+        "train_min": 0.0
+      },
+      "webservice2::docker_cpu_kernel_ticks": {
+        "scale": 31401919938560.0,
+        "train_max": 31479339941888.0,
+        "train_min": 77420003328.0
+      },
+      "webservice2::docker_cpu_system_ticks": {
+        "scale": 2.4956751434481664e+16,
+        "train_max": 4.749623514523238e+16,
+        "train_min": 2.253948371075072e+16
+      },
+      "webservice2::docker_cpu_total_norm_pct": {
+        "scale": 0.13480763137340546,
+        "train_max": 0.38074520230293274,
+        "train_min": 0.24593757092952728
+      },
+      "webservice2::docker_cpu_total_pct": {
+        "scale": 2.1569221019744873,
+        "train_max": 6.091923236846924,
+        "train_min": 3.9350011348724365
+      },
+      "webservice2::docker_cpu_user_norm_pct": {
+        "scale": 0.13555315136909485,
+        "train_max": 0.38151365518569946,
+        "train_min": 0.24596050381660461
+      },
+      "webservice2::docker_cpu_user_pct": {
+        "scale": 2.1688504219055176,
+        "train_max": 6.104218482971191,
+        "train_min": 3.935368061065674
+      },
+      "webservice2::docker_cpu_user_ticks": {
+        "scale": 8466532359208960.0,
+        "train_max": 8483909029330944.0,
+        "train_min": 17376670121984.0
+      },
+      "webservice2::docker_diskio_read_bytes": {
+        "scale": 503746560.0,
+        "train_max": 503869440.0,
+        "train_min": 122880.0
+      },
+      "webservice2::docker_diskio_read_ops": {
+        "scale": 60586.0,
+        "train_max": 60594.0,
+        "train_min": 8.0
+      },
+      "webservice2::docker_diskio_read_service_time": {
+        "scale": 20353990282.0,
+        "train_max": 20380442624.0,
+        "train_min": 26452342.0
+      },
+      "webservice2::docker_diskio_read_wait_time": {
+        "scale": 39852523376.0,
+        "train_max": 39852593152.0,
+        "train_min": 69776.0
+      },
+      "webservice2::docker_diskio_summary_bytes": {
+        "scale": 609062912.0,
+        "train_max": 609189888.0,
+        "train_min": 126976.0
+      },
+      "webservice2::docker_diskio_summary_ops": {
+        "scale": 86292.0,
+        "train_max": 86301.0,
+        "train_min": 9.0
+      },
+      "webservice2::docker_diskio_summary_service_time": {
+        "scale": 30727453104.0,
+        "train_max": 30763487232.0,
+        "train_min": 36034128.0
+      },
+      "webservice2::docker_diskio_summary_wait_time": {
+        "scale": 1195150839029.0,
+        "train_max": 1195150934016.0,
+        "train_min": 94987.0
+      },
+      "webservice2::docker_diskio_write_bytes": {
+        "scale": 105316352.0,
+        "train_max": 105320448.0,
+        "train_min": 4096.0
+      },
+      "webservice2::docker_diskio_write_ops": {
+        "scale": 25706.0,
+        "train_max": 25707.0,
+        "train_min": 1.0
+      },
+      "webservice2::docker_diskio_write_service_time": {
+        "scale": 10373462821.0,
+        "train_max": 10383044608.0,
+        "train_min": 9581787.0
+      },
+      "webservice2::docker_diskio_write_wait_time": {
+        "scale": 1155298205061.0,
+        "train_max": 1155298230272.0,
+        "train_min": 25211.0
+      },
+      "webservice2::docker_memory_rss_pct": {
+        "scale": 0.6209392547607422,
+        "train_max": 0.7350950241088867,
+        "train_min": 0.11415576934814453
+      },
+      "webservice2::docker_memory_rss_total": {
+        "scale": 2666913792.0,
+        "train_max": 3157209088.0,
+        "train_min": 490295296.0
+      },
+      "webservice2::docker_memory_stats_active_anon": {
+        "scale": 2443894784.0,
+        "train_max": 2690310144.0,
+        "train_min": 246415360.0
+      },
+      "webservice2::docker_memory_stats_active_file": {
+        "scale": 47312896.0,
+        "train_max": 47329280.0,
+        "train_min": 16384.0
+      },
+      "webservice2::docker_memory_stats_cache": {
+        "scale": 199245824.0,
+        "train_max": 209788928.0,
+        "train_min": 10543104.0
+      },
+      "webservice2::docker_memory_stats_dirty": {
+        "scale": 811008.0,
+        "train_max": 811008.0,
+        "train_min": 0.0
+      },
+      "webservice2::docker_memory_stats_inactive_anon": {
+        "scale": 616701952.0,
+        "train_max": 616726528.0,
+        "train_min": 24576.0
+      },
+      "webservice2::docker_memory_stats_inactive_file": {
+        "scale": 176603136.0,
+        "train_max": 186114048.0,
+        "train_min": 9510912.0
+      },
+      "webservice2::docker_memory_stats_mapped_file": {
+        "scale": 20275200.0,
+        "train_max": 20275200.0,
+        "train_min": 0.0
+      },
+      "webservice2::docker_memory_stats_pgfault": {
+        "scale": 8714796243.0,
+        "train_max": 8727684096.0,
+        "train_min": 12887853.0
+      },
+      "webservice2::docker_memory_stats_pgmajfault": {
+        "scale": 13860.0,
+        "train_max": 13860.0,
+        "train_min": 0.0
+      },
+      "webservice2::docker_memory_stats_pgpgin": {
+        "scale": 8301058210.0,
+        "train_max": 8313034240.0,
+        "train_min": 11976030.0
+      },
+      "webservice2::docker_memory_stats_pgpgout": {
+        "scale": 8300712788.0,
+        "train_max": 8312567296.0,
+        "train_min": 11854508.0
+      },
+      "webservice2::docker_memory_stats_rss": {
+        "scale": 2666913792.0,
+        "train_max": 3157209088.0,
+        "train_min": 490295296.0
+      },
+      "webservice2::docker_memory_stats_rss_huge": {
+        "scale": 54525952.0,
+        "train_max": 54525952.0,
+        "train_min": 0.0
+      },
+      "webservice2::docker_memory_stats_total_active_anon": {
+        "scale": 2443894784.0,
+        "train_max": 2690310144.0,
+        "train_min": 246415360.0
+      },
+      "webservice2::docker_memory_stats_total_active_file": {
+        "scale": 47312896.0,
+        "train_max": 47329280.0,
+        "train_min": 16384.0
+      },
+      "webservice2::docker_memory_stats_total_cache": {
+        "scale": 199245824.0,
+        "train_max": 209788928.0,
+        "train_min": 10543104.0
+      },
+      "webservice2::docker_memory_stats_total_dirty": {
+        "scale": 811008.0,
+        "train_max": 811008.0,
+        "train_min": 0.0
+      },
+      "webservice2::docker_memory_stats_total_inactive_anon": {
+        "scale": 616701952.0,
+        "train_max": 616726528.0,
+        "train_min": 24576.0
+      },
+      "webservice2::docker_memory_stats_total_inactive_file": {
+        "scale": 176603136.0,
+        "train_max": 186114048.0,
+        "train_min": 9510912.0
+      },
+      "webservice2::docker_memory_stats_total_mapped_file": {
+        "scale": 20275200.0,
+        "train_max": 20275200.0,
+        "train_min": 0.0
+      },
+      "webservice2::docker_memory_stats_total_pgfault": {
+        "scale": 8714796243.0,
+        "train_max": 8727684096.0,
+        "train_min": 12887853.0
+      },
+      "webservice2::docker_memory_stats_total_pgmajfault": {
+        "scale": 13860.0,
+        "train_max": 13860.0,
+        "train_min": 0.0
+      },
+      "webservice2::docker_memory_stats_total_pgpgin": {
+        "scale": 8301058210.0,
+        "train_max": 8313034240.0,
+        "train_min": 11976030.0
+      },
+      "webservice2::docker_memory_stats_total_pgpgout": {
+        "scale": 8300712788.0,
+        "train_max": 8312567296.0,
+        "train_min": 11854508.0
+      },
+      "webservice2::docker_memory_stats_total_rss": {
+        "scale": 2666913792.0,
+        "train_max": 3157209088.0,
+        "train_min": 490295296.0
+      },
+      "webservice2::docker_memory_stats_total_rss_huge": {
+        "scale": 54525952.0,
+        "train_max": 54525952.0,
+        "train_min": 0.0
+      },
+      "webservice2::docker_memory_usage_max": {
+        "scale": 2102132736.0,
+        "train_max": 3411435520.0,
+        "train_min": 1309302784.0
+      },
+      "webservice2::docker_memory_usage_pct": {
+        "scale": 0.6502752304077148,
+        "train_max": 0.7697591781616211,
+        "train_min": 0.11948394775390625
+      },
+      "webservice2::docker_memory_usage_total": {
+        "scale": 2792910848.0,
+        "train_max": 3306090496.0,
+        "train_min": 513179648.0
+      },
+      "webservice2::docker_network_in_bytes": {
+        "scale": 40443.73046875,
+        "train_max": 40443.73046875,
+        "train_min": 0.0
+      },
+      "webservice2::docker_network_in_packets": {
+        "scale": 565.349853515625,
+        "train_max": 565.349853515625,
+        "train_min": 0.0
+      },
+      "webservice2::docker_network_inbound_bytes": {
+        "scale": 5893904464.0,
+        "train_max": 5938587136.0,
+        "train_min": 44682672.0
+      },
+      "webservice2::docker_network_inbound_packets": {
+        "scale": 32557943.0,
+        "train_max": 32800376.0,
+        "train_min": 242433.0
+      },
+      "webservice2::docker_network_out_bytes": {
+        "scale": 1550309.0,
+        "train_max": 1550309.0,
+        "train_min": 0.0
+      },
+      "webservice2::docker_network_out_packets": {
+        "scale": 593.6947021484375,
+        "train_max": 593.6947021484375,
+        "train_min": 0.0
+      },
+      "webservice2::docker_network_outbound_bytes": {
+        "scale": 5601568404.0,
+        "train_max": 5632278016.0,
+        "train_min": 30709612.0
+      },
+      "webservice2::docker_network_outbound_packets": {
+        "scale": 36124382.0,
+        "train_max": 36399732.0,
+        "train_min": 275350.0
+      }
+    },
+    "normalization_fit_split": "train",
+    "parallel_execution": {
+      "effective_workers": 8,
+      "requested_workers": 8,
+      "result_order": "submitted task order",
+      "start_method": "spawn",
+      "task_count": 900,
+      "worker_native_threads": 1
+    },
+    "quality_fit_split": "train",
+    "quality_thresholds": {
+      "coverage": 0.2,
+      "dynamic_ratio": 0.0001,
+      "dynamic_span": 1e-10,
+      "unique_values": 2
+    },
+    "resume_cache": {
+      "cache_hits": 0,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/metric_cache",
+      "policy": "source-metadata and grid bound; atomic publish; execution-only and excluded from Git"
+    },
+    "schema_rule": "filename/service registry only; labels are unavailable to mapping",
+    "shared_schema_features_before_train_quality": 90
+  },
+  "normalization_firewall": "all telemetry scaling and quality decisions fit on Train only",
+  "preprocessing_runtime": {
+    "chunk_rows": 150000,
+    "phase_wall_seconds": {
+      "logs": 157.4466334860772,
+      "metric": 68.25052116718143,
+      "traces_including_span_index": 316.03173493314534
+    },
+    "pool_policy": "metric, log, span, and trace pools execute sequentially",
+    "requested_workers": 8,
+    "start_method": "spawn"
+  },
+  "random_seed": 42,
+  "raw_injection_boundary_purged": 0,
+  "raw_layout_binding": {
+    "logs": {
+      "bytes": 18445461523,
+      "digest_scope": "sha256(sorted relative_path + NUL + byte_size)",
+      "files": 10,
+      "layout_sha256": "ee10c7afacf40bb9eddb00a3cdfa2d99ce73d531654066b27595e579663c409b"
+    },
+    "metrics": {
+      "bytes": 4790077103,
+      "digest_scope": "sha256(sorted relative_path + NUL + byte_size)",
+      "files": 6640,
+      "layout_sha256": "38cabf0c6582a900a5ae80489eb0af392dedc00b4383ab7c4fabe1463eefd556"
+    },
+    "traces": {
+      "bytes": 8343966340,
+      "digest_scope": "sha256(sorted relative_path + NUL + byte_size)",
+      "files": 10,
+      "layout_sha256": "a12ae950f613c8f119742e7d1d149b56407cd76437020c4d31736e356e1fd08d"
+    }
+  },
+  "schema_version": "p5_i1_ad_data_manifest_v1",
+  "services": [
+    "dbservice1",
+    "dbservice2",
+    "logservice1",
+    "logservice2",
+    "mobservice1",
+    "mobservice2",
+    "redisservice1",
+    "redisservice2",
+    "webservice1",
+    "webservice2"
+  ],
+  "split_counts": {
+    "test": {
+      "event_count": 3900,
+      "first_timestamp_ms": 1627219530000,
+      "last_timestamp_ms": 1627747170000,
+      "positive_node_bins": 8397,
+      "timestamps": 17589,
+      "windows": 17580
+    },
+    "train": {
+      "event_count": 8787,
+      "first_timestamp_ms": 1625108820000,
+      "last_timestamp_ms": 1626691830000,
+      "positive_node_bins": 20106,
+      "timestamps": 52768,
+      "windows": 52759
+    },
+    "validation": {
+      "event_count": 3513,
+      "first_timestamp_ms": 1626691860000,
+      "last_timestamp_ms": 1627219500000,
+      "positive_node_bins": 7635,
+      "timestamps": 17589,
+      "windows": 17580
+    }
+  },
+  "split_files": {
+    "test": {
+      "label_mask": {
+        "bytes": 176018,
+        "dtype": "int8",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/test/label_mask.npy",
+        "sha256": "b5825654c8c173d42397a9d324dd9f555e1f52ba110a1ad7fb6e7006d6da9c3d",
+        "shape": [
+          17589,
+          10
+        ]
+      },
+      "labels": {
+        "bytes": 176018,
+        "dtype": "int8",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/test/labels.npy",
+        "sha256": "69800e2df9cf112ec8d4309bebc618e239e5d8ffc75121a5dee536d3f3d37b1c",
+        "shape": [
+          17589,
+          10
+        ]
+      },
+      "log": {
+        "bytes": 4221488,
+        "dtype": "float32",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/test/log.npy",
+        "sha256": "802d1398840ec99faafb4084741e17bd687b1bbbbd943e904ac83e667f8be7c4",
+        "shape": [
+          17589,
+          10,
+          6
+        ]
+      },
+      "metric": {
+        "bytes": 44324408,
+        "dtype": "float32",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/test/metric.npy",
+        "sha256": "2689b8d8e0707ebe7c62af2df4b3ca9bc5c95641b7c75660d98acb0694d7c214",
+        "shape": [
+          17589,
+          10,
+          63
+        ]
+      },
+      "timestamps": {
+        "bytes": 140840,
+        "dtype": "int64",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/test/timestamps.npy",
+        "sha256": "16acd33c5686bda23b43385b379d964e8363462b65227fce7351b1630395308f",
+        "shape": [
+          17589
+        ]
+      },
+      "trace": {
+        "bytes": 28142528,
+        "dtype": "float32",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/test/trace.npy",
+        "sha256": "b195ef823d162144593c5f68cc62f00e44d0edf725d071d420e814d8b96199f4",
+        "shape": [
+          17589,
+          10,
+          10,
+          4
+        ]
+      }
+    },
+    "train": {
+      "label_mask": {
+        "bytes": 527808,
+        "dtype": "int8",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/train/label_mask.npy",
+        "sha256": "cfd25fa187b361be536cdfa540adcb5fce3e0462be1556616e8d7c8b507e7090",
+        "shape": [
+          52768,
+          10
+        ]
+      },
+      "labels": {
+        "bytes": 527808,
+        "dtype": "int8",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/train/labels.npy",
+        "sha256": "112a215aa857d0b91d1265716f6b890c54a2c9d1775d8c9e00eb4a70ab537b3b",
+        "shape": [
+          52768,
+          10
+        ]
+      },
+      "log": {
+        "bytes": 12664448,
+        "dtype": "float32",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/train/log.npy",
+        "sha256": "7e5e7a80b03cdf65e655ef56f05d1ba20bed12c41d673afe096db9bc8d18b2b6",
+        "shape": [
+          52768,
+          10,
+          6
+        ]
+      },
+      "metric": {
+        "bytes": 132975488,
+        "dtype": "float32",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/train/metric.npy",
+        "sha256": "af621313a3c8dcb2acc81994ade5e346e2fb8ffef386fb7d495fd6c22db3b2fc",
+        "shape": [
+          52768,
+          10,
+          63
+        ]
+      },
+      "timestamps": {
+        "bytes": 422272,
+        "dtype": "int64",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/train/timestamps.npy",
+        "sha256": "2e88d0ccc12c49b3ee32a870ebd33f8a5cbca444edaccb31b1c4b7aa85cdb0a7",
+        "shape": [
+          52768
+        ]
+      },
+      "trace": {
+        "bytes": 84428928,
+        "dtype": "float32",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/train/trace.npy",
+        "sha256": "390dfae4da59493d195a06555b0b5d300f89a9536dab2915c6b5195edb8be3b9",
+        "shape": [
+          52768,
+          10,
+          10,
+          4
+        ]
+      }
+    },
+    "validation": {
+      "label_mask": {
+        "bytes": 176018,
+        "dtype": "int8",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/validation/label_mask.npy",
+        "sha256": "8cbf76e97e7fbc2a2dd4b230f42660d5255023c83a8ffc9949c05b111cf29e91",
+        "shape": [
+          17589,
+          10
+        ]
+      },
+      "labels": {
+        "bytes": 176018,
+        "dtype": "int8",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/validation/labels.npy",
+        "sha256": "c2ba6df07a1631872d3556ef9d7c6f0fc8c47e69419561ee6c5efde8848272a7",
+        "shape": [
+          17589,
+          10
+        ]
+      },
+      "log": {
+        "bytes": 4221488,
+        "dtype": "float32",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/validation/log.npy",
+        "sha256": "450dd0af780a542f3392d1468dd4e5a371545b89e6210af1a5757ded5b7ff47d",
+        "shape": [
+          17589,
+          10,
+          6
+        ]
+      },
+      "metric": {
+        "bytes": 44324408,
+        "dtype": "float32",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/validation/metric.npy",
+        "sha256": "8685438f2727f01df6b6f276c63c6248a061c0a8a4dc6393e6b8d0c45ba98ec9",
+        "shape": [
+          17589,
+          10,
+          63
+        ]
+      },
+      "timestamps": {
+        "bytes": 140840,
+        "dtype": "int64",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/validation/timestamps.npy",
+        "sha256": "da162a7b78de35fce473f092fe5613d89e8bfdbaf7da4d735d0e6f5caa8f4c8c",
+        "shape": [
+          17589
+        ]
+      },
+      "trace": {
+        "bytes": 28142528,
+        "dtype": "float32",
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/validation/trace.npy",
+        "sha256": "19a661768fe99f386605f4e5a87ca018d2a4be146e30701243eaee3196544392",
+        "shape": [
+          17589,
+          10,
+          10,
+          4
+        ]
+      }
+    }
+  },
+  "traces": {
+    "duration_unit": "seconds",
+    "graph_edges": 58,
+    "graph_fit_split": "train",
+    "invalid_duration_rows": 0,
+    "invalid_timestamp_rows": 25,
+    "negative_duration_rows": 0,
+    "normalization_fit_split": "train",
+    "parallel_execution": {
+      "span_index": {
+        "effective_workers": 8,
+        "requested_workers": 8,
+        "result_order": "submitted task order",
+        "start_method": "spawn",
+        "task_count": 10,
+        "worker_native_threads": 1
+      },
+      "trace": {
+        "effective_workers": 8,
+        "requested_workers": 8,
+        "result_order": "submitted task order",
+        "start_method": "spawn",
+        "task_count": 10,
+        "worker_native_threads": 1
+      }
+    },
+    "raw_rows_scanned": 28681438,
+    "retained_cross_service_rows": 23724201,
+    "span_indexes": {
+      "dbservice1": {
+        "cache_hit": false,
+        "cache_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/span_hashes/dbservice1-11d02359f34a9ad56d71da85ca0e1d0ce5ecf201f909716b4a0eedf18ada0a73.npy",
+        "cache_sha256": "baa335a9185df88cf62b3c671c4f25ff0fcef7a8eedebb34aa1fb526e2136b15",
+        "duplicate_span_rows": 0,
+        "span_rows": 1437954,
+        "unique_128bit_span_hashes": 1437954
+      },
+      "dbservice2": {
+        "cache_hit": false,
+        "cache_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/span_hashes/dbservice2-24490b2f845b04ea17232de29eecd384fa0e0231870c31275580701c2c051e97.npy",
+        "cache_sha256": "1b8f29115a513ca0a9cdaec1d152a8f909898d631c2e05cdde34ca16790b2167",
+        "duplicate_span_rows": 0,
+        "span_rows": 1519164,
+        "unique_128bit_span_hashes": 1519164
+      },
+      "logservice1": {
+        "cache_hit": false,
+        "cache_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/span_hashes/logservice1-9c8cc16009aae5b69ddc43a6733a08b041082e34fe8367fcba9f7d04abdd889f.npy",
+        "cache_sha256": "4e40813723eb27cb10ec85b52644631036bd012ad14af57c134fd3faec4a39e3",
+        "duplicate_span_rows": 0,
+        "span_rows": 2279590,
+        "unique_128bit_span_hashes": 2279590
+      },
+      "logservice2": {
+        "cache_hit": false,
+        "cache_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/span_hashes/logservice2-cd1a38f5c0190b6b05feb1bd71d0c481f1fa931b3fc05e926000dc7fe3dd48d5.npy",
+        "cache_sha256": "5c613ed6000b50cc7262bf7053583460768f16df589b70171c7a4817cc63b21f",
+        "duplicate_span_rows": 0,
+        "span_rows": 2279540,
+        "unique_128bit_span_hashes": 2279540
+      },
+      "mobservice1": {
+        "cache_hit": false,
+        "cache_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/span_hashes/mobservice1-160650d7eabc80dbf04c388258e3fbdb12ed2e2284c4ac00839522380fd8e951.npy",
+        "cache_sha256": "de97884e58c3c5cc5c514d176bf2dbf8680f289068d98631a79f611abd0fa952",
+        "duplicate_span_rows": 0,
+        "span_rows": 1443832,
+        "unique_128bit_span_hashes": 1443832
+      },
+      "mobservice2": {
+        "cache_hit": false,
+        "cache_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/span_hashes/mobservice2-a3ad8a352a18f7a512341cf5d632bd4b6de67fbd504ac8725eae6c71b1afd3bd.npy",
+        "cache_sha256": "1bfe041d32761dd52d56c54f1cb8faa90217b0e0a640f05536181cbd895b84e3",
+        "duplicate_span_rows": 0,
+        "span_rows": 1444262,
+        "unique_128bit_span_hashes": 1444262
+      },
+      "redisservice1": {
+        "cache_hit": false,
+        "cache_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/span_hashes/redisservice1-591dcf17234897257c04642d17a3484c94083c77ea626f50ac4432e36e753baa.npy",
+        "cache_sha256": "e28c03966f7cbf4425cbf1f4d69bb91cb275c61937199f125f7bbbee9900b621",
+        "duplicate_span_rows": 0,
+        "span_rows": 7638513,
+        "unique_128bit_span_hashes": 7638513
+      },
+      "redisservice2": {
+        "cache_hit": false,
+        "cache_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/span_hashes/redisservice2-d0470ee54ab8a1da8b38590aeafcddf6ab7e35ffb574c012df65bbd5e152c878.npy",
+        "cache_sha256": "56edd511c2e75466a004da82ad0277c571465b25c5348b2fed0116fe4371643f",
+        "duplicate_span_rows": 0,
+        "span_rows": 7639286,
+        "unique_128bit_span_hashes": 7639286
+      },
+      "webservice1": {
+        "cache_hit": false,
+        "cache_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/span_hashes/webservice1-9d990bd5797fde6bb897068580be1de7a54453d2edd8c0f51026a74396bb3e7d.npy",
+        "cache_sha256": "0834d4229b1f3388286cd1042c5b04d0686fb01734d531bb3c9255da3dacb420",
+        "duplicate_span_rows": 0,
+        "span_rows": 1542023,
+        "unique_128bit_span_hashes": 1542023
+      },
+      "webservice2": {
+        "cache_hit": false,
+        "cache_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/data/p5/i1/ad/span_hashes/webservice2-abbeac45e357f9802a63c5a227926d98e2d91b6153d21adb1c689ab765989117.npy",
+        "cache_sha256": "8f28c487340261a57ff7302375df708e01e6dbceada3bfe8664b6731c357f0df",
+        "duplicate_span_rows": 0,
+        "span_rows": 1457274,
+        "unique_128bit_span_hashes": 1457274
+      }
+    },
+    "span_lookup": "two independent stable uint64 hashes; label-free parent span to service mapping",
+    "status_codes": [
+      "200",
+      "300",
+      "400",
+      "500"
+    ],
+    "timestamp_alignment": "trace end_time to 30-second detector bin (historical Ada-MGAD convention)",
+    "unknown_status_rows_in_protocol_grid": 0,
+    "unmatched_parent_rows_in_protocol_grid": 4957191
+  },
+  "window_bins": 10
+}
