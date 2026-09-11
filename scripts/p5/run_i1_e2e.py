@@ -87,7 +87,14 @@ def _validate_index_arrays(manifest_path: Path) -> Mapping[str, object]:
                       (record["latencies"], record["latencies_sha256"])))
     for relative, expected in pairs:
         path = (root / str(relative)).resolve()
-        if path.parent != root or not path.is_file():
+        # Raw-index generations are deliberately nested under
+        # ``builds/<build_id>/``.  Keep the traversal guard, but do not
+        # require every array to sit directly beside index_manifest.json.
+        try:
+            path.relative_to(root)
+        except ValueError:
+            raise ValueError("raw-index manifest references a path outside its root")
+        if not path.is_file():
             raise ValueError("raw-index manifest references an invalid array path")
         if sha256_file(path) != str(expected):
             raise ValueError("raw-index array checksum mismatch: {}".format(path))

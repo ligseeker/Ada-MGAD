@@ -23,18 +23,21 @@ class SmallEndToEndIntegrationTest(unittest.TestCase):
             artifact.mkdir()
             index_root = root / "index"
             index_root.mkdir()
+            build_root = index_root / "builds" / "fixture-build"
+            build_root.mkdir(parents=True)
             anchor = int(config["split"]["boundaries_ms"][1]) + 600_000
             timestamps = np.arange(anchor - 300_000, anchor + 300_000, 15_000, dtype=np.int64)
             values = np.linspace(0.0, 1.0, len(timestamps), dtype=np.float32)
-            np.save(index_root / "metric.timestamps.npy", timestamps, allow_pickle=False)
-            np.save(index_root / "metric.values.npy", values, allow_pickle=False)
+            np.save(build_root / "metric.timestamps.npy", timestamps, allow_pickle=False)
+            np.save(build_root / "metric.values.npy", values, allow_pickle=False)
             index_manifest = index_root / "index_manifest.json"
             index_manifest.write_text(json.dumps({
                 "metric_series": [{
                     "service": "dbservice1", "indicator": "cpu",
-                    "timestamps": "metric.timestamps.npy", "values": "metric.values.npy",
-                    "timestamps_sha256": sha256_file(index_root / "metric.timestamps.npy"),
-                    "values_sha256": sha256_file(index_root / "metric.values.npy"),
+                    "timestamps": "builds/fixture-build/metric.timestamps.npy",
+                    "values": "builds/fixture-build/metric.values.npy",
+                    "timestamps_sha256": sha256_file(build_root / "metric.timestamps.npy"),
+                    "values_sha256": sha256_file(build_root / "metric.values.npy"),
                 }],
                 "logs": {},
                 "traces": {"parts": []},
