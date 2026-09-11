@@ -8,19 +8,36 @@ from torch_geometric.utils import dense_to_sparse, remove_self_loops
 def adj2adj(graph, batch_size, window_size, zdim):
     graph1 = graph.squeeze(0).squeeze(0).repeat(batch_size, window_size, 1, 1) \
         .reshape(-1, graph.shape[-2], graph.shape[-1])
-    adj0, adj1, fea = [], [], []
     node_adj = dense_to_sparse(graph1)[0]
     node_efea = graph.unsqueeze(-1).repeat(1, 1, zdim)
-    for num in range(node_adj.shape[1]):
-        idx = torch.argwhere(node_adj[1] == num)
-        idy = torch.argwhere(node_adj[0] == num)
-        adj0.append(idx.repeat(1, idy.shape[0]).reshape(-1))
-        adj1.append(idy.repeat(idx.shape[0], 1).reshape(-1))
-        fea.append(torch.ones(
-            idy.shape[0] * idx.shape[0], device=graph.device) * num)
-
-    adj = torch.stack([torch.concat(adj0), torch.concat(adj1)], dim=0)
-    fea = torch.concat(fea)
+    # The historical implementation launched two GPU argwhere kernels for
+    # every edge while only node ids can have incident edges.  Construct the
+    # same incoming-edge x outgoing-edge Cartesian products on CPU, preserving
+    # node and edge order exactly, then move the immutable index tensors back
+    # to the model device.  This changes construction cost, not graph semantics.
+    source = node_adj[0].detach().cpu().numpy()
+    target = node_adj[1].detach().cpu().numpy()
+    total_nodes = graph1.shape[0] * graph1.shape[1]
+    incoming = [[] for _ in range(total_nodes)]
+    outgoing = [[] for _ in range(total_nodes)]
+    for edge_index, (src, dst) in enumerate(zip(source, target)):
+        outgoing[int(src)].append(edge_index)
+        incoming[int(dst)].append(edge_index)
+    adj0, adj1, fea = [], [], []
+    for node_index in range(total_nodes):
+        if not incoming[node_index] or not outgoing[node_index]:
+            continue
+        left = torch.tensor(incoming[node_index], dtype=torch.long)
+        right = torch.tensor(outgoing[node_index], dtype=torch.long)
+        adj0.append(left.repeat_interleave(len(right)))
+        adj1.append(right.repeat(len(left)))
+        fea.append(torch.full(
+            (len(left) * len(right),), float(node_index), dtype=torch.float32
+        ))
+    if not adj0:
+        raise ValueError("graph has no incident edge pairs")
+    adj = torch.stack([torch.concat(adj0), torch.concat(adj1)], dim=0).to(graph.device)
+    fea = torch.concat(fea).to(graph.device)
     edge_adj, edge_efea = remove_self_loops(adj, fea)
     return node_adj, node_efea, edge_adj, edge_efea
 

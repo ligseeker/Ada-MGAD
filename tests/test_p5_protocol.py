@@ -6,6 +6,7 @@ import pandas as pd
 from src.e2e.protocol import (
     TemporalBlock,
     assign_event_blocks,
+    layout_digest,
     load_config,
     load_registry,
     purge_rca_cases,
@@ -52,6 +53,18 @@ class EventParserTests(unittest.TestCase):
 
 
 class TemporalProtocolTests(unittest.TestCase):
+    def test_layout_digest_binds_relative_paths_and_sizes(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "b.csv").write_bytes(b"12")
+            (root / "a.csv").write_bytes(b"345")
+            result = layout_digest(root, root.glob("*.csv"))
+            self.assertEqual(result["files"], 2)
+            self.assertEqual(result["bytes"], 5)
+            self.assertEqual(len(result["layout_sha256"]), 64)
+
     def test_frozen_registry_and_ordered_blocks(self):
         config = load_config(ROOT / "configs/e2e/gaia_p5_v1.yaml")
         registry = load_registry(config, ROOT)

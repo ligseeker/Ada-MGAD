@@ -58,6 +58,28 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def layout_digest(root: Path, paths: Iterable[Path]) -> Mapping[str, object]:
+    """Bind a telemetry mirror by relative paths and byte sizes without reading it."""
+
+    root = Path(root)
+    records = sorted(
+        ((str(Path(path).relative_to(root)), Path(path).stat().st_size) for path in paths),
+        key=lambda item: item[0],
+    )
+    digest = hashlib.sha256()
+    for relative, size in records:
+        digest.update(relative.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(str(size).encode("ascii"))
+        digest.update(b"\n")
+    return {
+        "files": len(records),
+        "bytes": sum(size for _, size in records),
+        "layout_sha256": digest.hexdigest(),
+        "digest_scope": "sha256(sorted relative_path + NUL + byte_size)",
+    }
+
+
 def load_config(path: Path) -> Mapping[str, object]:
     """Load the JSON-compatible YAML used to avoid an optional YAML runtime."""
 

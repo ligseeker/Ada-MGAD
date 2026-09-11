@@ -5,9 +5,9 @@
     "run_table_sha256": "ca8d44dd08319d940b0d607305165853da376208440b0e3ec07a80dac44e2820"
   },
   "config_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e/configs/e2e/gaia_p5_v1.yaml",
-  "config_sha256": "8712f8b799250c000e6ea3ebb3631f7fafc248208cb47cce3b52a17d9c2a1f17",
-  "generated_at_utc": "2026-09-09T19:12:05.704088+00:00",
-  "git_commit": "cbe57512b6bd1ce772ab42d9b8ec0b292c3cb91b",
+  "config_sha256": "171406d562b36b5513f0b5d011568a4a0831188041b45377068b6587d6e36f26",
+  "generated_at_utc": "2026-09-11T01:55:26.680977+00:00",
+  "git_commit": "e7db7911a986f6df8ae4fca9f1beedac21f69bf1",
   "protocol": {
     "ad": {
       "checkpoint_selection": "validation node F1 only",
@@ -18,6 +18,57 @@
       "threshold_selection": "maximize deterministic event F1 on validation only",
       "window_bins": 10,
       "window_step": 1
+    },
+    "ad_model": {
+      "abnormal_weight": 96,
+      "batch_size": 32,
+      "checkpoint_policy": "validation_f1_only",
+      "contrast_proj_dim": 32,
+      "contrast_start_epoch": 1,
+      "contrast_summary_mode": "last",
+      "contrast_temp": 0.1,
+      "contrast_warmup": 2,
+      "contrast_weight": 0.1,
+      "dropout": 0.2,
+      "eval_interval": 1,
+      "feature_edge": 4,
+      "feature_log": 8,
+      "feature_node": 16,
+      "graph_hidden": 16,
+      "graph_sparse_weight": 0.001,
+      "graph_summary_mode": "last",
+      "graph_update_steps": 2,
+      "label_percent": 0.5,
+      "label_weight": 0.01,
+      "learning_change": 30,
+      "learning_gamma": 0.5,
+      "learning_rate": 0.001,
+      "num_heads_e2n": 2,
+      "num_heads_edge": 4,
+      "num_heads_log": 4,
+      "num_heads_n2e": 4,
+      "num_heads_node": 4,
+      "num_layer": 2,
+      "num_workers": 2,
+      "para_low": 0.01,
+      "persistent_workers": false,
+      "pin_memory": true,
+      "rec_down": 1,
+      "score_fusion_alpha": 0.7,
+      "train_eval_interval": 0,
+      "weight_decay": 0.0005
+    },
+    "ad_preprocessing": {
+      "log_features": [
+        "level_INFO",
+        "level_WARNING",
+        "level_ERROR",
+        "level_DEBUG",
+        "level_UNKNOWN",
+        "log_total"
+      ],
+      "metric_excluded_features": [],
+      "metric_exclusions": []
     },
     "event_registry": {
       "excluded": [

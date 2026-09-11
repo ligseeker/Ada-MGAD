@@ -100,6 +100,7 @@ class MY(Base):
         self.graph_summary_mode = args.get('graph_summary_mode', 'last')
         self.contrast_summary_mode = args.get('contrast_summary_mode', 'last')
         self.score_fusion_alpha = float(args.get('score_fusion_alpha', 1.0))
+        self.checkpoint_policy = str(args.get('checkpoint_policy', 'legacy'))
 
     def _contrast_gamma(self, epoch):
         if self.contrast_weight <= 0 or epoch < self.contrast_start_epoch:
@@ -109,7 +110,14 @@ class MY(Base):
         progress = min((epoch - self.contrast_start_epoch + 1) / self.contrast_warmup, 1.0)
         return self.contrast_weight * progress
 
-    def fit(self, train_loader, test_loader, **args):
+    def fit(self, train_loader, test_loader=None, val_loader=None, **args):
+        selection_loader = val_loader if val_loader is not None else test_loader
+        if selection_loader is None:
+            raise ValueError("fit requires a validation loader (or legacy test_loader)")
+        selection_name = 'validation' if val_loader is not None else 'test'
+        validation_only = self.checkpoint_policy == 'validation_f1_only'
+        if validation_only and val_loader is None:
+            raise ValueError("validation_f1_only requires val_loader")
         optimizer = AdaBelief(self.model.parameters(), lr=self.learning_rate, weight_decay=self.weight_decay)
         scheduler = torch.optim.lr_scheduler.StepLR(optimizer, self.learning_change, self.learning_gamma)
 
@@ -117,6 +125,8 @@ class MY(Base):
                 "f1":{"score": 0, "state": None, "epoch": 0}}
 
         pre_loss, worse_count, isWrong = float("inf"), 0, False
+        selection_worse_count = 0
+        history = []
 
         label_weight = torch.tensor(
             np.array(list(self.True_list.values())), dtype=torch.float, device=self.device)
@@ -198,7 +208,7 @@ class MY(Base):
                 pass
             elif epoch_loss > pre_loss:
                 worse_count += 1
-                if self.patience > 0 and worse_count >= self.patience:
+                if not validation_only and self.patience > 0 and worse_count >= self.patience:
                     logging.info("Early stop at epoch: {}".format(epoch))
                     break
 
@@ -224,30 +234,59 @@ class MY(Base):
             if epoch > self.rec_down and ((epoch + 1) % self.eval_interval == 0 or epoch == self.epoches - 1):
                 if hasattr(self.model, 'reset_dynamic_graph_cache'):
                     self.model.reset_dynamic_graph_cache()
-                result = self.evaluate(test_loader)
+                result = self.evaluate(selection_loader)
                 logging.info(
-                    "[test] pr:{pr:.4f}  rc:{rc:.4f}  auc:{auc:.4f} ap:{ap:.4f} f1:{f1:.4f}".format(
-                        **result
+                    "[{}] pr:{:.4f} rc:{:.4f} auc:{:.4f} ap:{:.4f} f1:{:.4f}".format(
+                        selection_name, result['pr'], result['rc'], result['auc'], result['ap'], result['f1']
                     )
                 )
                 if float(result['f1']) >= best["f1"]["score"]:
                     best["f1"]["score"] = float(result['f1'])
                     best["f1"]["state"] = copy.deepcopy(self.model.state_dict())
                     best["f1"]["epoch"] = epoch
+                    selection_worse_count = 0
+                else:
+                    selection_worse_count += 1
+                history.append({
+                    'epoch': int(epoch),
+                    'train_loss': float(epoch_loss),
+                    'train_classification_loss': float(epoch_cls_loss),
+                    'train_reconstruction_loss': float(epoch_rec_loss),
+                    'train_contrastive_loss': float(epoch_contrast_loss),
+                    'train_graph_regularization_loss': float(epoch_graph_reg_loss),
+                    'selection_split': selection_name,
+                    'selection_metrics': {key: float(value) for key, value in result.items()},
+                })
+                if validation_only and self.patience > 0 and selection_worse_count >= self.patience:
+                    logging.info("Validation-only early stop at epoch: {}".format(epoch))
+                    scheduler.step()
+                    break
             scheduler.step()
 
         logging.info('saving model...')
-        self.save_model(best['loss'], self.model_save_dir, name='loss')
+        if not validation_only:
+            self.save_model(best['loss'], self.model_save_dir, name='loss')
         self.save_model(best['f1'], self.model_save_dir, name='f1')
+        self.fit_summary = {
+            'checkpoint_policy': self.checkpoint_policy,
+            'selection_split': selection_name,
+            'best_validation_f1': float(best['f1']['score']),
+            'best_epoch': int(best['f1']['epoch']),
+            'epochs_completed': int(epoch + 1),
+            'history': history,
+        }
+        return self.fit_summary
 
     def evaluate(self, test_loader, isFinall=False):
         self.model.eval()
         if hasattr(self.model, 'reset_dynamic_graph_cache'):
             self.model.reset_dynamic_graph_cache(reset_stats=True)
         with torch.no_grad():
-            predict_list, label_list, rec_score_list = [], [], []
+            predict_list, label_list, rec_score_list, sample_indices = [], [], [], []
             for batch_input in tqdm(test_loader):
                     batch_input = self.input2device(batch_input,self.use_gpu)
+                    if 'sample_index' in batch_input:
+                        sample_indices.append(batch_input['sample_index'].reshape(-1).long().cpu())
                     if self.score_fusion_alpha < 1.0:
                         raw_result, _, rec_score = self.model(
                             batch_input, evaluate=True, return_eval_aux=True
@@ -264,6 +303,16 @@ class MY(Base):
             if self.score_fusion_alpha < 1.0 and rec_score_list:
                 rec_score_list = torch.concat(rec_score_list, dim=0).reshape(-1).cpu()
                 predict_list = self._fuse_predict_with_reconstruction(predict_list, rec_score_list)
+            if sample_indices:
+                flat_indices = torch.concat(sample_indices, dim=0).tolist()
+                seen = set()
+                keep = []
+                for position, sample_index in enumerate(flat_indices):
+                    if sample_index not in seen:
+                        seen.add(sample_index)
+                        keep.append(position)
+                predict_list = predict_list[keep]
+                label_list = label_list[keep]
 
             info, result = util.calc_index(predict_list, label_list)
 
@@ -273,13 +322,14 @@ class MY(Base):
                 return result
 
     def _fuse_predict_with_reconstruction(self, predict_list, rec_scores):
+        original_shape = predict_list.shape
         cls_probs = predict_list.reshape(-1, predict_list.shape[-1])
         rec_scores = rec_scores.reshape(-1)
         rec_probs = self._reconstruction_energy_to_prob(rec_scores)
         alpha = min(max(self.score_fusion_alpha, 0.0), 1.0)
         fused_anomaly = alpha * cls_probs[:, 1] + (1 - alpha) * rec_probs
         fused_anomaly = fused_anomaly.clamp(0.0, 1.0)
-        return torch.stack([1 - fused_anomaly, fused_anomaly], dim=-1)
+        return torch.stack([1 - fused_anomaly, fused_anomaly], dim=-1).reshape(original_shape)
 
     def _reconstruction_energy_to_prob(self, rec_scores):
         median = torch.median(rec_scores)
