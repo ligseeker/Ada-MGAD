@@ -1,0 +1,57 @@
+{
+  "question": "How does the current e2e implementation define the detector timeline and the train/val/test split, and how does that differ from the V2 raw-telemetry timeline?",
+  "current_e2e_implementation": {
+    "split_mode": "chronological_absolute_duration_60_20_20 (three-way, WITH validation)",
+    "derivation": "boundaries computed from the GT event registry span: absolute_start = min(GT start) = 1625108812249 (2021-07-01 11:06:52.249 CST), absolute_end = max(GT end) = 1627747192313; b1 = start + 3/5 span = 1626691840287 (2021-07-19 18:50:40 CST), b2 = start + 4/5 span = 1627219516300 (2021-07-25 21:25:16 CST)",
+    "evidence": [
+      "configs/e2e/gaia_p5_v1.yaml split section",
+      "artifacts/p5/g0r2/split_feasibility.json (start_min_ms/end_max_ms equal GT registry min/max; mode duration_60_20_20)",
+      "artifacts/p5/i1/split_manifest.json (boundaries_ms, per-block event counts)",
+      "src/e2e/protocol.py temporal_blocks()"
+    ],
+    "effective_bin_grid": {
+      "train_bins": 52768,
+      "validation_bins": 17589,
+      "test_bins": 17589,
+      "total_bins": 87946,
+      "equivalent_continuous_range_ms": [1625108820000, 1627747200000]
+    },
+    "problems_under_v2": [
+      "split depends on GT taxonomy (min/max of GT events): changing GT inclusion rules would move Train/Test boundaries (violates V2 s12)",
+      "three-way 60/20/20 with an official Validation split (V2 mandates two-way 70/30, no validation)",
+      "train share is 60% of the GT span, not 70% of the telemetry timeline"
+    ]
+  },
+  "v2_recommended_timeline": {
+    "primary_caliber": "metric_only (matches Ada-MGAD main pre_GAIA.py: 30s grid built from aligned metric timestamps)",
+    "timeline_start_ms": 1625133600000,
+    "timeline_end_ms": 1627747200000,
+    "n_bins": 87120,
+    "k": 60984,
+    "split_timestamp_ms": 1626963120000,
+    "split_timestamp_iso": "2021-07-22T22:12:00.000+08:00",
+    "alternate_caliber_union": {
+      "timeline_start_ms": 1625104620000,
+      "n_bins": 88086,
+      "k": 61660,
+      "split_timestamp_ms": 1626954420000,
+      "split_timestamp_iso": "2021-07-22T19:47:00.000+08:00"
+    }
+  },
+  "numeric_differences": {
+    "grid_start": "current grid starts 1625108820000 vs metric_only 1625133600000: current is 826 bins (~6h53m) EARLIER; that early segment (07-01 11:07-18:00 CST) contains zero metric samples, so metric features there are NaN->ffill->0 fabrications; vs union caliber current starts 140 bins later",
+    "grid_end": "identical (1627747200000)",
+    "train_boundary": "V2 metric_only 70% split (07-22 22:12 CST) is 3.14 days LATER than current b1 (07-19 18:50) and 2.97 days EARLIER than current b2 (07-25 21:25)",
+    "train_share": "current train = 60% of GT span; V2 = 70.000% of telemetry bins",
+    "robustness": "V2 boundary is invariant to GT taxonomy changes and to the N=87121 endpoint variant (split_unchanged=true)"
+  },
+  "consequences_for_gt_events": {
+    "events_before_metric_timeline_start": {
+      "count_primary_caliber": 84,
+      "by_type": {"login_failure": 75, "memory_anomalies": 9},
+      "window": "2021-07-01 11:06:52 - 18:00:00 CST",
+      "implication": "under the metric_only timeline these events have no metric-based AD bins; they must be reported as timeline-excluded (logs/traces exist for them). The union caliber would keep them at the cost of ~8h of metric-less bins at the head of Train."
+    },
+    "all_12_cpu_anomalies_under_current_split": "fall entirely inside the current Test segment (split_manifest.json); registry-verified cpu window is 2021-07-27 23:46 -> 2021-07-31 20:00 CST, so all 12 also land in Test under the V2 boundary (07-22 22:12) - drift fact remains, must be reported, split must NOT be moved to balance it (V2 s13)"
+  }
+}

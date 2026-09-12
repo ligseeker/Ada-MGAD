@@ -1,0 +1,9 @@
+{
+  "total_rows": 17152,
+  "rows_not_comparable": 36,
+  "rows_not_comparable_reason": "traceback continuation fragments / malformed rows; all preparsed columns blank",
+  "rows_with_any_mismatch": 0,
+  "mismatch_count_by_field": {},
+  "anomaly_type_label_pairs_preparse_vs_derived": [],
+  "examples": []
+}

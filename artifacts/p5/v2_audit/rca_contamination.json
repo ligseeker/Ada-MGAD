@@ -1,0 +1,207 @@
+{
+  "primary": {
+    "summary": {
+      "train": {
+        "cases": 10416,
+        "clean_context_cases": 234,
+        "contaminated_context_cases": 10182,
+        "foreign_event_count_quantiles": {
+          "min": 0,
+          "p50": 4,
+          "p90": 7,
+          "p99": 9,
+          "max": 13
+        },
+        "oracle_boundary_purge": 2,
+        "oracle_context_outside_timeline": 87
+      },
+      "test": {
+        "cases": 5783,
+        "clean_context_cases": 46,
+        "contaminated_context_cases": 5737,
+        "foreign_event_count_quantiles": {
+          "min": 0,
+          "p50": 4,
+          "p90": 7,
+          "p99": 9,
+          "max": 13
+        },
+        "oracle_boundary_purge": 5,
+        "oracle_context_outside_timeline": 2
+      }
+    },
+    "per_case_head": [
+      {
+        "case_id": "gaia-v2-00005",
+        "fault_type": "memory_anomalies",
+        "service": "webservice2",
+        "t0_ms": 1625108812249,
+        "split_side": "train",
+        "foreign_event_count": 0,
+        "different_service_foreign_event_count": 0,
+        "different_fault_foreign_event_count": 0,
+        "different_root_foreign_event_count": 0,
+        "oracle_context_crosses_split": false,
+        "oracle_context_outside_timeline": true
+      },
+      {
+        "case_id": "gaia-v2-00000",
+        "fault_type": "memory_anomalies",
+        "service": "dbservice1",
+        "t0_ms": 1625111066883,
+        "split_side": "train",
+        "foreign_event_count": 0,
+        "different_service_foreign_event_count": 0,
+        "different_fault_foreign_event_count": 0,
+        "different_root_foreign_event_count": 0,
+        "oracle_context_crosses_split": false,
+        "oracle_context_outside_timeline": true
+      },
+      {
+        "case_id": "gaia-v2-00003",
+        "fault_type": "memory_anomalies",
+        "service": "dbservice2",
+        "t0_ms": 1625114695799,
+        "split_side": "train",
+        "foreign_event_count": 0,
+        "different_service_foreign_event_count": 0,
+        "different_fault_foreign_event_count": 0,
+        "different_root_foreign_event_count": 0,
+        "oracle_context_crosses_split": false,
+        "oracle_context_outside_timeline": true
+      },
+      {
+        "case_id": "gaia-v2-00007",
+        "fault_type": "memory_anomalies",
+        "service": "redisservice1",
+        "t0_ms": 1625116122447,
+        "split_side": "train",
+        "foreign_event_count": 0,
+        "different_service_foreign_event_count": 0,
+        "different_fault_foreign_event_count": 0,
+        "different_root_foreign_event_count": 0,
+        "oracle_context_crosses_split": false,
+        "oracle_context_outside_timeline": true
+      },
+      {
+        "case_id": "gaia-v2-00004",
+        "fault_type": "memory_anomalies",
+        "service": "dbservice2",
+        "t0_ms": 1625122822681,
+        "split_side": "train",
+        "foreign_event_count": 1,
+        "different_service_foreign_event_count": 1,
+        "different_fault_foreign_event_count": 1,
+        "different_root_foreign_event_count": 1,
+        "oracle_context_crosses_split": false,
+        "oracle_context_outside_timeline": true
+      }
+    ],
+    "per_case_csv": "rca_contamination_cases_primary.csv"
+  },
+  "with_freed": {
+    "summary": {
+      "train": {
+        "cases": 10429,
+        "clean_context_cases": 235,
+        "contaminated_context_cases": 10194,
+        "foreign_event_count_quantiles": {
+          "min": 0,
+          "p50": 4,
+          "p90": 7,
+          "p99": 9,
+          "max": 13
+        },
+        "oracle_boundary_purge": 2,
+        "oracle_context_outside_timeline": 88
+      },
+      "test": {
+        "cases": 5787,
+        "clean_context_cases": 45,
+        "contaminated_context_cases": 5742,
+        "foreign_event_count_quantiles": {
+          "min": 0,
+          "p50": 4,
+          "p90": 7,
+          "p99": 9,
+          "max": 13
+        },
+        "oracle_boundary_purge": 5,
+        "oracle_context_outside_timeline": 2
+      }
+    },
+    "per_case_head": [
+      {
+        "case_id": "gaia-v2-00005",
+        "fault_type": "memory_anomalies",
+        "service": "webservice2",
+        "t0_ms": 1625108812249,
+        "split_side": "train",
+        "foreign_event_count": 0,
+        "different_service_foreign_event_count": 0,
+        "different_fault_foreign_event_count": 0,
+        "different_root_foreign_event_count": 0,
+        "oracle_context_crosses_split": false,
+        "oracle_context_outside_timeline": true
+      },
+      {
+        "case_id": "gaia-v2-00000",
+        "fault_type": "memory_anomalies",
+        "service": "dbservice1",
+        "t0_ms": 1625111066883,
+        "split_side": "train",
+        "foreign_event_count": 0,
+        "different_service_foreign_event_count": 0,
+        "different_fault_foreign_event_count": 0,
+        "different_root_foreign_event_count": 0,
+        "oracle_context_crosses_split": false,
+        "oracle_context_outside_timeline": true
+      },
+      {
+        "case_id": "gaia-v2-00001",
+        "fault_type": "normal_memory_freed",
+        "service": "dbservice1",
+        "t0_ms": 1625113508804,
+        "split_side": "train",
+        "foreign_event_count": 0,
+        "different_service_foreign_event_count": 0,
+        "different_fault_foreign_event_count": 0,
+        "different_root_foreign_event_count": 0,
+        "oracle_context_crosses_split": false,
+        "oracle_context_outside_timeline": true
+      },
+      {
+        "case_id": "gaia-v2-00003",
+        "fault_type": "memory_anomalies",
+        "service": "dbservice2",
+        "t0_ms": 1625114695799,
+        "split_side": "train",
+        "foreign_event_count": 0,
+        "different_service_foreign_event_count": 0,
+        "different_fault_foreign_event_count": 0,
+        "different_root_foreign_event_count": 0,
+        "oracle_context_crosses_split": false,
+        "oracle_context_outside_timeline": true
+      },
+      {
+        "case_id": "gaia-v2-00007",
+        "fault_type": "memory_anomalies",
+        "service": "redisservice1",
+        "t0_ms": 1625116122447,
+        "split_side": "train",
+        "foreign_event_count": 0,
+        "different_service_foreign_event_count": 0,
+        "different_fault_foreign_event_count": 0,
+        "different_root_foreign_event_count": 0,
+        "oracle_context_crosses_split": false,
+        "oracle_context_outside_timeline": true
+      }
+    ],
+    "per_case_csv": "rca_contamination_cases_with_freed.csv"
+  },
+  "notes": [
+    "t0 = GT start (oracle anchor); detected-anchor (t_hat) contamination requires retraining under the new split and is N/A this audit round",
+    "i1 (old 60/20/20 split) reported detected_anchor_w300_crossing_cases=0 and 1 gt_w300_ineligible case",
+    "V2 s42: contaminated cases are NOT deleted; report clean/contaminated strata instead"
+  ]
+}

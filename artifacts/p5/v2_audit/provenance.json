@@ -1,0 +1,65 @@
+{
+  "audit_round": "P5 V2 protocol & raw-data audit (audit-only, no training, no model changes)",
+  "audit_date": "2026-09-13",
+  "plan_document": "docs/GAIA两阶段端到端原始数据与标签处理方案V2.md",
+  "worktree": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2",
+    "branch": "e2e-v2",
+    "base_branch": "origin/e2e",
+    "base_commit": "0ee8b060cab0e79c44997ff6b1fbaf0432ef4046",
+    "clean_at_setup": true
+  },
+  "old_worktree_readonly_reference": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e",
+    "branch": "e2e",
+    "head": "0ee8b060cab0e79c44997ff6b1fbaf0432ef4046",
+    "note": "Contains uncommitted i1 result artifacts (ad_*, rca_*, event_detection_metrics.json etc.) read for audit evidence; must not be modified."
+  },
+  "reference_repositories": {
+    "ada_mgad_main": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD",
+      "branch": "main",
+      "commit": "ab31282055b625838f41a1a3c91e51098175f254"
+    },
+    "ada_rca": {
+      "path": "/home/zhangll24/RCA_project/Ada-RCA",
+      "commit": "6c3abaaf34391db8a6e78743a3a3580440fe956d"
+    },
+    "diagfusion": {
+      "path": "/home/zhangll24/RCA_project/DiagFusion",
+      "commit": "9ec3f73ad3de15cb7bbd51d02fde90af0af26514"
+    }
+  },
+  "raw_dataset": {
+    "root": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS",
+    "metric_dir": "metric/metric_split/metric",
+    "metric_file_count": 6640,
+    "metric_total_size": "4.5G",
+    "metric_periods": ["2021-07-01_2021-07-15", "2021-07-15_2021-07-31"],
+    "business_dir": "business/business_split/business",
+    "business_file_count": 10,
+    "business_total_size_bytes": 18345412182,
+    "trace_dir": "trace/trace_split/trace",
+    "trace_file_count": 10,
+    "trace_total_size_bytes": 8481302360,
+    "run_dir": "run/run/run"
+  },
+  "raw_run_table": {
+    "audited_path": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS/run/run/run/run_table_2021-07_fixed.csv",
+    "sha256": "ba5848fa96056525a541294be33e452cc472519f819a9f3211bdc3914e9e234c",
+    "data_rows": 17152,
+    "columns": ["datetime", "service", "message", "timestamp", "level", "service_node", "anomaly_type", "duration_seconds"],
+    "provenance_note": "The original run_table_2021-07.csv is no longer present on disk. The _fixed file was produced by the dataset owner (user-confirmed 2026-09-13); its first three columns (datetime, service, message) preserve the original raw fields and `message` contains the full raw log line (ts,ms | LEVEL | node_ip | container_ip | service | payload). Columns timestamp/level/service_node/anomaly_type/duration_seconds are the owner's pre-parse CLAIMS: this audit re-derives all semantics from the raw message text and cross-checks against these columns instead of trusting them.",
+    "original_checksum_recorded_in_repo": {
+      "sha256": "ca8d44dd08319d940b0d607305165853da376208440b0e3ec07a80dac44e2820",
+      "source": "artifacts/p5/i1/protocol_manifest.json and run_manifest.json (branch e2e)",
+      "verifiable": false,
+      "reason": "original file missing from disk"
+    }
+  },
+  "python_environment": {
+    "interpreter": "/home/zhangll24/miniconda3/envs/DAG/bin/python3",
+    "pandas": "1.5.3",
+    "numpy": "1.24.1"
+  }
+}

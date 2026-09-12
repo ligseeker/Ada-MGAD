@@ -1,0 +1,112 @@
+{
+  "provenance": {
+    "produced_by": "P5-V2 audit round 2026-09-13, telemetry coverage scan (audit agent B)",
+    "method_note": "Full-precision counts for trace rows/status and business rows/levels were obtained by exhaustive ripgrep/streaming scans; sampling-delta and missingness statistics combine the committed G0R2 full scan (artifacts/p5/g0r2/raw_telemetry_timing.json) with this round's verification. Values marked estimated=true are sample-based.",
+    "cross_verification": [
+      "trace status counts and row totals match artifacts/p5/g0r2/raw_telemetry_timing.json key-for-key (24453030 / 3040760 / 1156668 / 30980 / 28681438 / 4228408)",
+      "business record total matches G0R2 (87974871)",
+      "metric global endpoints spot-checked via head/tail of half-1 and half-2 metric files this round"
+    ]
+  },
+  "metrics": {
+    "directory": "metric/metric_split/metric",
+    "file_count": 6640,
+    "total_size": "4.5G",
+    "period_halves": {
+      "2021-07-01_2021-07-15": 3314,
+      "2021-07-15_2021-07-31": 3326,
+      "boundary_behavior": "half-1 files end 2021-07-14 23:59:00-24:00, half-2 files start 2021-07-15 00:00:00-25; no overlap, no gap at the 07-15 seam"
+    },
+    "components": {
+      "count": 13,
+      "list": ["dbservice1", "dbservice2", "logservice1", "logservice2", "mobservice1", "mobservice2", "redisservice1", "redisservice2", "webservice1", "webservice2", "system(3 nodes 0.0.0.2/0.0.0.3/0.0.0.4)", "redis", "zookeeper"]
+    },
+    "distinct_features_total": 3320,
+    "distinct_features_by_component": {
+      "dbservice1": 159, "mobservice1": 159, "mobservice2": 159, "redisservice1": 159, "webservice1": 159,
+      "dbservice2": 183, "logservice1": 183, "logservice2": 183, "redisservice2": 183, "webservice2": 183,
+      "system": 1152, "redis": 272, "zookeeper": 186
+    },
+    "global_first_sample_ms": 1625133601000,
+    "global_first_sample_iso": "2021-07-01T18:00:01.000+08:00",
+    "global_last_sample_ms": 1627747200000,
+    "global_last_sample_iso": "2021-08-01T00:00:00.000+08:00",
+    "sampling": {
+      "median_delta_seconds": 30,
+      "p95_delta_seconds": 60,
+      "system_component_delta_seconds": 60,
+      "gap_rate": 0.1618,
+      "duplicate_timestamp_rows_total": 21750000,
+      "estimated": false,
+      "source": "G0R2 committed full scan, re-verified on samples this round"
+    },
+    "quality_red_flags": [
+      "metric telemetry starts 2021-07-01 18:00 CST, ~8h later than logs/traces (09:57 CST) and ~6.9h after the first GT injection (11:06:52 CST)",
+      "system component metrics only begin 2021-07-05 14:37 CST (~3.9 days / ~11114 bins of host-feature hole at the start of Train)",
+      "10 header-only empty files",
+      "~20 files in the socket_port / cgroup-limit families start late, stop early, contain duplicate timestamps or all-zero values",
+      "8 of those early-terminating files are half-2 files ending before the 70/30 split -> Test-segment feature-level holes",
+      "redis_info_server_config_file has empty-string values"
+    ]
+  },
+  "business_logs": {
+    "directory": "business/business_split/business",
+    "file_count": 10,
+    "total_size_bytes": 18345412182,
+    "record_count": 87974871,
+    "physical_line_count_approx": 175900000,
+    "physical_vs_record_note": "messages contain embedded newlines; records != physical lines",
+    "timestamp_resolution": "millisecond (message prefix)",
+    "level_distribution": {
+      "INFO": 84269925,
+      "WARNING": 2897917,
+      "ERROR": 806735,
+      "DEBUG": 0,
+      "invalid": 294
+    },
+    "level_notes": [
+      "WARNING is 99.998% concentrated in redisservice1/redisservice2",
+      "ERROR distribution: dbservice ~180k, webservice ~185k, logservice/mobservice/redisservice ~7k-15k each",
+      "business ERROR logs are model telemetry and MUST remain in the Logs modality even though run-table ERROR records are not GT (V2 s21)"
+    ],
+    "coverage": {
+      "first_iso": "2021-07-01T09:57:04.258+08:00 (webservice1)",
+      "last_iso": "2021-07-31T23:59:2x+08:00",
+      "all_10_services_span_full_month": true
+    }
+  },
+  "traces": {
+    "directory": "trace/trace_split/trace",
+    "file_count": 10,
+    "total_size_bytes": 8481302360,
+    "row_count": 28681438,
+    "status_distribution": {
+      "200": 24453030,
+      "300": 3040760,
+      "400": 30980,
+      "500": 1156668,
+      "non_200_total": 4228408,
+      "non_200_share": 0.1474
+    },
+    "status_notes": [
+      "status 300 appears ONLY in redisservice1/redisservice2 traces (3.04M rows, ~12.5% of all traces)",
+      "status 400 appears ONLY in redisservice traces (30,980 rows)",
+      "RCA Trace Error = status != 200 therefore counts redis 300/400 traffic as errors; consistent with G0R2 committed scan"
+    ],
+    "duration": "end - start, seconds with microsecond precision",
+    "coverage": {
+      "first_iso": "2021-07-01T09:57:04.255+08:00",
+      "last_iso": "2021-07-31T23:59:59.906+08:00",
+      "all_10_services_span_full_month": true
+    },
+    "quality_red_flags": [
+      "6 rows show a display-rounded 'timestamp' column value of 2021-08-01 00:00:00 while their start/end remain inside July; do NOT build the timeline from that column"
+    ]
+  },
+  "split_segment_coverage": {
+    "note": "coverage checked against the metric_only 70/30 boundary 2021-07-22 22:12 CST (see detector_timeline.json)",
+    "business": "all 10 services have records on 07-22, 07-23 and every day of the month; no day-level hole in Test",
+    "traces": "all 10 services covered through 07-31 23:59; no day-level hole in Test",
+    "metrics": "component-level coverage complete in Test except the feature-level holes listed in metrics.quality_red_flags"
+  }
+}

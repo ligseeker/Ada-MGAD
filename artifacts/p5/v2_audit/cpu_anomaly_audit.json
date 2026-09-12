@@ -1,0 +1,139 @@
+{
+  "count": 12,
+  "float_regex": "lasts\\s+(\\d+(?:\\.\\d+)?)\\s+seconds",
+  "records": [
+    {
+      "source_index": 13762,
+      "service": "dbservice1",
+      "payload": "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-27 23:46:25.446893 and lasts 3.0210864543914795 seconds",
+      "embedded_start_iso": "2021-07-27T23:46:25.447+08:00",
+      "derived_duration_seconds": 3.0210864543914795,
+      "duration_how": "numeric_seconds",
+      "preparsed_duration_seconds": "3.02109",
+      "duration_matches_preparse": true,
+      "all_digits_preserved": true
+    },
+    {
+      "source_index": 14405,
+      "service": "dbservice1",
+      "payload": "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-28 09:33:39.426569 and lasts 3.0509350299835205 seconds",
+      "embedded_start_iso": "2021-07-28T09:33:39.427+08:00",
+      "derived_duration_seconds": 3.0509350299835205,
+      "duration_how": "numeric_seconds",
+      "preparsed_duration_seconds": "3.05094",
+      "duration_matches_preparse": true,
+      "all_digits_preserved": true
+    },
+    {
+      "source_index": 14406,
+      "service": "dbservice1",
+      "payload": "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-28 12:34:11.898093 and lasts 2.9959075450897217 seconds",
+      "embedded_start_iso": "2021-07-28T12:34:11.898+08:00",
+      "derived_duration_seconds": 2.9959075450897217,
+      "duration_how": "numeric_seconds",
+      "preparsed_duration_seconds": "2.99591",
+      "duration_matches_preparse": true,
+      "all_digits_preserved": true
+    },
+    {
+      "source_index": 14408,
+      "service": "dbservice1",
+      "payload": "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-28 15:31:33.624950 and lasts 3.2413992881774902 seconds",
+      "embedded_start_iso": "2021-07-28T15:31:33.625+08:00",
+      "derived_duration_seconds": 3.2413992881774902,
+      "duration_how": "numeric_seconds",
+      "preparsed_duration_seconds": "3.2414",
+      "duration_matches_preparse": true,
+      "all_digits_preserved": true
+    },
+    {
+      "source_index": 14410,
+      "service": "dbservice1",
+      "payload": "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-28 22:01:39.125401 and lasts 2.915334701538086 seconds",
+      "embedded_start_iso": "2021-07-28T22:01:39.125+08:00",
+      "derived_duration_seconds": 2.915334701538086,
+      "duration_how": "numeric_seconds",
+      "preparsed_duration_seconds": "2.91533",
+      "duration_matches_preparse": true,
+      "all_digits_preserved": true
+    },
+    {
+      "source_index": 14510,
+      "service": "mobservice2",
+      "payload": "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-28 06:40:20.936320 and lasts 3.0034542083740234 seconds",
+      "embedded_start_iso": "2021-07-28T06:40:20.936+08:00",
+      "derived_duration_seconds": 3.0034542083740234,
+      "duration_how": "numeric_seconds",
+      "preparsed_duration_seconds": "3.00345",
+      "duration_matches_preparse": true,
+      "all_digits_preserved": true
+    },
+    {
+      "source_index": 14664,
+      "service": "mobservice2",
+      "payload": "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-28 18:39:56.272213 and lasts 3.0525479316711426 seconds",
+      "embedded_start_iso": "2021-07-28T18:39:56.272+08:00",
+      "derived_duration_seconds": 3.0525479316711426,
+      "duration_how": "numeric_seconds",
+      "preparsed_duration_seconds": "3.05255",
+      "duration_matches_preparse": true,
+      "all_digits_preserved": true
+    },
+    {
+      "source_index": 15031,
+      "service": "dbservice1",
+      "payload": "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-29 03:28:44.737084 and lasts 2.937929630279541 seconds",
+      "embedded_start_iso": "2021-07-29T03:28:44.737+08:00",
+      "derived_duration_seconds": 2.937929630279541,
+      "duration_how": "numeric_seconds",
+      "preparsed_duration_seconds": "2.93793",
+      "duration_matches_preparse": true,
+      "all_digits_preserved": true
+    },
+    {
+      "source_index": 15032,
+      "service": "dbservice1",
+      "payload": "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-29 15:34:36.586125 and lasts 2.9688236713409424 seconds",
+      "embedded_start_iso": "2021-07-29T15:34:36.586+08:00",
+      "derived_duration_seconds": 2.9688236713409424,
+      "duration_how": "numeric_seconds",
+      "preparsed_duration_seconds": "2.96882",
+      "duration_matches_preparse": true,
+      "all_digits_preserved": true
+    },
+    {
+      "source_index": 15146,
+      "service": "mobservice2",
+      "payload": "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-29 07:12:16.290937 and lasts 3.051996946334839 seconds",
+      "embedded_start_iso": "2021-07-29T07:12:16.291+08:00",
+      "derived_duration_seconds": 3.051996946334839,
+      "duration_how": "numeric_seconds",
+      "preparsed_duration_seconds": "3.052",
+      "duration_matches_preparse": true,
+      "all_digits_preserved": true
+    },
+    {
+      "source_index": 16371,
+      "service": "dbservice1",
+      "payload": "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-31 03:57:07.979291 and lasts 2.8919918537139893 seconds",
+      "embedded_start_iso": "2021-07-31T03:57:07.979+08:00",
+      "derived_duration_seconds": 2.8919918537139893,
+      "duration_how": "numeric_seconds",
+      "preparsed_duration_seconds": "2.89199",
+      "duration_matches_preparse": true,
+      "all_digits_preserved": true
+    },
+    {
+      "source_index": 16700,
+      "service": "mobservice2",
+      "payload": "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-31 20:00:44.203233 and lasts 2.9050204753875732 seconds",
+      "embedded_start_iso": "2021-07-31T20:00:44.203+08:00",
+      "derived_duration_seconds": 2.9050204753875732,
+      "duration_how": "numeric_seconds",
+      "preparsed_duration_seconds": "2.90502",
+      "duration_matches_preparse": true,
+      "all_digits_preserved": true
+    }
+  ],
+  "parse_failures": []
+}

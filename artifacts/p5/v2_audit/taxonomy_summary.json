@@ -1,0 +1,811 @@
+{
+  "taxonomy_version": "v2-audit-20260913",
+  "run_table": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS/run/run/run/run_table_2021-07_fixed.csv",
+  "raw_record_count": 17152,
+  "level_distribution_derived": {
+    "": 36,
+    "ERROR": 38,
+    "INFO": 861,
+    "WARNING": 16217
+  },
+  "raw_type_distribution": {
+    "access_permission_denied": 15,
+    "cpu_anomalies": 12,
+    "exception_injection_failed": 10,
+    "file_moving": 43,
+    "log_upload_failure": 38,
+    "login_failure": 15478,
+    "memory_anomalies": 652,
+    "normal_memory_freed": 17,
+    "traceback_continuation": 36,
+    "unknown": 19,
+    "upload_success": 832
+  },
+  "semantic_role_distribution": {
+    "fault_injection": 16200,
+    "generic_error_system_record": 38,
+    "normal_system_record": 851,
+    "parse_error": 36,
+    "possible_fault": 17,
+    "unsupported": 10
+  },
+  "message_pattern_inventory": [
+    {
+      "level": "WARNING",
+      "raw_type": "login_failure",
+      "pattern": "<HEX> | wait for <N> seconds for follow-up operations to simulate the login failure of the QR code expired",
+      "count": 15478
+    },
+    {
+      "level": "WARNING",
+      "raw_type": "memory_anomalies",
+      "pattern": "[memory_anomalies] trigger a high memory program, start at <TS> and lasts <N> seconds and use <N>g memory",
+      "count": 652
+    },
+    {
+      "level": "INFO",
+      "raw_type": "upload_success",
+      "pattern": "upload trace logs on <N>-<N>-<N> successfully",
+      "count": 280
+    },
+    {
+      "level": "INFO",
+      "raw_type": "upload_success",
+      "pattern": "upload run_logs logs on <N>-<N>-<N> successfully",
+      "count": 278
+    },
+    {
+      "level": "INFO",
+      "raw_type": "upload_success",
+      "pattern": "upload business logs on <N>-<N>-<N> successfully",
+      "count": 274
+    },
+    {
+      "level": "WARNING",
+      "raw_type": "file_moving",
+      "pattern": "trigger the file moving program, start with <TS>, last for <N> seconds",
+      "count": 43
+    },
+    {
+      "level": "",
+      "raw_type": "traceback_continuation",
+      "pattern": "(Background on this error at: http://sqlalche.me/e/<N>/e<N>q<N>)",
+      "count": 36
+    },
+    {
+      "level": "WARNING",
+      "raw_type": "normal_memory_freed",
+      "pattern": "[normal memory freed label] lasts ten minutes",
+      "count": 17
+    },
+    {
+      "level": "WARNING",
+      "raw_type": "access_permission_denied",
+      "pattern": "trigger an access permission denied exception, will lasts an hour",
+      "count": 15
+    },
+    {
+      "level": "WARNING",
+      "raw_type": "cpu_anomalies",
+      "pattern": "[cpu_anomalies] trigger a parallel fast sorting program , start at <TS> and lasts <N>.<HEX> seconds",
+      "count": 12
+    },
+    {
+      "level": "ERROR",
+      "raw_type": "log_upload_failure",
+      "pattern": "upload business logs on <N>-<N>-<N> failed: (pymysql.err.OperationalError) (<N>, \"Can't connect to MySQL server on '<IP>' ([Errno <N>] Connection refused)\")",
+      "count": 10
+    },
+    {
+      "level": "ERROR",
+      "raw_type": "log_upload_failure",
+      "pattern": "upload trace logs on <N>-<N>-<N> failed: (pymysql.err.OperationalError) (<N>, \"Can't connect to MySQL server on '<IP>' ([Errno <N>] Connection refused)\")",
+      "count": 10
+    },
+    {
+      "level": "ERROR",
+      "raw_type": "log_upload_failure",
+      "pattern": "upload run_logs logs on <N>-<N>-<N> failed: (pymysql.err.OperationalError) (<N>, \"Can't connect to MySQL server on '<IP>' ([Errno <N>] Connection refused)\")",
+      "count": 10
+    },
+    {
+      "level": "INFO",
+      "raw_type": "exception_injection_failed",
+      "pattern": "get a error: 'NoneType' object is not callable, exception injection failed",
+      "count": 9
+    },
+    {
+      "level": "ERROR",
+      "raw_type": "log_upload_failure",
+      "pattern": "upload business logs on <N>-<N>-<N> failed: (pymysql.err.OperationalError) (<N>, 'ny connections')",
+      "count": 6
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | the list of all available services are redisservice<N>: http://<IP>:<N>, redisservice<N>: http://<IP>:<N>",
+      "count": 5
+    },
+    {
+      "level": "ERROR",
+      "raw_type": "log_upload_failure",
+      "pattern": "upload run_logs logs on <N>-<N>-<N> failed: 'str' object does not support item assignment",
+      "count": 2
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | now call service:redisservice<N>, inst:http://<IP>:<N> as a downstream service",
+      "count": 2
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | info <HEX>-de<N>-<N>eb-b<N>-<HEX>:KOZoDVJh write success",
+      "count": 1
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | info <HEX>-df<N>-<N>eb-b<N>-<HEX>:lYAOPtMm write success",
+      "count": 1
+    },
+    {
+      "level": "INFO",
+      "raw_type": "exception_injection_failed",
+      "pattern": "get a error: 'Redis' object is not callable, exception injection failed",
+      "count": 1
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | request http://<IP>:<N>/set_key_value_into_redis and param={'keys': '<HEX>-e<N>-<N>eb-<N>b<N>-<HEX>', 'value': 'GKtJXRfS'}",
+      "count": 1
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | request http://<IP>:<N>/set_key_value_into_redis and param={'keys': '<HEX>-e<N>fa-<N>eb-aff<N>-<HEX>', 'value': 'goQRiNCP'}",
+      "count": 1
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | request http://<IP>:<N>/set_key_value_into_redis and param={'keys': '<HEX>-ebf<N>-<N>eb-<N>a<N>f-<HEX>', 'value': 'WPyTrmsx'}",
+      "count": 1
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | request http://<IP>:<N>/set_key_value_into_redis and param={'keys': '<HEX>-ec<N>-<N>eb-b<N>-<HEX>', 'value': 'xhUTVXnF'}",
+      "count": 1
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | info <HEX>-f<N>da-<N>eb-<N>cfc-<HEX>:xkZXUvcn write success",
+      "count": 1
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | info <HEX>-f<N>e<N>-<N>eb-b<N>b<N>-<HEX>:DjXaKYNR write success",
+      "count": 1
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | info <HEX>-f<N>-<N>eb-<N>a<N>-<HEX>:tBueHCAS write success",
+      "count": 1
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | request http://<IP>:<N>/set_key_value_into_redis and param={'keys': '<HEX>-f<N>ae-<N>eb-b<N>a<N>-<HEX>', 'value': 'jKNlhwnV'}",
+      "count": 1
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | info <HEX>-f<N>ef-<N>eb-<N>a<N>-<HEX>:ALRXkDds write success",
+      "count": 1
+    },
+    {
+      "level": "INFO",
+      "raw_type": "unknown",
+      "pattern": "<HEX> | request http://<IP>:<N>/set_key_value_into_redis and param={'keys': '<HEX>-f<N>-<N>eb-b<N>-<HEX>', 'value': 'vpXbgtCB'}",
+      "count": 1
+    }
+  ],
+  "per_type_semantics": {
+    "access_permission_denied": {
+      "count": 15,
+      "start_semantics": "message_ts",
+      "duration_how": {
+        "word_hour": 15
+      },
+      "distinct_duration_values_seconds": [
+        {
+          "value": 3600.0,
+          "count": 15
+        }
+      ],
+      "sample_payloads": [
+        "trigger an access permission denied exception, will lasts an hour",
+        "trigger an access permission denied exception, will lasts an hour",
+        "trigger an access permission denied exception, will lasts an hour"
+      ]
+    },
+    "cpu_anomalies": {
+      "count": 12,
+      "start_semantics": "embedded",
+      "duration_how": {
+        "numeric_seconds": 12
+      },
+      "distinct_duration_values_seconds": [
+        {
+          "value": 2.891992,
+          "count": 1
+        },
+        {
+          "value": 2.90502,
+          "count": 1
+        },
+        {
+          "value": 2.915335,
+          "count": 1
+        },
+        {
+          "value": 2.93793,
+          "count": 1
+        },
+        {
+          "value": 2.968824,
+          "count": 1
+        },
+        {
+          "value": 2.995908,
+          "count": 1
+        },
+        {
+          "value": 3.003454,
+          "count": 1
+        },
+        {
+          "value": 3.021086,
+          "count": 1
+        },
+        {
+          "value": 3.050935,
+          "count": 1
+        },
+        {
+          "value": 3.051997,
+          "count": 1
+        },
+        {
+          "value": 3.052548,
+          "count": 1
+        },
+        {
+          "value": 3.241399,
+          "count": 1
+        }
+      ],
+      "sample_payloads": [
+        "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-27 23:46:25.446893 and lasts 3.0210864543914795 seconds",
+        "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-28 09:33:39.426569 and lasts 3.0509350299835205 seconds",
+        "[cpu_anomalies] trigger a parallel fast sorting program , start at 2021-07-28 12:34:11.898093 and lasts 2.9959075450897217 seconds"
+      ],
+      "msg_ts_minus_start_seconds": {
+        "min": 0.0,
+        "median": 0.001,
+        "max": 0.009,
+        "interpretation": "message logged at START of fault window (offset ~ 0)"
+      }
+    },
+    "exception_injection_failed": {
+      "count": 10,
+      "start_semantics": "message_ts(point/none)",
+      "duration_how": {
+        "point_event": 10
+      },
+      "distinct_duration_values_seconds": [
+        {
+          "value": 0.0,
+          "count": 10
+        }
+      ],
+      "sample_payloads": [
+        "get a error: 'NoneType' object is not callable, exception injection failed",
+        "get a error: 'NoneType' object is not callable, exception injection failed",
+        "get a error: 'NoneType' object is not callable, exception injection failed"
+      ]
+    },
+    "file_moving": {
+      "count": 43,
+      "start_semantics": "embedded",
+      "duration_how": {
+        "numeric_seconds": 43
+      },
+      "distinct_duration_values_seconds": [
+        {
+          "value": 600.0,
+          "count": 43
+        }
+      ],
+      "sample_payloads": [
+        "trigger the file moving program, start with 2021-07-02 20:00:00.510589, last for 600 seconds",
+        "trigger the file moving program, start with 2021-07-04 04:00:00.578620, last for 600 seconds",
+        "trigger the file moving program, start with 2021-07-04 12:00:00.956911, last for 600 seconds"
+      ],
+      "msg_ts_minus_start_seconds": {
+        "min": 600.019,
+        "median": 600.098,
+        "max": 600.181,
+        "interpretation": "message logged at END of fault window (offset ~ duration)"
+      }
+    },
+    "log_upload_failure": {
+      "count": 38,
+      "start_semantics": "message_ts(point/none)",
+      "duration_how": {
+        "point_event": 38
+      },
+      "distinct_duration_values_seconds": [
+        {
+          "value": 0.0,
+          "count": 38
+        }
+      ],
+      "sample_payloads": [
+        "upload run_logs logs on 2021-07-01 failed: 'str' object does not support item assignment",
+        "upload run_logs logs on 2021-07-01 failed: 'str' object does not support item assignment",
+        "upload business logs on 2021-07-05 failed: (pymysql.err.OperationalError) (1040, 'ny connections')"
+      ]
+    },
+    "login_failure": {
+      "count": 15478,
+      "start_semantics": "message_ts",
+      "duration_how": {
+        "numeric_seconds": 15478
+      },
+      "distinct_duration_values_seconds": [
+        {
+          "value": 11.0,
+          "count": 15478
+        }
+      ],
+      "sample_payloads": [
+        "db0ed47426370ed5 | wait for 11 seconds for follow-up operations to simulate the login failure of the QR code expired",
+        "fe98597588500994 | wait for 11 seconds for follow-up operations to simulate the login failure of the QR code expired",
+        "4c8314c7ce3aceab | wait for 11 seconds for follow-up operations to simulate the login failure of the QR code expired"
+      ]
+    },
+    "memory_anomalies": {
+      "count": 652,
+      "start_semantics": "embedded",
+      "duration_how": {
+        "numeric_seconds": 652
+      },
+      "distinct_duration_values_seconds": [
+        {
+          "value": 600.0,
+          "count": 652
+        }
+      ],
+      "sample_payloads": [
+        "[memory_anomalies] trigger a high memory program, start at 2021-07-01 11:44:26.882752 and lasts 600 seconds and use 1g memory",
+        "[memory_anomalies] trigger a high memory program, start at 2021-07-01 22:23:04.230332 and lasts 600 seconds and use 1g memory",
+        "[memory_anomalies] trigger a high memory program, start at 2021-07-01 12:44:55.798971 and lasts 600 seconds and use 1g memory"
+      ],
+      "msg_ts_minus_start_seconds": {
+        "min": 600.605,
+        "median": 600.912,
+        "max": 618.377,
+        "interpretation": "message logged at END of fault window (offset ~ duration)"
+      }
+    },
+    "normal_memory_freed": {
+      "count": 17,
+      "start_semantics": "message_ts",
+      "duration_how": {
+        "word_minutes:ten": 17
+      },
+      "distinct_duration_values_seconds": [
+        {
+          "value": 600.0,
+          "count": 17
+        }
+      ],
+      "sample_payloads": [
+        "[normal memory freed label] lasts ten minutes",
+        "[normal memory freed label] lasts ten minutes",
+        "[normal memory freed label] lasts ten minutes"
+      ]
+    },
+    "traceback_continuation": {
+      "count": 36,
+      "start_semantics": "message_ts(point/none)",
+      "duration_how": {
+        "null": 36
+      },
+      "distinct_duration_values_seconds": [],
+      "sample_payloads": [
+        "(Background on this error at: http://sqlalche.me/e/14/e3q8)",
+        "(Background on this error at: http://sqlalche.me/e/14/e3q8)",
+        "(Background on this error at: http://sqlalche.me/e/14/e3q8)"
+      ]
+    },
+    "unknown": {
+      "count": 19,
+      "start_semantics": "message_ts(point/none)",
+      "duration_how": {
+        "null": 19
+      },
+      "distinct_duration_values_seconds": [],
+      "sample_payloads": [
+        "52e33c13c09808d9 | now call service:redisservice2, inst:http://0.0.0.2:9387 as a downstream service",
+        "26e6f497871d7fda | info 314c21ca-de98-11eb-b138-0242ac110003:KOZoDVJh write success",
+        "bb57e93a9245574c | the list of all available services are redisservice1: http://0.0.0.1:9386, redisservice2: http://0.0.0.2:9387"
+      ]
+    },
+    "upload_success": {
+      "count": 832,
+      "start_semantics": "message_ts(point/none)",
+      "duration_how": {
+        "null": 832
+      },
+      "distinct_duration_values_seconds": [],
+      "sample_payloads": [
+        "upload business logs on 2021-07-01 successfully",
+        "upload trace logs on 2021-07-01 successfully",
+        "upload run_logs logs on 2021-07-01 successfully"
+      ]
+    }
+  },
+  "primary_caliber": {
+    "n_gt": 16200,
+    "by_fault_type": {
+      "access_permission_denied": 15,
+      "cpu_anomalies": 12,
+      "file_moving": 43,
+      "login_failure": 15478,
+      "memory_anomalies": 652
+    },
+    "by_labelled_service": {
+      "dbservice1": 83,
+      "dbservice2": 96,
+      "logservice1": 66,
+      "logservice2": 63,
+      "mobservice1": 7815,
+      "mobservice2": 7799,
+      "redisservice1": 55,
+      "redisservice2": 57,
+      "webservice1": 82,
+      "webservice2": 84
+    },
+    "by_fault_type_and_service": [
+      {
+        "fault_type": "access_permission_denied",
+        "service": "dbservice1",
+        "count": 8
+      },
+      {
+        "fault_type": "access_permission_denied",
+        "service": "dbservice2",
+        "count": 7
+      },
+      {
+        "fault_type": "cpu_anomalies",
+        "service": "dbservice1",
+        "count": 8
+      },
+      {
+        "fault_type": "cpu_anomalies",
+        "service": "mobservice2",
+        "count": 4
+      },
+      {
+        "fault_type": "file_moving",
+        "service": "webservice1",
+        "count": 22
+      },
+      {
+        "fault_type": "file_moving",
+        "service": "webservice2",
+        "count": 21
+      },
+      {
+        "fault_type": "login_failure",
+        "service": "mobservice1",
+        "count": 7749
+      },
+      {
+        "fault_type": "login_failure",
+        "service": "mobservice2",
+        "count": 7729
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "dbservice1",
+        "count": 67
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "dbservice2",
+        "count": 89
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "logservice1",
+        "count": 66
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "logservice2",
+        "count": 63
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "mobservice1",
+        "count": 66
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "mobservice2",
+        "count": 66
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "redisservice1",
+        "count": 55
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "redisservice2",
+        "count": 57
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "webservice1",
+        "count": 60
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "webservice2",
+        "count": 63
+      }
+    ],
+    "start_ms_min": 1625108812249,
+    "start_ms_max": 1627747181313,
+    "end_ms_max": 1627747192313,
+    "start_iso_min": "2021-07-01T11:06:52.249+08:00",
+    "start_iso_max": "2021-07-31T23:59:41.313+08:00"
+  },
+  "with_freed_caliber": {
+    "n_gt": 16217,
+    "by_fault_type": {
+      "access_permission_denied": 15,
+      "cpu_anomalies": 12,
+      "file_moving": 43,
+      "login_failure": 15478,
+      "memory_anomalies": 652,
+      "normal_memory_freed": 17
+    },
+    "by_labelled_service": {
+      "dbservice1": 86,
+      "dbservice2": 96,
+      "logservice1": 67,
+      "logservice2": 64,
+      "mobservice1": 7816,
+      "mobservice2": 7800,
+      "redisservice1": 56,
+      "redisservice2": 58,
+      "webservice1": 86,
+      "webservice2": 88
+    },
+    "by_fault_type_and_service": [
+      {
+        "fault_type": "access_permission_denied",
+        "service": "dbservice1",
+        "count": 8
+      },
+      {
+        "fault_type": "access_permission_denied",
+        "service": "dbservice2",
+        "count": 7
+      },
+      {
+        "fault_type": "cpu_anomalies",
+        "service": "dbservice1",
+        "count": 8
+      },
+      {
+        "fault_type": "cpu_anomalies",
+        "service": "mobservice2",
+        "count": 4
+      },
+      {
+        "fault_type": "file_moving",
+        "service": "webservice1",
+        "count": 22
+      },
+      {
+        "fault_type": "file_moving",
+        "service": "webservice2",
+        "count": 21
+      },
+      {
+        "fault_type": "login_failure",
+        "service": "mobservice1",
+        "count": 7749
+      },
+      {
+        "fault_type": "login_failure",
+        "service": "mobservice2",
+        "count": 7729
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "dbservice1",
+        "count": 67
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "dbservice2",
+        "count": 89
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "logservice1",
+        "count": 66
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "logservice2",
+        "count": 63
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "mobservice1",
+        "count": 66
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "mobservice2",
+        "count": 66
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "redisservice1",
+        "count": 55
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "redisservice2",
+        "count": 57
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "webservice1",
+        "count": 60
+      },
+      {
+        "fault_type": "memory_anomalies",
+        "service": "webservice2",
+        "count": 63
+      },
+      {
+        "fault_type": "normal_memory_freed",
+        "service": "dbservice1",
+        "count": 3
+      },
+      {
+        "fault_type": "normal_memory_freed",
+        "service": "logservice1",
+        "count": 1
+      },
+      {
+        "fault_type": "normal_memory_freed",
+        "service": "logservice2",
+        "count": 1
+      },
+      {
+        "fault_type": "normal_memory_freed",
+        "service": "mobservice1",
+        "count": 1
+      },
+      {
+        "fault_type": "normal_memory_freed",
+        "service": "mobservice2",
+        "count": 1
+      },
+      {
+        "fault_type": "normal_memory_freed",
+        "service": "redisservice1",
+        "count": 1
+      },
+      {
+        "fault_type": "normal_memory_freed",
+        "service": "redisservice2",
+        "count": 1
+      },
+      {
+        "fault_type": "normal_memory_freed",
+        "service": "webservice1",
+        "count": 4
+      },
+      {
+        "fault_type": "normal_memory_freed",
+        "service": "webservice2",
+        "count": 4
+      }
+    ],
+    "start_ms_min": 1625108812249,
+    "start_ms_max": 1627747181313,
+    "end_ms_max": 1627747192313,
+    "start_iso_min": "2021-07-01T11:06:52.249+08:00",
+    "start_iso_max": "2021-07-31T23:59:41.313+08:00"
+  },
+  "exclusion_breakdown": [
+    {
+      "raw_type": "exception_injection_failed",
+      "semantic_role": "unsupported",
+      "count": 10
+    },
+    {
+      "raw_type": "log_upload_failure",
+      "semantic_role": "generic_error_system_record",
+      "count": 38
+    },
+    {
+      "raw_type": "normal_memory_freed",
+      "semantic_role": "possible_fault",
+      "count": 17
+    },
+    {
+      "raw_type": "traceback_continuation",
+      "semantic_role": "parse_error",
+      "count": 36
+    },
+    {
+      "raw_type": "unknown",
+      "semantic_role": "normal_system_record",
+      "count": 19
+    },
+    {
+      "raw_type": "upload_success",
+      "semantic_role": "normal_system_record",
+      "count": 832
+    }
+  ],
+  "same_bin_collisions_primary": {
+    "bins_with_multiple_injections": 1003,
+    "max_injections_in_one_bin": 3,
+    "same_service_same_bin_bins": 483,
+    "max_same_service_same_bin": 3,
+    "bins_with_multiple_services": 536,
+    "max_services_in_one_bin": 3
+  },
+  "same_bin_collisions_with_freed": {
+    "bins_with_multiple_injections": 1003,
+    "max_injections_in_one_bin": 3,
+    "same_service_same_bin_bins": 483,
+    "max_same_service_same_bin": 3,
+    "bins_with_multiple_services": 536,
+    "max_services_in_one_bin": 3
+  },
+  "events_starting_before_metric_timeline": {
+    "metric_timeline_start_ms": 1625133600000,
+    "metric_timeline_start_iso": "2021-07-01T18:00:00.000+08:00",
+    "primary_count": 84,
+    "primary_by_type": {
+      "memory_anomalies": 9,
+      "login_failure": 75
+    },
+    "with_freed_count": 85,
+    "note": "these events precede the first metric sample (2021-07-01 18:00 CST); logs/traces exist from 09:57 CST"
+  },
+  "hardcoded_expectations": "none; every count in this file is an output of parsing"
+}

@@ -1,0 +1,303 @@
+{
+  "count": 17,
+  "all_payloads_identical_pattern": true,
+  "gap_to_prev_memory_end_seconds": {
+    "min": 1761.766,
+    "median": 27469.618,
+    "max": 149909.331,
+    "count_with_preceding_memory_event": 17
+  },
+  "end_marker_hypothesis": "REJECTED: message ts is far from the preceding injection end; records look independent (see per-record gaps)",
+  "records": [
+    {
+      "source_index": 1,
+      "service": "dbservice1",
+      "message_ts_iso": "2021-07-01T12:25:08.804+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 0,
+        "start_iso": "2021-07-01T11:44:26.883+08:00",
+        "end_iso": "2021-07-01T11:54:26.883+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 1841.921,
+        "gap_msg_ts_minus_prev_start_seconds": 2441.921
+      }
+    },
+    {
+      "source_index": 2088,
+      "service": "webservice2",
+      "message_ts_iso": "2021-07-05T08:25:27.738+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 1476,
+        "start_iso": "2021-07-04T18:39:16.152+08:00",
+        "end_iso": "2021-07-04T18:49:16.152+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 48971.586,
+        "gap_msg_ts_minus_prev_start_seconds": 49571.586
+      }
+    },
+    {
+      "source_index": 3162,
+      "service": "mobservice2",
+      "message_ts_iso": "2021-07-07T03:47:26.304+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 2803,
+        "start_iso": "2021-07-06T15:09:46.657+08:00",
+        "end_iso": "2021-07-06T15:19:46.657+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 44859.647,
+        "gap_msg_ts_minus_prev_start_seconds": 45459.647
+      }
+    },
+    {
+      "source_index": 3794,
+      "service": "mobservice1",
+      "message_ts_iso": "2021-07-08T07:49:26.053+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 3724,
+        "start_iso": "2021-07-08T00:01:36.435+08:00",
+        "end_iso": "2021-07-08T00:11:36.435+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 27469.618,
+        "gap_msg_ts_minus_prev_start_seconds": 28069.618
+      }
+    },
+    {
+      "source_index": 3956,
+      "service": "webservice2",
+      "message_ts_iso": "2021-07-09T05:16:48.226+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 3955,
+        "start_iso": "2021-07-09T04:37:26.460+08:00",
+        "end_iso": "2021-07-09T04:47:26.460+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 1761.766,
+        "gap_msg_ts_minus_prev_start_seconds": 2361.766
+      }
+    },
+    {
+      "source_index": 4372,
+      "service": "redisservice1",
+      "message_ts_iso": "2021-07-10T03:01:16.899+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 4371,
+        "start_iso": "2021-07-10T01:58:52.779+08:00",
+        "end_iso": "2021-07-10T02:08:52.779+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 3144.12,
+        "gap_msg_ts_minus_prev_start_seconds": 3744.12
+      }
+    },
+    {
+      "source_index": 5370,
+      "service": "webservice1",
+      "message_ts_iso": "2021-07-12T02:24:07.655+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 4831,
+        "start_iso": "2021-07-11T08:13:25.639+08:00",
+        "end_iso": "2021-07-11T08:23:25.639+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 64842.016,
+        "gap_msg_ts_minus_prev_start_seconds": 65442.016
+      }
+    },
+    {
+      "source_index": 5882,
+      "service": "webservice2",
+      "message_ts_iso": "2021-07-13T09:11:25.840+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 5369,
+        "start_iso": "2021-07-12T15:31:55.896+08:00",
+        "end_iso": "2021-07-12T15:41:55.896+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 62969.944,
+        "gap_msg_ts_minus_prev_start_seconds": 63569.944
+      }
+    },
+    {
+      "source_index": 6967,
+      "service": "dbservice1",
+      "message_ts_iso": "2021-07-15T01:29:31.478+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 6461,
+        "start_iso": "2021-07-14T23:30:59.131+08:00",
+        "end_iso": "2021-07-14T23:40:59.131+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 6512.347,
+        "gap_msg_ts_minus_prev_start_seconds": 7112.347
+      }
+    },
+    {
+      "source_index": 6973,
+      "service": "dbservice1",
+      "message_ts_iso": "2021-07-15T20:37:41.355+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 6972,
+        "start_iso": "2021-07-15T09:56:34.587+08:00",
+        "end_iso": "2021-07-15T10:06:34.587+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 37866.768,
+        "gap_msg_ts_minus_prev_start_seconds": 38466.768
+      }
+    },
+    {
+      "source_index": 8064,
+      "service": "logservice1",
+      "message_ts_iso": "2021-07-16T02:03:28.070+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 7498,
+        "start_iso": "2021-07-15T23:12:31.948+08:00",
+        "end_iso": "2021-07-15T23:22:31.948+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 9656.122,
+        "gap_msg_ts_minus_prev_start_seconds": 10256.122
+      }
+    },
+    {
+      "source_index": 9355,
+      "service": "webservice1",
+      "message_ts_iso": "2021-07-20T04:23:32.138+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 8701,
+        "start_iso": "2021-07-18T10:35:02.807+08:00",
+        "end_iso": "2021-07-18T10:45:02.807+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 149909.331,
+        "gap_msg_ts_minus_prev_start_seconds": 150509.331
+      }
+    },
+    {
+      "source_index": 9891,
+      "service": "webservice2",
+      "message_ts_iso": "2021-07-21T00:26:09.148+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 9348,
+        "start_iso": "2021-07-20T21:33:51.196+08:00",
+        "end_iso": "2021-07-20T21:43:51.196+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 9737.952,
+        "gap_msg_ts_minus_prev_start_seconds": 10337.952
+      }
+    },
+    {
+      "source_index": 12474,
+      "service": "webservice1",
+      "message_ts_iso": "2021-07-25T04:01:41.787+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 12470,
+        "start_iso": "2021-07-25T00:48:58.887+08:00",
+        "end_iso": "2021-07-25T00:58:58.887+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 10962.9,
+        "gap_msg_ts_minus_prev_start_seconds": 11562.9
+      }
+    },
+    {
+      "source_index": 15024,
+      "service": "logservice2",
+      "message_ts_iso": "2021-07-28T07:35:36.447+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 15020,
+        "start_iso": "2021-07-28T03:35:35.821+08:00",
+        "end_iso": "2021-07-28T03:45:35.821+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 13800.626,
+        "gap_msg_ts_minus_prev_start_seconds": 14400.626
+      }
+    },
+    {
+      "source_index": 16385,
+      "service": "webservice1",
+      "message_ts_iso": "2021-07-31T02:56:33.157+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 15716,
+        "start_iso": "2021-07-30T18:58:19.472+08:00",
+        "end_iso": "2021-07-30T19:08:19.472+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 28093.685,
+        "gap_msg_ts_minus_prev_start_seconds": 28693.685
+      }
+    },
+    {
+      "source_index": 17137,
+      "service": "redisservice2",
+      "message_ts_iso": "2021-07-31T09:13:53.452+08:00",
+      "payload": "[normal memory freed label] lasts ten minutes",
+      "preparsed_anomaly_type": "normal_memory_freed",
+      "preparsed_duration_seconds": "600",
+      "derived_duration_seconds": 600.0,
+      "derived_duration_how": "word_minutes:ten",
+      "nearest_preceding_memory_anomaly": {
+        "source_index": 16356,
+        "start_iso": "2021-07-30T07:11:53.777+08:00",
+        "end_iso": "2021-07-30T07:21:53.777+08:00",
+        "gap_msg_ts_minus_prev_end_seconds": 93119.675,
+        "gap_msg_ts_minus_prev_start_seconds": 93719.675
+      }
+    }
+  ],
+  "decision": "primary caliber: EXCLUDED (possible_fault, pending verification); alternate caliber: INCLUDED as free_using_memory with start=message ts, duration=600s (matches Ada-MGAD main pre_GAIA.py:190-196 which labels these records positive, and DiagFusion gaia_resplit.csv which keeps 16/17 as an independent fault class with st_time=message ts, duration=600)"
+}

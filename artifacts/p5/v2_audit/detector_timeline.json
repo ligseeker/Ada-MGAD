@@ -1,0 +1,63 @@
+{
+  "definition": "B_k = [timeline_start + k*30s, +30s); Train = B_0..B_(K-1); Test = B_K..B_(N-1); K = floor(0.7*N); T_split = start(B_K)",
+  "gt_dependence": "none - endpoints come from raw telemetry only (V2 s12/s13)",
+  "primary_recommendation": "metric_only (matches Ada-MGAD main pre_GAIA.py metric-timestamp grid definition)",
+  "calibers": {
+    "metric_only": {
+      "caliber": "metric_only",
+      "timeline_start_ms": 1625133600000,
+      "timeline_start_iso": "2021-07-01T18:00:00.000+08:00",
+      "timeline_end_ms": 1627747200000,
+      "timeline_end_iso": "2021-08-01T00:00:00.000+08:00",
+      "first_raw_sample_ms": 1625133601000,
+      "last_raw_sample_ms": 1627747200000,
+      "bin_width_ms": 30000,
+      "n_bins": 87120,
+      "train_bins": 60984,
+      "test_bins": 26136,
+      "k_floor_0_7_n": 60984,
+      "split_timestamp_ms": 1626963120000,
+      "split_timestamp_iso": "2021-07-22T22:12:00.000+08:00",
+      "actual_train_ratio": 0.7,
+      "actual_test_ratio": 0.3,
+      "sensitivity_n_plus_1": {
+        "n_bins": 87121,
+        "k": 60984,
+        "split_timestamp_ms": 1626963120000,
+        "split_unchanged": true
+      }
+    },
+    "union": {
+      "caliber": "union",
+      "timeline_start_ms": 1625104620000,
+      "timeline_start_iso": "2021-07-01T09:57:00.000+08:00",
+      "timeline_end_ms": 1627747200000,
+      "timeline_end_iso": "2021-08-01T00:00:00.000+08:00",
+      "first_raw_sample_ms": 1625104624255,
+      "last_raw_sample_ms": 1627747199906,
+      "bin_width_ms": 30000,
+      "n_bins": 88086,
+      "train_bins": 61660,
+      "test_bins": 26426,
+      "k_floor_0_7_n": 61660,
+      "split_timestamp_ms": 1626954420000,
+      "split_timestamp_iso": "2021-07-22T19:47:00.000+08:00",
+      "actual_train_ratio": 0.699998,
+      "actual_test_ratio": 0.300002,
+      "sensitivity_n_plus_1": {
+        "n_bins": 88087,
+        "k": 61660,
+        "split_timestamp_ms": 1626954420000,
+        "split_unchanged": true
+      }
+    }
+  },
+  "provenance": {
+    "endpoints_from": "full raw-telemetry scan, audit round 2026-09-13",
+    "cross_verified_against": [
+      "artifacts/p5/g0r2/raw_telemetry_timing.json (committed full scan; trace/business counts match)",
+      "head/tail spot check of metric half-1/half-2 files (this audit round)"
+    ],
+    "rescan_instructions": "endpoints can be re-derived via scripts/p5/audit_raw_telemetry.py (G0R2) or head/tail over metric/metric_split/metric, business/business_split/business, trace/trace_split/trace"
+  }
+}

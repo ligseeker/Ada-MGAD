@@ -1,0 +1,619 @@
+{
+  "gt_source": "gt_event_registry.csv (taxonomy v2-audit-20260913, re-derived from raw messages)",
+  "timeline_source": "detector_timeline.json (raw telemetry, GT-independent)",
+  "variants": {
+    "metric_only/primary_16200_style": {
+      "n_bins": 87120,
+      "train_bins": 60984,
+      "test_bins": 26136,
+      "split_timestamp_ms": 1626963120000,
+      "split_timestamp_iso": "2021-07-22T22:12:00.000+08:00",
+      "train_events": {
+        "count": 10332,
+        "by_fault_type": {
+          "access_permission_denied": 10,
+          "file_moving": 27,
+          "login_failure": 9857,
+          "memory_anomalies": 438
+        },
+        "by_service": {
+          "dbservice1": 49,
+          "dbservice2": 62,
+          "logservice1": 48,
+          "logservice2": 44,
+          "mobservice1": 4980,
+          "mobservice2": 4972,
+          "redisservice1": 33,
+          "redisservice2": 39,
+          "webservice1": 53,
+          "webservice2": 52
+        }
+      },
+      "test_events": {
+        "count": 5783,
+        "by_fault_type": {
+          "access_permission_denied": 5,
+          "cpu_anomalies": 12,
+          "file_moving": 16,
+          "login_failure": 5546,
+          "memory_anomalies": 204
+        },
+        "by_service": {
+          "dbservice1": 33,
+          "dbservice2": 32,
+          "logservice1": 18,
+          "logservice2": 19,
+          "mobservice1": 2799,
+          "mobservice2": 2787,
+          "redisservice1": 20,
+          "redisservice2": 17,
+          "webservice1": 28,
+          "webservice2": 30
+        }
+      },
+      "boundary_crossing_purge": {
+        "count": 1,
+        "cases": [
+          {
+            "case_id": "gaia-v2-10508",
+            "fault_type": "memory_anomalies",
+            "service": "webservice1",
+            "start_ms": 1626962746587,
+            "end_ms": 1626963346587
+          }
+        ]
+      },
+      "outside_timeline_events": {
+        "count": 84,
+        "by_type": {
+          "memory_anomalies": 9,
+          "login_failure": 75
+        },
+        "reason": "event interval does not intersect the telemetry timeline (e.g. injections before metric start 07-01 18:00 CST under metric_only)",
+        "cases_head": [
+          {
+            "case_id": "gaia-v2-00005",
+            "fault_type": "memory_anomalies",
+            "start_ms": 1625108812249
+          },
+          {
+            "case_id": "gaia-v2-00000",
+            "fault_type": "memory_anomalies",
+            "start_ms": 1625111066883
+          },
+          {
+            "case_id": "gaia-v2-00003",
+            "fault_type": "memory_anomalies",
+            "start_ms": 1625114695799
+          },
+          {
+            "case_id": "gaia-v2-00007",
+            "fault_type": "memory_anomalies",
+            "start_ms": 1625116122447
+          },
+          {
+            "case_id": "gaia-v2-00004",
+            "fault_type": "memory_anomalies",
+            "start_ms": 1625122822681
+          },
+          {
+            "case_id": "gaia-v2-00014",
+            "fault_type": "login_failure",
+            "start_ms": 1625123023991
+          },
+          {
+            "case_id": "gaia-v2-00113",
+            "fault_type": "login_failure",
+            "start_ms": 1625123305556
+          },
+          {
+            "case_id": "gaia-v2-00015",
+            "fault_type": "login_failure",
+            "start_ms": 1625123497103
+          },
+          {
+            "case_id": "gaia-v2-00016",
+            "fault_type": "login_failure",
+            "start_ms": 1625123711830
+          },
+          {
+            "case_id": "gaia-v2-00114",
+            "fault_type": "login_failure",
+            "start_ms": 1625123771833
+          },
+          {
+            "case_id": "gaia-v2-00115",
+            "fault_type": "login_failure",
+            "start_ms": 1625124065900
+          },
+          {
+            "case_id": "gaia-v2-00116",
+            "fault_type": "login_failure",
+            "start_ms": 1625124096455
+          },
+          {
+            "case_id": "gaia-v2-00017",
+            "fault_type": "login_failure",
+            "start_ms": 1625124146966
+          },
+          {
+            "case_id": "gaia-v2-00117",
+            "fault_type": "login_failure",
+            "start_ms": 1625124241962
+          },
+          {
+            "case_id": "gaia-v2-00118",
+            "fault_type": "login_failure",
+            "start_ms": 1625124358528
+          },
+          {
+            "case_id": "gaia-v2-00018",
+            "fault_type": "login_failure",
+            "start_ms": 1625124426145
+          },
+          {
+            "case_id": "gaia-v2-00119",
+            "fault_type": "login_failure",
+            "start_ms": 1625124602148
+          },
+          {
+            "case_id": "gaia-v2-00120",
+            "fault_type": "login_failure",
+            "start_ms": 1625124662232
+          },
+          {
+            "case_id": "gaia-v2-00019",
+            "fault_type": "login_failure",
+            "start_ms": 1625124766990
+          },
+          {
+            "case_id": "gaia-v2-00020",
+            "fault_type": "login_failure",
+            "start_ms": 1625124942392
+          }
+        ]
+      },
+      "same_bin_collisions_all": {
+        "same_bin_event_bins": 1003,
+        "max_events_in_one_bin": 3,
+        "same_service_same_bin_bins": 483,
+        "max_same_service_same_bin": 3,
+        "definition": "events grouped by floor(start_ms/30000); positive-bin-level stats for the OLD split remain in artifacts/p5/g0r2/label_reconciliation.json"
+      },
+      "same_bin_collisions_train": {
+        "same_bin_event_bins": 592,
+        "max_events_in_one_bin": 3,
+        "same_service_same_bin_bins": 279,
+        "max_same_service_same_bin": 3,
+        "definition": "events grouped by floor(start_ms/30000); positive-bin-level stats for the OLD split remain in artifacts/p5/g0r2/label_reconciliation.json"
+      },
+      "same_bin_collisions_test": {
+        "same_bin_event_bins": 404,
+        "max_events_in_one_bin": 3,
+        "same_service_same_bin_bins": 202,
+        "max_same_service_same_bin": 3,
+        "definition": "events grouped by floor(start_ms/30000); positive-bin-level stats for the OLD split remain in artifacts/p5/g0r2/label_reconciliation.json"
+      },
+      "boundary_exclusion_mask_bins": [
+        1626962850000,
+        1626962880000,
+        1626962910000,
+        1626962940000,
+        1626962970000,
+        1626963000000,
+        1626963030000,
+        1626963060000,
+        1626963090000,
+        1626963120000,
+        1626963150000,
+        1626963180000,
+        1626963210000,
+        1626963240000,
+        1626963270000,
+        1626963300000,
+        1626963330000
+      ],
+      "ad_burn_in": {
+        "train_first_targets_lost": 9,
+        "test_first_targets_lost": 9,
+        "note": "strict in-split 10-bin windows (V2 s30): first 9 target bins of each split have no valid window"
+      }
+    },
+    "metric_only/with_freed": {
+      "n_bins": 87120,
+      "train_bins": 60984,
+      "test_bins": 26136,
+      "split_timestamp_ms": 1626963120000,
+      "split_timestamp_iso": "2021-07-22T22:12:00.000+08:00",
+      "train_events": {
+        "count": 10344,
+        "by_fault_type": {
+          "access_permission_denied": 10,
+          "file_moving": 27,
+          "login_failure": 9857,
+          "memory_anomalies": 438,
+          "normal_memory_freed": 12
+        },
+        "by_service": {
+          "dbservice1": 51,
+          "dbservice2": 62,
+          "logservice1": 49,
+          "logservice2": 44,
+          "mobservice1": 4981,
+          "mobservice2": 4973,
+          "redisservice1": 34,
+          "redisservice2": 39,
+          "webservice1": 55,
+          "webservice2": 56
+        }
+      },
+      "test_events": {
+        "count": 5787,
+        "by_fault_type": {
+          "access_permission_denied": 5,
+          "cpu_anomalies": 12,
+          "file_moving": 16,
+          "login_failure": 5546,
+          "memory_anomalies": 204,
+          "normal_memory_freed": 4
+        },
+        "by_service": {
+          "dbservice1": 33,
+          "dbservice2": 32,
+          "logservice1": 18,
+          "logservice2": 20,
+          "mobservice1": 2799,
+          "mobservice2": 2787,
+          "redisservice1": 20,
+          "redisservice2": 18,
+          "webservice1": 30,
+          "webservice2": 30
+        }
+      },
+      "boundary_crossing_purge": {
+        "count": 1,
+        "cases": [
+          {
+            "case_id": "gaia-v2-10508",
+            "fault_type": "memory_anomalies",
+            "service": "webservice1",
+            "start_ms": 1626962746587,
+            "end_ms": 1626963346587
+          }
+        ]
+      },
+      "outside_timeline_events": {
+        "count": 85,
+        "by_type": {
+          "memory_anomalies": 9,
+          "normal_memory_freed": 1,
+          "login_failure": 75
+        },
+        "reason": "event interval does not intersect the telemetry timeline (e.g. injections before metric start 07-01 18:00 CST under metric_only)",
+        "cases_head": [
+          {
+            "case_id": "gaia-v2-00005",
+            "fault_type": "memory_anomalies",
+            "start_ms": 1625108812249
+          },
+          {
+            "case_id": "gaia-v2-00000",
+            "fault_type": "memory_anomalies",
+            "start_ms": 1625111066883
+          },
+          {
+            "case_id": "gaia-v2-00001",
+            "fault_type": "normal_memory_freed",
+            "start_ms": 1625113508804
+          },
+          {
+            "case_id": "gaia-v2-00003",
+            "fault_type": "memory_anomalies",
+            "start_ms": 1625114695799
+          },
+          {
+            "case_id": "gaia-v2-00007",
+            "fault_type": "memory_anomalies",
+            "start_ms": 1625116122447
+          },
+          {
+            "case_id": "gaia-v2-00004",
+            "fault_type": "memory_anomalies",
+            "start_ms": 1625122822681
+          },
+          {
+            "case_id": "gaia-v2-00014",
+            "fault_type": "login_failure",
+            "start_ms": 1625123023991
+          },
+          {
+            "case_id": "gaia-v2-00113",
+            "fault_type": "login_failure",
+            "start_ms": 1625123305556
+          },
+          {
+            "case_id": "gaia-v2-00015",
+            "fault_type": "login_failure",
+            "start_ms": 1625123497103
+          },
+          {
+            "case_id": "gaia-v2-00016",
+            "fault_type": "login_failure",
+            "start_ms": 1625123711830
+          },
+          {
+            "case_id": "gaia-v2-00114",
+            "fault_type": "login_failure",
+            "start_ms": 1625123771833
+          },
+          {
+            "case_id": "gaia-v2-00115",
+            "fault_type": "login_failure",
+            "start_ms": 1625124065900
+          },
+          {
+            "case_id": "gaia-v2-00116",
+            "fault_type": "login_failure",
+            "start_ms": 1625124096455
+          },
+          {
+            "case_id": "gaia-v2-00017",
+            "fault_type": "login_failure",
+            "start_ms": 1625124146966
+          },
+          {
+            "case_id": "gaia-v2-00117",
+            "fault_type": "login_failure",
+            "start_ms": 1625124241962
+          },
+          {
+            "case_id": "gaia-v2-00118",
+            "fault_type": "login_failure",
+            "start_ms": 1625124358528
+          },
+          {
+            "case_id": "gaia-v2-00018",
+            "fault_type": "login_failure",
+            "start_ms": 1625124426145
+          },
+          {
+            "case_id": "gaia-v2-00119",
+            "fault_type": "login_failure",
+            "start_ms": 1625124602148
+          },
+          {
+            "case_id": "gaia-v2-00120",
+            "fault_type": "login_failure",
+            "start_ms": 1625124662232
+          },
+          {
+            "case_id": "gaia-v2-00019",
+            "fault_type": "login_failure",
+            "start_ms": 1625124766990
+          }
+        ]
+      },
+      "same_bin_collisions_all": {
+        "same_bin_event_bins": 1003,
+        "max_events_in_one_bin": 3,
+        "same_service_same_bin_bins": 483,
+        "max_same_service_same_bin": 3,
+        "definition": "events grouped by floor(start_ms/30000); positive-bin-level stats for the OLD split remain in artifacts/p5/g0r2/label_reconciliation.json"
+      },
+      "same_bin_collisions_train": {
+        "same_bin_event_bins": 592,
+        "max_events_in_one_bin": 3,
+        "same_service_same_bin_bins": 279,
+        "max_same_service_same_bin": 3,
+        "definition": "events grouped by floor(start_ms/30000); positive-bin-level stats for the OLD split remain in artifacts/p5/g0r2/label_reconciliation.json"
+      },
+      "same_bin_collisions_test": {
+        "same_bin_event_bins": 404,
+        "max_events_in_one_bin": 3,
+        "same_service_same_bin_bins": 202,
+        "max_same_service_same_bin": 3,
+        "definition": "events grouped by floor(start_ms/30000); positive-bin-level stats for the OLD split remain in artifacts/p5/g0r2/label_reconciliation.json"
+      },
+      "boundary_exclusion_mask_bins": [
+        1626962850000,
+        1626962880000,
+        1626962910000,
+        1626962940000,
+        1626962970000,
+        1626963000000,
+        1626963030000,
+        1626963060000,
+        1626963090000,
+        1626963120000,
+        1626963150000,
+        1626963180000,
+        1626963210000,
+        1626963240000,
+        1626963270000,
+        1626963300000,
+        1626963330000
+      ],
+      "ad_burn_in": {
+        "train_first_targets_lost": 9,
+        "test_first_targets_lost": 9,
+        "note": "strict in-split 10-bin windows (V2 s30): first 9 target bins of each split have no valid window"
+      }
+    },
+    "union/primary_16200_style": {
+      "n_bins": 88086,
+      "train_bins": 61660,
+      "test_bins": 26426,
+      "split_timestamp_ms": 1626954420000,
+      "split_timestamp_iso": "2021-07-22T19:47:00.000+08:00",
+      "train_events": {
+        "count": 10353,
+        "by_fault_type": {
+          "access_permission_denied": 10,
+          "file_moving": 27,
+          "login_failure": 9870,
+          "memory_anomalies": 446
+        },
+        "by_service": {
+          "dbservice1": 50,
+          "dbservice2": 64,
+          "logservice1": 48,
+          "logservice2": 44,
+          "mobservice1": 4983,
+          "mobservice2": 4982,
+          "redisservice1": 35,
+          "redisservice2": 40,
+          "webservice1": 53,
+          "webservice2": 54
+        }
+      },
+      "test_events": {
+        "count": 5847,
+        "by_fault_type": {
+          "access_permission_denied": 5,
+          "cpu_anomalies": 12,
+          "file_moving": 16,
+          "login_failure": 5608,
+          "memory_anomalies": 206
+        },
+        "by_service": {
+          "dbservice1": 33,
+          "dbservice2": 32,
+          "logservice1": 18,
+          "logservice2": 19,
+          "mobservice1": 2832,
+          "mobservice2": 2817,
+          "redisservice1": 20,
+          "redisservice2": 17,
+          "webservice1": 29,
+          "webservice2": 30
+        }
+      },
+      "boundary_crossing_purge": {
+        "count": 0,
+        "cases": []
+      },
+      "outside_timeline_events": {
+        "count": 0,
+        "by_type": {},
+        "reason": "event interval does not intersect the telemetry timeline (e.g. injections before metric start 07-01 18:00 CST under metric_only)",
+        "cases_head": []
+      },
+      "same_bin_collisions_all": {
+        "same_bin_event_bins": 1003,
+        "max_events_in_one_bin": 3,
+        "same_service_same_bin_bins": 483,
+        "max_same_service_same_bin": 3,
+        "definition": "events grouped by floor(start_ms/30000); positive-bin-level stats for the OLD split remain in artifacts/p5/g0r2/label_reconciliation.json"
+      },
+      "same_bin_collisions_train": {
+        "same_bin_event_bins": 596,
+        "max_events_in_one_bin": 3,
+        "same_service_same_bin_bins": 280,
+        "max_same_service_same_bin": 3,
+        "definition": "events grouped by floor(start_ms/30000); positive-bin-level stats for the OLD split remain in artifacts/p5/g0r2/label_reconciliation.json"
+      },
+      "same_bin_collisions_test": {
+        "same_bin_event_bins": 407,
+        "max_events_in_one_bin": 3,
+        "same_service_same_bin_bins": 203,
+        "max_same_service_same_bin": 3,
+        "definition": "events grouped by floor(start_ms/30000); positive-bin-level stats for the OLD split remain in artifacts/p5/g0r2/label_reconciliation.json"
+      },
+      "boundary_exclusion_mask_bins": [],
+      "ad_burn_in": {
+        "train_first_targets_lost": 9,
+        "test_first_targets_lost": 9,
+        "note": "strict in-split 10-bin windows (V2 s30): first 9 target bins of each split have no valid window"
+      }
+    },
+    "union/with_freed": {
+      "n_bins": 88086,
+      "train_bins": 61660,
+      "test_bins": 26426,
+      "split_timestamp_ms": 1626954420000,
+      "split_timestamp_iso": "2021-07-22T19:47:00.000+08:00",
+      "train_events": {
+        "count": 10366,
+        "by_fault_type": {
+          "access_permission_denied": 10,
+          "file_moving": 27,
+          "login_failure": 9870,
+          "memory_anomalies": 446,
+          "normal_memory_freed": 13
+        },
+        "by_service": {
+          "dbservice1": 53,
+          "dbservice2": 64,
+          "logservice1": 49,
+          "logservice2": 44,
+          "mobservice1": 4984,
+          "mobservice2": 4983,
+          "redisservice1": 36,
+          "redisservice2": 40,
+          "webservice1": 55,
+          "webservice2": 58
+        }
+      },
+      "test_events": {
+        "count": 5851,
+        "by_fault_type": {
+          "access_permission_denied": 5,
+          "cpu_anomalies": 12,
+          "file_moving": 16,
+          "login_failure": 5608,
+          "memory_anomalies": 206,
+          "normal_memory_freed": 4
+        },
+        "by_service": {
+          "dbservice1": 33,
+          "dbservice2": 32,
+          "logservice1": 18,
+          "logservice2": 20,
+          "mobservice1": 2832,
+          "mobservice2": 2817,
+          "redisservice1": 20,
+          "redisservice2": 18,
+          "webservice1": 31,
+          "webservice2": 30
+        }
+      },
+      "boundary_crossing_purge": {
+        "count": 0,
+        "cases": []
+      },
+      "outside_timeline_events": {
+        "count": 0,
+        "by_type": {},
+        "reason": "event interval does not intersect the telemetry timeline (e.g. injections before metric start 07-01 18:00 CST under metric_only)",
+        "cases_head": []
+      },
+      "same_bin_collisions_all": {
+        "same_bin_event_bins": 1003,
+        "max_events_in_one_bin": 3,
+        "same_service_same_bin_bins": 483,
+        "max_same_service_same_bin": 3,
+        "definition": "events grouped by floor(start_ms/30000); positive-bin-level stats for the OLD split remain in artifacts/p5/g0r2/label_reconciliation.json"
+      },
+      "same_bin_collisions_train": {
+        "same_bin_event_bins": 596,
+        "max_events_in_one_bin": 3,
+        "same_service_same_bin_bins": 280,
+        "max_same_service_same_bin": 3,
+        "definition": "events grouped by floor(start_ms/30000); positive-bin-level stats for the OLD split remain in artifacts/p5/g0r2/label_reconciliation.json"
+      },
+      "same_bin_collisions_test": {
+        "same_bin_event_bins": 407,
+        "max_events_in_one_bin": 3,
+        "same_service_same_bin_bins": 203,
+        "max_same_service_same_bin": 3,
+        "definition": "events grouped by floor(start_ms/30000); positive-bin-level stats for the OLD split remain in artifacts/p5/g0r2/label_reconciliation.json"
+      },
+      "boundary_exclusion_mask_bins": [],
+      "ad_burn_in": {
+        "train_first_targets_lost": 9,
+        "test_first_targets_lost": 9,
+        "note": "strict in-split 10-bin windows (V2 s30): first 9 target bins of each split have no valid window"
+      }
+    }
+  }
+}
