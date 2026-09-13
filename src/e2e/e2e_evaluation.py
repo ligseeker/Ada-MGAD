@@ -41,11 +41,18 @@ def detector_only_rankings(
     """
 
     required_matching = {"prediction_id", "t_hat", "match_status", "case_id", "gt_service"}
-    required_scores = {"prediction_timestamp", "service", "anomaly_score"}
+    required_scores = {"service", "anomaly_score"}
     if not required_matching.issubset(matched.columns):
         raise ValueError("matching table lacks detector-only identity columns")
-    if not required_scores.issubset(node_predictions.columns):
+    if not required_scores.issubset(node_predictions.columns) or not (
+        {"prediction_available_time", "prediction_timestamp"} & set(node_predictions.columns)
+    ):
         raise ValueError("node prediction table lacks timestamped service scores")
+    time_column = (
+        "prediction_available_time"
+        if "prediction_available_time" in node_predictions.columns
+        else "prediction_timestamp"
+    )
     selected = matched.loc[matched["match_status"].astype(str) == "matched"].copy()
     scores = node_predictions.copy()
     if "split" in scores.columns:
@@ -54,7 +61,7 @@ def detector_only_rankings(
     output: Dict[str, Mapping[str, object]] = {}
     for row in selected.itertuples(index=False):
         anchor = int(row.t_hat)
-        observed = scores.loc[scores["prediction_timestamp"].astype(np.int64) == anchor]
+        observed = scores.loc[scores[time_column].astype(np.int64) == anchor]
         if len(observed) != len(GAIA_SERVICES):
             raise ValueError("t_hat {} does not have exactly ten service scores".format(anchor))
         if observed["service"].duplicated().any() or set(observed["service"].astype(str)) != set(GAIA_SERVICES):
