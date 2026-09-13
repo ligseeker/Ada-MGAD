@@ -136,6 +136,24 @@ class FrozenSchemaFirewallTests(unittest.TestCase):
 
 
 class MetricTransformTests(unittest.TestCase):
+    def test_metric_semantic_kind_separates_counters_rates_and_gauges(self):
+        from src.e2e.gaia_preprocessing.metric import metric_semantic_kind
+
+        expected = {
+            "docker_cpu_core_X_ticks": "counter",
+            "docker_network_in_bytes": "counter",
+            "docker_memory_stats_pgfault": "counter",
+            "host_system_process_cgroup_cpuacct_total_ns": "counter",
+            "docker_diskio_read_rate": "direct_rate",
+            "host_system_diskio_iostat_read_per_sec_bytes": "direct_rate",
+            "docker_cpu_total_pct": "gauge",
+            "host_system_memory_used_pct": "gauge",
+            "host_system_network_summary_tcp_CurrEstab": "gauge",
+        }
+        self.assertEqual(
+            {name: metric_semantic_kind(name) for name in expected}, expected
+        )
+
     def test_counter_rate_rejects_resets_and_long_gaps(self):
         from src.e2e.gaia_preprocessing.metric import derive_reset_aware_rate
 

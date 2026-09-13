@@ -8,6 +8,66 @@ from typing import Sequence, Tuple
 import numpy as np
 
 
+_NETWORK_GAUGES = (
+    "currestab",
+    "defaultttl",
+    "forwarding",
+    "maxconn",
+    "rtoalgorithm",
+    "rtomax",
+    "rtomin",
+)
+
+
+def metric_semantic_kind(logical_feature: str) -> str:
+    """Classify a GAIA logical Metric using label-free exporter semantics."""
+
+    name = str(logical_feature).lower()
+    if "_iostat_" in name or name.endswith("_rate") or "_per_sec_" in name:
+        return "direct_rate"
+    if name.startswith("docker_cpu_") and name.endswith("_ticks"):
+        return "counter"
+    if name.startswith("docker_diskio_") and any(
+        name.endswith(suffix)
+        for suffix in (
+            "_bytes",
+            "_ops",
+            "_reads",
+            "_writes",
+            "_total",
+        )
+    ):
+        return "counter"
+    if name.startswith("docker_memory_") and any(
+        token in name
+        for token in ("fail_count", "pgfault", "pgmajfault", "pgpgin", "pgpgout")
+    ):
+        return "counter"
+    if name.startswith("docker_network_"):
+        return "counter"
+    if name.startswith("host_system_diskio_") and "_iostat_" not in name:
+        return "counter"
+    if name.startswith("host_system_network_"):
+        if any(name.endswith(suffix) for suffix in _NETWORK_GAUGES):
+            return "gauge"
+        return "counter"
+    if name.startswith("host_system_memory_page_stats_") or name.endswith(
+        ("_swap_in_pages", "_swap_out_pages")
+    ):
+        return "counter"
+    if "_cgroup_blkio_total_" in name or "_cgroup_cpuacct_" in name:
+        return "counter"
+    if "_cgroup_cpu_stats_" in name or name.endswith("_cpu_total_value"):
+        return "counter"
+    if "_cgroup_memory_" in name and (
+        name.endswith("_failures") or "_page_faults" in name or "_pages_in" in name or "_pages_out" in name
+    ):
+        return "counter"
+    if name.endswith("_uptime_duration_ms"):
+        return "counter"
+    return "gauge"
+
+
 @dataclass(frozen=True)
 class MetricScaler:
     lower: float

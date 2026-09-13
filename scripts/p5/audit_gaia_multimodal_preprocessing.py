@@ -38,6 +38,10 @@ from src.e2e.log_templates import (
     message_payload,
     parse_message_timestamp_ms,
 )
+from src.e2e.gaia_preprocessing.metric import (
+    derive_reset_aware_rate,
+    metric_semantic_kind,
+)
 from src.e2e.protocol import GAIA_SERVICES, layout_digest, sha256_file
 from util.GAIA.constant import GAIA_IP_MAP, GAIA_MULTI_CORE_PREFIXES
 from util.GAIA.pre_GAIA import (
@@ -143,6 +147,7 @@ def _metric_registry(metric_root: Path, train_start: int, train_end: int) -> Tup
                 "path": str(path.resolve()), "source_service": source_service,
                 "target_service": service, "scope": scope, "ip": str(info["ip"]),
                 "feature": feature, "logical_feature": target, "full_name": info["full_name"],
+                "semantic_kind": metric_semantic_kind(target),
                 "date_start_ms": date_start, "date_end_ms": date_end,
                 "overlaps_train": bool(date_end > train_start and date_start < train_end),
                 "multi_core": is_core, "parse_status": "mapped",
@@ -152,6 +157,7 @@ def _metric_registry(metric_root: Path, train_start: int, train_end: int) -> Tup
                 "path": str(path.resolve()), "source_service": source_service,
                 "target_service": "", "scope": scope, "ip": str(info["ip"]),
                 "feature": feature, "logical_feature": logical, "full_name": info["full_name"],
+                "semantic_kind": metric_semantic_kind(logical),
                 "date_start_ms": date_start, "date_end_ms": date_end,
                 "overlaps_train": bool(date_end > train_start and date_start < train_end),
                 "multi_core": is_core, "parse_status": "unmapped",
@@ -281,18 +287,26 @@ def _correlation_matrices(feature_map: Mapping[str, np.ndarray]) -> Tuple[list[s
     for name in sorted(feature_map):
         values = np.asarray(feature_map[name], dtype=np.float64)
         finite = np.isfinite(values)
-        if finite.sum() <= 1:
+        if finite.sum() <= 1 or np.std(values[finite]) == 0:
             continue
-        replacement = float(np.nanmedian(values[finite]))
         names.append(name)
-        vectors.append(np.where(finite, values, replacement))
+        vectors.append(values)
     if not vectors:
         empty = np.empty((0, 0))
         return names, empty, empty
-    matrix = np.asarray(vectors, dtype=np.float64)
-    return names, np.corrcoef(matrix), np.corrcoef(
-        pd.DataFrame(matrix).rank(axis=1, method="average").to_numpy(dtype=np.float64)
-    )
+    pearson = np.full((len(names), len(names)), np.nan, dtype=np.float64)
+    spearman = np.full_like(pearson, np.nan)
+    np.fill_diagonal(pearson, 1.0)
+    np.fill_diagonal(spearman, 1.0)
+    for left in range(len(names)):
+        for right in range(left + 1, len(names)):
+            pearson_value = _corr_pair(vectors[left], vectors[right], "pearson")
+            spearman_value = _corr_pair(vectors[left], vectors[right], "spearman")
+            if pearson_value is not None:
+                pearson[left, right] = pearson[right, left] = pearson_value
+            if spearman_value is not None:
+                spearman[left, right] = spearman[right, left] = spearman_value
+    return names, pearson, spearman
 
 
 def _threshold_summary(names: Sequence[str], matrix: np.ndarray, thresholds: Sequence[float]) -> Mapping[str, object]:
@@ -332,6 +346,7 @@ def audit_metrics(metric_root: Path, output: Path, train_start: int, train_end: 
     quality_rows = []
     gap_rows = []
     multicore_rows = []
+    semantic_counts = Counter()
     # Keep one aligned vector per service/feature for per-service and physical
     # host correlation.  The bound is the GAIA registry (10 services x 474
     # logical names x 60,984 Train bins), not the raw row count.
@@ -340,28 +355,64 @@ def audit_metrics(metric_root: Path, output: Path, train_start: int, train_end: 
         for feature, full_names in sorted(groups[service].items()):
             train_groups = []
             timestamp_parts = []
+            semantic_kind = metric_semantic_kind(feature)
             for full_name, paths in sorted(full_names.items()):
                 array, timestamps = _read_metric_group(paths, feature, train_start, train_end, grid, chunk_rows)
+                if semantic_kind == "counter":
+                    array = derive_reset_aware_rate(grid, array, max_gap_ms=60_000)
                 train_groups.append(array)
                 timestamp_parts.append(timestamps)
             if not train_groups:
                 continue
             stack = np.asarray(train_groups, dtype=np.float32)
-            combined = np.nanmean(stack, axis=0) if len(train_groups) > 1 else stack[0]
-            quality, gap_stats = _quality(combined, np.concatenate(timestamp_parts) if timestamp_parts else np.empty(0, dtype=np.int64))
             scope = "host_of_node" if feature.startswith("host_") else "global_container"
-            base = {"service": service, "scope": scope, "logical_feature": feature, "source_count": len(train_groups)}
-            quality_rows.append({**base, **quality})
-            gap_rows.append({**base, **{key: value for key, value in gap_stats.items() if key != "gap_lengths_bins"}, "gap_lengths_bins": json.dumps(gap_stats["gap_lengths_bins"])})
-            if scope == "global_container" or feature.startswith("host_"):
-                service_arrays[service][feature] = combined
+            transformed_base = feature + ("__rate" if semantic_kind == "counter" else "")
+            aggregations = [("none", stack[0])]
+            if len(train_groups) > 1:
+                aggregations = [("core_mean", np.nanmean(stack, axis=0))]
+                if semantic_kind != "counter" and feature.endswith(("_pct", "_norm_pct")):
+                    aggregations.append(("core_max", np.nanmax(stack, axis=0)))
+            raw_timestamp_values = (
+                np.concatenate(timestamp_parts)
+                if timestamp_parts
+                else np.empty(0, dtype=np.int64)
+            )
+            for aggregation, combined in aggregations:
+                transformed_feature = transformed_base + (
+                    "__{}".format(aggregation) if aggregation != "none" else ""
+                )
+                quality, gap_stats = _quality(combined, raw_timestamp_values)
+                base = {
+                    "service": service,
+                    "scope": scope,
+                    "logical_feature": feature,
+                    "transformed_feature": transformed_feature,
+                    "semantic_kind": semantic_kind,
+                    "core_aggregation": aggregation,
+                    "source_count": len(train_groups),
+                }
+                quality_rows.append({**base, **quality})
+                gap_rows.append({
+                    **base,
+                    **{
+                        key: value
+                        for key, value in gap_stats.items()
+                        if key != "gap_lengths_bins"
+                    },
+                    "gap_lengths_bins": json.dumps(gap_stats["gap_lengths_bins"]),
+                })
+                service_arrays[service][transformed_feature] = combined
+                semantic_counts[semantic_kind] += 1
             if len(train_groups) > 1:
                 mean_values = np.nanmean(stack, axis=0)
                 max_values = np.nanmax(stack, axis=0)
                 valid = np.isfinite(mean_values) & np.isfinite(max_values)
                 correlation = _corr_pair(mean_values, max_values, "pearson")
                 spearman = _corr_pair(mean_values, max_values, "spearman")
-                multicore_rows.append({**base, "core_count": len(train_groups), "mean_max_pearson": correlation,
+                multicore_rows.append({"service": service, "scope": scope,
+                                       "logical_feature": feature,
+                                       "semantic_kind": semantic_kind,
+                                       "core_count": len(train_groups), "mean_max_pearson": correlation,
                                        "mean_max_spearman": spearman,
                                        "mean_q95": float(np.nanquantile(mean_values, 0.95)) if np.isfinite(mean_values).any() else None,
                                        "max_q95": float(np.nanquantile(max_values, 0.95)) if np.isfinite(max_values).any() else None})
@@ -378,25 +429,26 @@ def audit_metrics(metric_root: Path, output: Path, train_start: int, train_end: 
         for feature, values in arrays.items():
             feature_arrays[feature].append(values)
     names = sorted(feature_arrays)
-    vectors = []
-    valid_names = []
+    global_features = {}
     for name in names:
         arrays = feature_arrays[name]
-        vector = np.nanmean(np.asarray(arrays, dtype=np.float32), axis=0)
-        if np.isfinite(vector).sum() > 1:
-            vector = np.where(np.isfinite(vector), vector, np.nanmedian(vector[np.isfinite(vector)]))
-            vectors.append(vector)
-            valid_names.append(name)
+        stacked = np.asarray(arrays, dtype=np.float32)
+        finite = np.isfinite(stacked)
+        support = finite.sum(axis=0)
+        vector = np.full(stacked.shape[1], np.nan, dtype=np.float64)
+        np.divide(
+            np.where(finite, stacked, 0.0).sum(axis=0),
+            support,
+            out=vector,
+            where=support > 0,
+        )
+        if np.isfinite(vector).sum() > 1 and np.nanstd(vector) > 0:
+            global_features[name] = vector
     thresholds = (0.90, 0.95, 0.98, 0.995)
-    if vectors:
-        vector_matrix = np.asarray(vectors, dtype=np.float64)
-        pearson = np.corrcoef(vector_matrix)
-        spearman = np.corrcoef(pd.DataFrame(vector_matrix).rank(axis=1, method="average").to_numpy(dtype=np.float64))
-    else:
-        pearson = spearman = np.empty((0, 0))
+    valid_names, pearson, spearman = _correlation_matrices(global_features)
     payload = {
         "schema": "metric_train_correlation_audit_v1", "feature_count": len(valid_names),
-        "aggregation": "mean over available services, Train aligned 30s bins; descriptive only",
+        "aggregation": "mean over available services, Train aligned 30s bins; pairwise-complete correlation; descriptive only",
         "thresholds": {}, "selection_performed": False,
     }
     for threshold in thresholds:
@@ -457,7 +509,13 @@ def audit_metrics(metric_root: Path, output: Path, train_start: int, train_end: 
         }
     payload["host_by_physical_host"] = host_by_physical_host
     _json_dump(output / "metric_correlation_clusters_train.json", payload)
-    return {"registry_rows": int(len(registry)), "quality_rows": int(len(quality_frame)), "feature_count_for_correlation": len(valid_names)}
+    return {
+        "registry_rows": int(len(registry)),
+        "quality_rows": int(len(quality_frame)),
+        "feature_count_for_correlation": len(valid_names),
+        "semantic_transform_counts": dict(semantic_counts),
+        "counter_transform": "reset-aware delta/elapsed; negative delta and gap>60s are missing",
+    }
 
 
 def _iter_log_messages(path: Path, chunk_rows: int) -> Iterable[Tuple[pd.Series, np.ndarray, np.ndarray]]:
@@ -470,6 +528,21 @@ def _iter_log_messages(path: Path, chunk_rows: int) -> Iterable[Tuple[pd.Series,
 def audit_logs(log_root: Path, output: Path, train_start: int, train_end: int, test_end: int, config_path: Path, chunk_rows: int) -> Mapping[str, object]:
     config = config_path.parent.parent.parent / "util/GAIA/gaia.ini"
     fit = fit_train_templates(log_root, train_start, train_end, config_path=config, chunk_rows=chunk_rows)
+    state_path = output / "log_drain_state_train.jsonpickle"
+    state_path.write_text(str(fit["state"]), encoding="utf-8")
+    _json_dump(output / "log_drain_fit_train.json", {
+        "schema": "log_drain_fit_train_v1",
+        "fit_split": "train",
+        "fit_interval": fit["fit_interval"],
+        "fit_order": fit["fit_order"],
+        "cluster_ids": list(fit["cluster_ids"]),
+        "templates": dict(fit["templates"]),
+        "drain_config_path": str(config.resolve()),
+        "drain_config_sha256": sha256_file(config),
+        "drain_state_path": str(state_path.resolve()),
+        "drain_state_sha256": sha256_file(state_path),
+        "decision_inputs": ["train"],
+    })
     miner = _miner_from_config(config)
     _restore_drain(miner, fit["state"])
     cluster_ids = tuple(int(value) for value in fit["cluster_ids"])
@@ -559,7 +632,12 @@ def audit_logs(log_root: Path, output: Path, train_start: int, train_end: int, t
         "test_unseen_by_level": dict(test_unseen_by_level),
         "test_level_counts": dict(test_levels), "test_used_for_selection": False,
     })
-    return {"cluster_count": len(cluster_ids), "train_rows": train_total, "test_rows": test_rows}
+    return {
+        "cluster_count": len(cluster_ids),
+        "train_rows": train_total,
+        "test_rows": test_rows,
+        "drain_state_sha256": sha256_file(state_path),
+    }
 
 
 def _trace_time_ms(values: pd.Series) -> Tuple[np.ndarray, np.ndarray]:
@@ -819,11 +897,16 @@ def main() -> int:
         "split": args.split, "chunk_rows": args.chunk_rows, "workers": args.workers, "start_method": args.start_method,
         "output_root": str(output), "outputs": [], "results": {},
     }
+    # Publish an explicit pending marker before any expensive scan. A killed
+    # audit must never look like a complete input to schema freeze.
+    _json_dump(output / "audit_manifest.json", manifest)
     if args.full:
         train_start, train_end = _config_split(config, "train")
         manifest["results"]["metric"] = audit_metrics(raw_root / "metric/metric_split/metric", output, train_start, train_end, args.chunk_rows)
+        _json_dump(output / "audit_manifest.json", manifest)
         _, test_end = _config_split(config, "test")
         manifest["results"]["logs"] = audit_logs(raw_root / "business/business_split/business", output, train_start, train_end, test_end, config_path, args.chunk_rows)
+        _json_dump(output / "audit_manifest.json", manifest)
         manifest["results"]["traces"] = audit_traces(raw_root / "trace/trace_split/trace", output, train_start, train_end, args.chunk_rows)
         manifest["status"] = "AUDIT_FULL_COMPLETE"
     manifest["outputs"] = sorted(path.name for path in output.iterdir() if path.is_file() and path.name != "audit_manifest.json")
