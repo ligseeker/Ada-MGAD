@@ -1125,6 +1125,8 @@ def build_ad_data(
     manifest = {
         "schema_version": "p5_v3_ad_data_manifest_v1",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "status": "FORMAL_FULL_DATA",
+        "formal_result": True,
         "git_commit": subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=str(project_root), text=True
         ).strip(),

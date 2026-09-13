@@ -269,6 +269,7 @@ def train_and_infer(
     summary = {
         "schema_version": "p5_v3_ad_training_summary_v1",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(), "git_commit": git_head(),
+        "status": "FORMAL_FULL_DATA", "formal_result": True,
         "random_seed": int(args["random_seed"]), "config_sha256": sha256_file(config_path),
         "data_manifest_sha256": sha256_file(artifact_root / "ad_data_manifest.json"),
         "schema_artifacts": manifest.get("schema_artifacts", {}),
@@ -319,6 +320,25 @@ def evaluate_checkpoint(config, data_root, artifact_root, checkpoint_dir, gpu, c
     system.load_model(str(checkpoint_dir), name="best_train_loss")
     calibration = load_reconstruction_calibration(artifact_root / "reconstruction_calibration.json")
     outputs = _predict_splits(system, datasets, loaders, artifact_root, calibration)
+    training_summary["inference_replay"] = {
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "checkpoint": {
+            "path": str(primary.resolve()), "sha256": sha256_file(primary),
+        },
+        "calibration": {
+            "path": str((artifact_root / "reconstruction_calibration.json").resolve()),
+            "sha256": sha256_file(artifact_root / "reconstruction_calibration.json"),
+            "fit_split": "train",
+        },
+        "prediction_artifacts": {
+            split: {"path": str(value["path"].resolve()), "sha256": sha256_file(value["path"])}
+            for split, value in outputs.items()
+        },
+        "test_used_for_fit_or_selection": False,
+    }
+    training_summary["train_node_metrics"] = outputs["train"]["metrics"]
+    training_summary["test_node_metrics"] = outputs["test"]["metrics"]
+    write_json(summary_path, training_summary)
     return args, datasets, outputs
 
 

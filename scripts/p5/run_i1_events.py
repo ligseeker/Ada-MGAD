@@ -82,6 +82,8 @@ def _write_outputs(result, artifact_root: Path, metadata: Dict[str, object]):
     metrics = {
         "schema_version": "p5_v3_event_detection_metrics_v1",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(), **metadata,
+        "status": "FORMAL_FULL_DATA",
+        "formal_result": True,
         "threshold_selection": {
             "threshold": float(selection.threshold), "candidate_count": int(selection.candidate_count),
             "tie_break": selection.tie_break, "selection_source": "Train only",

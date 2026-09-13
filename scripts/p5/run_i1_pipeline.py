@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Orchestrate the frozen P5-I1 GAIA two-stage pipeline."""
+"""Orchestrate the frozen GAIA V3 two-stage pipeline.
+
+The ``preprocess`` and ``train-evaluate`` actions are operator-run actions.
+This script does not turn the V3 smoke fixtures into formal results.
+"""
 
 from __future__ import annotations
 
@@ -14,12 +18,12 @@ import sys
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_LOCK_PATH = PROJECT_ROOT / "data/p5/i1/.pipeline.lock"
+DEFAULT_LOCK_PATH = PROJECT_ROOT / "data/p5/v3/.pipeline.lock"
 
 
 @contextmanager
 def exclusive_pipeline_lock(path: Path = DEFAULT_LOCK_PATH):
-    """Fail fast when another container is writing the canonical run outputs."""
+    """Fail fast when another process owns the canonical V3 output tree."""
 
     lock_path = Path(path)
     lock_path.parent.mkdir(parents=True, exist_ok=True)
@@ -29,7 +33,7 @@ def exclusive_pipeline_lock(path: Path = DEFAULT_LOCK_PATH):
             fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError as exc:
             raise RuntimeError(
-                "another P5-I1 pipeline owns the shared output lock: {}".format(lock_path)
+                "another V3 pipeline owns the shared output lock: {}".format(lock_path)
             ) from exc
         handle.seek(0)
         handle.truncate()
@@ -44,16 +48,17 @@ def exclusive_pipeline_lock(path: Path = DEFAULT_LOCK_PATH):
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("smoke", "preprocess", "train-evaluate", "full"))
-    parser.add_argument("--config", default="configs/e2e/gaia_p5_v1.yaml")
-    parser.add_argument("--raw-root", default=None,
-                        help="Optional byte-layout-verified mirror of GAIA MicroSS.")
+    parser.add_argument("--config", default="configs/e2e/gaia_p5_v3.json")
+    parser.add_argument("--raw-root", default=None)
     parser.add_argument("--chunk-rows", default=None, type=int)
-    parser.add_argument("--raw-workers", default=None, type=int)
+    parser.add_argument("--raw-workers", default=None, type=int,
+                        help="Workers for raw-index and preprocessing parse/map stages.")
+    parser.add_argument("--ad-workers", default=None, type=int)
     parser.add_argument("--feature-workers", default=None, type=int)
     parser.add_argument("--event-workers", default=None, type=int)
     parser.add_argument("--case-chunk-size", default=None, type=int)
     parser.add_argument("--start-method", choices=("spawn", "forkserver"), default=None)
-    parser.add_argument("--gpu", default=True, type=lambda value: value.lower() == "true")
+    parser.add_argument("--gpu", default=False, type=lambda value: value.lower() == "true")
     return parser.parse_args()
 
 
@@ -63,55 +68,124 @@ def _run(arguments):
     subprocess.check_call(command, cwd=str(PROJECT_ROOT))
 
 
+def _common(args):
+    return ["--config", args.config]
+
+
+def _raw_root(args):
+    return ["--raw-root", args.raw_root] if args.raw_root else []
+
+
+def _chunk(args):
+    return ["--chunk-rows", str(args.chunk_rows)] if args.chunk_rows is not None else []
+
+
+def _method(args):
+    return ["--start-method", args.start_method] if args.start_method else []
+
+
+def _workers(value):
+    return ["--workers", str(value)] if value is not None else []
+
+
+def _case_chunk(args):
+    return ["--case-chunk-size", str(args.case_chunk_size)] if args.case_chunk_size is not None else []
+
+
 def smoke(args):
-    common = ["--config", args.config]
-    _run(["scripts/p5/build_i1_protocol.py"] + common)
+    common = _common(args)
+    _run(["scripts/p5/run_v3_preprocessing_smoke.py"])
     _run(["scripts/p5/run_i1_ad.py", "smoke"] + common + ["--gpu", str(args.gpu).lower()])
     _run(["scripts/p5/run_i1_events.py", "smoke"] + common)
-    _run(["scripts/p5/run_i1_rca_features.py", "smoke"] + common)
+    _run([
+        "scripts/p5/run_i1_rca_features.py", "smoke", "--config", args.config,
+        "--feature-root", "data/p5/v3/rca_features_smoke",
+        "--artifact-root", "artifacts/p5/v3/rca_smoke",
+    ])
     _run(["scripts/p5/run_i1_rca.py", "smoke"] + common)
     _run(["scripts/p5/run_i1_e2e.py", "smoke"] + common)
+    _run(["scripts/p5/run_v3_e2e_smoke.py"])
 
 
 def preprocess(args):
-    common = ["--config", args.config]
-    raw = ["--raw-root", args.raw_root] if args.raw_root else []
-    chunk = ["--chunk-rows", str(args.chunk_rows)] if args.chunk_rows is not None else []
-    method = ["--start-method", args.start_method] if args.start_method else []
-    raw_workers = ["--workers", str(args.raw_workers)] if args.raw_workers is not None else []
-    feature_workers = (
-        ["--workers", str(args.feature_workers)] if args.feature_workers is not None else []
-    )
-    case_chunk = (
-        ["--case-chunk-size", str(args.case_chunk_size)]
-        if args.case_chunk_size is not None else []
-    )
-    _run(["scripts/p5/build_i1_protocol.py"] + common)
+    common = _common(args)
+    raw = _raw_root(args)
+    chunk = _chunk(args)
+    method = _method(args)
+    raw_workers = _workers(args.raw_workers)
+    ad_workers = _workers(args.ad_workers if args.ad_workers is not None else args.raw_workers)
+    feature_workers = _workers(args.feature_workers)
+    case_chunk = _case_chunk(args)
+
+    _run(["scripts/p5/build_v3_gt.py"] + common + raw)
+    _run(["scripts/p5/build_v3_protocol.py"] + common)
     _run(
         ["scripts/p5/run_i1_ad.py", "preprocess"]
-        + common + raw + chunk + method + raw_workers
+        + common + raw + chunk + method + ad_workers
     )
+    _run([
+        "scripts/p5/run_i1_rca_features.py", "case-registry",
+        "--anchor-mode", "gt", "--case-registry",
+        "artifacts/p5/v3/rca/rca_case_registry_gt.csv",
+    ] + common)
     _run(
         ["scripts/p5/run_i1_rca_features.py", "index"]
         + common + raw + chunk + method + raw_workers
     )
-    _run(
-        ["scripts/p5/run_i1_rca_features.py", "materialize"]
-        + common + method + feature_workers + case_chunk
-    )
+    _run([
+        "scripts/p5/run_i1_rca_features.py", "materialize",
+        "--case-registry", "artifacts/p5/v3/rca/rca_case_registry_gt.csv",
+        "--feature-root", "data/p5/v3/rca_features_gt",
+        "--artifact-root", "artifacts/p5/v3/rca_gt_features",
+    ] + common + method + feature_workers + case_chunk)
 
 
 def train_evaluate(args):
-    common = ["--config", args.config]
+    common = _common(args)
+    method = _method(args)
+    feature_workers = _workers(args.feature_workers)
+    case_chunk = _case_chunk(args)
+    event_workers = _workers(args.event_workers)
     _run(["scripts/p5/run_i1_ad.py", "train"] + common + ["--gpu", str(args.gpu).lower()])
-    event_workers = (
-        ["--workers", str(args.event_workers)] if args.event_workers is not None else []
-    )
-    event_method = ["--start-method", args.start_method] if args.start_method else []
-    _run(["scripts/p5/run_i1_events.py", "evaluate"] + common + event_workers + event_method)
-    _run(["scripts/p5/run_i1_rca.py", "train-oracle"] + common)
-    _run(["scripts/p5/run_i1_e2e.py", "evaluate"] + common)
-    _run(["scripts/p5/finalize_i1_manifest.py"] + common)
+    _run([
+        "scripts/p5/run_i1_events.py", "evaluate", "--artifact-root", "artifacts/p5/v3/events",
+    ] + common + event_workers + method)
+    _run([
+        "scripts/p5/run_i1_rca_features.py", "case-registry",
+        "--anchor-mode", "detected",
+        "--matching", "artifacts/p5/v3/events/event_matching.csv",
+        "--case-registry", "artifacts/p5/v3/rca/rca_case_registry_detected.csv",
+    ] + common)
+    _run([
+        "scripts/p5/run_i1_rca_features.py", "materialize",
+        "--case-registry", "artifacts/p5/v3/rca/rca_case_registry_detected.csv",
+        "--feature-root", "data/p5/v3/rca_features_detected",
+        "--artifact-root", "artifacts/p5/v3/rca_detected_features",
+    ] + common + method + feature_workers + case_chunk)
+    _run([
+        "scripts/p5/run_i1_rca.py", "train-v3",
+        "--feature-root", "data/p5/v3/rca_features_gt",
+        "--case-registry", "artifacts/p5/v3/rca/rca_case_registry_gt.csv",
+        "--detected-feature-root", "data/p5/v3/rca_features_detected",
+        "--detected-case-registry", "artifacts/p5/v3/rca/rca_case_registry_detected.csv",
+        "--artifact-root", "artifacts/p5/v3/rca",
+    ] + common)
+    _run([
+        "scripts/p5/run_i1_e2e.py", "evaluate",
+        "--artifact-root", "artifacts/p5/v3/rca",
+        "--index-manifest", "data/p5/v3/rca_raw_index/index_manifest.json",
+        "--model-path", "data/p5/v3/rca_model/conditional_logit.npz",
+        "--case-registry", "artifacts/p5/v3/rca/rca_case_registry_gt.csv",
+        "--event-matching", "artifacts/p5/v3/events/event_matching.csv",
+        "--test-node-predictions", "artifacts/p5/v3/ad/ad_test_predictions.csv",
+        "--oracle-predictions", "artifacts/p5/v3/rca/rca_oracle_predictions.csv",
+        "--root-frequency-predictions", "artifacts/p5/v3/rca/root_frequency_predictions.csv",
+        "--detected-predictions", "artifacts/p5/v3/rca/rca_detected_predictions.csv",
+    ] + common)
+    _run([
+        "scripts/p5/finalize_v3_manifest.py",
+        "--artifact-root", "artifacts/p5/v3",
+    ] + common)
 
 
 def main():
@@ -130,8 +204,8 @@ def main():
     print(json.dumps({
         "status": "COMPLETE",
         "action": args.action,
-        "formal_result": args.action in ("train-evaluate", "full"),
-        "formal_preprocessing": args.action in ("preprocess", "full"),
+        "formal_result": args.action == "train-evaluate" or args.action == "full",
+        "full_gaia_preprocessing_executed": args.action in ("preprocess", "full"),
     }, sort_keys=True))
 
 
