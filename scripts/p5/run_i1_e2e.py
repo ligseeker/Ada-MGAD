@@ -37,16 +37,18 @@ from src.e2e.rca_model import load_conditional_logit, predict_rankings, rca_metr
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", nargs="?", default="evaluate", choices=("evaluate", "smoke"))
-    parser.add_argument("--config", default="configs/e2e/gaia_p5_v1.yaml")
-    parser.add_argument("--artifact-root", default="artifacts/p5/i1")
-    parser.add_argument("--index-manifest", default="data/p5/i1/rca_raw_index/index_manifest.json")
-    parser.add_argument("--model-path", default="data/p5/i1/rca_model/conditional_logit.npz")
-    parser.add_argument("--detected-feature-path", default="data/p5/i1/rca_detected_features.npy")
-    parser.add_argument("--case-registry", default="artifacts/p5/i1/rca_case_registry.csv")
+    parser.add_argument("--config", default="configs/e2e/gaia_p5_v3.json")
+    parser.add_argument("--artifact-root", default="artifacts/p5/v3/rca")
+    parser.add_argument("--index-manifest", default="data/p5/v3/rca_raw_index/index_manifest.json")
+    parser.add_argument("--model-path", default="data/p5/v3/rca_model/conditional_logit.npz")
+    parser.add_argument("--detected-feature-path", default="data/p5/v3/rca_detected_features.npy")
+    parser.add_argument("--case-registry", default="artifacts/p5/v3/rca/rca_case_registry_gt.csv")
     parser.add_argument("--event-matching", default=None)
     parser.add_argument("--test-node-predictions", default=None)
     parser.add_argument("--oracle-predictions", default=None)
     parser.add_argument("--root-frequency-predictions", default=None)
+    parser.add_argument("--detected-predictions", default=None,
+                        help="Precomputed detected-anchor Ada-RCA ranking CSV.")
     return parser.parse_args()
 
 
@@ -54,6 +56,19 @@ def git_head() -> str:
     return subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=str(PROJECT_ROOT), text=True
     ).strip()
+
+
+def _is_v3(config: Mapping[str, object]) -> bool:
+    return str(config.get("schema_version", "")).startswith("p5_v3_")
+
+
+def _config_path(config: Mapping[str, object], config_path: Path = None) -> Path:
+    if config_path is not None:
+        return Path(config_path).resolve()
+    return PROJECT_ROOT / (
+        "configs/e2e/gaia_p5_v3.json" if _is_v3(config)
+        else "configs/e2e/gaia_p5_v1.yaml"
+    )
 
 
 def temporal_spec(config: Mapping[str, object]) -> TemporalSpec:
@@ -121,6 +136,54 @@ def _rankings_for_cases(path: Path, case_ids: Sequence[str]):
     if missing:
         raise ValueError("ranking artifact is missing matched case IDs: {}".format(missing[:3]))
     return tuple(parse_ranking_row(by_id.loc[case_id]) for case_id in case_ids)
+
+
+def _diagnosis_rankings_for_cases(
+    path: Path,
+    matched: pd.DataFrame,
+) -> Mapping[str, Sequence[str]]:
+    """Re-key a case-level RCA ranking artifact by matched prediction ID."""
+
+    if matched.empty:
+        return {}
+    frame = pd.read_csv(path)
+    if "case_id" not in frame:
+        raise ValueError("ranking artifact lacks case_id: {}".format(path))
+    frame["case_id"] = frame["case_id"].astype(str)
+    if frame["case_id"].duplicated().any():
+        raise ValueError("ranking artifact contains duplicate case IDs: {}".format(path))
+    by_id = frame.set_index("case_id", drop=False)
+    output = {}
+    for row in matched.itertuples(index=False):
+        case_id = str(row.case_id)
+        if case_id not in by_id.index:
+            raise ValueError("ranking artifact is missing matched case ID {}".format(case_id))
+        prediction_id = str(row.prediction_id)
+        if prediction_id in output:
+            raise ValueError("duplicate matched prediction ID")
+        output[prediction_id] = parse_ranking_row(by_id.loc[case_id])
+    return output
+
+
+def _scores_for_cases(path: Path, case_ids: Sequence[str]) -> np.ndarray:
+    frame = pd.read_csv(path)
+    if "case_id" not in frame:
+        raise ValueError("ranking artifact lacks case_id: {}".format(path))
+    frame["case_id"] = frame["case_id"].astype(str)
+    if frame["case_id"].duplicated().any():
+        raise ValueError("ranking artifact contains duplicate case IDs: {}".format(path))
+    score_columns = ["score_{}".format(service) for service in GAIA_SERVICES]
+    missing = sorted(set(score_columns) - set(frame.columns))
+    if missing:
+        raise ValueError("ranking artifact lacks score columns: {}".format(missing))
+    by_id = frame.set_index("case_id", drop=False)
+    missing_ids = [case_id for case_id in case_ids if case_id not in by_id.index]
+    if missing_ids:
+        raise ValueError("ranking artifact is missing score case IDs: {}".format(missing_ids[:3]))
+    scores = by_id.loc[list(case_ids), score_columns].to_numpy(dtype=np.float64)
+    if not np.isfinite(scores).all():
+        raise ValueError("ranking artifact contains non-finite scores")
+    return scores
 
 
 def _prediction_frame(matched: pd.DataFrame, scores: np.ndarray,
@@ -217,12 +280,15 @@ def _purge_rca_ineligible_matching(
 def evaluate(config: Mapping[str, object], artifact_root: Path, index_manifest: Path,
              model_path: Path, detected_feature_path: Path, matching_path: Path,
              node_path: Path, oracle_path: Path, frequency_path: Path,
-             case_registry_path: Path):
+             case_registry_path: Path, detected_predictions_path: Path = None,
+             config_path: Path = None, formal_result: bool = True):
     source_paths = (
         index_manifest, model_path, model_path.with_suffix(".json"), matching_path,
         node_path, oracle_path, frequency_path, case_registry_path,
         artifact_root / "rca_metrics.json",
     )
+    if detected_predictions_path is not None:
+        source_paths = source_paths + (detected_predictions_path,)
     missing = [str(path) for path in source_paths if not path.is_file()]
     if missing:
         raise FileNotFoundError("full E2E prerequisites are missing: {}".format(missing))
@@ -230,6 +296,8 @@ def evaluate(config: Mapping[str, object], artifact_root: Path, index_manifest: 
     matching_all = pd.read_csv(matching_path)
     if "split" not in matching_all:
         raise ValueError("event matching artifact lacks split")
+    if _is_v3(config) and "validation" in set(matching_all["split"].astype(str)):
+        raise ValueError("V3 E2E evaluation cannot consume Validation matching rows")
     full_test_matching = matching_all.loc[
         matching_all["split"].astype(str) == "test"
     ].copy()
@@ -239,6 +307,8 @@ def evaluate(config: Mapping[str, object], artifact_root: Path, index_manifest: 
     case_registry = pd.read_csv(case_registry_path)
     if not {"case_id", "split"}.issubset(case_registry.columns):
         raise ValueError("RCA case registry lacks case_id/split")
+    if _is_v3(config) and "validation" in set(case_registry["split"].astype(str)):
+        raise ValueError("V3 E2E evaluation cannot consume Validation RCA cases")
     matching, boundary_purge = _purge_rca_ineligible_matching(
         full_test_matching, case_registry, config
     )
@@ -246,37 +316,55 @@ def evaluate(config: Mapping[str, object], artifact_root: Path, index_manifest: 
     matched = matched.sort_values(["t_hat", "prediction_id"], kind="stable").reset_index(drop=True)
     if matched["prediction_id"].duplicated().any() or matched["case_id"].duplicated().any():
         raise ValueError("one-to-one event matching identity constraint is violated")
+    case_ids = matched["case_id"].astype(str).tolist()
 
     model = load_conditional_logit(model_path)
-    spec = temporal_spec(config)
     detected_feature_path.parent.mkdir(parents=True, exist_ok=True)
-    if len(matched):
-        index = GaiaRcaRawIndex.from_manifest(index_manifest)
-        features = np.lib.format.open_memmap(
-            detected_feature_path, mode="w+", dtype=np.float32,
-            shape=(len(matched), len(GAIA_SERVICES), int(config["rca"]["feature_dimension"])),
+    if detected_predictions_path is not None:
+        # The formal V3 path consumes the independently materialized detected
+        # RCA bundle produced by run_i1_rca.py.  It does not rebuild features
+        # from Ada-MGAD tensors or silently substitute a second scorer.
+        detected_rankings = (
+            _rankings_for_cases(detected_predictions_path, case_ids)
+            if case_ids else tuple()
         )
-        for position, row in enumerate(matched.itertuples(index=False)):
-            # Only the detector anchor is passed to telemetry construction.
-            # The labelled service/fault type remain outside this call.
-            indicators = index.case_indicators(int(row.t_hat), spec)
-            value = extract_case_features_from_indicators(
-                str(row.prediction_id), GAIA_SERVICES, indicators, spec
-            )
-            z2 = flatten_features(value, "z2")
-            if z2.shape != (10, 68) or not np.all(np.isfinite(z2)):
-                raise ValueError("detected-anchor RCA feature row is invalid")
-            features[position] = z2.astype(np.float32)
-        features.flush()
-        feature_values = np.asarray(features, dtype=np.float64)
-        detected_scores = model.scores(feature_values)
-        detected_rankings = predict_rankings(feature_values, model, GAIA_SERVICES)
-        detected_feature_hash = sha256_file(detected_feature_path)
+        detected_scores = (
+            _scores_for_cases(detected_predictions_path, case_ids)
+            if case_ids else np.empty((0, len(GAIA_SERVICES)), dtype=np.float64)
+        )
+        detected_feature_hash = None
     else:
-        np.save(detected_feature_path, np.empty((0, 10, 68), dtype=np.float32), allow_pickle=False)
-        detected_scores = np.empty((0, 10), dtype=float)
-        detected_rankings = tuple()
-        detected_feature_hash = sha256_file(detected_feature_path)
+        # Legacy compatibility path: materialize detected anchors directly
+        # from the raw index.  V3 formal orchestration supplies the precomputed
+        # ranking artifact above.
+        spec = temporal_spec(config)
+        if len(matched):
+            index = GaiaRcaRawIndex.from_manifest(index_manifest)
+            features = np.lib.format.open_memmap(
+                detected_feature_path, mode="w+", dtype=np.float32,
+                shape=(len(matched), len(GAIA_SERVICES), int(config["rca"]["feature_dimension"])),
+            )
+            for position, row in enumerate(matched.itertuples(index=False)):
+                # Only the detector anchor is passed to telemetry construction.
+                # The labelled service/fault type remain outside this call.
+                indicators = index.case_indicators(int(row.t_hat), spec)
+                value = extract_case_features_from_indicators(
+                    str(row.prediction_id), GAIA_SERVICES, indicators, spec
+                )
+                z2 = flatten_features(value, "z2")
+                if z2.shape != (10, 68) or not np.all(np.isfinite(z2)):
+                    raise ValueError("detected-anchor RCA feature row is invalid")
+                features[position] = z2.astype(np.float32)
+            features.flush()
+            feature_values = np.asarray(features, dtype=np.float64)
+            detected_scores = model.scores(feature_values)
+            detected_rankings = predict_rankings(feature_values, model, GAIA_SERVICES)
+            detected_feature_hash = sha256_file(detected_feature_path)
+        else:
+            np.save(detected_feature_path, np.empty((0, 10, 68), dtype=np.float32), allow_pickle=False)
+            detected_scores = np.empty((0, 10), dtype=float)
+            detected_rankings = tuple()
+            detected_feature_hash = sha256_file(detected_feature_path)
 
     node_predictions = pd.read_csv(node_path)
     detector_records = detector_only_rankings(matching, node_predictions)
@@ -289,13 +377,27 @@ def evaluate(config: Mapping[str, object], artifact_root: Path, index_manifest: 
         for row in matched.itertuples(index=False)
     ], dtype=float).reshape(len(matched), len(GAIA_SERVICES))
 
-    case_ids = matched["case_id"].astype(str).tolist()
     oracle_rankings = _rankings_for_cases(oracle_path, case_ids) if case_ids else tuple()
     frequency_rankings = _rankings_for_cases(frequency_path, case_ids) if case_ids else tuple()
     detected_metrics = _metrics(detected_rankings, matched)
     detector_metrics = _metrics(detector_rankings, matched)
     oracle_metrics = _metrics(oracle_rankings, matched)
     frequency_metrics = _metrics(frequency_rankings, matched)
+
+    detected_rankings_by_prediction = {
+        str(row.prediction_id): detected_rankings[position]
+        for position, row in enumerate(matched.itertuples(index=False))
+    }
+    detector_rankings_by_prediction = {
+        str(row.prediction_id): detector_rankings[position]
+        for position, row in enumerate(matched.itertuples(index=False))
+    }
+    oracle_rankings_by_prediction = _diagnosis_rankings_for_cases(oracle_path, matched)
+    frequency_rankings_by_prediction = _diagnosis_rankings_for_cases(frequency_path, matched)
+    detected_diagnosis = diagnosis_metrics(matching, detected_rankings_by_prediction)
+    detector_diagnosis = diagnosis_metrics(matching, detector_rankings_by_prediction)
+    oracle_diagnosis = diagnosis_metrics(matching, oracle_rankings_by_prediction)
+    frequency_diagnosis = diagnosis_metrics(matching, frequency_rankings_by_prediction)
 
     detected_frame = _prediction_frame(
         matched, detected_scores, detected_rankings, "Ada-RCA-G"
@@ -308,18 +410,16 @@ def evaluate(config: Mapping[str, object], artifact_root: Path, index_manifest: 
     detected_frame.to_csv(detected_path, index=False)
     detector_frame.to_csv(detector_path, index=False)
 
-    rankings_by_prediction = {
-        str(row.prediction_id): detected_rankings[position]
-        for position, row in enumerate(matched.itertuples(index=False))
-    }
-    diagnosis = diagnosis_metrics(matching, rankings_by_prediction)
+    rankings_by_prediction = detected_rankings_by_prediction
+    diagnosis = detected_diagnosis
+    result_status = "FORMAL_FULL_DATA" if formal_result else "SMOKE_TEST_NOT_FORMAL"
     diagnosis.update({
-        "schema_version": "p5_i1_e2e_diagnosis_metrics_v1",
+        "schema_version": "p5_v3_e2e_diagnosis_metrics_v1" if _is_v3(config) else "p5_i1_e2e_diagnosis_metrics_v1",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "status": "FORMAL_FULL_DATA",
+        "status": result_status,
         "git_commit": git_head(),
         "random_seed": int(config["random_seed"]),
-        "config_sha256": sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v1.yaml"),
+        "config_sha256": sha256_file(_config_path(config, config_path)),
         "evaluation_population": "W300-eligible Test GT and detected anchors after chronological boundary purge",
         "event_detection_population": {
             "matching_rows_before_rca_boundary_purge": int(len(full_test_matching)),
@@ -328,12 +428,17 @@ def evaluate(config: Mapping[str, object], artifact_root: Path, index_manifest: 
         "rca_boundary_purge": boundary_purge,
         "source_artifacts": {
             path.name: {"path": str(path.resolve()), "sha256": sha256_file(path)}
-            for path in source_paths[:-1]
+            for path in source_paths
         },
         "detected_feature_file": {
             "path": str(detected_feature_path.resolve()),
             "sha256": detected_feature_hash,
             "shape": [int(len(matched)), 10, 68],
+            "source": (
+                "precomputed detected-anchor ranking artifact"
+                if detected_predictions_path is not None
+                else "legacy raw-index materialization"
+            ),
         },
         "output_artifacts": {
             "rca_detected_predictions.csv": sha256_file(detected_path),
@@ -341,6 +446,52 @@ def evaluate(config: Mapping[str, object], artifact_root: Path, index_manifest: 
         },
     })
     write_json(artifact_root / "e2e_diagnosis_metrics.json", diagnosis)
+
+    layered = {
+        "schema_version": "p5_v3_layered_e2e_report_v1" if _is_v3(config) else "p5_i1_layered_e2e_report_v1",
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "status": result_status if _is_v3(config) else "LEGACY_COMPATIBILITY",
+        "config_sha256": sha256_file(_config_path(config, config_path)),
+        "populations": {
+            "test_matching_rows_before_rca_boundary_purge": int(len(full_test_matching)),
+            "test_matching_rows_after_rca_boundary_purge": int(len(matching)),
+            "matched_cases": int(len(matched)),
+            "false_alarm_predictions": int((matching["match_status"].astype(str) == "false_alarm").sum()),
+            "missed_gt_events": int((matching["match_status"].astype(str) == "miss").sum()),
+        },
+        "layers": {
+            "detector_only": {
+                "matched_case_rca_metrics": detector_metrics,
+                "full_diagnosis": detector_diagnosis,
+            },
+            "ada_rca_detected_anchor": {
+                "matched_case_rca_metrics": detected_metrics,
+                "full_diagnosis": detected_diagnosis,
+            },
+            "ada_rca_oracle_gt_anchor": {
+                "matched_case_rca_metrics": oracle_metrics,
+                "full_diagnosis": oracle_diagnosis,
+            },
+            "root_frequency_train_only": {
+                "matched_case_rca_metrics": frequency_metrics,
+                "full_diagnosis": frequency_diagnosis,
+            },
+        },
+        "anchor_degradation": (
+            anchor_metric_delta(oracle_metrics, detected_metrics) if len(matched)
+            else {"status": "NO_MATCHED_EVENTS"}
+        ),
+        "delay_ranking_relationship": delay_ranking_relationship(
+            matching, rankings_by_prediction
+        ),
+        "definitions": {
+            "detector_only": "rank canonical services by anomaly score at matched prediction_available_time",
+            "oracle": "Ada-RCA ranking from raw telemetry anchored at GT start_ms",
+            "detected": "Ada-RCA ranking from raw telemetry anchored at matched prediction_available_time",
+            "diagnosis": "unmatched prediction/GT and Top-k ranking failures are penalized as defined in diagnosis_metrics",
+        },
+    }
+    write_json(artifact_root / "e2e_layered_report.json", layered)
 
     rca_summary_path = artifact_root / "rca_metrics.json"
     rca_summary = json.loads(rca_summary_path.read_text(encoding="utf-8"))
@@ -362,6 +513,10 @@ def evaluate(config: Mapping[str, object], artifact_root: Path, index_manifest: 
     rca_summary["detector_only_artifact"] = {
         "path": str(detector_path.resolve()), "sha256": sha256_file(detector_path)
     }
+    rca_summary["layered_report_artifact"] = {
+        "path": str((artifact_root / "e2e_layered_report.json").resolve()),
+        "sha256": sha256_file(artifact_root / "e2e_layered_report.json"),
+    }
     write_json(rca_summary_path, rca_summary)
     return {"rca_metrics": rca_summary, "e2e_diagnosis_metrics": diagnosis,
             "raw_index_check": index_check}
@@ -375,8 +530,8 @@ def smoke(config: Mapping[str, object], artifact_root: Path):
          "detection_delay_seconds": 10.0},
         {"split": "test", "prediction_id": "p1", "t_hat": 90_000,
          "match_status": "matched", "case_id": "c1", "gt_service": "webservice2",
-         "fault_type": "memory_anomalies", "gt_start_ms": 100_000,
-         "detection_delay_seconds": -10.0},
+         "fault_type": "memory_anomalies", "gt_start_ms": 80_000,
+         "detection_delay_seconds": 10.0},
         {"split": "test", "prediction_id": "p2", "t_hat": 150_000,
          "match_status": "false_alarm", "case_id": None, "gt_service": None,
          "fault_type": None, "gt_start_ms": None, "detection_delay_seconds": None},
@@ -389,20 +544,20 @@ def smoke(config: Mapping[str, object], artifact_root: Path):
     for anchor in (30_000, 90_000):
         for index, service in enumerate(GAIA_SERVICES):
             node_rows.append({
-                "split": "test", "prediction_timestamp": anchor, "service": service,
+                "split": "test", "prediction_available_time": anchor, "service": service,
                 "anomaly_score": 1.0 if index == (0 if anchor == 30_000 else 9) else 0.0,
             })
     detector = detector_only_rankings(matching, pd.DataFrame(node_rows))
     rankings = {key: value["ranking"] for key, value in detector.items()}
     summary = {
-        "schema_version": "p5_i1_e2e_smoke_v1",
+        "schema_version": "p5_v3_e2e_smoke_v1" if _is_v3(config) else "p5_i1_e2e_smoke_v1",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "status": "PASS",
         "formal_result": False,
         "fixture": "synthetic only",
         "git_commit": git_head(),
         "random_seed": int(config["random_seed"]),
-        "config_sha256": sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v1.yaml"),
+        "config_sha256": sha256_file(_config_path(config)),
         "detector_only_rankings": {key: list(value) for key, value in rankings.items()},
         "diagnosis": diagnosis_metrics(matching, rankings),
         "delay_relationship": delay_ranking_relationship(matching, rankings),
@@ -419,6 +574,11 @@ def main():
     if args.action == "smoke":
         result = smoke(config, artifact_root)
     else:
+        detected_predictions = (
+            (PROJECT_ROOT / args.detected_predictions).resolve()
+            if args.detected_predictions
+            else (artifact_root / "rca_detected_predictions.csv" if _is_v3(config) else None)
+        )
         result = evaluate(
             config,
             artifact_root,
@@ -430,6 +590,8 @@ def main():
             Path(args.oracle_predictions or artifact_root / "rca_oracle_predictions.csv").resolve(),
             Path(args.root_frequency_predictions or artifact_root / "root_frequency_predictions.csv").resolve(),
             (PROJECT_ROOT / args.case_registry).resolve(),
+            detected_predictions,
+            config_path=(PROJECT_ROOT / args.config).resolve(),
         )
     print(json.dumps(result, sort_keys=True))
 
