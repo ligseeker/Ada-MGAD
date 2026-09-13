@@ -99,9 +99,17 @@ def _write_outputs(result, artifact_root: Path, metadata: Dict[str, object]):
     return metrics
 
 
-def evaluate(config, artifact_root: Path, train_path: Path, test_path: Path, registry_path: Path, workers=1, start_method="spawn"):
+def evaluate(
+    config, artifact_root: Path, train_path: Path, test_path: Path,
+    registry_path: Path, workers=1, start_method="spawn", config_path: Path = None,
+):
     train = load_prediction_table(train_path)
     test = load_prediction_table(test_path)
+    if str(config.get("schema_version", "")).startswith("p5_v3_"):
+        if set(train["split"].astype(str)) != {"train"}:
+            raise ValueError("V3 Train prediction artifact must contain only Train rows")
+        if set(test["split"].astype(str)) != {"test"}:
+            raise ValueError("V3 Test prediction artifact must contain only Test rows")
     registry = load_registry(config, PROJECT_ROOT) if registry_path is None else pd.read_csv(registry_path)
     result = run_event_detection(
         train, test, registry, temporal_blocks(config),
@@ -109,9 +117,12 @@ def evaluate(config, artifact_root: Path, train_path: Path, test_path: Path, reg
         tolerance_seconds=int(config["event_trigger"]["matching_tolerance_seconds"]),
         threshold_workers=int(workers), threshold_start_method=str(start_method),
     )
+    config_path = Path(
+        config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json")
+    ).resolve()
     return _write_outputs(result, artifact_root, {
-        "git_commit": git_head(), "config_path": str((PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json").resolve()),
-        "config_sha256": sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json"),
+        "git_commit": git_head(), "config_path": str(config_path),
+        "config_sha256": sha256_file(config_path),
         "train_prediction_path": str(train_path.resolve()), "train_prediction_sha256": sha256_file(train_path),
         "test_prediction_path": str(test_path.resolve()), "test_prediction_sha256": sha256_file(test_path),
         "registry_path": str(registry_path.resolve()) if registry_path else str((PROJECT_ROOT / str(config["event_registry"]["path"])).resolve()),
@@ -150,7 +161,10 @@ def main():
         train_path = Path(args.train_predictions or (PROJECT_ROOT / "artifacts/p5/v3/ad/ad_train_predictions.csv")).resolve()
         test_path = Path(args.test_predictions or (PROJECT_ROOT / "artifacts/p5/v3/ad/ad_test_predictions.csv")).resolve()
         registry_path = Path(args.registry).resolve() if args.registry else None
-        result = evaluate(config, artifact_root, train_path, test_path, registry_path, args.workers, args.start_method)
+        result = evaluate(
+            config, artifact_root, train_path, test_path, registry_path,
+            args.workers, args.start_method, (PROJECT_ROOT / args.config).resolve(),
+        )
     print(json.dumps(result, sort_keys=True))
 
 
