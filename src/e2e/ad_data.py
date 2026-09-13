@@ -9,6 +9,7 @@ import pandas as pd
 from torch.utils.data import Dataset, Sampler
 
 from .protocol import GAIA_SERVICES, TemporalBlock, sha256_file
+from .parallel import atomic_save_npy
 
 
 ARRAY_NAMES = ("timestamps", "metric", "log", "trace", "labels", "label_mask")
@@ -45,10 +46,18 @@ def build_registry_node_labels(
         service = str(row.service)
         if service not in service_index:
             raise ValueError("registry service is outside the canonical service registry")
-        first_bin = (int(row.start_ms) // step_ms) * step_ms
-        last_bin = (int(row.end_ms) // step_ms) * step_ms
-        left = int(np.searchsorted(timestamps, first_bin, side="left"))
-        right = int(np.searchsorted(timestamps, last_bin, side="right"))
+        start_ms = int(row.start_ms)
+        end_ms = int(row.end_ms)
+        if end_ms <= start_ms:
+            raise ValueError("registry intervals must be positive half-open spans")
+        # A bin [b,b+step) is positive iff it overlaps the event interval
+        # [start_ms,end_ms).  The strict sides are intentional: an event that
+        # ends exactly at b does not label the bin starting at b, and an event
+        # that starts exactly at b+step does not label the preceding bin.
+        first_bin = start_ms - step_ms
+        last_bin = end_ms
+        left = int(np.searchsorted(timestamps, first_bin, side="right"))
+        right = int(np.searchsorted(timestamps, last_bin, side="left"))
         if right > left:
             labels[left:right, service_index[service]] = 1
     return labels
@@ -67,7 +76,7 @@ def build_semisupervised_mask(
     counts = np.zeros((binary.shape[1], 2), dtype=np.float64)
     threshold = 10.0 * float(label_percent)
     for timestamp_index in range(binary.shape[0]):
-        if timestamp_index < int(window_bins):
+        if timestamp_index < max(0, int(window_bins) - 1):
             continue
         counts += one_hot[timestamp_index]
         current_class = binary[timestamp_index]
@@ -82,6 +91,9 @@ class WindowMetadata:
     split: str
     window_start_time: int
     window_end_time: int
+    target_bin_start: int
+    target_bin_end: int
+    prediction_available_time: int
     prediction_timestamp: int
     service_names: Tuple[str, ...]
     node_labels: Tuple[int, ...]
@@ -93,6 +105,8 @@ class TimestampedArrayDataset(Dataset):
     def __init__(self, directory: Path, window_bins: int, grid_seconds: int):
         self.directory = Path(directory)
         self.split = self.directory.name
+        if self.split not in ("train", "test"):
+            raise ValueError("V3 Ada-MGAD datasets may only contain Train and Test splits")
         self.window_bins = int(window_bins)
         self.grid_ms = int(grid_seconds) * 1000
         self.timestamps = np.load(self.directory / "timestamps.npy", mmap_mode="r")
@@ -141,6 +155,11 @@ class TimestampedArrayDataset(Dataset):
             split=self.split,
             window_start_time=int(self.timestamps[index]),
             window_end_time=int(self.timestamps[target]) + self.grid_ms,
+            target_bin_start=int(self.timestamps[target]),
+            target_bin_end=int(self.timestamps[target]) + self.grid_ms,
+            prediction_available_time=int(self.timestamps[target]) + self.grid_ms,
+            # Kept as the historical target-bin-start alias. V3 event code
+            # always resolves the explicit prediction_available_time field.
             prediction_timestamp=int(self.timestamps[target]),
             service_names=GAIA_SERVICES,
             node_labels=tuple(int(value) for value in self.labels[target]),
@@ -172,6 +191,8 @@ def save_split_arrays(
     split: str,
     arrays: Mapping[str, np.ndarray],
 ) -> Mapping[str, object]:
+    if str(split) not in ("train", "test"):
+        raise ValueError("V3 split writer accepts only train and test")
     missing = set(ARRAY_NAMES) - set(arrays)
     if missing:
         raise ValueError("missing split arrays: {}".format(sorted(missing)))
@@ -186,7 +207,7 @@ def save_split_arrays(
         elif len(values) != expected_length:
             raise ValueError("split arrays must have identical timestamp length")
         path = directory / (name + ".npy")
-        np.save(path, values, allow_pickle=False)
+        atomic_save_npy(path, values)
         records[name] = {
             "path": str(path.resolve()),
             "shape": list(values.shape),
@@ -202,5 +223,5 @@ def load_timestamped_datasets(
 ) -> Mapping[str, TimestampedArrayDataset]:
     return {
         split: TimestampedArrayDataset(Path(data_root) / split, window_bins, grid_seconds)
-        for split in ("train", "validation", "test")
+        for split in ("train", "test")
     }

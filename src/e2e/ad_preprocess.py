@@ -34,6 +34,12 @@ from .ad_data import (
     grid_for_block,
     save_split_arrays,
 )
+from .log_templates import (
+    LEVELS as DRAIN_LEVELS,
+    fit_train_templates,
+    schema_features,
+    transform_service_frozen,
+)
 from .protocol import (
     GAIA_SERVICES,
     assign_event_blocks,
@@ -56,20 +62,27 @@ _METRIC_GRID = None
 _METRIC_GRID_MS = None
 _METRIC_TRAIN_BOUNDS = None
 _METRIC_CACHE_DIR = None
+_METRIC_CHUNK_ROWS = None
+_LOG_STATE = None
+_LOG_CONFIG_PATH = None
+_LOG_CLUSTER_IDS = None
 
 
-def _read_metric_group_strict(full_name: str, paths: Sequence[Path], feature: str) -> pd.DataFrame:
+def _read_metric_group_strict(
+    full_name: str, paths: Sequence[Path], feature: str, chunk_rows: int = 500000
+) -> pd.DataFrame:
     """Read every E2E metric shard and fail rather than accept partial input."""
 
     frames = []
     for path in paths:
-        frame = pd.read_csv(path)
-        missing = {"timestamp", "value"} - set(frame.columns)
-        if missing:
-            raise ValueError(
-                "metric shard {} for {} lacks columns {}".format(path, full_name, sorted(missing))
-            )
-        frames.append(frame)
+        reader = pd.read_csv(path, chunksize=int(chunk_rows), low_memory=False)
+        for frame in reader:
+            missing = {"timestamp", "value"} - set(frame.columns)
+            if missing:
+                raise ValueError(
+                    "metric shard {} for {} lacks columns {}".format(path, full_name, sorted(missing))
+                )
+            frames.append(frame[["timestamp", "value"]])
     if not frames:
         raise ValueError("metric group {} contains no source shards".format(full_name))
     merged = pd.concat(frames, ignore_index=True)
@@ -85,12 +98,22 @@ def _read_metric_group_strict(full_name: str, paths: Sequence[Path], feature: st
     return merged.sort_values("timestamp").reset_index(drop=True)
 
 
-def _logical_metric_schema(metric_dir: Path, excluded_features: Sequence[str] = ()):
+def _logical_metric_schema(
+    metric_dir: Path,
+    excluded_features: Sequence[str] = (),
+    train_start_ms: int = None,
+    train_end_ms: int = None,
+):
     by_service = {service: defaultdict(lambda: defaultdict(list)) for service in GAIA_SERVICES}
     for path in sorted(Path(metric_dir).glob("*.csv")):
         info = _parse_metric_filename(path.name)
         if info is None:
             continue
+        if train_start_ms is not None and train_end_ms is not None:
+            start = int(pd.Timestamp(info["date_start"], tz="Asia/Shanghai").timestamp() * 1000)
+            end = int(pd.Timestamp(info["date_end"], tz="Asia/Shanghai").timestamp() * 1000)
+            if end <= int(train_start_ms) or start >= int(train_end_ms):
+                continue
         for service, feature in _target_services_for_metric(info):
             if service not in by_service:
                 continue
@@ -164,10 +187,18 @@ def build_metric_arrays(
     progress_every: int = 25,
     workers: int = 1,
     start_method: str = "spawn",
+    chunk_rows: int = 500000,
 ) -> Tuple[np.ndarray, Mapping[str, object]]:
     """Preserve the historical metric schema/aggregation with Train-only fit."""
 
-    groups, schema_common = _logical_metric_schema(metric_dir, excluded_features)
+    if len(grid) == 0:
+        raise ValueError("metric preprocessing requires a non-empty detector grid")
+    train_start_ms = int(grid[int(slices["train"].start or 0)])
+    train_stop_index = int(slices["train"].stop)
+    train_end_ms = int(grid[train_stop_index - 1]) + 30000
+    groups, schema_common = _logical_metric_schema(
+        metric_dir, excluded_features, train_start_ms=train_start_ms, train_end_ms=train_end_ms
+    )
     cache_dir = Path(cache_dir)
     cache_dir.mkdir(parents=True, exist_ok=True)
     train_slice = slices["train"]
@@ -215,6 +246,7 @@ def build_metric_arrays(
         initargs=(
             np.asarray(grid, dtype=np.int64), grid_ms,
             int(train_slice.start or 0), int(train_slice.stop), str(cache_dir),
+            int(chunk_rows),
         ),
     )
     cache_hits = 0
@@ -266,6 +298,8 @@ def build_metric_arrays(
             "dynamic_span": 1e-10, "dynamic_ratio": 1e-4,
         },
         "quality_fit_split": "train",
+        "schema_fit_interval_ms": [train_start_ms, train_end_ms],
+        "schema_fit_rule": "metric filename ranges must overlap the Train interval before common-feature intersection",
         "normalization_fit_split": "train",
         "normalization": normalization,
         "resume_cache": {
@@ -274,6 +308,7 @@ def build_metric_arrays(
             "cache_hits": cache_hits,
         },
         "parallel_execution": parallel_metadata,
+        "chunk_rows": int(chunk_rows),
     }
     return output, stats
 
@@ -302,9 +337,12 @@ def _materialize_metric_series(task):
             raise ValueError("metric resume-cache binding mismatch")
     else:
         sums = np.zeros(len(grid), dtype=np.float64)
-        counts = np.zeros(len(grid), dtype=np.int16)
+        counts = np.zeros(len(grid), dtype=np.int32)
         for full_name, paths in task["groups"]:
-            frame = _read_metric_group_strict(full_name, tuple(Path(path) for path in paths), feature)
+            frame = _read_metric_group_strict(
+                full_name, tuple(Path(path) for path in paths), feature,
+                chunk_rows=_METRIC_CHUNK_ROWS,
+            )
             aligned = _aligned_mean(frame, grid, _METRIC_GRID_MS)
             observed = np.isfinite(aligned)
             sums[observed] += aligned[observed]
@@ -324,12 +362,13 @@ def _materialize_metric_series(task):
     }
 
 
-def _initialize_metric_worker(grid, grid_ms, train_start, train_stop, cache_dir):
-    global _METRIC_GRID, _METRIC_GRID_MS, _METRIC_TRAIN_BOUNDS, _METRIC_CACHE_DIR
+def _initialize_metric_worker(grid, grid_ms, train_start, train_stop, cache_dir, chunk_rows):
+    global _METRIC_GRID, _METRIC_GRID_MS, _METRIC_TRAIN_BOUNDS, _METRIC_CACHE_DIR, _METRIC_CHUNK_ROWS
     _METRIC_GRID = np.asarray(grid, dtype=np.int64)
     _METRIC_GRID_MS = int(grid_ms)
     _METRIC_TRAIN_BOUNDS = (int(train_start), int(train_stop))
     _METRIC_CACHE_DIR = Path(cache_dir)
+    _METRIC_CHUNK_ROWS = int(chunk_rows)
 
 
 def _local_ms(values: pd.Series) -> Tuple[np.ndarray, np.ndarray]:
@@ -828,6 +867,293 @@ def build_ad_data(
                 "logs": log_wall_seconds,
                 "traces_including_span_index": trace_wall_seconds,
             },
+        },
+    }
+    write_json(Path(artifact_root) / "ad_data_manifest.json", manifest)
+    return manifest
+
+
+# V3 log implementation.  It is defined after the historical helper so the
+# public function name remains stable for callers importing this module, while
+# the runtime path uses the Train-fit/frozen-transform implementation below.
+def _initialize_log_worker(state_path: str, config_path: str, cluster_ids: Sequence[int]):
+    global _LOG_STATE, _LOG_CONFIG_PATH, _LOG_CLUSTER_IDS
+    payload = json.loads(Path(state_path).read_text(encoding="utf-8"))
+    _LOG_STATE = str(payload["state"])
+    _LOG_CONFIG_PATH = Path(config_path)
+    _LOG_CLUSTER_IDS = tuple(int(value) for value in cluster_ids)
+
+
+def _build_log_service_v3(task):
+    if _LOG_STATE is None or _LOG_CONFIG_PATH is None or _LOG_CLUSTER_IDS is None:
+        raise RuntimeError("Drain3 worker was not initialized with the Train-fitted state")
+    service_index, service, source_path, grid, chunk_rows, train_start_ms, train_end_ms = task
+    values, stats = transform_service_frozen(
+        Path(source_path), np.asarray(grid, dtype=np.int64), chunk_rows=int(chunk_rows),
+        state=_LOG_STATE, config_path=_LOG_CONFIG_PATH, cluster_ids=_LOG_CLUSTER_IDS,
+        train_start_ms=int(train_start_ms), train_end_ms=int(train_end_ms),
+    )
+    return int(service_index), values, stats
+
+
+def build_log_arrays(
+    business_dir: Path,
+    grid: np.ndarray,
+    slices: Mapping[str, slice],
+    chunk_rows: int = 500000,
+    workers: int = 1,
+    start_method: str = "spawn",
+    template_artifact_dir: Path = None,
+    drain_config_path: Path = None,
+) -> Tuple[np.ndarray, Mapping[str, object]]:
+    """Fit Drain3 on Train rows, then transform all rows with a frozen matcher."""
+
+    grid = np.asarray(grid, dtype=np.int64)
+    if len(grid) == 0:
+        raise ValueError("log preprocessing requires a non-empty detector grid")
+    train_slice = slices["train"]
+    train_start_ms = int(grid[int(train_slice.start or 0)])
+    train_end_ms = int(grid[int(train_slice.stop) - 1]) + 30000
+    config_path = Path(drain_config_path or (Path(__file__).resolve().parents[2] / "util/GAIA/gaia.ini"))
+    if not config_path.is_file():
+        raise FileNotFoundError(config_path)
+    template_root = Path(template_artifact_dir or (Path(business_dir) / ".p5_v3_drain3"))
+    template_root.mkdir(parents=True, exist_ok=True)
+    fit = fit_train_templates(
+        Path(business_dir), train_start_ms, train_end_ms,
+        config_path=config_path, chunk_rows=int(chunk_rows),
+    )
+    state_path = template_root / "drain3_train_state.json"
+    atomic_write_json(state_path, {"schema_version": "p5_v3_drain3_state_v1", "state": fit["state"]})
+    features = schema_features(fit["cluster_ids"])
+    schema = {
+        "schema_version": "p5_v3_drain3_feature_schema_v1",
+        "fit_split": "train",
+        "fit_interval_ms": [train_start_ms, train_end_ms],
+        "config_path": str(config_path.resolve()),
+        "config_sha256": sha256_file(config_path),
+        "cluster_ids": [int(value) for value in fit["cluster_ids"]],
+        "templates": dict(fit["templates"]),
+        "unknown_template": "template_UNK",
+        "feature_names": list(features),
+        "state_path": str(state_path.resolve()),
+        "state_sha256": sha256_file(state_path),
+        "fit_order": fit["fit_order"],
+        "test_transform": "TemplateMiner.match only; no cluster creation; unmatched templates map to UNK",
+    }
+    atomic_write_json(template_root / "log_template_schema.json", schema)
+    tasks = tuple(
+        (
+            service_index, service,
+            str(Path(business_dir) / "business_table_{}_2021-07.csv".format(service)),
+            grid, int(chunk_rows), train_start_ms, train_end_ms,
+        )
+        for service_index, service in enumerate(GAIA_SERVICES)
+    )
+    results, parallel_metadata = ordered_process_map(
+        _build_log_service_v3, tasks, workers=int(workers), start_method=start_method,
+        initializer=_initialize_log_worker,
+        initargs=(str(state_path), str(config_path), tuple(fit["cluster_ids"])),
+    )
+    values = np.zeros((len(grid), len(GAIA_SERVICES), len(features)), dtype=np.float32)
+    stats_by_service = {}
+    for service_index, service_values, service_stats in results:
+        values[:, int(service_index), :] = service_values
+        stats_by_service[GAIA_SERVICES[int(service_index)]] = service_stats
+    train = values[train_slice]
+    maxima = np.max(train, axis=(0, 1)) if len(train) else np.zeros(len(features), dtype=np.float32)
+    maxima[maxima == 0] = 1.0
+    values /= maxima[None, None, :]
+    total_stats = {
+        "raw_rows_scanned": int(sum(int(item["raw_rows_scanned"]) for item in stats_by_service.values())),
+        "invalid_message_prefix_timestamps": int(sum(int(item["invalid_message_prefix_timestamps"]) for item in stats_by_service.values())),
+        "retained_protocol_rows": int(sum(int(item["retained_protocol_rows"]) for item in stats_by_service.values())),
+        "unseen_template_rows": int(sum(int(item["unseen_template_rows"]) for item in stats_by_service.values())),
+        "feature_names": list(features),
+        "feature_count": len(features),
+        "timestamp_source": "message prefix YYYY-MM-DD HH:MM:SS,mmm",
+        "raw_text_model_input": False,
+        "normalization_fit_split": "train",
+        "train_maxima": maxima.astype(float).tolist(),
+        "drain3": schema,
+        "fit_statistics": {
+            key: value for key, value in fit.items() if key != "state"
+        },
+        "service_statistics": stats_by_service,
+        "parallel_execution": parallel_metadata,
+        "chunk_rows": int(chunk_rows),
+    }
+    return values, total_stats
+
+
+def build_ad_data(
+    config: Mapping[str, object],
+    project_root: Path,
+    data_root: Path,
+    artifact_root: Path,
+    chunk_rows: int = 500000,
+    raw_root_override: Path = None,
+    workers: int = 1,
+    start_method: str = "spawn",
+    metric_workers: int = None,
+    log_workers: int = None,
+    trace_workers: int = None,
+) -> Mapping[str, object]:
+    """Materialize the complete V3 detector input without cross-split windows."""
+
+    blocks = temporal_blocks(config)
+    grid_ms = int(config["ad"]["grid_seconds"]) * 1000
+    grids = {
+        block.name: grid_for_block(block, int(config["ad"]["grid_seconds"]))
+        for block in blocks
+    }
+    offsets = {}
+    cursor = 0
+    for block in blocks:
+        offsets[block.name] = slice(cursor, cursor + len(grids[block.name]))
+        cursor += len(grids[block.name])
+    grid = np.concatenate([grids[block.name] for block in blocks])
+    if len(grid) == 0:
+        raise ValueError("V3 detector grid is empty")
+    canonical_raw_root = Path(str(config["gaia_raw_root"]))
+    raw_root = Path(raw_root_override) if raw_root_override is not None else canonical_raw_root
+    raw_root = raw_root.resolve()
+    run_table = raw_root / "run/run/run/run_table_2021-07.csv"
+    if not run_table.is_file():
+        raise FileNotFoundError(run_table)
+    actual_run_sha = sha256_file(run_table)
+    if actual_run_sha != str(config["run_table"]["sha256"]):
+        raise ValueError("execution raw run table differs from frozen V3 provenance binding")
+    modality_roots = {
+        "metrics": raw_root / "metric/metric_split/metric",
+        "logs": raw_root / "business/business_split/business",
+        "traces": raw_root / "trace/trace_split/trace",
+    }
+    raw_layout = {
+        name: layout_digest(path, path.glob("*.csv"))
+        for name, path in modality_roots.items()
+    }
+    metric_workers = int(workers if metric_workers is None else metric_workers)
+    log_workers = int(workers if log_workers is None else log_workers)
+    trace_workers = int(workers if trace_workers is None else trace_workers)
+    phase_started = time.perf_counter()
+    metric, metric_stats = build_metric_arrays(
+        modality_roots["metrics"], grid, offsets, Path(data_root) / "metric_cache",
+        tuple(config["ad_preprocessing"]["metric_excluded_features"]),
+        workers=metric_workers, start_method=start_method, chunk_rows=int(chunk_rows),
+    )
+    metric_wall_seconds = time.perf_counter() - phase_started
+    metric_stats["exclusions"] = list(config["ad_preprocessing"]["metric_exclusions"])
+    phase_started = time.perf_counter()
+    logs, log_stats = build_log_arrays(
+        modality_roots["logs"], grid, offsets, int(chunk_rows), workers=log_workers,
+        start_method=start_method, template_artifact_dir=Path(data_root) / "log_templates",
+    )
+    log_wall_seconds = time.perf_counter() - phase_started
+    phase_started = time.perf_counter()
+    trace, graph, trace_stats = build_trace_arrays(
+        modality_roots["traces"], Path(data_root) / "span_hashes", grid, offsets,
+        int(chunk_rows), workers=trace_workers, start_method=start_method,
+    )
+    trace_wall_seconds = time.perf_counter() - phase_started
+
+    registry = load_registry(config, Path(project_root))
+    assigned, raw_purged = assign_event_blocks(registry, blocks)
+    split_files = {}
+    split_counts = {}
+    for block in blocks:
+        block_slice = offsets[block.name]
+        block_registry = assigned.loc[assigned["split"].astype(str) == block.name]
+        timestamps = grid[block_slice]
+        labels = build_registry_node_labels(
+            timestamps, block_registry, GAIA_SERVICES, int(config["ad"]["grid_seconds"])
+        )
+        label_mask = build_semisupervised_mask(
+            labels, float(config["ad_model"]["label_percent"]), int(config["ad"]["window_bins"])
+        )
+        split_files[block.name] = save_split_arrays(data_root, block.name, {
+            "timestamps": timestamps, "metric": metric[block_slice],
+            "log": logs[block_slice], "trace": trace[block_slice],
+            "labels": labels, "label_mask": label_mask,
+        })
+        split_counts[block.name] = {
+            "timestamps": int(len(timestamps)),
+            "windows": max(0, int(len(timestamps)) - int(config["ad"]["window_bins"]) + 1),
+            "positive_node_bins": int(labels.sum()),
+            "event_count": int(len(block_registry)),
+            "first_timestamp_ms": int(timestamps[0]),
+            "last_timestamp_ms": int(timestamps[-1]),
+            "interval": "[{}, {})".format(int(block.start_ms), int(block.end_ms)),
+        }
+    graph_path = Path(data_root) / "graph.npy"
+    atomic_save_npy(graph_path, graph)
+    config_path = Path(project_root) / "configs/e2e/gaia_p5_v3.json"
+    metric_schema_path = Path(artifact_root) / "metric_feature_schema.json"
+    log_schema_path = Path(artifact_root) / "log_template_schema.json"
+    ad_schema_path = Path(artifact_root) / "ad_schema.json"
+    write_json(metric_schema_path, {
+        "schema_version": "p5_v3_metric_feature_schema_v1",
+        "fit_split": "train", "feature_names": metric_stats["feature_names"],
+        "features_per_node": metric_stats["features_per_node_after_train_quality"],
+        "stats": metric_stats,
+    })
+    log_schema_source = Path(data_root) / "log_templates/log_template_schema.json"
+    log_schema = json.loads(log_schema_source.read_text(encoding="utf-8"))
+    write_json(log_schema_path, log_schema)
+    write_json(ad_schema_path, {
+        "schema_version": "p5_v3_ad_schema_v1", "fit_split": "train",
+        "services": list(GAIA_SERVICES), "grid_seconds": int(config["ad"]["grid_seconds"]),
+        "window_bins": int(config["ad"]["window_bins"]),
+        "dimensions": {
+            "raw_node": int(metric.shape[-1]), "log_len": int(logs.shape[-1]),
+            "raw_edge": int(trace.shape[-1]),
+        },
+        "metric_schema_sha256": sha256_file(metric_schema_path),
+        "log_schema_sha256": sha256_file(log_schema_path),
+        "graph_fit_split": "train",
+    })
+    manifest = {
+        "schema_version": "p5_v3_ad_data_manifest_v1",
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "git_commit": subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=str(project_root), text=True
+        ).strip(),
+        "random_seed": int(config["random_seed"]),
+        "config_sha256": sha256_file(config_path),
+        "run_table_sha256": actual_run_sha,
+        "event_registry_sha256": sha256_file(
+            (Path(project_root) / str(config["event_registry"]["path"])).resolve()
+        ),
+        "raw_layout": raw_layout,
+        "canonical_raw_root": str(canonical_raw_root.resolve()),
+        "execution_raw_root": str(raw_root),
+        "raw_injection_boundary_purged": int(len(raw_purged)),
+        "services": list(GAIA_SERVICES), "grid_seconds": int(config["ad"]["grid_seconds"]),
+        "window_bins": int(config["ad"]["window_bins"]), "split_counts": split_counts,
+        "dimensions": {
+            "raw_node": int(metric.shape[-1]), "log_len": int(logs.shape[-1]),
+            "raw_edge": int(trace.shape[-1]),
+        },
+        "metric": metric_stats, "logs": log_stats, "traces": trace_stats,
+        "graph": {
+            "path": str(graph_path.resolve()), "sha256": sha256_file(graph_path),
+            "shape": list(graph.shape), "edges": int(graph.sum()), "fit_split": "train",
+        },
+        "schema_artifacts": {
+            "metric": {"path": str(metric_schema_path.resolve()), "sha256": sha256_file(metric_schema_path)},
+            "logs": {"path": str(log_schema_path.resolve()), "sha256": sha256_file(log_schema_path)},
+            "ad": {"path": str(ad_schema_path.resolve()), "sha256": sha256_file(ad_schema_path)},
+        },
+        "split_files": split_files,
+        "label_source": "V3 six-class raw injection registry; half-open overlap labels",
+        "excluded_label_sources": ["ERROR", "traceback continuation", "unsupported/unknown", "outside domain", "split crossing"],
+        "normalization_firewall": "metric/log/trace normalization, quality, schema, and graph fit on Train only",
+        "train_test_window_isolation": "separate arrays; no window crosses the split boundary",
+        "preprocessing_runtime": {
+            "metric_workers": metric_workers, "log_workers": log_workers, "trace_workers": trace_workers,
+            "chunk_rows": int(chunk_rows), "start_method": str(start_method),
+            "pool_policy": "modality parse/map pools execute sequentially; each worker publishes independent cache/shard artifacts",
+            "phase_wall_seconds": {"metric": metric_wall_seconds, "logs": log_wall_seconds, "traces": trace_wall_seconds},
         },
     }
     write_json(Path(artifact_root) / "ad_data_manifest.json", manifest)
