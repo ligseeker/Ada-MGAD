@@ -593,17 +593,72 @@ def _open_parent_index(path: Path) -> sqlite3.Connection:
     connection.execute("PRAGMA journal_mode=OFF")
     connection.execute("PRAGMA synchronous=OFF")
     connection.execute("PRAGMA temp_store=FILE")
-    connection.execute("CREATE TABLE IF NOT EXISTS parent (key BLOB PRIMARY KEY, service TEXT NOT NULL)")
+    connection.execute(
+        "CREATE TABLE IF NOT EXISTS parent ("
+        "key BLOB PRIMARY KEY, service TEXT NOT NULL, ambiguous INTEGER NOT NULL DEFAULT 0)"
+    )
     connection.execute("CREATE TEMP TABLE IF NOT EXISTS query_keys (key BLOB PRIMARY KEY)")
+    connection.execute(
+        "CREATE TEMP TABLE IF NOT EXISTS incoming_parent ("
+        "key BLOB NOT NULL, service TEXT NOT NULL, PRIMARY KEY(key, service)) WITHOUT ROWID"
+    )
     return connection
 
 
-def _parent_lookup(connection: sqlite3.Connection, keys: Sequence[bytes]) -> Mapping[bytes, str]:
+def _insert_parent_rows(
+    connection: sqlite3.Connection, rows: Sequence[Tuple[bytes, str]]
+) -> Mapping[str, int]:
+    """Insert a chunk while preserving cross-service ambiguity."""
+
+    if not rows:
+        return {
+            "new_keys": 0,
+            "ambiguous_keys_created": 0,
+            "same_service_duplicates": 0,
+        }
+    before_keys = int(connection.execute("SELECT COUNT(*) FROM parent").fetchone()[0])
+    before_ambiguous = int(
+        connection.execute("SELECT COUNT(*) FROM parent WHERE ambiguous=1").fetchone()[0]
+    )
+    connection.execute("DELETE FROM incoming_parent")
+    connection.executemany(
+        "INSERT OR IGNORE INTO incoming_parent(key, service) VALUES (?, ?)", rows
+    )
+    unique_pairs = int(
+        connection.execute("SELECT COUNT(*) FROM incoming_parent").fetchone()[0]
+    )
+    connection.execute(
+        "INSERT INTO parent(key, service, ambiguous) "
+        "SELECT key, MIN(service), CASE WHEN COUNT(*) > 1 THEN 1 ELSE 0 END "
+        "FROM incoming_parent GROUP BY key "
+        "ON CONFLICT(key) DO UPDATE SET ambiguous = "
+        "CASE WHEN parent.ambiguous=1 OR excluded.ambiguous=1 "
+        "OR parent.service<>excluded.service THEN 1 ELSE 0 END"
+    )
+    connection.commit()
+    after_keys = int(connection.execute("SELECT COUNT(*) FROM parent").fetchone()[0])
+    after_ambiguous = int(
+        connection.execute("SELECT COUNT(*) FROM parent WHERE ambiguous=1").fetchone()[0]
+    )
+    return {
+        "new_keys": after_keys - before_keys,
+        "ambiguous_keys_created": after_ambiguous - before_ambiguous,
+        "same_service_duplicates": len(rows) - unique_pairs,
+    }
+
+
+def _parent_lookup(
+    connection: sqlite3.Connection, keys: Sequence[bytes]
+) -> Tuple[Mapping[bytes, str], set[bytes]]:
     connection.execute("DELETE FROM query_keys")
     connection.executemany("INSERT OR IGNORE INTO query_keys(key) VALUES (?)", ((key,) for key in keys))
-    return dict(connection.execute(
-        "SELECT query_keys.key, parent.service FROM query_keys JOIN parent USING(key)"
-    ).fetchall())
+    rows = connection.execute(
+        "SELECT query_keys.key, parent.service, parent.ambiguous "
+        "FROM query_keys JOIN parent USING(key)"
+    ).fetchall()
+    resolved = {key: service for key, service, ambiguous in rows if not ambiguous}
+    ambiguous = {key for key, _service, is_ambiguous in rows if is_ambiguous}
+    return resolved, ambiguous
 
 
 def audit_traces(trace_root: Path, output: Path, train_start: int, train_end: int, chunk_rows: int) -> Mapping[str, object]:
@@ -619,6 +674,7 @@ def audit_traces(trace_root: Path, output: Path, train_start: int, train_end: in
         pass
     connection = _open_parent_index(index_path)
     duplicate_keys = 0; parent_rows = 0; invalid_parent_rows = 0
+    ambiguous_parent_keys = 0
     for source in sorted(trace_root.glob("trace_table_*_2021-07.csv")):
         for chunk in pd.read_csv(source, usecols=["trace_id", "span_id", "service_name", "end_time"], chunksize=chunk_rows, keep_default_na=False, on_bad_lines="error"):
             end_ms, valid_time = _trace_time_ms(chunk["end_time"])
@@ -630,13 +686,10 @@ def audit_traces(trace_root: Path, output: Path, train_start: int, train_end: in
                     continue
                 rows.append((_trace_pair_hash(trace_id, span_id), service))
             if rows:
-                before = int(connection.execute("SELECT COUNT(*) FROM parent").fetchone()[0])
-                connection.executemany("INSERT OR IGNORE INTO parent(key, service) VALUES (?, ?)", rows)
-                connection.commit()
-                after = int(connection.execute("SELECT COUNT(*) FROM parent").fetchone()[0])
-                inserted = after - before
-                parent_rows += inserted
-                duplicate_keys += len(rows) - inserted
+                insert_stats = _insert_parent_rows(connection, rows)
+                parent_rows += int(insert_stats["new_keys"])
+                duplicate_keys += int(insert_stats["same_service_duplicates"])
+                ambiguous_parent_keys += int(insert_stats["ambiguous_keys_created"])
     edge_stats: MutableMapping[Tuple[str, str, str], MutableMapping[str, object]] = defaultdict(
         lambda: {"count": 0, "duration_sum": 0.0, "duration_min": math.inf,
                  "duration_max": -math.inf, "sample": [], "bins": set(), "days": set()}
@@ -654,9 +707,15 @@ def audit_traces(trace_root: Path, output: Path, train_start: int, train_end: in
             selected = end_valid & (end_ms >= train_start) & (end_ms < train_end) & np.isfinite(duration) & (duration >= 0) & np.isfinite(status) & np.isin(status_int, np.asarray([200, 300, 400, 500], dtype=np.int64))
             counters["rows_train"] += int(selected.sum())
             keys = [_trace_pair_hash(trace_id, parent_id) for trace_id, parent_id in zip(chunk["trace_id"].astype(str), chunk["parent_id"].astype(str))]
-            found = _parent_lookup(connection, keys) if np.any(selected) else {}
+            if np.any(selected):
+                found, ambiguous = _parent_lookup(connection, keys)
+            else:
+                found, ambiguous = {}, set()
             for key_hash, trace_id, parent_id, dst, end, code, seconds, valid in zip(keys, chunk["trace_id"].astype(str), chunk["parent_id"].astype(str), chunk["service_name"].astype(str), end_ms, status, duration, selected):
                 if not valid: continue
+                if key_hash in ambiguous:
+                    counters["parent_ambiguous"] += 1
+                    continue
                 source_service = found.get(key_hash)
                 counters["parent_resolved"] += int(source_service is not None)
                 counters["parent_unmatched"] += int(source_service is None)
@@ -690,6 +749,7 @@ def audit_traces(trace_root: Path, output: Path, train_start: int, train_end: in
     _json_dump(output / "trace_parent_resolution_train.json", {
         "schema": "trace_parent_resolution_train_v1", "key": "(trace_id, span_id)",
         "parent_map_split_local": True, "parent_rows": parent_rows, "duplicate_parent_keys": duplicate_keys,
+        "ambiguous_parent_keys": ambiguous_parent_keys,
         "invalid_parent_rows": invalid_parent_rows, **dict(counters), "graph_selection_performed": False,
     })
     values = np.asarray(duration_sample, dtype=float)
