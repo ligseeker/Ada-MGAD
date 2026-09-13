@@ -1,0 +1,26 @@
+{
+  "config": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p5_v3.json",
+    "sha256": "121bdaddc7d8d70087a5ecd41ebc2070a3534d52ec13b76f9945dc916df90449"
+  },
+  "event_registry": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv",
+    "sha256": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+    "taxonomy_version": "gaia-v3-20260913"
+  },
+  "evidence_status": "IMPLEMENTATION_BINDING",
+  "formal_execution": {
+    "full_preprocessing_executed": false,
+    "full_test_executed": false,
+    "full_training_executed": false,
+    "smoke_only_until_explicit_operator_run": true
+  },
+  "generated_by_commit": "4980990c62d629009506decd345714d703ed4843",
+  "protocol_id": "P5-V3-GAIA-W300-B15",
+  "raw_run_table": {
+    "path": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS/run/run/run/run_table_2021-07.csv",
+    "sha256": "f6752f1bb46b63ebff05639093477963735370c6d70a1588ddebb304d952cb0b"
+  },
+  "schema_version": "p5_v3_gaia_protocol_manifest_v1",
+  "split_manifest": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/split_manifest.json"
+}

@@ -1,4 +1,4 @@
-"""Frozen P5-I1 protocol, registry binding, and chronological split helpers."""
+"""Frozen GAIA V3 protocol, registry binding, and chronological split helpers."""
 
 from dataclasses import dataclass
 import hashlib
@@ -22,11 +22,12 @@ GAIA_SERVICES = (
     "webservice2",
 )
 SUPPORTED_FAULT_TYPES = (
-    "login failure",
+    "login_failure",
     "memory_anomalies",
     "cpu_anomalies",
-    "file moving program",
-    "access permission denied exception",
+    "file_moving",
+    "normal_memory_freed",
+    "access_permission_denied",
 )
 
 
@@ -40,8 +41,6 @@ class TemporalBlock:
     is_final: bool = False
 
     def contains_anchor(self, timestamp_ms: int) -> bool:
-        if self.is_final:
-            return self.start_ms <= timestamp_ms <= self.end_ms
         return self.start_ms <= timestamp_ms < self.end_ms
 
     def contains_interval(self, start_ms: int, end_ms: int) -> bool:
@@ -81,23 +80,49 @@ def layout_digest(root: Path, paths: Iterable[Path]) -> Mapping[str, object]:
 
 
 def load_config(path: Path) -> Mapping[str, object]:
-    """Load the JSON-compatible YAML used to avoid an optional YAML runtime."""
+    """Load and fail closed on drift from the V3 protocol."""
 
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     services = tuple(data["services"])
     if services != GAIA_SERVICES:
         raise ValueError("config service registry/order differs from canonical GAIA registry")
+    if not str(data.get("schema_version", "")).startswith("p5_v3_"):
+        # The checked-in V1 fixture remains readable by historical audit unit
+        # tests.  No V3 production entry point accepts or derives artifacts
+        # from this compatibility branch.
+        return data
     if int(data["ad"]["grid_seconds"]) != 30 or int(data["ad"]["window_bins"]) != 10:
-        raise ValueError("P5-I1 Ada-MGAD grid/window protocol drift")
+        raise ValueError("GAIA V3 Ada-MGAD grid/window protocol drift")
+    if int(data["ad"].get("epochs", 0)) != 100 or int(data["ad"].get("patience", 0)) != 10:
+        raise ValueError("GAIA V3 requires max_epochs=100 and patience=10")
+    if str(data["ad"].get("early_stopping_metric")) != "train_total_loss":
+        raise ValueError("GAIA V3 early stopping must use train_total_loss")
+    if str(data["ad"].get("primary_checkpoint")) != "best_train_loss.pt":
+        raise ValueError("GAIA V3 primary checkpoint must be best_train_loss.pt")
+    if "expected_events" in data.get("event_registry", {}):
+        raise ValueError("event registry row counts must be derived, not hardcoded")
+    if str(data["event_trigger"].get("threshold_selection")) != "train_only_exact_unique_scores":
+        raise ValueError("GAIA V3 threshold selection must be Train-only")
+    if str(data["event_trigger"].get("matching_semantics")) != "causal_max_cardinality_minimum_delay":
+        raise ValueError("GAIA V3 event matching semantics drift")
+    split = data.get("split", {})
+    if str(split.get("mode")) != "chronological_metric_70_30":
+        raise ValueError("GAIA V3 requires the metric-based chronological 70/30 split")
+    if int(split.get("train_fraction_numerator", 0)) != 7 or int(
+        split.get("train_fraction_denominator", 0)
+    ) != 10:
+        raise ValueError("GAIA V3 split must use K=(7*N)//10")
+    if "validation" in json.dumps(split).lower():
+        raise ValueError("GAIA V3 split binding must not contain a validation partition")
     rca = data["rca"]
     if int(rca["window_seconds"]) != 300 or int(rca["bin_seconds"]) != 15:
-        raise ValueError("P5-I1 requires W300-B15")
+        raise ValueError("GAIA V3 requires W300-B15")
     preprocessing = data["preprocessing"]
     cpu_budget = int(preprocessing["cpu_budget"])
     if cpu_budget < 1:
         raise ValueError("preprocessing CPU budget must be positive")
-    for key in ("ad_workers", "rca_index_workers", "rca_feature_workers"):
-        value = int(preprocessing[key])
+    for key in ("metric_workers", "log_workers", "trace_workers", "ad_workers", "rca_index_workers", "rca_feature_workers"):
+        value = int(preprocessing.get(key, preprocessing.get("ad_workers", 1)))
         if value < 1 or value > cpu_budget:
             raise ValueError("{} must be within the preprocessing CPU budget".format(key))
     if str(preprocessing["multiprocessing_start_method"]) not in ("spawn", "forkserver"):
@@ -117,6 +142,9 @@ def preprocessing_runtime(
     """Resolve bounded runtime controls without changing scientific protocol."""
 
     keys = {
+        "metric": "metric_workers",
+        "logs": "log_workers",
+        "traces": "trace_workers",
         "ad": "ad_workers",
         "rca_index": "rca_index_workers",
         "rca_features": "rca_feature_workers",
@@ -124,9 +152,8 @@ def preprocessing_runtime(
     if stage not in keys:
         raise ValueError("unknown preprocessing stage: {}".format(stage))
     frozen = config["preprocessing"]
-    resolved_workers = int(
-        frozen[keys[stage]] if workers is None else workers
-    )
+    configured_workers = int(frozen.get(keys[stage], frozen.get("ad_workers", 1)))
+    resolved_workers = int(configured_workers if workers is None else workers)
     cpu_budget = int(frozen["cpu_budget"])
     if resolved_workers < 1 or resolved_workers > cpu_budget:
         raise ValueError(
@@ -161,15 +188,28 @@ def preprocessing_runtime(
 
 def temporal_blocks(config: Mapping[str, object]) -> Tuple[TemporalBlock, ...]:
     split = config["split"]
-    boundaries = tuple(int(value) for value in split["boundaries_ms"])
+    if str(split.get("mode", "")).endswith("60_20_20"):
+        boundaries = [int(value) for value in split["boundaries_ms"]]
+        return (
+            TemporalBlock("train", int(split["absolute_start_ms"]), boundaries[0]),
+            TemporalBlock("validation", boundaries[0], boundaries[1]),
+            TemporalBlock("test", boundaries[1], int(split["absolute_end_ms"]), is_final=True),
+        )
     overall_start = int(split["absolute_start_ms"])
     overall_end = int(split["absolute_end_ms"])
-    if not overall_start < boundaries[0] < boundaries[1] < overall_end:
-        raise ValueError("chronological split boundaries must be strictly ordered")
+    grid_ms = int(config["ad"]["grid_seconds"]) * 1000
+    duration = overall_end - overall_start
+    if duration <= 0 or duration % grid_ms:
+        raise ValueError("metric detector timeline must contain whole 30-second bins")
+    n = duration // grid_ms
+    train_bins = (7 * n) // 10
+    boundary = overall_start + train_bins * grid_ms
+    declared = split.get("boundary_ms")
+    if declared is not None and int(declared) != boundary:
+        raise ValueError("declared 70/30 split boundary differs from K=(7*N)//10")
     return (
-        TemporalBlock("train", overall_start, boundaries[0]),
-        TemporalBlock("validation", boundaries[0], boundaries[1]),
-        TemporalBlock("test", boundaries[1], overall_end, is_final=True),
+        TemporalBlock("train", overall_start, boundary),
+        TemporalBlock("test", boundary, overall_end, is_final=True),
     )
 
 
@@ -185,15 +225,15 @@ def load_registry(config: Mapping[str, object], project_root: Path) -> pd.DataFr
     }
     if not required.issubset(frame.columns):
         raise ValueError("event registry is missing required columns")
-    if len(frame) != int(binding["expected_events"]):
-        raise ValueError("event registry row count mismatch")
     if frame["case_id"].duplicated().any():
         raise ValueError("event registry case IDs must be unique")
+    if "labelled_service" not in frame.columns:
+        frame["labelled_service"] = frame["service"]
     if not set(frame["service"]).issubset(GAIA_SERVICES):
         raise ValueError("event registry contains a service outside the canonical registry")
-    if set(frame["fault_type"]) != set(SUPPORTED_FAULT_TYPES):
+    if str(config.get("schema_version", "")).startswith("p5_v3_") and set(frame["fault_type"]) != set(SUPPORTED_FAULT_TYPES):
         raise ValueError("event registry supported fault taxonomy mismatch")
-    if (frame["end_ms"] < frame["start_ms"]).any():
+    if (frame["end_ms"] <= frame["start_ms"]).any():
         raise ValueError("event registry contains a negative interval")
     return frame.sort_values(["start_ms", "source_index", "case_id"], kind="stable").reset_index(drop=True)
 
@@ -267,8 +307,8 @@ def count_crossing_ad_windows(
 
     grid_ms = int(grid_seconds) * 1000
     lookback_ms = (int(window_bins) - 1) * grid_ms
-    start = (blocks[0].start_ms // grid_ms) * grid_ms
-    end = (blocks[-1].end_ms // grid_ms) * grid_ms
+    start = ((blocks[0].start_ms + grid_ms - 1) // grid_ms) * grid_ms
+    end = ((blocks[-1].end_ms - grid_ms) // grid_ms) * grid_ms
     crossing = []
     by_split = {block.name: 0 for block in blocks}
     outside_absolute_range = 0
@@ -292,7 +332,7 @@ def count_crossing_ad_windows(
         "purged_windows_by_split": by_split,
         "unassigned_grid_timestamps_outside_absolute_range": outside_absolute_range,
         "purged_prediction_timestamps_ms": crossing,
-        "window_interval": "[prediction_timestamp-(window_bins-1)*grid, prediction_timestamp+grid)",
+        "window_interval": "[target_bin_start-(window_bins-1)*grid,target_bin_start+grid)",
     }
 
 

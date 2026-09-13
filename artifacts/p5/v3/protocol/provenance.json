@@ -1,0 +1,104 @@
+{
+  "artifacts": {
+    "assigned_event_registry.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/assigned_event_registry.csv",
+      "sha256": "47d70a96878d4a5b369c03a5b1dc0d1f7af453222615eab5f9c6e2918268c154"
+    },
+    "gt_event_registry.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv",
+      "sha256": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b"
+    },
+    "purged_event_registry.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/purged_event_registry.csv",
+      "sha256": "0c6a81c97b15dec8dc9df3d8e4d281bd86c01f55e035ede64dd3758e4eec9fb4"
+    }
+  },
+  "config": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p5_v3.json",
+    "sha256": "121bdaddc7d8d70087a5ecd41ebc2070a3534d52ec13b76f9945dc916df90449"
+  },
+  "detector_timeline": {
+    "end_ms": 1627747200000,
+    "grid_seconds": 30,
+    "interval": "[start_ms,end_ms)",
+    "start_ms": 1625133600000
+  },
+  "evidence_status": "REVALIDATED FACT",
+  "generated_by_commit": "4980990c62d629009506decd345714d703ed4843",
+  "raw_run_table": {
+    "columns_used": [
+      "datetime",
+      "service",
+      "message"
+    ],
+    "path": "/home/zhangll24/RCA_project/datasets/GAIA/MicroSS/run/run/run/run_table_2021-07.csv",
+    "preparsed_columns_ignored": true,
+    "rows": 17152,
+    "sha256": "f6752f1bb46b63ebff05639093477963735370c6d70a1588ddebb304d952cb0b"
+  },
+  "registry": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv",
+    "rows": 16217,
+    "sha256": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b"
+  },
+  "schema_version": "p5_v3_gaia_gt_provenance_v1",
+  "semantics": {
+    "cpu_duration": "floating-point seconds preserved before millisecond end calculation",
+    "error_traceback_exclusion": "run-table ERROR and continuation rows are not GT; business telemetry ERROR remains input",
+    "gt_unit": "one raw injection equals one GT event",
+    "interval": "half-open [start_ms,end_ms)",
+    "normal_memory_freed": "message timestamp plus 600 seconds"
+  },
+  "split": {
+    "boundary_ms": 1626963120000,
+    "integer_rule": "K=(7*N)//10",
+    "intervals": {
+      "test": "[boundary_ms,detector_end_ms)",
+      "train": "[detector_start_ms,boundary_ms)"
+    },
+    "mode": "chronological_metric_70_30"
+  },
+  "taxonomy": {
+    "detector_domain_gt_count": 16132,
+    "fault_counts": {
+      "access_permission_denied": 15,
+      "cpu_anomalies": 12,
+      "file_moving": 43,
+      "login_failure": 15478,
+      "memory_anomalies": 652,
+      "normal_memory_freed": 17
+    },
+    "fault_types": [
+      "login_failure",
+      "memory_anomalies",
+      "file_moving",
+      "normal_memory_freed",
+      "access_permission_denied",
+      "cpu_anomalies"
+    ],
+    "level_distribution": {
+      "": 36,
+      "ERROR": 38,
+      "INFO": 861,
+      "WARNING": 16217
+    },
+    "outside_detector_domain_count": 85,
+    "raw_gt_count": 16217,
+    "raw_type_distribution": {
+      "access_permission_denied": 15,
+      "cpu_anomalies": 12,
+      "error_record": 38,
+      "file_moving": 43,
+      "login_failure": 15478,
+      "memory_anomalies": 652,
+      "normal_memory_freed": 17,
+      "normal_record": 851,
+      "traceback_continuation": 36,
+      "unsupported": 10
+    },
+    "split_boundary_purge_count": 1,
+    "test_gt_count": 5787,
+    "train_gt_count": 10344
+  },
+  "taxonomy_version": "gaia-v3-20260913"
+}

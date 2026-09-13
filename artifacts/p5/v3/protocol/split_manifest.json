@@ -1,0 +1,84 @@
+{
+  "ad_window_purge": {
+    "candidate_prediction_timestamps": 87120,
+    "purged_prediction_timestamps_ms": [
+      1625133600000,
+      1625133630000,
+      1625133660000,
+      1625133690000,
+      1625133720000,
+      1625133750000,
+      1625133780000,
+      1625133810000,
+      1625133840000,
+      1626963120000,
+      1626963150000,
+      1626963180000,
+      1626963210000,
+      1626963240000,
+      1626963270000,
+      1626963300000,
+      1626963330000,
+      1626963360000
+    ],
+    "purged_windows": 18,
+    "purged_windows_by_split": {
+      "test": 9,
+      "train": 9
+    },
+    "unassigned_grid_timestamps_outside_absolute_range": 0,
+    "window_interval": "[target_bin_start-(window_bins-1)*grid,target_bin_start+grid)"
+  },
+  "blocks": [
+    {
+      "end_ms": 1626963120000,
+      "interval": "[start_ms,end_ms)",
+      "name": "train",
+      "start_ms": 1625133600000
+    },
+    {
+      "end_ms": 1627747200000,
+      "interval": "[start_ms,end_ms)",
+      "name": "test",
+      "start_ms": 1626963120000
+    }
+  ],
+  "config_sha256": "121bdaddc7d8d70087a5ecd41ebc2070a3534d52ec13b76f9945dc916df90449",
+  "event_counts": {
+    "assigned_rows": 16131,
+    "by_fault_type": {
+      "access_permission_denied": 15,
+      "cpu_anomalies": 12,
+      "file_moving": 43,
+      "login_failure": 15478,
+      "memory_anomalies": 652,
+      "normal_memory_freed": 17
+    },
+    "by_split": {
+      "boundary_purge": 1,
+      "outside_detector_domain": 85,
+      "test": 5787,
+      "train": 10344
+    },
+    "purged_rows": 86,
+    "raw_registry_rows": 16217,
+    "test_rows": 5787,
+    "train_rows": 10344
+  },
+  "event_registry_sha256": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+  "metric_grid": {
+    "K": 60984,
+    "N": 87120,
+    "grid_seconds": 30,
+    "integer_rule": "K=(7*N)//10"
+  },
+  "protocol_id": "P5-V3-GAIA-W300-B15",
+  "schema_version": "p5_v3_gaia_split_manifest_v1",
+  "semantics": {
+    "label_interval": "half-open overlap: bin_start < event_end and bin_end > event_start",
+    "prediction_time": "prediction_available_time=target_bin_end",
+    "test_fit_or_select": false,
+    "train_test_isolation": true,
+    "validation_split": false
+  }
+}
