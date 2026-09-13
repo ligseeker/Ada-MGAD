@@ -83,15 +83,36 @@ class Base(nn.Module):
         return batch_input
 
     # Loading modal paras
+    def _checkpoint_path(self, model_save_file="", name='loss'):
+        root = os.fspath(model_save_file)
+        aliases = {
+            'loss': 'best_train_loss.pt',
+            'f1': 'best_train_f1.pt',
+            'last': 'last.pt',
+            'best_train_loss': 'best_train_loss.pt',
+            'best_train_f1': 'best_train_f1.pt',
+        }
+        filename = aliases.get(str(name), str(name))
+        if not filename.endswith('.pt'):
+            filename = filename + '.pt'
+        return os.path.join(root, filename)
+
     def load_model(self, model_save_file="", name='loss'):
         if model_save_file == ' ':
             logging.info(f'No {self.model.name} statue file')
         else:
             logging.info(f'{self.model.name} on {model_save_file} loading...')
-            ckpt_path = os.path.join(model_save_file, f"{self.model.name}_{name}_stage.ckpt")
+            ckpt_path = self._checkpoint_path(model_save_file, name)
             if os.path.exists(ckpt_path):
                 self.model.load_state_dict(torch.load(ckpt_path, map_location=self.device))
             else:
+                # Read-only compatibility with pre-V3 checkpoints. Formal V3
+                # runs never select these names.
+                legacy_ckpt_path = os.path.join(model_save_file, f"{self.model.name}_{name}_stage.ckpt")
+                if os.path.exists(legacy_ckpt_path):
+                    logging.info(f"{ckpt_path} not found, loading legacy checkpoint {legacy_ckpt_path}.")
+                    self.model.load_state_dict(torch.load(legacy_ckpt_path, map_location=self.device))
+                    return
                 legacy_ckpt_path = os.path.join(model_save_file, f"my_{name}_stage.ckpt")
                 if os.path.exists(legacy_ckpt_path):
                     logging.info(f"{ckpt_path} not found, loading legacy checkpoint {legacy_ckpt_path}.")
@@ -102,7 +123,7 @@ class Base(nn.Module):
     # Saving modal paras
     def save_model(self, best_dict, model_save_dir="", name='loss'):
         os.makedirs(model_save_dir, exist_ok=True)
-        file_status = os.path.join(model_save_dir, f"{self.model.name}_{name}_stage.ckpt")
+        file_status = self._checkpoint_path(model_save_dir, name)
         if best_dict['state'] is None:
             logging.info(f'No {self.model.name} - {name} statue file')
         else: 
@@ -301,7 +322,7 @@ class MY(Base):
         }
         return self.fit_summary
 
-    def evaluate(self, test_loader, isFinall=False):
+    def evaluate(self, test_loader, isFinall=False, calibration=None):
         self.model.eval()
         if hasattr(self.model, 'reset_dynamic_graph_cache'):
             self.model.reset_dynamic_graph_cache(reset_stats=True)
@@ -329,7 +350,9 @@ class MY(Base):
             label_list = torch.concat(label_list, dim=0).cpu()
             if self.score_fusion_alpha < 1.0 and rec_score_list:
                 rec_score_list = torch.concat(rec_score_list, dim=0).reshape(-1).cpu()
-                predict_list = self._fuse_predict_with_reconstruction(predict_list, rec_score_list)
+                predict_list = self._fuse_predict_with_reconstruction(
+                    predict_list, rec_score_list, calibration=calibration
+                )
             if sample_indices:
                 flat_indices = torch.concat(sample_indices, dim=0).tolist()
                 seen = set()
@@ -348,18 +371,167 @@ class MY(Base):
             else:
                 return result
 
-    def _fuse_predict_with_reconstruction(self, predict_list, rec_scores):
+    def _fuse_predict_with_reconstruction(self, predict_list, rec_scores, calibration=None):
         original_shape = predict_list.shape
         cls_probs = predict_list.reshape(-1, predict_list.shape[-1])
         rec_scores = rec_scores.reshape(-1)
-        rec_probs = self._reconstruction_energy_to_prob(rec_scores)
+        rec_probs = self._reconstruction_energy_to_prob(rec_scores, calibration=calibration)
         alpha = min(max(self.score_fusion_alpha, 0.0), 1.0)
         fused_anomaly = alpha * cls_probs[:, 1] + (1 - alpha) * rec_probs
         fused_anomaly = fused_anomaly.clamp(0.0, 1.0)
         return torch.stack([1 - fused_anomaly, fused_anomaly], dim=-1).reshape(original_shape)
 
-    def _reconstruction_energy_to_prob(self, rec_scores):
+    def _reconstruction_energy_to_prob(self, rec_scores, calibration=None):
+        if calibration is not None:
+            values = rec_scores.detach().cpu().numpy()
+            transformed = calibration.transform_scores(values)
+            return torch.as_tensor(transformed, dtype=rec_scores.dtype, device=rec_scores.device)
         median = torch.median(rec_scores)
         mad = torch.median(torch.abs(rec_scores - median)).clamp_min(1e-6)
         normalized = (rec_scores - median) / (1.4826 * mad)
         return torch.sigmoid(normalized)
+
+    def fit(self, train_loader, train_eval_loader=None, test_loader=None, val_loader=None, **args):
+        """V3 Train-only trainer with loss-primary checkpoint governance.
+
+        The earlier method in this file is retained only for source-level
+        comparison with the upstream trainer; this definition is the active
+        method.  Passing a Validation or Test loader is an explicit error so a
+        legacy caller cannot silently contaminate selection or early stopping.
+        """
+
+        if test_loader is not None or val_loader is not None:
+            raise ValueError("V3 training forbids validation/test loaders; use Train-only fit")
+        train_eval_loader = train_loader if train_eval_loader is None else train_eval_loader
+        optimizer = AdaBelief(
+            self.model.parameters(), lr=self.learning_rate, weight_decay=self.weight_decay
+        )
+        scheduler = torch.optim.lr_scheduler.StepLR(
+            optimizer, self.learning_change, self.learning_gamma
+        )
+        best = {
+            "loss": {"score": float("inf"), "state": None, "epoch": 0},
+            "f1": {"score": float("-inf"), "state": None, "epoch": 0},
+        }
+        worse_count = 0
+        history = []
+        completed_epochs = 0
+        stop_reason = "max_epochs"
+        label_weight = torch.tensor(
+            np.array(list(self.True_list.values())), dtype=torch.float, device=self.device
+        )
+        losser = nn.BCEWithLogitsLoss(reduction="mean", weight=label_weight)
+        logging.info("optimizer : using AdaBelief; early stopping metric: train_total_loss")
+        global_step = 0
+
+        for epoch in range(self.epoches):
+            lr = optimizer.param_groups[0]["lr"]
+            para = torch.tensor(1 / (epoch // self.rec_down + 1), device=self.device)
+            para = para if para > self.para_low else self.para_low
+            gamma = self._contrast_gamma(epoch)
+            if hasattr(self.model, "reset_dynamic_graph_cache"):
+                self.model.reset_dynamic_graph_cache(reset_stats=True)
+            self.model.train()
+            sums = {"total": 0.0, "cls": 0.0, "rec": 0.0, "contrast": 0.0, "graph": 0.0}
+            batch_count = 0
+            epoch_started = time.time()
+            with tqdm(train_loader, disable=not self.batch_progress, desc="train", leave=False) as tbar:
+                for batch_input in tbar:
+                    batch_input = self.input2device(batch_input, self.use_gpu)
+                    optimizer.zero_grad()
+                    raw_loss, cls_result, cls_label, contrast_loss, graph_reg_loss = self.model(
+                        batch_input, global_step=global_step, compute_contrast=gamma > 0
+                    )
+                    rec_loss = sum(raw_loss)
+                    cls_loss = (
+                        torch.zeros((), dtype=torch.float32, device=self.device)
+                        if cls_result.shape[0] == 0 else losser(cls_result, cls_label)
+                    )
+                    loss = (1 - para) * cls_loss + para * rec_loss + gamma * contrast_loss + graph_reg_loss
+                    if not torch.isfinite(loss):
+                        raise FloatingPointError("non-finite total loss in Train epoch {}".format(epoch))
+                    loss.backward()
+                    nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=10, norm_type=2)
+                    optimizer.step()
+                    global_step += 1
+                    batch_count += 1
+                    sums["total"] += float(loss.item())
+                    sums["cls"] += float(cls_loss.item())
+                    sums["rec"] += float(rec_loss.item())
+                    sums["contrast"] += float(contrast_loss.item())
+                    sums["graph"] += float(graph_reg_loss.item())
+                    if self.batch_progress:
+                        tbar.set_postfix(loss=f"{loss.item():.6f}", cls=f"{cls_loss.item():.6f}")
+            if batch_count == 0:
+                raise ValueError("Train loader yielded no complete batches")
+            completed_epochs += 1
+            epoch_values = {key: value / batch_count for key, value in sums.items()}
+            train_result = {"pr": 0.0, "rc": 0.0, "auc": 0.0, "ap": 0.0, "f1": 0.0}
+            if self.train_eval_interval > 0 and (
+                (epoch + 1) % self.train_eval_interval == 0 or epoch == self.epoches - 1
+            ):
+                if hasattr(self.model, "reset_dynamic_graph_cache"):
+                    self.model.reset_dynamic_graph_cache()
+                train_result = self.evaluate(train_eval_loader)
+                logging.info(
+                    "[train] pr:{pr:.4f} rc:{rc:.4f} auc:{auc} ap:{ap} f1:{f1:.4f}".format(
+                        **train_result
+                    )
+                )
+            if epoch_values["total"] < best["loss"]["score"]:
+                best["loss"] = {
+                    "score": epoch_values["total"],
+                    "state": copy.deepcopy(self.model.state_dict()),
+                    "epoch": epoch,
+                }
+                worse_count = 0
+            else:
+                worse_count += 1
+            if float(train_result["f1"]) > best["f1"]["score"]:
+                best["f1"] = {
+                    "score": float(train_result["f1"]),
+                    "state": copy.deepcopy(self.model.state_dict()),
+                    "epoch": epoch,
+                }
+            history.append({
+                "epoch": int(epoch),
+                "train_total_loss": float(epoch_values["total"]),
+                "train_classification_loss": float(epoch_values["cls"]),
+                "train_reconstruction_loss": float(epoch_values["rec"]),
+                "train_contrastive_loss": float(epoch_values["contrast"]),
+                "train_graph_regularization_loss": float(epoch_values["graph"]),
+                "train_metrics": {key: float(value) for key, value in train_result.items()},
+                "complete_train_epoch": True,
+                "batch_count": int(batch_count),
+                "epoch_seconds": float(time.time() - epoch_started),
+            })
+            os.makedirs(self.model_save_dir, exist_ok=True)
+            torch.save(self.model.state_dict(), self._checkpoint_path(self.model_save_dir, "last"))
+            logging.info(
+                "Epoch %d/%d train_total_loss=%.6f best=%.6f patience=%d",
+                epoch + 1, self.epoches, epoch_values["total"], best["loss"]["score"], worse_count,
+            )
+            scheduler.step()
+            if self.patience > 0 and worse_count >= self.patience:
+                stop_reason = "train_total_loss_patience"
+                break
+
+        if best["loss"]["state"] is None or best["f1"]["state"] is None:
+            raise RuntimeError("Train did not produce complete checkpoint states")
+        self.save_model(best["loss"], self.model_save_dir, name="best_train_loss")
+        self.save_model(best["f1"], self.model_save_dir, name="best_train_f1")
+        self.fit_summary = {
+            "checkpoint_policy": "best_train_loss_primary_best_train_f1_diagnostic",
+            "early_stopping_metric": "train_total_loss",
+            "selection_split": "train_diagnostic_only",
+            "best_train_loss": float(best["loss"]["score"]),
+            "best_train_loss_epoch": int(best["loss"]["epoch"]),
+            "best_train_f1": float(best["f1"]["score"]),
+            "best_train_f1_epoch": int(best["f1"]["epoch"]),
+            "epochs_completed": int(completed_epochs),
+            "stop_reason": stop_reason,
+            "test_used_for_fit_or_selection": False,
+            "validation_used_for_fit_or_selection": False,
+            "history": history,
+        }
+        return self.fit_summary

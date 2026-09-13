@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Prepare, smoke-test, train, and infer the P5-I1 Ada-MGAD-G stage."""
+"""Run the V3 Ada-MGAD detector stage on Train/Test arrays."""
+
+from __future__ import annotations
 
 import argparse
 from datetime import datetime, timezone
@@ -12,11 +14,7 @@ import sys
 
 import numpy as np
 import pandas as pd
-from sklearn.metrics import (
-    average_precision_score,
-    precision_recall_fscore_support,
-    roc_auc_score,
-)
+from sklearn.metrics import average_precision_score, precision_recall_fscore_support, roc_auc_score
 import torch
 from torch.utils.data import DataLoader
 
@@ -32,9 +30,12 @@ from src.e2e.ad_data import (
     save_split_arrays,
 )
 from src.e2e.ad_preprocess import build_ad_data
-from src.e2e.protocol import (
-    GAIA_SERVICES, load_config, preprocessing_runtime, sha256_file, write_json,
+from src.e2e.calibration import (
+    fit_reconstruction_calibration,
+    save_reconstruction_calibration,
+    load_reconstruction_calibration,
 )
+from src.e2e.protocol import GAIA_SERVICES, load_config, preprocessing_runtime, sha256_file, write_json
 from src.model import MyModel
 from util.train import MY
 from util.util import seed_everything
@@ -43,45 +44,34 @@ from util.util import seed_everything
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("preprocess", "smoke", "train", "infer", "all"))
-    parser.add_argument("--config", default="configs/e2e/gaia_p5_v1.yaml")
-    parser.add_argument("--data-root", default="data/p5/i1/ad")
-    parser.add_argument("--artifact-root", default="artifacts/p5/i1")
-    parser.add_argument("--checkpoint-dir", default="data/p5/i1/checkpoint")
-    parser.add_argument(
-        "--raw-root", default=None,
-        help="Optional byte-layout-verified execution mirror of the canonical GAIA raw root.",
-    )
+    parser.add_argument("--config", default="configs/e2e/gaia_p5_v3.json")
+    parser.add_argument("--data-root", default="data/p5/v3/ad")
+    parser.add_argument("--artifact-root", default="artifacts/p5/v3/ad")
+    parser.add_argument("--checkpoint-dir", default="data/p5/v3/checkpoint")
+    parser.add_argument("--raw-root", default=None)
     parser.add_argument("--chunk-rows", default=None, type=int)
-    parser.add_argument("--workers", default=None, type=int,
-                        help="Raw preprocessing processes; defaults to frozen config.")
+    parser.add_argument("--workers", default=None, type=int)
     parser.add_argument("--start-method", choices=("spawn", "forkserver"), default=None)
-    parser.add_argument("--gpu", default=True, type=lambda value: value.lower() == "true")
+    parser.add_argument("--gpu", default=False, type=lambda value: value.lower() == "true")
     return parser.parse_args()
 
 
 def git_head() -> str:
-    return subprocess.check_output(
-        ["git", "rev-parse", "HEAD"], cwd=str(PROJECT_ROOT), text=True
-    ).strip()
+    return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(PROJECT_ROOT), text=True).strip()
 
 
 def model_args(config, manifest, checkpoint_dir: Path, gpu: bool, overrides=None):
     args = dict(config["ad_model"])
     args.update({
-        "random_seed": int(config["random_seed"]),
-        "gpu": bool(gpu),
-        "epochs": int(config["ad"]["epochs"]),
-        "patience": float(config["ad"]["patience"]),
-        "window": int(config["ad"]["window_bins"]),
-        "step": int(config["ad"]["window_step"]),
-        "num_nodes": len(GAIA_SERVICES),
-        "raw_node": int(manifest["dimensions"]["raw_node"]),
+        "random_seed": int(config["random_seed"]), "gpu": bool(gpu),
+        "epochs": int(config["ad"]["epochs"]), "patience": int(config["ad"]["patience"]),
+        "early_stopping_metric": str(config["ad"]["early_stopping_metric"]),
+        "window": int(config["ad"]["window_bins"]), "step": int(config["ad"]["window_step"]),
+        "num_nodes": len(GAIA_SERVICES), "raw_node": int(manifest["dimensions"]["raw_node"]),
         "log_len": int(manifest["dimensions"]["log_len"]),
         "raw_edge": int(manifest["dimensions"]["raw_edge"]),
-        "result_dir": str(checkpoint_dir.resolve()),
-        "model_path": str(checkpoint_dir.resolve()),
-        "main_model": "Ada-MGAD-G",
-        "evaluate": False,
+        "result_dir": str(checkpoint_dir.resolve()), "model_path": str(checkpoint_dir.resolve()),
+        "main_model": "Ada-MGAD-G", "evaluate": False,
     })
     if overrides:
         args.update(overrides)
@@ -97,64 +87,63 @@ def build_loaders(datasets, args):
     }
     if int(args["num_workers"]) > 0:
         common["persistent_workers"] = bool(args["persistent_workers"])
-    train_generator = torch.Generator()
-    train_generator.manual_seed(int(args["random_seed"]))
     train = DataLoader(
-        datasets["train"], shuffle=True, drop_last=True,
-        generator=train_generator, **common
+        # The upstream model constructs a fixed batch-size graph index.  Pad
+        # only within Train, so every real window participates in the epoch and
+        # no partial batch can address a non-existent graph node.
+        datasets["train"], sampler=PaddedSequentialSampler(datasets["train"], batch_size),
+        drop_last=False, **common
     )
-    validation = DataLoader(
-        datasets["validation"],
-        sampler=PaddedSequentialSampler(datasets["validation"], batch_size),
+    train_eval = DataLoader(
+        datasets["train"], sampler=PaddedSequentialSampler(datasets["train"], batch_size),
         drop_last=False, **common
     )
     test = DataLoader(
-        datasets["test"],
-        sampler=PaddedSequentialSampler(datasets["test"], batch_size),
+        datasets["test"], sampler=PaddedSequentialSampler(datasets["test"], batch_size),
         drop_last=False, **common
     )
-    return train, validation, test
+    return {"train": train, "train_eval": train_eval, "test": test}
 
 
-def _deduplicate(indices, scores, labels):
+def _deduplicate(indices, *values):
     order = np.argsort(indices, kind="stable")
-    indices = indices[order]
-    scores = scores[order]
-    labels = labels[order]
-    keep = np.ones(len(indices), dtype=bool)
-    keep[1:] = indices[1:] != indices[:-1]
-    return indices[keep], scores[keep], labels[keep]
+    sorted_indices = np.asarray(indices)[order]
+    keep = np.ones(len(sorted_indices), dtype=bool)
+    if len(keep) > 1:
+        keep[1:] = sorted_indices[1:] != sorted_indices[:-1]
+    return (sorted_indices[keep],) + tuple(np.asarray(value)[order][keep] for value in values)
 
 
-def timestamped_predict(system: MY, loader, dataset):
+def timestamped_predict(system: MY, loader, dataset, calibration=None):
+    """Collect one prediction per window and apply the supplied frozen calibration."""
+
     system.model.eval()
-    all_indices = []
-    all_scores = []
-    all_labels = []
-    reconstruction = []
+    all_indices, all_scores, all_labels, all_reconstruction = [], [], [], []
     with torch.no_grad():
         for batch in loader:
             batch = system.input2device(batch, system.use_gpu)
+            scores, _, reconstruction = system.model(batch, evaluate=True, return_eval_aux=True)
             all_indices.append(batch["sample_index"].reshape(-1).long().cpu().numpy())
-            if system.score_fusion_alpha < 1.0:
-                scores, _, rec = system.model(batch, evaluate=True, return_eval_aux=True)
-                reconstruction.append(rec.reshape(-1).cpu())
-            else:
-                scores, _ = system.model(batch, evaluate=True)
             all_scores.append(scores.cpu())
-            all_labels.append(batch["groundtruth_real"].cpu())
-    score_tensor = torch.concat(all_scores, dim=0)
-    if reconstruction:
-        score_tensor = system._fuse_predict_with_reconstruction(
-            score_tensor, torch.concat(reconstruction, dim=0)
-        )
+            all_labels.append(batch["groundtruth_real"].cpu().numpy())
+            all_reconstruction.append(reconstruction.cpu().numpy())
+    if not all_indices:
+        raise ValueError("prediction loader yielded no rows")
     indices = np.concatenate(all_indices).astype(np.int64)
-    scores = score_tensor.numpy()
-    labels = torch.concat(all_labels, dim=0).numpy()
-    indices, scores, labels = _deduplicate(indices, scores, labels)
+    scores = torch.concat(all_scores, dim=0).numpy()
+    labels = np.concatenate(all_labels, axis=0)
+    reconstruction = np.concatenate(all_reconstruction, axis=0)
+    indices, scores, labels, reconstruction = _deduplicate(indices, scores, labels, reconstruction)
     if len(indices) != len(dataset) or not np.array_equal(indices, np.arange(len(dataset))):
         raise ValueError("timestamped prediction did not cover every window exactly once")
-    return indices, scores, labels
+    raw_scores = reconstruction.reshape(-1)
+    if calibration is not None:
+        score_tensor = torch.as_tensor(scores, dtype=torch.float32)
+        reconstruction_tensor = torch.as_tensor(reconstruction, dtype=torch.float32)
+        scores = system._fuse_predict_with_reconstruction(
+            score_tensor, reconstruction_tensor, calibration=calibration
+        ).numpy()
+    return indices, scores, labels, raw_scores
 
 
 def node_metrics(scores: np.ndarray, labels: np.ndarray):
@@ -173,14 +162,9 @@ def node_metrics(scores: np.ndarray, labels: np.ndarray):
     except ValueError:
         ap = None
     return {
-        "precision": float(precision),
-        "recall": float(recall),
-        "f1": float(f1),
-        "auc": auc,
-        "average_precision": ap,
-        "node_rows": int(len(actual)),
-        "positive_labels": int(actual.sum()),
-        "positive_predictions": int(predicted.sum()),
+        "precision": float(precision), "recall": float(recall), "f1": float(f1),
+        "auc": auc, "average_precision": ap, "node_rows": int(len(actual)),
+        "positive_labels": int(actual.sum()), "positive_predictions": int(predicted.sum()),
     }
 
 
@@ -191,104 +175,151 @@ def write_timestamped_predictions(path: Path, dataset, indices, scores, labels):
         for service_index, service in enumerate(GAIA_SERVICES):
             probability = float(scores[position, service_index, 1])
             rows.append({
-                "split": metadata.split,
-                "sample_index": int(sample_index),
-                "window_start_time": metadata.window_start_time,
-                "window_end_time": metadata.window_end_time,
-                "prediction_timestamp": metadata.prediction_timestamp,
-                "service": service,
-                "service_registry_index": service_index,
+                "split": metadata.split, "sample_index": int(sample_index),
+                "window_start_time": metadata.window_start_time, "window_end_time": metadata.window_end_time,
+                "target_bin_start": metadata.target_bin_start, "target_bin_end": metadata.target_bin_end,
+                "prediction_available_time": metadata.prediction_available_time,
+                "prediction_timestamp": metadata.prediction_available_time,
+                "service": service, "service_registry_index": service_index,
                 "anomaly_score": probability,
                 "node_label": int(np.argmax(labels[position, service_index])),
                 "binary_prediction": int(probability >= 0.5),
             })
     path.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(rows).to_csv(path, index=False)
+    pd.DataFrame(rows).to_csv(path, index=False, lineterminator="\n")
 
 
-def load_manifest(artifact_root: Path):
-    return json.loads((artifact_root / "ad_data_manifest.json").read_text())
+def load_manifest(artifact_root: Path, config_path: Path = None):
+    manifest_path = artifact_root / "ad_data_manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if not str(manifest.get("schema_version", "")).startswith("p5_v3_"):
+        raise ValueError("Ada-MGAD loader requires a V3 data manifest")
+    expected_config = Path(config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json"))
+    if str(manifest.get("config_sha256")) != sha256_file(expected_config):
+        raise ValueError("Ada-MGAD data manifest config SHA differs from execution config")
+    for name, record in manifest.get("schema_artifacts", {}).items():
+        path = Path(record["path"])
+        if not path.is_file() or sha256_file(path) != str(record["sha256"]):
+            raise ValueError("Ada-MGAD schema artifact checksum mismatch: {}".format(name))
+    graph_record = manifest.get("graph", {})
+    graph_path = Path(graph_record.get("path", ""))
+    if not graph_path.is_file() or sha256_file(graph_path) != str(graph_record.get("sha256")):
+        raise ValueError("Ada-MGAD graph artifact checksum mismatch")
+    if set(manifest.get("split_counts", {})) != {"train", "test"}:
+        raise ValueError("Ada-MGAD data manifest must contain exactly Train/Test splits")
+    return manifest
 
 
-def evaluate_checkpoint(config, data_root, artifact_root, checkpoint_dir, gpu):
-    manifest = load_manifest(artifact_root)
+def _load_datasets_and_system(config, data_root, artifact_root, checkpoint_dir, gpu):
+    config_path = PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json"
+    manifest = load_manifest(artifact_root, config_path)
     args = model_args(config, manifest, checkpoint_dir, gpu)
     seed_everything(int(args["random_seed"]))
     datasets = load_timestamped_datasets(
         data_root, int(args["window"]), int(config["ad"]["grid_seconds"])
     )
     loaders = build_loaders(datasets, args)
-    graph = np.load(data_root / "graph.npy")
+    graph = np.load(data_root / "graph.npy", allow_pickle=False)
     system = MY(MyModel(graph, **args), **args)
-    system.load_model(str(checkpoint_dir), name="f1")
+    return manifest, args, datasets, loaders, system
+
+
+def _predict_splits(system, datasets, loaders, artifact_root, calibration):
     outputs = {}
-    for split, loader in (("validation", loaders[1]), ("test", loaders[2])):
-        indices, scores, labels = timestamped_predict(system, loader, datasets[split])
-        path = artifact_root / ("ad_{}_predictions.csv".format(split))
+    for split in ("train", "test"):
+        indices, scores, labels, raw_scores = timestamped_predict(
+            system, loaders["train_eval"] if split == "train" else loaders[split],
+            datasets[split], calibration=calibration
+        )
+        path = artifact_root / "ad_{}_predictions.csv".format(split)
         write_timestamped_predictions(path, datasets[split], indices, scores, labels)
         outputs[split] = {
-            "indices": indices,
-            "scores": scores,
-            "labels": labels,
-            "path": path,
+            "indices": indices, "scores": scores, "labels": labels,
+            "raw_reconstruction_scores": raw_scores, "path": path,
             "metrics": node_metrics(scores, labels),
         }
-    return args, datasets, outputs
+    return outputs
 
 
 def train_and_infer(config, data_root: Path, artifact_root: Path, checkpoint_dir: Path, gpu: bool):
-    manifest = load_manifest(artifact_root)
-    args = model_args(config, manifest, checkpoint_dir, gpu)
-    seed_everything(int(args["random_seed"]))
-    datasets = load_timestamped_datasets(
-        data_root, int(args["window"]), int(config["ad"]["grid_seconds"])
-    )
-    train_loader, validation_loader, _ = build_loaders(datasets, args)
-    graph = np.load(data_root / "graph.npy")
-    system = MY(MyModel(graph, **args), **args)
-    fit_summary = system.fit(train_loader=train_loader, val_loader=validation_loader)
-    checkpoint = checkpoint_dir / "Ada-MGAD-G_f1_stage.ckpt"
-    if not checkpoint.is_file():
-        raise FileNotFoundError(str(checkpoint))
-    eval_args, datasets, outputs = evaluate_checkpoint(
+    manifest, args, datasets, loaders, system = _load_datasets_and_system(
         config, data_root, artifact_root, checkpoint_dir, gpu
     )
+    fit_summary = system.fit(train_loader=loaders["train"], train_eval_loader=loaders["train_eval"])
+    primary = checkpoint_dir / "best_train_loss.pt"
+    auxiliary = checkpoint_dir / "best_train_f1.pt"
+    last = checkpoint_dir / "last.pt"
+    for path in (primary, auxiliary, last):
+        if not path.is_file():
+            raise FileNotFoundError(path)
+    system.load_model(str(checkpoint_dir), name="best_train_loss")
+    _, _, _, train_raw = timestamped_predict(system, loaders["train_eval"], datasets["train"], calibration=None)
+    calibration = fit_reconstruction_calibration(train_raw)
+    calibration_path = artifact_root / "reconstruction_calibration.json"
+    save_reconstruction_calibration(calibration_path, calibration)
+    outputs = _predict_splits(system, datasets, loaders, artifact_root, calibration)
+    config_path = PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json"
     summary = {
-        "schema_version": "p5_i1_ad_training_summary_v1",
-        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "git_commit": git_head(),
-        "random_seed": int(args["random_seed"]),
-        "config_sha256": sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v1.yaml"),
+        "schema_version": "p5_v3_ad_training_summary_v1",
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(), "git_commit": git_head(),
+        "random_seed": int(args["random_seed"]), "config_sha256": sha256_file(config_path),
         "data_manifest_sha256": sha256_file(artifact_root / "ad_data_manifest.json"),
-        "checkpoint": {
-            "path": str(checkpoint.resolve()),
-            "sha256": sha256_file(checkpoint),
-            "committed_to_git": False,
+        "schema_artifacts": manifest.get("schema_artifacts", {}),
+        "graph_artifact": manifest.get("graph", {}),
+        "checkpoint_policy": {
+            "primary": "best_train_loss.pt", "auxiliary": "best_train_f1.pt", "last": "last.pt",
+            "primary_selection": "minimum complete Train epoch average train_total_loss",
+            "test_used_for_fit_or_selection": False, "validation_split": False,
         },
-        "checkpoint_selection": "validation node F1 only; Test not evaluated during fit",
+        "checkpoints": {
+            path.name: {"path": str(path.resolve()), "sha256": sha256_file(path)}
+            for path in (primary, auxiliary, last)
+        },
+        "reconstruction_calibration": {
+            "path": str(calibration_path.resolve()), "sha256": sha256_file(calibration_path),
+            "fit_split": "train", "test_used_for_fit": False,
+        },
         "fit": fit_summary,
         "split_window_counts": {name: len(dataset) for name, dataset in datasets.items()},
-        "validation_node_metrics": outputs["validation"]["metrics"],
-        "test_node_metrics": outputs["test"]["metrics"],
+        "train_node_metrics": outputs["train"]["metrics"], "test_node_metrics": outputs["test"]["metrics"],
         "prediction_artifacts": {
-            split: {
-                "path": str(output["path"].resolve()),
-                "sha256": sha256_file(output["path"]),
-            }
-            for split, output in outputs.items()
+            split: {"path": str(value["path"].resolve()), "sha256": sha256_file(value["path"])}
+            for split, value in outputs.items()
         },
-        "model_args": eval_args,
+        "model_args": args,
     }
     write_json(artifact_root / "ad_training_summary.json", summary)
     return summary
 
 
+def evaluate_checkpoint(config, data_root, artifact_root, checkpoint_dir, gpu):
+    manifest, args, datasets, loaders, system = _load_datasets_and_system(
+        config, data_root, artifact_root, checkpoint_dir, gpu
+    )
+    primary = checkpoint_dir / "best_train_loss.pt"
+    summary_path = artifact_root / "ad_training_summary.json"
+    if not primary.is_file() or not summary_path.is_file():
+        raise FileNotFoundError("V3 primary checkpoint or training summary is missing")
+    training_summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    if training_summary.get("config_sha256") != sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json"):
+        raise ValueError("training summary config SHA differs from execution config")
+    expected_checkpoint_sha = training_summary.get("checkpoints", {}).get("best_train_loss.pt", {}).get("sha256")
+    if expected_checkpoint_sha != sha256_file(primary):
+        raise ValueError("primary checkpoint checksum differs from training provenance")
+    system.load_model(str(checkpoint_dir), name="best_train_loss")
+    calibration = load_reconstruction_calibration(artifact_root / "reconstruction_calibration.json")
+    outputs = _predict_splits(system, datasets, loaders, artifact_root, calibration)
+    return args, datasets, outputs
+
+
 def smoke(config, data_root: Path, artifact_root: Path, gpu: bool):
+    """Run a tiny synthetic Train/Test detector path; never a formal result."""
+
     smoke_root = data_root.parent / "ad_smoke"
     if smoke_root.exists():
         shutil.rmtree(smoke_root)
     rng = np.random.RandomState(int(config["random_seed"]))
-    for split_index, split in enumerate(("train", "validation", "test")):
+    for split_index, split in enumerate(("train", "test")):
         count = 48
         timestamps = np.arange(count, dtype=np.int64) * 30000 + split_index * 10_000_000
         metric = rng.normal(size=(count, 10, 4)).astype(np.float32)
@@ -296,14 +327,9 @@ def smoke(config, data_root: Path, artifact_root: Path, gpu: bool):
         trace = rng.uniform(size=(count, 10, 10, 4)).astype(np.float32)
         labels = np.zeros((count, 10), dtype=np.int8)
         labels[15:18, split_index] = 1
-        masks = build_semisupervised_mask(labels, 0.5, 10)
         save_split_arrays(smoke_root, split, {
-            "timestamps": timestamps,
-            "metric": metric,
-            "log": logs,
-            "trace": trace,
-            "labels": labels,
-            "label_mask": masks,
+            "timestamps": timestamps, "metric": metric, "log": logs, "trace": trace,
+            "labels": labels, "label_mask": build_semisupervised_mask(labels, 0.5, 10),
         })
     graph = np.zeros((10, 10), dtype=np.float32)
     for index in range(10):
@@ -314,37 +340,32 @@ def smoke(config, data_root: Path, artifact_root: Path, gpu: bool):
     datasets = load_timestamped_datasets(smoke_root, 10, 30)
     checkpoint_dir = smoke_root / "checkpoint"
     args = model_args(config, manifest, checkpoint_dir, gpu, {
-        "epochs": 3,
-        "patience": 1,
-        "batch_size": 32,
-        "num_workers": 0,
-        "train_eval_interval": 0,
+        "epochs": 3, "patience": 1, "batch_size": 32, "num_workers": 0,
+        "train_eval_interval": 1,
     })
     seed_everything(int(args["random_seed"]))
     loaders = build_loaders(datasets, args)
     system = MY(MyModel(graph, **args), **args)
-    fit = system.fit(train_loader=loaders[0], val_loader=loaders[1])
-    system.load_model(str(checkpoint_dir), name="f1")
-    indices, scores, labels = timestamped_predict(system, loaders[2], datasets["test"])
+    fit = system.fit(train_loader=loaders["train"], train_eval_loader=loaders["train_eval"])
+    system.load_model(str(checkpoint_dir), name="best_train_loss")
+    _, _, _, train_raw = timestamped_predict(system, loaders["train_eval"], datasets["train"])
+    calibration = fit_reconstruction_calibration(train_raw)
+    save_reconstruction_calibration(smoke_root / "reconstruction_calibration.json", calibration)
+    outputs = _predict_splits(system, datasets, loaders, smoke_root, calibration)
     summary = {
-        "schema_version": "p5_i1_ad_smoke_v1",
-        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "git_commit": git_head(),
-        "config_sha256": sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v1.yaml"),
-        "random_seed": int(config["random_seed"]),
-        "status": "PASS",
-        "formal_result": False,
-        "fixture": "synthetic only",
-        "gpu": bool(gpu and torch.cuda.is_available()),
+        "schema_version": "p5_v3_ad_smoke_v1", "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "git_commit": git_head(), "config_sha256": sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json"),
+        "random_seed": int(config["random_seed"]), "status": "PASS", "formal_result": False,
+        "fixture": "synthetic Train/Test only", "gpu": bool(gpu and torch.cuda.is_available()),
         "windows_per_split": {name: len(dataset) for name, dataset in datasets.items()},
-        "prediction_windows": len(indices),
-        "prediction_shape": list(scores.shape),
-        "finite_scores": bool(np.isfinite(scores).all()),
+        "prediction_windows": {name: len(value["indices"]) for name, value in outputs.items()},
+        "finite_scores": bool(all(np.isfinite(value["scores"]).all() for value in outputs.values())),
+        "checkpoints": sorted(path.name for path in checkpoint_dir.glob("*.pt")),
         "fit": fit,
-        "node_metrics": node_metrics(scores, labels),
+        "node_metrics": {name: value["metrics"] for name, value in outputs.items()},
     }
-    if not summary["finite_scores"]:
-        raise ValueError("Ada-MGAD smoke produced non-finite scores")
+    if not summary["finite_scores"] or sorted(summary["checkpoints"]) != ["best_train_f1.pt", "best_train_loss.pt", "last.pt"]:
+        raise ValueError("Ada-MGAD smoke did not produce finite scores and all V3 checkpoints")
     write_json(artifact_root / "ad_smoke_summary.json", summary)
     return summary
 
@@ -366,6 +387,9 @@ def main():
             config, PROJECT_ROOT, data_root, artifact_root, runtime["chunk_rows"],
             Path(args.raw_root).resolve() if args.raw_root else None,
             workers=runtime["workers"], start_method=runtime["start_method"],
+            metric_workers=(args.workers or int(config["preprocessing"]["metric_workers"])),
+            log_workers=(args.workers or int(config["preprocessing"]["log_workers"])),
+            trace_workers=(args.workers or int(config["preprocessing"]["trace_workers"])),
         )
     if args.action == "smoke":
         result = smoke(config, data_root, artifact_root, args.gpu)
@@ -376,12 +400,14 @@ def main():
             config, data_root, artifact_root, checkpoint_dir, args.gpu
         )
         result = {
-            "checkpoint": str((checkpoint_dir / "Ada-MGAD-G_f1_stage.ckpt").resolve()),
-            "validation_node_metrics": outputs["validation"]["metrics"],
+            "checkpoint": str((checkpoint_dir / "best_train_loss.pt").resolve()),
+            "train_node_metrics": outputs["train"]["metrics"],
             "test_node_metrics": outputs["test"]["metrics"],
         }
+    elif args.action == "preprocess":
+        result = {"status": "PREPROCESS_COMPLETE", "formal_result": False}
     else:
-        result = {"status": "PREPROCESS_COMPLETE"}
+        result = {"status": "NOOP"}
     print(json.dumps(result, sort_keys=True))
 
 
