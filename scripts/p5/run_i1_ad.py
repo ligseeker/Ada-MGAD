@@ -342,7 +342,7 @@ def evaluate_checkpoint(config, data_root, artifact_root, checkpoint_dir, gpu, c
     return args, datasets, outputs
 
 
-def smoke(config, data_root: Path, artifact_root: Path, gpu: bool):
+def smoke(config, data_root: Path, artifact_root: Path, gpu: bool, config_path: Path):
     """Run a tiny synthetic Train/Test detector path; never a formal result."""
 
     smoke_root = data_root.parent / "ad_smoke"
@@ -384,7 +384,7 @@ def smoke(config, data_root: Path, artifact_root: Path, gpu: bool):
     outputs = _predict_splits(system, datasets, loaders, smoke_root, calibration)
     summary = {
         "schema_version": "p5_v3_ad_smoke_v1", "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "git_commit": git_head(), "config_sha256": sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json"),
+        "git_commit": git_head(), "config_sha256": sha256_file(config_path),
         "random_seed": int(config["random_seed"]), "status": "PASS", "formal_result": False,
         "fixture": "synthetic Train/Test only", "gpu": bool(gpu and torch.cuda.is_available()),
         "windows_per_split": {name: len(dataset) for name, dataset in datasets.items()},
@@ -426,7 +426,13 @@ def main():
             config_path=(PROJECT_ROOT / args.config).resolve(),
         )
     if args.action == "smoke":
-        result = smoke(config, data_root, artifact_root, args.gpu)
+        result = smoke(
+            config,
+            data_root,
+            artifact_root,
+            args.gpu,
+            (PROJECT_ROOT / args.config).resolve(),
+        )
     elif args.action in ("train", "all"):
         result = train_and_infer(
             config, data_root, artifact_root, checkpoint_dir, args.gpu,

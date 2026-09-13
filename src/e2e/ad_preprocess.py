@@ -1002,6 +1002,15 @@ def build_ad_data(
 ) -> Mapping[str, object]:
     """Materialize the complete V3 detector input without cross-split windows."""
 
+    preprocessing_schema = str(config.get("ad_preprocessing", {}).get("schema_version", ""))
+    if preprocessing_schema == "gaia_ad_preprocessing_v2":
+        raise ValueError(
+            "GAIA preprocessing V2 materializer is not enabled through the legacy "
+            "build_ad_data path; use the schema-bound V2 materializer after P1 freeze"
+        )
+    if preprocessing_schema:
+        raise ValueError("unknown ad_preprocessing schema_version: {}".format(preprocessing_schema))
+
     blocks = temporal_blocks(config)
     grid_ms = int(config["ad"]["grid_seconds"]) * 1000
     grids = {
