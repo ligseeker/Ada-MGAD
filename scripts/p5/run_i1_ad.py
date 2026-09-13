@@ -210,8 +210,10 @@ def load_manifest(artifact_root: Path, config_path: Path = None):
     return manifest
 
 
-def _load_datasets_and_system(config, data_root, artifact_root, checkpoint_dir, gpu):
-    config_path = PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json"
+def _load_datasets_and_system(
+    config, data_root, artifact_root, checkpoint_dir, gpu, config_path=None
+):
+    config_path = Path(config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json")).resolve()
     manifest = load_manifest(artifact_root, config_path)
     args = model_args(config, manifest, checkpoint_dir, gpu)
     seed_everything(int(args["random_seed"]))
@@ -241,9 +243,12 @@ def _predict_splits(system, datasets, loaders, artifact_root, calibration):
     return outputs
 
 
-def train_and_infer(config, data_root: Path, artifact_root: Path, checkpoint_dir: Path, gpu: bool):
+def train_and_infer(
+    config, data_root: Path, artifact_root: Path, checkpoint_dir: Path,
+    gpu: bool, config_path: Path = None,
+):
     manifest, args, datasets, loaders, system = _load_datasets_and_system(
-        config, data_root, artifact_root, checkpoint_dir, gpu
+        config, data_root, artifact_root, checkpoint_dir, gpu, config_path
     )
     fit_summary = system.fit(train_loader=loaders["train"], train_eval_loader=loaders["train_eval"])
     primary = checkpoint_dir / "best_train_loss.pt"
@@ -258,7 +263,9 @@ def train_and_infer(config, data_root: Path, artifact_root: Path, checkpoint_dir
     calibration_path = artifact_root / "reconstruction_calibration.json"
     save_reconstruction_calibration(calibration_path, calibration)
     outputs = _predict_splits(system, datasets, loaders, artifact_root, calibration)
-    config_path = PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json"
+    config_path = Path(
+        config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json")
+    ).resolve()
     summary = {
         "schema_version": "p5_v3_ad_training_summary_v1",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(), "git_commit": git_head(),
@@ -292,16 +299,19 @@ def train_and_infer(config, data_root: Path, artifact_root: Path, checkpoint_dir
     return summary
 
 
-def evaluate_checkpoint(config, data_root, artifact_root, checkpoint_dir, gpu):
+def evaluate_checkpoint(config, data_root, artifact_root, checkpoint_dir, gpu, config_path=None):
     manifest, args, datasets, loaders, system = _load_datasets_and_system(
-        config, data_root, artifact_root, checkpoint_dir, gpu
+        config, data_root, artifact_root, checkpoint_dir, gpu, config_path
     )
     primary = checkpoint_dir / "best_train_loss.pt"
     summary_path = artifact_root / "ad_training_summary.json"
     if not primary.is_file() or not summary_path.is_file():
         raise FileNotFoundError("V3 primary checkpoint or training summary is missing")
     training_summary = json.loads(summary_path.read_text(encoding="utf-8"))
-    if training_summary.get("config_sha256") != sha256_file(PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json"):
+    config_path = Path(
+        config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json")
+    ).resolve()
+    if training_summary.get("config_sha256") != sha256_file(config_path):
         raise ValueError("training summary config SHA differs from execution config")
     expected_checkpoint_sha = training_summary.get("checkpoints", {}).get("best_train_loss.pt", {}).get("sha256")
     if expected_checkpoint_sha != sha256_file(primary):
@@ -387,17 +397,25 @@ def main():
             config, PROJECT_ROOT, data_root, artifact_root, runtime["chunk_rows"],
             Path(args.raw_root).resolve() if args.raw_root else None,
             workers=runtime["workers"], start_method=runtime["start_method"],
-            metric_workers=(args.workers or int(config["preprocessing"]["metric_workers"])),
-            log_workers=(args.workers or int(config["preprocessing"]["log_workers"])),
-            trace_workers=(args.workers or int(config["preprocessing"]["trace_workers"])),
+            # A single --workers override is intentionally global.  Without
+            # it, preserve each modality's frozen V3 worker budget (notably
+            # trace=24 versus metric/log=8).
+            metric_workers=(args.workers if args.workers is not None else int(config["preprocessing"]["metric_workers"])),
+            log_workers=(args.workers if args.workers is not None else int(config["preprocessing"]["log_workers"])),
+            trace_workers=(args.workers if args.workers is not None else int(config["preprocessing"]["trace_workers"])),
+            config_path=(PROJECT_ROOT / args.config).resolve(),
         )
     if args.action == "smoke":
         result = smoke(config, data_root, artifact_root, args.gpu)
     elif args.action in ("train", "all"):
-        result = train_and_infer(config, data_root, artifact_root, checkpoint_dir, args.gpu)
+        result = train_and_infer(
+            config, data_root, artifact_root, checkpoint_dir, args.gpu,
+            (PROJECT_ROOT / args.config).resolve(),
+        )
     elif args.action == "infer":
         eval_args, datasets, outputs = evaluate_checkpoint(
-            config, data_root, artifact_root, checkpoint_dir, args.gpu
+            config, data_root, artifact_root, checkpoint_dir, args.gpu,
+            (PROJECT_ROOT / args.config).resolve(),
         )
         result = {
             "checkpoint": str((checkpoint_dir / "best_train_loss.pt").resolve()),

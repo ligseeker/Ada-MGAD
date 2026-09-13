@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 import multiprocessing
 import json
 import os
@@ -17,6 +17,20 @@ Task = TypeVar("Task")
 Result = TypeVar("Result")
 SUPPORTED_START_METHODS = ("spawn", "forkserver")
 _THREADPOOL_LIMITER = None
+
+
+def _task_label(task: object) -> str:
+    """Extract a bounded human-readable shard label for worker failures."""
+
+    if isinstance(task, Mapping):
+        for key in ("service", "feature", "source_path", "path"):
+            if key in task:
+                return "{}={}".format(key, task[key])
+    if isinstance(task, (tuple, list)):
+        for value in task:
+            if isinstance(value, str) and (".csv" in value or "/" in value):
+                return value
+    return type(task).__name__
 
 
 def _limit_worker_threads() -> None:
@@ -50,8 +64,8 @@ def ordered_process_map(
     """Run independent tasks while preserving their submitted order.
 
     A one-worker call executes in-process and is the compatibility reference.
-    Multiprocess execution uses ``Executor.map``, whose result order is defined
-    by input order rather than completion order.
+    Multiprocess execution observes failures as soon as a worker reports one,
+    while collecting successful results back into submitted-task order.
     """
 
     task_list = tuple(tasks)
@@ -88,7 +102,24 @@ def ordered_process_map(
         initializer=worker_initializer,
         initargs=worker_initargs,
     ) as executor:
-        return tuple(executor.map(function, task_list, chunksize=1)), metadata
+        futures = {
+            executor.submit(function, task): index
+            for index, task in enumerate(task_list)
+        }
+        results = [None] * len(task_list)
+        try:
+            for future in as_completed(futures):
+                index = futures[future]
+                results[index] = future.result()
+        except Exception as error:
+            for pending in futures:
+                pending.cancel()
+            label = _task_label(task_list[index])
+            error.args = (
+                "parallel task {} ({}) failed: {}".format(index, label, error),
+            )
+            raise
+        return tuple(results), metadata
 
 
 def _combined_initializer(

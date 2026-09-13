@@ -83,6 +83,7 @@ def _make_fixture(root: Path) -> Path:
             "span_id": ["span-{}".format(service)], "parent_id": ["span-{}".format(parent)],
             "start_time": [_local_text(0).replace(",", ".")],
             "end_time": [_local_text(1).replace(",", ".")], "status_code": [300 if service_index == 0 else 200],
+            "service_name": [service],
         }).to_csv(trace_dir / "trace_table_{}_2021-07.csv".format(service), index=False)
     return table
 

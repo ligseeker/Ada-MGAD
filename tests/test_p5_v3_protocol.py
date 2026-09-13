@@ -43,6 +43,8 @@ class V3RawTaxonomyTests(unittest.TestCase):
         self.assertEqual(records[1]["duration_seconds"], 600.0)
         self.assertFalse(records[2]["gt_included"])
         self.assertFalse(records[3]["gt_included"])
+        self.assertEqual(records[2]["raw_type"], "error_record")
+        self.assertEqual(records[3]["raw_type"], "traceback_continuation")
         self.assertEqual(set(FAULT_TYPES), {
             "login_failure", "memory_anomalies", "file_moving",
             "normal_memory_freed", "access_permission_denied", "cpu_anomalies",

@@ -150,10 +150,10 @@ def _classify(payload: str, level: str) -> str:
         return "file_moving"
     if "access permission denied exception" in lowered:
         return "access_permission_denied"
-    if level == "ERROR":
-        return "error_record"
     if lowered.startswith("(background on this error at"):
         return "traceback_continuation"
+    if level == "ERROR":
+        return "error_record"
     if "upload" in lowered and "failed" in lowered:
         return "error_record"
     if "exception injection failed" in lowered or "object is not callable" in lowered:

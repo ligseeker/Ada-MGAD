@@ -443,7 +443,7 @@ def _build_log_service(task):
     rows_scanned = invalid_timestamps = retained = 0
     for chunk_index, chunk in enumerate(pd.read_csv(
         source_path, usecols=["message"], chunksize=chunk_rows,
-        keep_default_na=False, on_bad_lines="skip",
+        keep_default_na=False, on_bad_lines="error",
     ), start=1):
         messages = chunk["message"].astype("string")
         rows_scanned += len(messages)
@@ -555,7 +555,7 @@ def _build_span_hash_service(task):
         rows = 0
         for chunk in pd.read_csv(
             source, usecols=["span_id"], chunksize=chunk_rows,
-            keep_default_na=False, on_bad_lines="skip",
+            keep_default_na=False, on_bad_lines="error",
         ):
             rows += len(chunk)
             parts.append(_hash_pair(chunk["span_id"]))
@@ -671,7 +671,7 @@ def _build_trace_child(task):
     for chunk_index, chunk in enumerate(pd.read_csv(
         source_path,
         usecols=["start_time", "end_time", "parent_id", "status_code"],
-        chunksize=chunk_rows, keep_default_na=False, on_bad_lines="skip",
+        chunksize=chunk_rows, keep_default_na=False, on_bad_lines="error",
     ), start=1):
         stats["raw_rows_scanned"] += len(chunk)
         end_prefix = chunk["end_time"].astype("string").str.replace(".", ",", n=1, regex=False)
@@ -998,6 +998,7 @@ def build_ad_data(
     metric_workers: int = None,
     log_workers: int = None,
     trace_workers: int = None,
+    config_path: Path = None,
 ) -> Mapping[str, object]:
     """Materialize the complete V3 detector input without cross-split windows."""
 
@@ -1029,6 +1030,13 @@ def build_ad_data(
         "logs": raw_root / "business/business_split/business",
         "traces": raw_root / "trace/trace_split/trace",
     }
+    missing_roots = [
+        str(path) for path in modality_roots.values() if not path.is_dir()
+    ]
+    if missing_roots:
+        raise FileNotFoundError(
+            "GAIA raw root is missing modality directories: {}".format(missing_roots)
+        )
     raw_layout = {
         name: layout_digest(path, path.glob("*.csv"))
         for name, path in modality_roots.items()
@@ -1087,7 +1095,9 @@ def build_ad_data(
         }
     graph_path = Path(data_root) / "graph.npy"
     atomic_save_npy(graph_path, graph)
-    config_path = Path(project_root) / "configs/e2e/gaia_p5_v3.json"
+    config_path = Path(
+        config_path or (Path(project_root) / "configs/e2e/gaia_p5_v3.json")
+    ).resolve()
     metric_schema_path = Path(artifact_root) / "metric_feature_schema.json"
     log_schema_path = Path(artifact_root) / "log_template_schema.json"
     ad_schema_path = Path(artifact_root) / "ad_schema.json"

@@ -322,25 +322,79 @@ def _read_metric_group_strict(
     return merged.sort_values("timestamp").reset_index(drop=True)
 
 
-def _verify_raw_layout(raw_root: Path, expected_inventory: Mapping[str, object]) -> Mapping[str, object]:
+def _verify_raw_layout(
+    raw_root: Path,
+    expected_inventory: Optional[Mapping[str, object]] = None,
+) -> Mapping[str, object]:
+    """Bind the execution raw root without importing Ada-MGAD artifacts.
+
+    ``expected_inventory`` remains supported for the historical unit tests and
+    for callers that have an independently frozen mirror binding.  V3 formal
+    execution deliberately does not read the old P5-G0R2 timing artifact: the
+    current raw tree is bound by its live relative-path/byte-size digest and
+    by the run-table SHA recorded in the V3 config.
+    """
+
     roots = {
         "metrics": raw_root / "metric/metric_split/metric",
         "logs": raw_root / "business/business_split/business",
         "traces": raw_root / "trace/trace_split/trace",
     }
+    missing_roots = [str(path) for path in roots.values() if not path.is_dir()]
+    if missing_roots:
+        raise FileNotFoundError(
+            "GAIA raw root is missing modality directories: {}".format(missing_roots)
+        )
     actual = {
         modality: layout_digest(root, root.glob("*.csv"))
         for modality, root in roots.items()
     }
-    if actual != expected_inventory:
-        raise ValueError("GAIA raw root differs from the P5-G0R2 byte-layout binding")
+    if any(int(record["files"]) == 0 for record in actual.values()):
+        raise ValueError("GAIA raw root contains an empty telemetry modality")
+    if expected_inventory is not None and actual != expected_inventory:
+        raise ValueError("GAIA raw root differs from the supplied byte-layout binding")
     return actual
+
+
+def validate_raw_index_manifest(manifest_path: Path) -> Mapping[str, object]:
+    """Verify every published raw-index array before downstream materialization."""
+
+    manifest_path = Path(manifest_path)
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    root = manifest_path.parent.resolve()
+    references = []
+    for record in manifest.get("metric_series", []):
+        references.extend(((record["timestamps"], record["timestamps_sha256"]),
+                           (record["values"], record["values_sha256"])))
+    for record in manifest.get("logs", {}).values():
+        references.extend(((record["timestamps"], record["timestamps_sha256"]),
+                           (record["levels"], record["levels_sha256"])))
+    for record in manifest.get("traces", {}).get("parts", []):
+        references.extend(((record["timestamps"], record["timestamps_sha256"]),
+                           (record["errors"], record["errors_sha256"]),
+                           (record["latencies"], record["latencies_sha256"])))
+    for relative, expected in references:
+        path = (root / str(relative)).resolve()
+        try:
+            path.relative_to(root)
+        except ValueError as exc:
+            raise ValueError("raw-index manifest references a path outside its root") from exc
+        if not path.is_file():
+            raise ValueError("raw-index manifest references a missing array: {}".format(path))
+        actual = sha256_file(path)
+        if actual != str(expected):
+            raise ValueError(
+                "raw-index array checksum mismatch: {} (expected {}, got {})".format(
+                    path, expected, actual
+                )
+            )
+    return {"array_files": len(references), "arrays_checksum_verified": True}
 
 
 def build_raw_index(
     raw_root: Path,
     output_root: Path,
-    expected_inventory: Mapping[str, object],
+    expected_inventory: Optional[Mapping[str, object]] = None,
     *,
     chunk_rows: int = 500000,
     workers: int = 1,
@@ -353,14 +407,44 @@ def build_raw_index(
     output_root = Path(output_root)
     output_root.mkdir(parents=True, exist_ok=True)
     actual_inventory = _verify_raw_layout(raw_root, expected_inventory)
+    provenance = dict(provenance or {})
     build_binding = {
         "schema": "p5_i1_gaia_rca_raw_index_v2",
         "raw_layout": actual_inventory,
         "chunk_rows": int(chunk_rows),
+        # Config/run-table/commit identity belongs to the resumable build
+        # binding.  A same-byte raw tree cannot silently reuse an index made
+        # under a different formal execution binding.
+        "provenance": provenance,
     }
     build_id = hashlib.sha256(
         json.dumps(build_binding, sort_keys=True).encode("utf-8")
     ).hexdigest()[:20]
+    manifest_path = output_root / "index_manifest.json"
+    if manifest_path.is_file():
+        cached = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if cached.get("build_binding") == build_binding:
+            # A published manifest is the completion marker.  Verify all
+            # referenced arrays before accepting it as a resumable result.
+            references = []
+            for record in cached.get("metric_series", []):
+                references.extend(((record["timestamps"], record["timestamps_sha256"]),
+                                   (record["values"], record["values_sha256"])))
+            for record in cached.get("logs", {}).values():
+                references.extend(((record["timestamps"], record["timestamps_sha256"]),
+                                   (record["levels"], record["levels_sha256"])))
+            for record in cached.get("traces", {}).get("parts", []):
+                references.extend(((record["timestamps"], record["timestamps_sha256"]),
+                                   (record["errors"], record["errors_sha256"]),
+                                   (record["latencies"], record["latencies_sha256"])))
+            valid = True
+            for relative, expected_sha in references:
+                path = output_root / str(relative)
+                if not path.is_file() or sha256_file(path) != str(expected_sha):
+                    valid = False
+                    break
+            if valid:
+                return cached
     generation_root = output_root / "builds" / build_id
     generation_root.mkdir(parents=True, exist_ok=True)
     metric_dir = raw_root / "metric/metric_split/metric"
@@ -407,7 +491,9 @@ def build_raw_index(
     log_records = {}
     invalid_log_timestamps = 0
     for service, record, invalid_count in log_results:
-        log_records[service] = record
+        log_records[service] = _merge_raw_log_parts(
+            service, record, generation_root, output_root
+        )
         invalid_log_timestamps += int(invalid_count)
 
     trace_dir = raw_root / "trace/trace_split/trace"
@@ -442,7 +528,7 @@ def build_raw_index(
         "raw_layout": actual_inventory,
         "services": list(GAIA_SERVICES),
         "label_firewall": "no root service, fault type, event label, or Ada-MGAD tensor is accepted",
-        "provenance": dict(provenance or {}),
+        "provenance": provenance,
         "parallel_execution": {
             "metric": metric_parallel,
             "logs": log_parallel,
@@ -470,7 +556,6 @@ def build_raw_index(
             "latency_unit": "seconds",
         },
     }
-    manifest_path = output_root / "index_manifest.json"
     atomic_write_json(manifest_path, manifest)
     return manifest
 
@@ -523,13 +608,15 @@ def _build_raw_metric_series(task):
 
 def _build_raw_log_service(task):
     service, source_path, generation_root_value, manifest_root_value, chunk_rows = task
-    timestamp_parts = []
-    level_parts = []
+    generation_root = Path(generation_root_value)
+    manifest_root = Path(manifest_root_value)
+    part_records = []
     invalid_timestamps = 0
     for chunk in pd.read_csv(
         source_path, usecols=["message"], chunksize=chunk_rows,
-        keep_default_na=False, on_bad_lines="skip",
+        keep_default_na=False, on_bad_lines="error",
     ):
+        part_number = len(part_records)
         messages = chunk["message"].astype("string")
         timestamps, valid = _local_ms(messages.str.slice(0, 23))
         invalid_timestamps += int((~valid).sum())
@@ -540,26 +627,77 @@ def _build_raw_log_service(task):
                 "| {} |".format(level), regex=False, na=False
             ).to_numpy(dtype=bool, na_value=False)
             levels[found] = level_index
-        timestamp_parts.append(timestamps[valid].astype(np.int64))
-        level_parts.append(levels)
-    timestamps = (
-        np.concatenate(timestamp_parts) if timestamp_parts else np.empty(0, dtype=np.int64)
+        timestamps = timestamps[valid].astype(np.int64)
+        order = np.argsort(timestamps, kind="stable")
+        prefix = "{}.log.part{:06d}".format(service, part_number)
+        ts_path = generation_root / (prefix + ".timestamps.npy")
+        level_path = generation_root / (prefix + ".levels.npy")
+        ts_meta = _save_array(ts_path, timestamps[order])
+        level_meta = _save_array(level_path, levels[order])
+        part_records.append({
+            "timestamps": _manifest_relative(ts_path, manifest_root),
+            "levels": _manifest_relative(level_path, manifest_root),
+            "rows": int(len(order)),
+            "timestamps_sha256": ts_meta["sha256"],
+            "levels_sha256": level_meta["sha256"],
+        })
+    return service, {"parts": part_records}, invalid_timestamps
+
+
+def _merge_raw_log_parts(
+    service: str,
+    record: Mapping[str, object],
+    generation_root: Path,
+    manifest_root: Path,
+) -> Mapping[str, object]:
+    """Merge chunk shards through a memmap, without loading the raw log text."""
+
+    parts = list(record.get("parts", ()))
+    total_rows = sum(int(part["rows"]) for part in parts)
+    timestamps_path = generation_root / (service + ".log.timestamps.npy")
+    levels_path = generation_root / (service + ".log.levels.npy")
+    timestamps = np.lib.format.open_memmap(
+        timestamps_path, mode="w+", dtype=np.int64, shape=(total_rows,)
     )
-    levels = np.concatenate(level_parts) if level_parts else np.empty(0, dtype=np.uint8)
-    order = np.argsort(timestamps, kind="stable")
-    generation_root = Path(generation_root_value)
-    manifest_root = Path(manifest_root_value)
-    ts_path = generation_root / (service + ".log.timestamps.npy")
-    level_path = generation_root / (service + ".log.levels.npy")
-    ts_meta = _save_array(ts_path, timestamps[order])
-    level_meta = _save_array(level_path, levels[order])
-    return service, {
-        "timestamps": _manifest_relative(ts_path, manifest_root),
-        "levels": _manifest_relative(level_path, manifest_root),
-        "rows": int(len(order)),
-        "timestamps_sha256": ts_meta["sha256"],
-        "levels_sha256": level_meta["sha256"],
-    }, invalid_timestamps
+    levels = np.lib.format.open_memmap(
+        levels_path, mode="w+", dtype=np.uint8, shape=(total_rows,)
+    )
+    offset = 0
+    previous_last = None
+    needs_sort = False
+    for part in parts:
+        part_timestamps = np.load(manifest_root / str(part["timestamps"]), mmap_mode="r")
+        part_levels = np.load(manifest_root / str(part["levels"]), mmap_mode="r")
+        count = len(part_timestamps)
+        timestamps[offset:offset + count] = part_timestamps
+        levels[offset:offset + count] = part_levels
+        if count and previous_last is not None and int(part_timestamps[0]) < previous_last:
+            needs_sort = True
+        if count:
+            previous_last = int(part_timestamps[-1])
+        offset += count
+    timestamps.flush()
+    levels.flush()
+    del timestamps, levels
+    # GAIA files are normally chronological.  Keep the common path streaming;
+    # only an explicitly out-of-order source pays for a deterministic reorder.
+    if needs_sort and total_rows:
+        values_t = np.load(timestamps_path, mmap_mode="r")
+        order = np.argsort(values_t, kind="stable")
+        values_l = np.load(levels_path, mmap_mode="r")
+        sorted_t = np.asarray(values_t[order], dtype=np.int64)
+        sorted_l = np.asarray(values_l[order], dtype=np.uint8)
+        atomic_save_npy(timestamps_path, sorted_t)
+        atomic_save_npy(levels_path, sorted_l)
+    return {
+        "timestamps": _manifest_relative(timestamps_path, manifest_root),
+        "levels": _manifest_relative(levels_path, manifest_root),
+        "rows": int(total_rows),
+        "timestamps_sha256": sha256_file(timestamps_path),
+        "levels_sha256": sha256_file(levels_path),
+        "source_chunk_count": int(len(parts)),
+        "source_order": "canonical source row order with deterministic timestamp sort if needed",
+    }
 
 
 def _build_raw_trace_source(task):
@@ -573,7 +711,7 @@ def _build_raw_trace_source(task):
     for part_number, chunk in enumerate(pd.read_csv(
         source,
         usecols=["start_time", "end_time", "status_code", "service_name"],
-        chunksize=chunk_rows, keep_default_na=False, on_bad_lines="skip",
+        chunksize=chunk_rows, keep_default_na=False, on_bad_lines="error",
     )):
         arrays, stats = parse_trace_chunk(chunk)
         for key, value in stats.items():
