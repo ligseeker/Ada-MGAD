@@ -9,11 +9,12 @@ from .schema import (
     load_frozen_preprocessing_schema,
     verify_frozen_schema_sources,
 )
-from .materialize import validate_transformed_modalities
+from .materialize import materialize_ad_inputs, validate_transformed_modalities
 
 __all__ = [
     "FrozenPreprocessingSchema",
     "load_frozen_preprocessing_schema",
     "validate_transformed_modalities",
+    "materialize_ad_inputs",
     "verify_frozen_schema_sources",
 ]

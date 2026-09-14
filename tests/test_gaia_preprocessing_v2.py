@@ -31,7 +31,7 @@ def _valid_schema():
         "source_binding": {
             "config_sha256": "a" * 64,
             "policy_sha256": "b" * 64,
-            "audit_sha256": "c" * 64,
+            "raw_train_sha256": "c" * 64,
         },
         "metric": {
             "ordered_slots": (
@@ -112,7 +112,7 @@ class FrozenSchemaFirewallTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             sources = {}
-            for name in ("config", "policy", "audit"):
+            for name in ("config", "policy", "raw_train"):
                 path = root / "{}.json".format(name)
                 path.write_text('{"name":"%s"}' % name, encoding="utf-8")
                 sources[name] = path
@@ -131,7 +131,7 @@ class FrozenSchemaFirewallTests(unittest.TestCase):
                     schema,
                     config_path=sources["config"],
                     policy_path=sources["policy"],
-                    audit_path=sources["audit"],
+                    raw_train_path=sources["raw_train"],
                 )
 
 
@@ -368,10 +368,10 @@ class TraceTransformTests(unittest.TestCase):
 
 
 class MaterializationBoundaryTests(unittest.TestCase):
-    def test_legacy_materializer_refuses_v2_schema_declaration(self):
+    def test_v2_adapter_requires_explicit_frozen_schema_path(self):
         from src.e2e.ad_preprocess import build_ad_data
 
-        with self.assertRaisesRegex(ValueError, "V2 materializer"):
+        with self.assertRaisesRegex(ValueError, "frozen_schema_path"):
             build_ad_data(
                 {"ad_preprocessing": {"schema_version": "gaia_ad_preprocessing_v2"}},
                 Path("."),

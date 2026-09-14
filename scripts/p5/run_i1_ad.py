@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the V3 Ada-MGAD detector stage on Train/Test arrays."""
+"""Run the Ada-MGAD detector stage on frozen V2 preprocessing output."""
 
 from __future__ import annotations
 
@@ -36,18 +36,16 @@ from src.e2e.calibration import (
     load_reconstruction_calibration,
 )
 from src.e2e.protocol import GAIA_SERVICES, load_config, preprocessing_runtime, sha256_file, write_json
-from src.model import MyModel
-from util.train import MY
 from util.util import seed_everything
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("preprocess", "smoke", "train", "infer", "all"))
-    parser.add_argument("--config", default="configs/e2e/gaia_p5_v3.json")
-    parser.add_argument("--data-root", default="data/p5/v3/ad")
-    parser.add_argument("--artifact-root", default="artifacts/p5/v3/ad")
-    parser.add_argument("--checkpoint-dir", default="data/p5/v3/checkpoint")
+    parser.add_argument("--config", default="configs/e2e/gaia_p5_v3_preprocessing_v2.json")
+    parser.add_argument("--data-root", default="data/p5/v3_preprocessing_v2/ad")
+    parser.add_argument("--artifact-root", default="artifacts/p5/v3_preprocessing_v2/ad")
+    parser.add_argument("--checkpoint-dir", default="data/p5/v3_preprocessing_v2/checkpoint")
     parser.add_argument("--raw-root", default=None)
     parser.add_argument("--chunk-rows", default=None, type=int)
     parser.add_argument("--workers", default=None, type=int)
@@ -186,15 +184,17 @@ def write_timestamped_predictions(path: Path, dataset, indices, scores, labels):
                 "binary_prediction": int(probability >= 0.5),
             })
     path.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(rows).to_csv(path, index=False, lineterminator="\n")
+    pd.DataFrame(rows).to_csv(path, index=False, line_terminator="\n")
 
 
 def load_manifest(artifact_root: Path, config_path: Path = None):
     manifest_path = artifact_root / "ad_data_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if not str(manifest.get("schema_version", "")).startswith("p5_v3_"):
-        raise ValueError("Ada-MGAD loader requires a V3 data manifest")
-    expected_config = Path(config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json"))
+    if manifest.get("status") != "COMPLETE":
+        raise ValueError("Ada-MGAD data manifest is not COMPLETE")
+    if manifest.get("schema_version") != "gaia_ad_preprocessing_v2_manifest":
+        raise ValueError("Ada-MGAD loader requires a complete V2 data manifest")
+    expected_config = Path(config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3_preprocessing_v2.json"))
     if str(manifest.get("config_sha256")) != sha256_file(expected_config):
         raise ValueError("Ada-MGAD data manifest config SHA differs from execution config")
     for name, record in manifest.get("schema_artifacts", {}).items():
@@ -213,7 +213,10 @@ def load_manifest(artifact_root: Path, config_path: Path = None):
 def _load_datasets_and_system(
     config, data_root, artifact_root, checkpoint_dir, gpu, config_path=None
 ):
-    config_path = Path(config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json")).resolve()
+    from src.model import MyModel
+    from util.train import MY
+
+    config_path = Path(config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3_preprocessing_v2.json")).resolve()
     manifest = load_manifest(artifact_root, config_path)
     args = model_args(config, manifest, checkpoint_dir, gpu)
     seed_everything(int(args["random_seed"]))
@@ -264,10 +267,10 @@ def train_and_infer(
     save_reconstruction_calibration(calibration_path, calibration)
     outputs = _predict_splits(system, datasets, loaders, artifact_root, calibration)
     config_path = Path(
-        config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json")
+        config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3_preprocessing_v2.json")
     ).resolve()
     summary = {
-        "schema_version": "p5_v3_ad_training_summary_v1",
+        "schema_version": "gaia_ad_v2_training_summary_v1",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(), "git_commit": git_head(),
         "status": "FORMAL_FULL_DATA", "formal_result": True,
         "random_seed": int(args["random_seed"]), "config_sha256": sha256_file(config_path),
@@ -307,10 +310,10 @@ def evaluate_checkpoint(config, data_root, artifact_root, checkpoint_dir, gpu, c
     primary = checkpoint_dir / "best_train_loss.pt"
     summary_path = artifact_root / "ad_training_summary.json"
     if not primary.is_file() or not summary_path.is_file():
-        raise FileNotFoundError("V3 primary checkpoint or training summary is missing")
+        raise FileNotFoundError("primary checkpoint or training summary is missing")
     training_summary = json.loads(summary_path.read_text(encoding="utf-8"))
     config_path = Path(
-        config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3.json")
+        config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3_preprocessing_v2.json")
     ).resolve()
     if training_summary.get("config_sha256") != sha256_file(config_path):
         raise ValueError("training summary config SHA differs from execution config")
@@ -345,6 +348,9 @@ def evaluate_checkpoint(config, data_root, artifact_root, checkpoint_dir, gpu, c
 def smoke(config, data_root: Path, artifact_root: Path, gpu: bool, config_path: Path):
     """Run a tiny synthetic Train/Test detector path; never a formal result."""
 
+    from src.model import MyModel
+    from util.train import MY
+
     smoke_root = data_root.parent / "ad_smoke"
     if smoke_root.exists():
         shutil.rmtree(smoke_root)
@@ -352,9 +358,9 @@ def smoke(config, data_root: Path, artifact_root: Path, gpu: bool, config_path: 
     for split_index, split in enumerate(("train", "test")):
         count = 48
         timestamps = np.arange(count, dtype=np.int64) * 30000 + split_index * 10_000_000
-        metric = rng.normal(size=(count, 10, 4)).astype(np.float32)
-        logs = rng.uniform(size=(count, 10, 6)).astype(np.float32)
-        trace = rng.uniform(size=(count, 10, 10, 4)).astype(np.float32)
+        metric = rng.normal(size=(count, 10, 48)).astype(np.float32)
+        logs = rng.uniform(size=(count, 10, 32)).astype(np.float32)
+        trace = rng.uniform(size=(count, 10, 10, 8)).astype(np.float32)
         labels = np.zeros((count, 10), dtype=np.int8)
         labels[15:18, split_index] = 1
         save_split_arrays(smoke_root, split, {
@@ -366,7 +372,7 @@ def smoke(config, data_root: Path, artifact_root: Path, gpu: bool, config_path: 
         graph[index, (index + 1) % 10] = 1.0
         graph[(index + 1) % 10, index] = 1.0
     np.save(smoke_root / "graph.npy", graph, allow_pickle=False)
-    manifest = {"dimensions": {"raw_node": 4, "log_len": 6, "raw_edge": 4}}
+    manifest = {"dimensions": {"raw_node": 48, "log_len": 32, "raw_edge": 8}}
     datasets = load_timestamped_datasets(smoke_root, 10, 30)
     checkpoint_dir = smoke_root / "checkpoint"
     args = model_args(config, manifest, checkpoint_dir, gpu, {
@@ -383,11 +389,12 @@ def smoke(config, data_root: Path, artifact_root: Path, gpu: bool, config_path: 
     save_reconstruction_calibration(smoke_root / "reconstruction_calibration.json", calibration)
     outputs = _predict_splits(system, datasets, loaders, smoke_root, calibration)
     summary = {
-        "schema_version": "p5_v3_ad_smoke_v1", "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "schema_version": "gaia_ad_v2_smoke_v1", "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "git_commit": git_head(), "config_sha256": sha256_file(config_path),
         "random_seed": int(config["random_seed"]), "status": "PASS", "formal_result": False,
         "fixture": "synthetic Train/Test only", "gpu": bool(gpu and torch.cuda.is_available()),
         "windows_per_split": {name: len(dataset) for name, dataset in datasets.items()},
+        "dimensions": {"raw_node": 48, "log_len": 32, "raw_edge": 8},
         "prediction_windows": {name: len(value["indices"]) for name, value in outputs.items()},
         "finite_scores": bool(all(np.isfinite(value["scores"]).all() for value in outputs.values())),
         "checkpoints": sorted(path.name for path in checkpoint_dir.glob("*.pt")),
@@ -395,7 +402,7 @@ def smoke(config, data_root: Path, artifact_root: Path, gpu: bool, config_path: 
         "node_metrics": {name: value["metrics"] for name, value in outputs.items()},
     }
     if not summary["finite_scores"] or sorted(summary["checkpoints"]) != ["best_train_f1.pt", "best_train_loss.pt", "last.pt"]:
-        raise ValueError("Ada-MGAD smoke did not produce finite scores and all V3 checkpoints")
+        raise ValueError("Ada-MGAD smoke did not produce finite scores and all checkpoints")
     write_json(artifact_root / "ad_smoke_summary.json", summary)
     return summary
 
@@ -412,17 +419,12 @@ def main():
         config, "ad", workers=args.workers, chunk_rows=args.chunk_rows,
         start_method=args.start_method,
     )
+    preprocess_manifest = None
     if args.action in ("preprocess", "all"):
-        build_ad_data(
+        preprocess_manifest = build_ad_data(
             config, PROJECT_ROOT, data_root, artifact_root, runtime["chunk_rows"],
             Path(args.raw_root).resolve() if args.raw_root else None,
             workers=runtime["workers"], start_method=runtime["start_method"],
-            # A single --workers override is intentionally global.  Without
-            # it, preserve each modality's frozen V3 worker budget (notably
-            # trace=24 versus metric/log=8).
-            metric_workers=(args.workers if args.workers is not None else int(config["preprocessing"]["metric_workers"])),
-            log_workers=(args.workers if args.workers is not None else int(config["preprocessing"]["log_workers"])),
-            trace_workers=(args.workers if args.workers is not None else int(config["preprocessing"]["trace_workers"])),
             config_path=(PROJECT_ROOT / args.config).resolve(),
         )
     if args.action == "smoke":
@@ -449,7 +451,14 @@ def main():
             "test_node_metrics": outputs["test"]["metrics"],
         }
     elif args.action == "preprocess":
-        result = {"status": "PREPROCESS_COMPLETE", "formal_result": False}
+        result = {
+            "status": str(preprocess_manifest.get("status", "UNKNOWN")),
+            "formal_result": False,
+            "manifest": str((artifact_root / "ad_data_manifest.json").resolve()),
+            "dimensions": preprocess_manifest.get("dimensions", {}),
+            "split_counts": preprocess_manifest.get("split_counts", {}),
+            "schema_sha256": preprocess_manifest.get("schema_sha256"),
+        }
     else:
         result = {"status": "NOOP"}
     print(json.dumps(result, sort_keys=True))

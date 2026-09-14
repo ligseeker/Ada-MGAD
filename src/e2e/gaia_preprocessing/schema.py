@@ -90,7 +90,7 @@ def _reject_non_finite(value: Any, field: str = "schema") -> None:
 def _validate_source_binding(value: Any) -> None:
     if not isinstance(value, Mapping) or not value:
         raise ValueError("source_binding must be a non-empty object")
-    required = {"config_sha256", "policy_sha256", "audit_sha256"}
+    required = {"config_sha256", "policy_sha256", "raw_train_sha256"}
     missing = required.difference(value)
     if missing:
         raise ValueError("source_binding is missing {}".format(sorted(missing)))
@@ -205,7 +205,7 @@ def verify_frozen_schema_sources(
     *,
     config_path: Path,
     policy_path: Path,
-    audit_path: Path,
+    raw_train_path: Path,
 ) -> None:
     """Verify the three decision materials bound by a frozen schema."""
 
@@ -215,7 +215,7 @@ def verify_frozen_schema_sources(
     paths = {
         "config_sha256": Path(config_path),
         "policy_sha256": Path(policy_path),
-        "audit_sha256": Path(audit_path),
+        "raw_train_sha256": Path(raw_train_path),
     }
     for key, path in paths.items():
         actual = hashlib.sha256(path.read_bytes()).hexdigest()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Finalize the V3 machine-readable run manifest and evidence report."""
+"""Finalize the machine-readable run manifest while preserving RCA paths."""
 
 from __future__ import annotations
 
@@ -22,6 +22,10 @@ def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", default="configs/e2e/gaia_p5_v3.json")
     parser.add_argument("--artifact-root", default="artifacts/p5/v3")
+    parser.add_argument("--protocol-root", default=None)
+    parser.add_argument("--ad-artifact-root", default=None)
+    parser.add_argument("--ad-checkpoint-root", default=None)
+    parser.add_argument("--event-artifact-root", default=None)
     parser.add_argument("--pytest-result", default="not recorded")
     return parser.parse_args()
 
@@ -61,26 +65,54 @@ def config_sha_from_record(record):
     return None
 
 
+def resolve_output_roots(config, *, artifact_root, protocol_root=None,
+                         ad_artifact_root=None, ad_checkpoint_root=None,
+                         event_artifact_root=None):
+    """Resolve protocol, AD, and event trees without changing RCA history paths."""
+
+    def resolve(value):
+        path = Path(value)
+        return path if path.is_absolute() else PROJECT_ROOT / path
+
+    configured_ad = config.get("ad_paths", {})
+    root = resolve(artifact_root)
+    return {
+        "root": root.resolve(),
+        "protocol": resolve(protocol_root or config.get("gt_output_dir", root / "protocol")).resolve(),
+        "ad": resolve(ad_artifact_root or configured_ad.get("artifact_root", "artifacts/p5/v3/ad")).resolve(),
+        "checkpoint": resolve(ad_checkpoint_root or configured_ad.get("checkpoint_root", "data/p5/v3/checkpoint")).resolve(),
+        "event": resolve(event_artifact_root or configured_ad.get("event_root", root / "events")).resolve(),
+    }
+
+
 def main():
     args = parse_args()
     config_path = (PROJECT_ROOT / args.config).resolve()
     config = load_config(config_path)
-    root = (PROJECT_ROOT / args.artifact_root).resolve()
+    roots = resolve_output_roots(
+        config, artifact_root=args.artifact_root,
+        protocol_root=args.protocol_root,
+        ad_artifact_root=args.ad_artifact_root,
+        ad_checkpoint_root=args.ad_checkpoint_root,
+        event_artifact_root=args.event_artifact_root,
+    )
+    root, protocol_root = roots["root"], roots["protocol"]
+    ad_root, checkpoint_root, event_root = roots["ad"], roots["checkpoint"], roots["event"]
     required = {
-        "protocol_manifest": root / "protocol/protocol_manifest.json",
-        "split_manifest": root / "protocol/split_manifest.json",
-        "gt_provenance": root / "protocol/provenance.json",
-        "ad_data_manifest": root / "ad/ad_data_manifest.json",
-        "ad_training_summary": root / "ad/ad_training_summary.json",
-        "ad_train_predictions": root / "ad/ad_train_predictions.csv",
-        "ad_test_predictions": root / "ad/ad_test_predictions.csv",
-        "ad_calibration": root / "ad/reconstruction_calibration.json",
-        "ad_checkpoint_best_train_loss": PROJECT_ROOT / "data/p5/v3/checkpoint/best_train_loss.pt",
-        "ad_checkpoint_best_train_f1": PROJECT_ROOT / "data/p5/v3/checkpoint/best_train_f1.pt",
-        "ad_checkpoint_last": PROJECT_ROOT / "data/p5/v3/checkpoint/last.pt",
-        "event_metrics": root / "events/event_detection_metrics.json",
-        "ad_event_predictions": root / "events/ad_event_predictions.csv",
-        "event_matching": root / "events/event_matching.csv",
+        "protocol_manifest": protocol_root / "protocol_manifest.json",
+        "split_manifest": protocol_root / "split_manifest.json",
+        "gt_provenance": protocol_root / "provenance.json",
+        "ad_data_manifest": ad_root / "ad_data_manifest.json",
+        "ad_training_summary": ad_root / "ad_training_summary.json",
+        "ad_train_predictions": ad_root / "ad_train_predictions.csv",
+        "ad_test_predictions": ad_root / "ad_test_predictions.csv",
+        "ad_calibration": ad_root / "reconstruction_calibration.json",
+        "ad_checkpoint_best_train_loss": checkpoint_root / "best_train_loss.pt",
+        "ad_checkpoint_best_train_f1": checkpoint_root / "best_train_f1.pt",
+        "ad_checkpoint_last": checkpoint_root / "last.pt",
+        "event_metrics": event_root / "event_detection_metrics.json",
+        "ad_event_predictions": event_root / "ad_event_predictions.csv",
+        "event_matching": event_root / "event_matching.csv",
         "rca_raw_index_manifest": PROJECT_ROOT / "data/p5/v3/rca_raw_index/index_manifest.json",
         "rca_gt_case_registry": root / "rca/rca_case_registry_gt.csv",
         "rca_detected_case_registry": root / "rca/rca_case_registry_detected.csv",
@@ -127,7 +159,12 @@ def main():
     ):
         if artifacts[name]["status"] == "COMPLETE":
             status = json_record(Path(artifacts[name]["path"])).get("status")
-            if status not in ("FORMAL", "FORMAL_FULL_DATA"):
+            allowed_statuses = ("FORMAL", "FORMAL_FULL_DATA")
+            if name == "ad_data_manifest":
+                # V2 preprocessing is published before model training. COMPLETE
+                # is its terminal status, not a training/evaluation claim.
+                allowed_statuses = allowed_statuses + ("COMPLETE",)
+            if status not in allowed_statuses:
                 raise ValueError("{} has non-formal status {}".format(name, status))
     for name in ("rca_train_manifest", "e2e_diagnosis", "e2e_layered_report"):
         if artifacts[name]["status"] == "COMPLETE":

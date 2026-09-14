@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Orchestrate the frozen GAIA V3 two-stage pipeline.
+"""Orchestrate the GAIA V2 preprocessing and downstream stages.
 
 The ``preprocess`` and ``train-evaluate`` actions are operator-run actions.
-This script does not turn the V3 smoke fixtures into formal results.
+This script does not turn smoke fixtures into formal results.
 """
 
 from __future__ import annotations
@@ -18,12 +18,16 @@ import sys
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_LOCK_PATH = PROJECT_ROOT / "data/p5/v3/.pipeline.lock"
+DEFAULT_LOCK_PATH = PROJECT_ROOT / "data/p5/v3_preprocessing_v2/.pipeline.lock"
+V2_DATA_ROOT = "data/p5/v3_preprocessing_v2/ad"
+V2_ARTIFACT_ROOT = "artifacts/p5/v3_preprocessing_v2/ad"
+V2_CHECKPOINT_ROOT = "data/p5/v3_preprocessing_v2/checkpoint"
+V2_EVENT_ROOT = "artifacts/p5/v3_preprocessing_v2/events"
 
 
 @contextmanager
 def exclusive_pipeline_lock(path: Path = DEFAULT_LOCK_PATH):
-    """Fail fast when another process owns the canonical V3 output tree."""
+    """Fail fast when another process owns the canonical V2 output tree."""
 
     lock_path = Path(path)
     lock_path.parent.mkdir(parents=True, exist_ok=True)
@@ -33,7 +37,7 @@ def exclusive_pipeline_lock(path: Path = DEFAULT_LOCK_PATH):
             fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError as exc:
             raise RuntimeError(
-                "another V3 pipeline owns the shared output lock: {}".format(lock_path)
+                "another V2 pipeline owns the shared output lock: {}".format(lock_path)
             ) from exc
         handle.seek(0)
         handle.truncate()
@@ -48,7 +52,7 @@ def exclusive_pipeline_lock(path: Path = DEFAULT_LOCK_PATH):
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("smoke", "preprocess", "train-evaluate", "full"))
-    parser.add_argument("--config", default="configs/e2e/gaia_p5_v3.json")
+    parser.add_argument("--config", default="configs/e2e/gaia_p5_v3_preprocessing_v2.json")
     parser.add_argument("--raw-root", default=None)
     parser.add_argument("--chunk-rows", default=None, type=int)
     parser.add_argument("--raw-workers", default=None, type=int,
@@ -94,7 +98,6 @@ def _case_chunk(args):
 
 def smoke(args):
     common = _common(args)
-    _run(["scripts/p5/run_v3_preprocessing_smoke.py"])
     _run(["scripts/p5/run_i1_ad.py", "smoke"] + common + ["--gpu", str(args.gpu).lower()])
     _run(["scripts/p5/run_i1_events.py", "smoke"] + common)
     _run([
@@ -104,7 +107,6 @@ def smoke(args):
     ])
     _run(["scripts/p5/run_i1_rca.py", "smoke"] + common)
     _run(["scripts/p5/run_i1_e2e.py", "smoke"] + common)
-    _run(["scripts/p5/run_v3_e2e_smoke.py"])
 
 
 def preprocess(args):
@@ -117,11 +119,15 @@ def preprocess(args):
     feature_workers = _workers(args.feature_workers)
     case_chunk = _case_chunk(args)
 
+    # Protocol/GT artifacts are regenerated against the V2 config. RCA feature
+    # and model outputs below intentionally retain their historical V3 roots.
     _run(["scripts/p5/build_v3_gt.py"] + common + raw)
     _run(["scripts/p5/build_v3_protocol.py"] + common)
     _run(
         ["scripts/p5/run_i1_ad.py", "preprocess"]
         + common + raw + chunk + method + ad_workers
+        + ["--data-root", V2_DATA_ROOT, "--artifact-root", V2_ARTIFACT_ROOT,
+           "--checkpoint-dir", V2_CHECKPOINT_ROOT]
     )
     _run([
         "scripts/p5/run_i1_rca_features.py", "case-registry",
@@ -146,14 +152,18 @@ def train_evaluate(args):
     feature_workers = _workers(args.feature_workers)
     case_chunk = _case_chunk(args)
     event_workers = _workers(args.event_workers)
-    _run(["scripts/p5/run_i1_ad.py", "train"] + common + ["--gpu", str(args.gpu).lower()])
+    _run(["scripts/p5/run_i1_ad.py", "train"] + common + ["--gpu", str(args.gpu).lower(),
+          "--data-root", V2_DATA_ROOT, "--artifact-root", V2_ARTIFACT_ROOT,
+          "--checkpoint-dir", V2_CHECKPOINT_ROOT])
     _run([
-        "scripts/p5/run_i1_events.py", "evaluate", "--artifact-root", "artifacts/p5/v3/events",
+        "scripts/p5/run_i1_events.py", "evaluate", "--artifact-root", V2_EVENT_ROOT,
+        "--train-predictions", V2_ARTIFACT_ROOT + "/ad_train_predictions.csv",
+        "--test-predictions", V2_ARTIFACT_ROOT + "/ad_test_predictions.csv",
     ] + common + event_workers + method)
     _run([
         "scripts/p5/run_i1_rca_features.py", "case-registry",
         "--anchor-mode", "detected",
-        "--matching", "artifacts/p5/v3/events/event_matching.csv",
+        "--matching", V2_EVENT_ROOT + "/event_matching.csv",
         "--case-registry", "artifacts/p5/v3/rca/rca_case_registry_detected.csv",
     ] + common)
     _run([
@@ -176,8 +186,8 @@ def train_evaluate(args):
         "--index-manifest", "data/p5/v3/rca_raw_index/index_manifest.json",
         "--model-path", "data/p5/v3/rca_model/conditional_logit.npz",
         "--case-registry", "artifacts/p5/v3/rca/rca_case_registry_gt.csv",
-        "--event-matching", "artifacts/p5/v3/events/event_matching.csv",
-        "--test-node-predictions", "artifacts/p5/v3/ad/ad_test_predictions.csv",
+        "--event-matching", V2_EVENT_ROOT + "/event_matching.csv",
+        "--test-node-predictions", V2_ARTIFACT_ROOT + "/ad_test_predictions.csv",
         "--oracle-predictions", "artifacts/p5/v3/rca/rca_oracle_predictions.csv",
         "--root-frequency-predictions", "artifacts/p5/v3/rca/root_frequency_predictions.csv",
         "--detected-predictions", "artifacts/p5/v3/rca/rca_detected_predictions.csv",
@@ -185,6 +195,9 @@ def train_evaluate(args):
     _run([
         "scripts/p5/finalize_v3_manifest.py",
         "--artifact-root", "artifacts/p5/v3",
+        "--ad-artifact-root", V2_ARTIFACT_ROOT,
+        "--ad-checkpoint-root", V2_CHECKPOINT_ROOT,
+        "--event-artifact-root", V2_EVENT_ROOT,
     ] + common)
 
 

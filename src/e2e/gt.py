@@ -402,7 +402,7 @@ def build_provenance(
 
 def write_csv(path: Path, frame: pd.DataFrame) -> None:
     Path(path).parent.mkdir(parents=True, exist_ok=True)
-    frame.to_csv(path, index=False, lineterminator="\n")
+    frame.to_csv(path, index=False, line_terminator="\n")
 
 
 def write_json(path: Path, value: Mapping[str, object]) -> None:

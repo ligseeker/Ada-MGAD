@@ -1,0 +1,10 @@
+{
+  "schema_version": "gaia_ad_preprocessing_v2_policy",
+  "status": "APPROVED",
+  "fit_split": "train",
+  "metric": {"dimension": 48, "base_slots": 45, "quality": "train_only", "scaling": "q01_q99_clip", "fill_max_intervals": 2, "pearson_threshold": 0.995, "spearman_threshold": 0.995, "scope_quotas": {"global": 30, "host": 15}},
+  "logs": {"stable_templates": 17, "rare_levels": 5, "unknown_levels": 5, "levels": 5, "min_template_count": 2, "min_template_bins": 2},
+  "traces": {"status_order": ["200", "300", "400", "500"], "statistics": ["count", "mean_latency"], "raw_edge": 8, "min_edge_rows": 1, "min_positive_bins": 2},
+  "test_used_for_selection": false,
+  "gt_labels_used": false
+}

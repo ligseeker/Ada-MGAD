@@ -22,7 +22,28 @@ from util.GAIA.pre_GAIA import (
     _reduce_duplicate_timestamp_values,
 )
 
-from .ad_preprocess import _local_ms, _logical_metric_schema
+from util.GAIA.pre_GAIA import _parse_metric_filename, _target_services_for_metric
+
+
+def _local_ms(values: pd.Series) -> Tuple[np.ndarray, np.ndarray]:
+    parsed = pd.to_datetime(values, format="%Y-%m-%d %H:%M:%S,%f", errors="coerce")
+    localized = parsed.dt.tz_localize("Asia/Shanghai", ambiguous="NaT", nonexistent="NaT")
+    valid = localized.notna().to_numpy()
+    numeric = localized.astype("int64").to_numpy(dtype=np.int64) // 1_000_000
+    return numeric, valid
+
+
+def _logical_metric_schema(metric_dir: Path):
+    by_service = {service: defaultdict(lambda: defaultdict(list)) for service in GAIA_SERVICES}
+    for path in sorted(Path(metric_dir).glob("*.csv")):
+        info = _parse_metric_filename(path.name)
+        if info is None:
+            continue
+        for service, feature in _target_services_for_metric(info):
+            if service in by_service:
+                by_service[service][feature][info["full_name"]].append(path)
+    common = set.intersection(*(set(by_service[service]) for service in GAIA_SERVICES))
+    return by_service, tuple(sorted(common))
 from .parallel import atomic_save_npy, atomic_write_json, ordered_process_map
 from .protocol import GAIA_SERVICES, layout_digest, sha256_file
 
