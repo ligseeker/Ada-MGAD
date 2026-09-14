@@ -8,7 +8,8 @@ def build_ad_data(
     config: Mapping[str, object], project_root: Path, data_root: Path,
     artifact_root: Path, chunk_rows: int = 150000,
     raw_root_override: Path = None, workers: int = 1,
-    start_method: str = "spawn",
+    start_method: str = "spawn", metric_workers: int = None,
+    log_workers: int = None, trace_workers: int = None,
     config_path: Path = None,
 ):
     """Run the only supported GAIA preprocessing implementation (V2)."""
@@ -29,7 +30,10 @@ def build_ad_data(
         raw_root=(Path(raw_root_override) if raw_root_override is not None else Path(str(config["gaia_raw_root"]))),
         data_root=Path(data_root), artifact_root=Path(artifact_root),
         policy_path=(project_root / str(policy)).resolve(),
-        runtime={"workers": int(workers), "chunk_rows": int(chunk_rows), "start_method": str(start_method)},
+        runtime={"workers": int(workers), "metric_workers": int(workers if metric_workers is None else metric_workers),
+                 "log_workers": int(workers if log_workers is None else log_workers),
+                 "trace_workers": int(workers if trace_workers is None else trace_workers),
+                 "chunk_rows": int(chunk_rows), "start_method": str(start_method)},
     )
 
 

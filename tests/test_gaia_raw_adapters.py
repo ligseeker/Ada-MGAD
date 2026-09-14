@@ -37,6 +37,22 @@ def _write_log(path, messages):
 
 
 class RawMetricAdapterTests(unittest.TestCase):
+    def test_parallel_fit_and_transform_match_serial(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            rows = [[START + index * 30_000, 10.0 + index * 10.0] for index in range(4)]
+            for service in ("dbservice1", "dbservice2"):
+                _metric_file(root, "{}_0.0.0.1_db_signal_2021-07-01_2021-07-15.csv".format(service), rows)
+            serial = fit_metric(root, START, END, min_coverage=0.5, min_unique=2,
+                                min_dynamic_ratio=0.0, required_slots=1, max_slots=2,
+                                workers=1)
+            parallel = fit_metric(root, START, END, min_coverage=0.5, min_unique=2,
+                                  min_dynamic_ratio=0.0, required_slots=1, max_slots=2,
+                                  workers=2)
+            self.assertEqual(serial.slot_names, parallel.slot_names)
+            np.testing.assert_allclose(transform_metric(serial, root, START, END, workers=1),
+                                       transform_metric(parallel, root, START, END, workers=2))
+
     def test_real_slots_are_selected_without_padding_and_counter_is_rate(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -88,6 +104,18 @@ class RawMetricAdapterTests(unittest.TestCase):
 
 
 class RawLogAdapterTests(unittest.TestCase):
+    def test_parallel_fit_and_transform_match_serial(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            stable = "2021-07-01 09:00:00,000 | INFO | x | stable message"
+            for service in GAIA_SERVICES:
+                _write_log(root / "business_table_{}_2021-07.csv".format(service), [stable, stable])
+            serial = fit_logs(root, START, END, min_template_count=2, min_template_bins=1, workers=1)
+            parallel = fit_logs(root, START, END, min_template_count=2, min_template_bins=1, workers=2)
+            self.assertEqual(serial.slot_names, parallel.slot_names)
+            np.testing.assert_array_equal(transform_logs(serial, root, START, END, workers=1),
+                                           transform_logs(parallel, root, START, END, workers=2))
+
     def test_level_aware_routes_and_frozen_transform(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -109,6 +137,25 @@ class RawLogAdapterTests(unittest.TestCase):
 
 
 class RawTraceAdapterTests(unittest.TestCase):
+    def test_parallel_fit_and_transform_match_serial(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            header = ["timestamp", "host_ip", "service_name", "trace_id", "span_id", "parent_id", "start_time", "end_time", "url", "status_code", "message"]
+            for service in GAIA_SERVICES:
+                path = root / "trace_table_{}_2021-07.csv".format(service)
+                with path.open("w", newline="", encoding="utf-8") as handle:
+                    writer = csv.writer(handle)
+                    writer.writerow(header)
+                    if service == "dbservice1":
+                        writer.writerow(["2021-07-01 09:00:00", "0.0.0.4", service, "t", "p", "0", "2021-07-01 09:00:00.000", "2021-07-01 09:00:00.010", "", "200", "root"])
+                    if service == "webservice1":
+                        writer.writerow(["2021-07-01 09:00:00", "0.0.0.1", service, "t", "c", "p", "2021-07-01 09:00:00.020", "2021-07-01 09:00:00.120", "", "500", "child"])
+            serial = fit_trace(root, START, END, min_edge_rows=1, min_positive_bins=1, workers=1)
+            parallel = fit_trace(root, START, END, min_edge_rows=1, min_positive_bins=1, workers=2)
+            self.assertEqual(serial.directed_edges, parallel.directed_edges)
+            np.testing.assert_array_equal(transform_trace(serial, root, START, END, workers=1),
+                                           transform_trace(parallel, root, START, END, workers=2))
+
     def test_split_local_parent_and_count_mean_latency_schema(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

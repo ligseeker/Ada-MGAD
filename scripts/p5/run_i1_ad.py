@@ -49,6 +49,9 @@ def parse_args():
     parser.add_argument("--raw-root", default=None)
     parser.add_argument("--chunk-rows", default=None, type=int)
     parser.add_argument("--workers", default=None, type=int)
+    parser.add_argument("--metric-workers", default=None, type=int)
+    parser.add_argument("--log-workers", default=None, type=int)
+    parser.add_argument("--trace-workers", default=None, type=int)
     parser.add_argument("--start-method", choices=("spawn", "forkserver"), default=None)
     parser.add_argument("--gpu", default=False, type=lambda value: value.lower() == "true")
     return parser.parse_args()
@@ -407,6 +410,22 @@ def smoke(config, data_root: Path, artifact_root: Path, gpu: bool, config_path: 
     return summary
 
 
+def modality_workers(config, args):
+    """Resolve per-modality budgets; explicit stage flags override global fallback."""
+
+    global_workers = args.workers
+    resolved = {
+        "metric": args.metric_workers if args.metric_workers is not None else (global_workers if global_workers is not None else int(config["preprocessing"]["metric_workers"])),
+        "logs": args.log_workers if args.log_workers is not None else (global_workers if global_workers is not None else int(config["preprocessing"]["log_workers"])),
+        "traces": args.trace_workers if args.trace_workers is not None else (global_workers if global_workers is not None else int(config["preprocessing"]["trace_workers"])),
+    }
+    cpu_budget = int(config["preprocessing"]["cpu_budget"])
+    for stage, value in resolved.items():
+        if int(value) < 1 or int(value) > cpu_budget:
+            raise ValueError("{} workers must be between 1 and configured CPU budget {}".format(stage, cpu_budget))
+    return resolved
+
+
 def main():
     args = parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -421,10 +440,12 @@ def main():
     )
     preprocess_manifest = None
     if args.action in ("preprocess", "all"):
+        modality = modality_workers(config, args)
         preprocess_manifest = build_ad_data(
             config, PROJECT_ROOT, data_root, artifact_root, runtime["chunk_rows"],
             Path(args.raw_root).resolve() if args.raw_root else None,
             workers=runtime["workers"], start_method=runtime["start_method"],
+            metric_workers=modality["metric"], log_workers=modality["logs"], trace_workers=modality["traces"],
             config_path=(PROJECT_ROOT / args.config).resolve(),
         )
     if args.action == "smoke":

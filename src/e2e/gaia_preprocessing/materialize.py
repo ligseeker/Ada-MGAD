@@ -117,6 +117,12 @@ def materialize_ad_inputs(*, schema_path: Path, config_path: Path, raw_root: Pat
     grid_ms = int(config["ad"]["grid_seconds"]) * 1000
     chunk_rows = int(runtime.get("chunk_rows", 100000))
     workers = int(runtime.get("workers", 1))
+    metric_workers = int(runtime.get("metric_workers", workers))
+    log_workers = int(runtime.get("log_workers", workers))
+    trace_workers = int(runtime.get("trace_workers", workers))
+    cpu_budget = int(config["preprocessing"]["cpu_budget"])
+    if min(metric_workers, log_workers, trace_workers) < 1 or max(metric_workers, log_workers, trace_workers) > cpu_budget:
+        raise ValueError("modality workers must be between one and configured CPU budget {}".format(cpu_budget))
     start_method = str(runtime.get("start_method", "spawn"))
     raw_binding = _raw_train_binding(raw_root, train.start_ms, train.end_ms)
 
@@ -126,17 +132,20 @@ def materialize_ad_inputs(*, schema_path: Path, config_path: Path, raw_root: Pat
                             fill_max_intervals=int(metric_policy.get("fill_max_intervals", 2)),
                             pearson_threshold=metric_policy.get("pearson_threshold"),
                             spearman_threshold=metric_policy.get("spearman_threshold"),
-                            scope_quotas=metric_policy.get("scope_quotas"))
+                            scope_quotas=metric_policy.get("scope_quotas"),
+                            workers=metric_workers, start_method=start_method)
     log_fit = fit_logs(raw_root / "business/business_split/business", train.start_ms, train.end_ms,
                        grid_ms=grid_ms, chunk_rows=chunk_rows,
                        min_template_count=int(log_policy.get("min_template_count", 2)),
                        min_template_bins=int(log_policy.get("min_template_bins", 2)),
                        max_stable_templates=int(log_policy.get("stable_templates", 17)),
-                       config_path=config_path.parents[2] / "util/GAIA/gaia.ini")
+                       config_path=config_path.parents[2] / "util/GAIA/gaia.ini",
+                       workers=log_workers, start_method=start_method)
     trace_fit = fit_trace(raw_root / "trace/trace_split/trace", train.start_ms, train.end_ms,
                           grid_ms=grid_ms, chunk_rows=chunk_rows,
                           min_edge_rows=int(trace_policy.get("min_edge_rows", 1)),
-                          min_positive_bins=int(trace_policy.get("min_positive_bins", 2)))
+                          min_positive_bins=int(trace_policy.get("min_positive_bins", 2)),
+                          workers=trace_workers, start_method=start_method)
     drain_state_path = artifact_root / "drain3_train_state.json"
     _write_json_atomic(drain_state_path, {"schema_version": "gaia_ad_preprocessing_v2_drain_state", "state": log_fit.drain_state})
     if schema_path.exists():
@@ -158,12 +167,12 @@ def materialize_ad_inputs(*, schema_path: Path, config_path: Path, raw_root: Pat
         raise FileExistsError("staging output already exists: {}".format(staging))
     staging.mkdir(parents=True)
     try:
-        metric_parts = {name: transform_metric_with_observability(metric_fit, raw_root / "metric/metric_split/metric", block.start_ms, block.end_ms)[0]
+        metric_parts = {name: transform_metric_with_observability(metric_fit, raw_root / "metric/metric_split/metric", block.start_ms, block.end_ms, workers=metric_workers, start_method=start_method)[0]
                         for name, block in (("train", train), ("test", test))}
-        log_parts = {"train": transform_logs(log_fit, raw_root / "business/business_split/business", train.start_ms, train.end_ms, chunk_rows=chunk_rows),
-                     "test": transform_logs(log_fit, raw_root / "business/business_split/business", test.start_ms, test.end_ms, chunk_rows=chunk_rows)}
-        trace_parts = {"train": transform_trace(trace_fit, raw_root / "trace/trace_split/trace", train.start_ms, train.end_ms, chunk_rows=chunk_rows),
-                       "test": transform_trace(trace_fit, raw_root / "trace/trace_split/trace", test.start_ms, test.end_ms, chunk_rows=chunk_rows)}
+        log_parts = {"train": transform_logs(log_fit, raw_root / "business/business_split/business", train.start_ms, train.end_ms, chunk_rows=chunk_rows, workers=log_workers, start_method=start_method),
+                     "test": transform_logs(log_fit, raw_root / "business/business_split/business", test.start_ms, test.end_ms, chunk_rows=chunk_rows, workers=log_workers, start_method=start_method)}
+        trace_parts = {"train": transform_trace(trace_fit, raw_root / "trace/trace_split/trace", train.start_ms, train.end_ms, chunk_rows=chunk_rows, workers=trace_workers, start_method=start_method),
+                       "test": transform_trace(trace_fit, raw_root / "trace/trace_split/trace", test.start_ms, test.end_ms, chunk_rows=chunk_rows, workers=trace_workers, start_method=start_method)}
         for split in ("train", "test"):
             validate_transformed_modalities(schema=schema, metric=metric_parts[split], logs=log_parts[split], trace=trace_parts[split], service_count=len(GAIA_SERVICES))
         assigned, purged = assign_event_blocks(load_registry(config, config_path.parents[2]), blocks)
@@ -196,7 +205,7 @@ def materialize_ad_inputs(*, schema_path: Path, config_path: Path, raw_root: Pat
                     "services": list(GAIA_SERVICES), "split_counts": split_counts, "split_files": split_files,
                     "schema_artifacts": {"preprocessing": {"path": str(schema_path), "sha256": _sha256(schema_path)}, "drain_state": {"path": str(drain_state_path), "sha256": _sha256(drain_state_path)}},
                     "graph": {"path": str(data_root / "graph.npy"), "sha256": _sha256(data_root / "graph.npy"), "directed_edges": [list(edge) for edge in trace_fit.directed_edges]},
-                    "metric": {"slots": list(metric_fit.slot_names)}, "logs": {"slots": list(log_fit.slot_names)}, "traces": {"directed_edges": [list(edge) for edge in trace_fit.directed_edges], "diagnostics": dict(trace_fit.diagnostics)}, "raw_injection_boundary_purged": len(purged), "workers": workers, "chunk_rows": chunk_rows, "start_method": start_method}
+                    "metric": {"slots": list(metric_fit.slot_names)}, "logs": {"slots": list(log_fit.slot_names)}, "traces": {"directed_edges": [list(edge) for edge in trace_fit.directed_edges], "diagnostics": dict(trace_fit.diagnostics)}, "raw_injection_boundary_purged": len(purged), "workers": workers, "modality_workers": {"metric": metric_workers, "logs": log_workers, "traces": trace_workers}, "chunk_rows": chunk_rows, "start_method": start_method}
         _write_json_atomic(artifact_root / "ad_data_manifest.json", manifest)
         return manifest
     except Exception:

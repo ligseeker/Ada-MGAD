@@ -60,6 +60,7 @@ def ordered_process_map(
     start_method: str = "spawn",
     initializer: Optional[Callable[..., None]] = None,
     initargs: Sequence[object] = (),
+    max_in_flight: Optional[int] = None,
 ) -> Tuple[Tuple[Result, ...], Mapping[str, object]]:
     """Run independent tasks while preserving their submitted order.
 
@@ -79,6 +80,8 @@ def ordered_process_map(
             )
         )
     effective = min(requested, len(task_list)) if task_list else 0
+    requested_in_flight = max(1, int(max_in_flight or effective * 2)) if effective else 0
+    bounded_in_flight = min(len(task_list), requested_in_flight) if task_list else 0
     metadata = {
         "requested_workers": requested,
         "effective_workers": effective,
@@ -86,6 +89,7 @@ def ordered_process_map(
         "start_method": "serial" if effective <= 1 else start_method,
         "result_order": "submitted task order",
         "worker_native_threads": 1,
+        "max_in_flight": bounded_in_flight,
     }
     if not task_list:
         return (), metadata
@@ -102,15 +106,24 @@ def ordered_process_map(
         initializer=worker_initializer,
         initargs=worker_initargs,
     ) as executor:
-        futures = {
-            executor.submit(function, task): index
-            for index, task in enumerate(task_list)
-        }
+        # Keep only a bounded window of descriptors submitted at once.  This
+        # prevents a large modality stage from retaining every task and its
+        # result payload in the parent process.
+        futures = {}
+        next_index = 0
+        while next_index < min(len(task_list), bounded_in_flight):
+            futures[executor.submit(function, task_list[next_index])] = next_index
+            next_index += 1
         results = [None] * len(task_list)
         try:
-            for future in as_completed(futures):
+            while futures:
+                future = next(iter(as_completed(tuple(futures))))
                 index = futures[future]
                 results[index] = future.result()
+                del futures[future]
+                if next_index < len(task_list):
+                    futures[executor.submit(function, task_list[next_index])] = next_index
+                    next_index += 1
         except Exception as error:
             for pending in futures:
                 pending.cancel()
