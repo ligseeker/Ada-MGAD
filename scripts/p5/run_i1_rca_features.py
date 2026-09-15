@@ -262,9 +262,9 @@ def build_case_registry(
     retained = retained.sort_values(["start_ms", "split", "case_id"], kind="stable").reset_index(drop=True)
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    retained.to_csv(output_path, index=False, line_terminator="\n")
+    retained.to_csv(output_path, index=False, lineterminator="\n")
     purge_path = output_path.with_name(output_path.stem + "_purged.csv")
-    rca_purged.to_csv(purge_path, index=False, line_terminator="\n")
+    rca_purged.to_csv(purge_path, index=False, lineterminator="\n")
     metadata = {
         "schema_version": "p5_v3_rca_case_registry_v1",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),

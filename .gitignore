@@ -11,6 +11,7 @@ data/examples/msds_tiny/save/*
 !data/examples/msds_tiny/pre/trace_path.pkl
 !data/examples/msds_tiny/save/dataset.pkl
 result/
+experiments/
 
 .ipynb_checkpoints/
 */.ipynb_checkpoints/

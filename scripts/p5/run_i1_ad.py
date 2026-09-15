@@ -5,9 +5,11 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime, timezone
+import hashlib
 import json
 import logging
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -35,7 +37,14 @@ from src.e2e.calibration import (
     save_reconstruction_calibration,
     load_reconstruction_calibration,
 )
-from src.e2e.protocol import GAIA_SERVICES, load_config, preprocessing_runtime, sha256_file, write_json
+from src.e2e.protocol import (
+    GAIA_SERVICES,
+    ad_preprocessing_config_sha256,
+    load_config,
+    preprocessing_runtime,
+    sha256_file,
+    write_json,
+)
 from util.util import seed_everything
 
 
@@ -45,6 +54,10 @@ def parse_args():
     parser.add_argument("--config", default="configs/e2e/gaia_p5_v3_preprocessing_v2.json")
     parser.add_argument("--data-root", default="data/p5/v3_preprocessing_v2/ad")
     parser.add_argument("--artifact-root", default="artifacts/p5/v3_preprocessing_v2/ad")
+    parser.add_argument(
+        "--preprocess-artifact-root", default=None,
+        help="root containing the shared ad_data_manifest.json and frozen preprocessing metadata; defaults to --artifact-root",
+    )
     parser.add_argument("--checkpoint-dir", default="data/p5/v3_preprocessing_v2/checkpoint")
     parser.add_argument("--raw-root", default=None)
     parser.add_argument("--chunk-rows", default=None, type=int)
@@ -55,6 +68,12 @@ def parse_args():
     parser.add_argument("--start-method", choices=("spawn", "forkserver"), default=None)
     parser.add_argument("--gpu", default=False, type=lambda value: value.lower() == "true")
     return parser.parse_args()
+
+
+def resolve_preprocess_artifact_root(artifact_root: Path, preprocess_artifact_root=None) -> Path:
+    """Resolve the immutable preprocessing artifact root for a detector run."""
+
+    return Path(preprocess_artifact_root or artifact_root).resolve()
 
 
 def git_head() -> str:
@@ -187,7 +206,71 @@ def write_timestamped_predictions(path: Path, dataset, indices, scores, labels):
                 "binary_prediction": int(probability >= 0.5),
             })
     path.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(rows).to_csv(path, index=False, line_terminator="\n")
+    pd.DataFrame(rows).to_csv(path, index=False, lineterminator="\n")
+
+
+def validate_manifest_config_binding(manifest, config_path: Path):
+    """Accept exact config identity or proven training-only config drift.
+
+    Older V2 manifests predate the shared-input digest.  For those artifacts,
+    recover the exact config blob from their recorded git commit, verify its
+    full SHA, and compare only the semantic shared-input projection.
+    """
+
+    config_path = Path(config_path).resolve()
+    current_full_sha = sha256_file(config_path)
+    manifest_full_sha = str(manifest.get("config_sha256", ""))
+    current_config = json.loads(config_path.read_text(encoding="utf-8"))
+    current_preprocessing_sha = ad_preprocessing_config_sha256(current_config)
+    if manifest_full_sha == current_full_sha:
+        return {
+            "mode": "exact_full_config",
+            "manifest_config_sha256": manifest_full_sha,
+            "execution_config_sha256": current_full_sha,
+            "preprocessing_config_sha256": current_preprocessing_sha,
+        }
+
+    recorded_preprocessing_sha = manifest.get("preprocessing_config_sha256")
+    if recorded_preprocessing_sha is not None:
+        if str(recorded_preprocessing_sha) != current_preprocessing_sha:
+            raise ValueError("Ada-MGAD preprocessing config digest differs from preprocessing")
+        return {
+            "mode": "preprocessing_config_digest",
+            "manifest_config_sha256": manifest_full_sha,
+            "execution_config_sha256": current_full_sha,
+            "preprocessing_config_sha256": current_preprocessing_sha,
+        }
+
+    commit = str(manifest.get("git_commit", ""))
+    if re.fullmatch(r"[0-9a-fA-F]{40}", commit) is None:
+        raise ValueError("legacy Ada-MGAD manifest lacks a valid source commit")
+    try:
+        relative_config = config_path.relative_to(PROJECT_ROOT).as_posix()
+    except ValueError as exc:
+        raise ValueError("legacy config compatibility requires a repository config path") from exc
+    try:
+        legacy_bytes = subprocess.check_output(
+            ["git", "show", "{}:{}".format(commit, relative_config)],
+            cwd=str(PROJECT_ROOT),
+        )
+    except subprocess.CalledProcessError as exc:
+        raise ValueError("cannot recover legacy preprocessing config from git") from exc
+    if hashlib.sha256(legacy_bytes).hexdigest() != manifest_full_sha:
+        raise ValueError("legacy preprocessing config blob does not match manifest SHA")
+    try:
+        legacy_config = json.loads(legacy_bytes.decode("utf-8"))
+    except (UnicodeDecodeError, ValueError) as exc:
+        raise ValueError("legacy preprocessing config blob is invalid") from exc
+    legacy_preprocessing_sha = ad_preprocessing_config_sha256(legacy_config)
+    if legacy_preprocessing_sha != current_preprocessing_sha:
+        raise ValueError("Ada-MGAD config drift changes frozen preprocessing semantics")
+    return {
+        "mode": "legacy_git_verified_preprocessing_digest",
+        "manifest_config_sha256": manifest_full_sha,
+        "execution_config_sha256": current_full_sha,
+        "preprocessing_config_sha256": current_preprocessing_sha,
+        "legacy_config_commit": commit,
+    }
 
 
 def load_manifest(artifact_root: Path, config_path: Path = None):
@@ -198,8 +281,9 @@ def load_manifest(artifact_root: Path, config_path: Path = None):
     if manifest.get("schema_version") != "gaia_ad_preprocessing_v2_manifest":
         raise ValueError("Ada-MGAD loader requires a complete V2 data manifest")
     expected_config = Path(config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3_preprocessing_v2.json"))
-    if str(manifest.get("config_sha256")) != sha256_file(expected_config):
-        raise ValueError("Ada-MGAD data manifest config SHA differs from execution config")
+    manifest["loader_config_binding"] = validate_manifest_config_binding(
+        manifest, expected_config
+    )
     for name, record in manifest.get("schema_artifacts", {}).items():
         path = Path(record["path"])
         if not path.is_file() or sha256_file(path) != str(record["sha256"]):
@@ -214,13 +298,17 @@ def load_manifest(artifact_root: Path, config_path: Path = None):
 
 
 def _load_datasets_and_system(
-    config, data_root, artifact_root, checkpoint_dir, gpu, config_path=None
+    config, data_root, artifact_root, checkpoint_dir, gpu, config_path=None,
+    preprocess_artifact_root=None,
 ):
     from src.model import MyModel
     from util.train import MY
 
     config_path = Path(config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3_preprocessing_v2.json")).resolve()
-    manifest = load_manifest(artifact_root, config_path)
+    preprocess_artifact_root = resolve_preprocess_artifact_root(
+        artifact_root, preprocess_artifact_root
+    )
+    manifest = load_manifest(preprocess_artifact_root, config_path)
     args = model_args(config, manifest, checkpoint_dir, gpu)
     seed_everything(int(args["random_seed"]))
     datasets = load_timestamped_datasets(
@@ -251,10 +339,11 @@ def _predict_splits(system, datasets, loaders, artifact_root, calibration):
 
 def train_and_infer(
     config, data_root: Path, artifact_root: Path, checkpoint_dir: Path,
-    gpu: bool, config_path: Path = None,
+    gpu: bool, config_path: Path = None, preprocess_artifact_root: Path = None,
 ):
     manifest, args, datasets, loaders, system = _load_datasets_and_system(
-        config, data_root, artifact_root, checkpoint_dir, gpu, config_path
+        config, data_root, artifact_root, checkpoint_dir, gpu, config_path,
+        preprocess_artifact_root=preprocess_artifact_root,
     )
     fit_summary = system.fit(
         train_loader=loaders["train"],
@@ -276,12 +365,22 @@ def train_and_infer(
     config_path = Path(
         config_path or (PROJECT_ROOT / "configs/e2e/gaia_p5_v3_preprocessing_v2.json")
     ).resolve()
+    data_manifest_path = (
+        resolve_preprocess_artifact_root(artifact_root, preprocess_artifact_root)
+        / "ad_data_manifest.json"
+    )
+    data_manifest_sha256 = sha256_file(data_manifest_path)
     summary = {
         "schema_version": "gaia_ad_v2_training_summary_v1",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(), "git_commit": git_head(),
         "status": "FORMAL_FULL_DATA", "formal_result": True,
         "random_seed": int(args["random_seed"]), "config_sha256": sha256_file(config_path),
-        "data_manifest_sha256": sha256_file(artifact_root / "ad_data_manifest.json"),
+        # Keep the legacy checksum field while recording the exact shared
+        # input artifact used by this run.
+        "data_manifest_path": str(data_manifest_path),
+        "data_manifest_sha256": data_manifest_sha256,
+        "data_manifest": {"path": str(data_manifest_path), "sha256": data_manifest_sha256},
+        "preprocessing_config_binding": manifest.get("loader_config_binding"),
         "schema_artifacts": manifest.get("schema_artifacts", {}),
         "graph_artifact": manifest.get("graph", {}),
         "checkpoint_policy": {
@@ -312,9 +411,13 @@ def train_and_infer(
     return summary
 
 
-def evaluate_checkpoint(config, data_root, artifact_root, checkpoint_dir, gpu, config_path=None):
+def evaluate_checkpoint(
+    config, data_root, artifact_root, checkpoint_dir, gpu, config_path=None,
+    preprocess_artifact_root=None,
+):
     manifest, args, datasets, loaders, system = _load_datasets_and_system(
-        config, data_root, artifact_root, checkpoint_dir, gpu, config_path
+        config, data_root, artifact_root, checkpoint_dir, gpu, config_path,
+        preprocess_artifact_root=preprocess_artifact_root,
     )
     primary = checkpoint_dir / "best_train_f1.pt"
     summary_path = artifact_root / "ad_training_summary.json"
@@ -326,6 +429,13 @@ def evaluate_checkpoint(config, data_root, artifact_root, checkpoint_dir, gpu, c
     ).resolve()
     if training_summary.get("config_sha256") != sha256_file(config_path):
         raise ValueError("training summary config SHA differs from execution config")
+    data_manifest_path = (
+        resolve_preprocess_artifact_root(artifact_root, preprocess_artifact_root)
+        / "ad_data_manifest.json"
+    )
+    expected_manifest_sha = training_summary.get("data_manifest_sha256")
+    if expected_manifest_sha and expected_manifest_sha != sha256_file(data_manifest_path):
+        raise ValueError("data manifest checksum differs from training provenance")
     expected_checkpoint_sha = training_summary.get("checkpoints", {}).get("best_train_f1.pt", {}).get("sha256")
     if expected_checkpoint_sha != sha256_file(primary):
         raise ValueError("primary checkpoint checksum differs from training provenance")
@@ -442,6 +552,11 @@ def main():
     config = load_config((PROJECT_ROOT / args.config).resolve())
     data_root = (PROJECT_ROOT / args.data_root).resolve()
     artifact_root = (PROJECT_ROOT / args.artifact_root).resolve()
+    preprocess_artifact_root = resolve_preprocess_artifact_root(
+        artifact_root,
+        (PROJECT_ROOT / args.preprocess_artifact_root)
+        if args.preprocess_artifact_root else None,
+    )
     checkpoint_dir = (PROJECT_ROOT / args.checkpoint_dir).resolve()
     artifact_root.mkdir(parents=True, exist_ok=True)
     runtime = preprocessing_runtime(
@@ -469,12 +584,12 @@ def main():
     elif args.action in ("train", "all"):
         result = train_and_infer(
             config, data_root, artifact_root, checkpoint_dir, args.gpu,
-            (PROJECT_ROOT / args.config).resolve(),
+            (PROJECT_ROOT / args.config).resolve(), preprocess_artifact_root,
         )
     elif args.action == "infer":
         eval_args, datasets, outputs = evaluate_checkpoint(
             config, data_root, artifact_root, checkpoint_dir, args.gpu,
-            (PROJECT_ROOT / args.config).resolve(),
+            (PROJECT_ROOT / args.config).resolve(), preprocess_artifact_root,
         )
         result = {
             "checkpoint": str((checkpoint_dir / "best_train_f1.pt").resolve()),

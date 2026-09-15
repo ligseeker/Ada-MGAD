@@ -50,11 +50,19 @@ def _raw_train_binding(raw_root: Path, start_ms: int, end_ms: int) -> str:
     return digest.hexdigest()
 
 
-def _schema_payload(config_path, policy_path, raw_train_sha256, metric_fit, log_fit, trace_fit, drain_state_path):
+def _schema_payload(
+    config_path, policy_path, raw_train_sha256, preprocessing_config_sha256,
+    metric_fit, log_fit, trace_fit, drain_state_path,
+):
     return {
         "schema_version": "gaia_ad_preprocessing_v2", "status": "FROZEN", "fit_split": "train",
         "decision_inputs": ["train"], "gt_labels_used": False, "test_used_for_selection": False,
-        "source_binding": {"config_sha256": _sha256(config_path), "policy_sha256": _sha256(policy_path), "raw_train_sha256": raw_train_sha256},
+        "source_binding": {
+            "config_sha256": _sha256(config_path),
+            "preprocessing_config_sha256": preprocessing_config_sha256,
+            "policy_sha256": _sha256(policy_path),
+            "raw_train_sha256": raw_train_sha256,
+        },
         "metric": {
             "ordered_slots": list(metric_fit.slot_names) + ["global_observed_fraction", "host_applicable", "host_observed_fraction"],
             "slots": [{"name": slot.name, "scope": slot.scope, "logical_feature": slot.logical_feature,
@@ -96,11 +104,18 @@ def materialize_ad_inputs(*, schema_path: Path, config_path: Path, raw_root: Pat
                           data_root: Path, artifact_root: Path,
                           runtime: Mapping[str, object], policy_path: Path = None) -> Mapping[str, object]:
     from ..ad_data import build_registry_node_labels, build_semisupervised_mask, save_split_arrays
-    from ..protocol import GAIA_SERVICES, assign_event_blocks, load_registry, temporal_blocks
+    from ..protocol import (
+        GAIA_SERVICES,
+        assign_event_blocks,
+        load_registry,
+        ad_preprocessing_config_sha256,
+        temporal_blocks,
+    )
 
     config_path, raw_root = Path(config_path).resolve(), Path(raw_root).resolve()
     data_root, artifact_root, schema_path = Path(data_root).resolve(), Path(artifact_root).resolve(), Path(schema_path).resolve()
     config = json.loads(config_path.read_text(encoding="utf-8"))
+    preprocessing_config_sha = ad_preprocessing_config_sha256(config)
     policy_path = Path(policy_path or config["ad_preprocessing"]["policy_path"])
     if not policy_path.is_absolute():
         policy_path = config_path.parents[2] / policy_path
@@ -155,7 +170,13 @@ def materialize_ad_inputs(*, schema_path: Path, config_path: Path, raw_root: Pat
         if any(binding.get(key) != value for key, value in expected.items()):
             raise ValueError("frozen V2 schema source binding differs from current sources")
     else:
-        _write_json_atomic(schema_path, _schema_payload(config_path, policy_path, raw_binding, metric_fit, log_fit, trace_fit, drain_state_path))
+        _write_json_atomic(
+            schema_path,
+            _schema_payload(
+                config_path, policy_path, raw_binding, preprocessing_config_sha,
+                metric_fit, log_fit, trace_fit, drain_state_path,
+            ),
+        )
         schema = load_frozen_preprocessing_schema(schema_path)
     expected_dimensions = {"raw_node": metric_slots + 3, "log_len": len(log_fit.slot_names), "raw_edge": 8}
     if schema.dimensions != expected_dimensions:
@@ -200,7 +221,8 @@ def materialize_ad_inputs(*, schema_path: Path, config_path: Path, raw_root: Pat
                 record["sha256"] = _sha256(final_path)
         manifest = {"schema_version": "gaia_ad_preprocessing_v2_manifest", "status": "COMPLETE", "formal_result": False,
                     "generated_at_utc": datetime.now(timezone.utc).isoformat(), "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(config_path.parents[2]), text=True).strip(),
-                    "config_sha256": _sha256(config_path), "policy_sha256": _sha256(policy_path), "schema_sha256": _sha256(schema_path), "raw_train_sha256": raw_binding,
+                    "config_sha256": _sha256(config_path), "preprocessing_config_sha256": preprocessing_config_sha,
+                    "policy_sha256": _sha256(policy_path), "schema_sha256": _sha256(schema_path), "raw_train_sha256": raw_binding,
                     "decision_inputs": ["train"], "gt_labels_used_for_schema": False, "test_used_for_selection": False, "dimensions": dict(schema.dimensions), "schema_path": str(schema_path),
                     "services": list(GAIA_SERVICES), "split_counts": split_counts, "split_files": split_files,
                     "schema_artifacts": {"preprocessing": {"path": str(schema_path), "sha256": _sha256(schema_path)}, "drain_state": {"path": str(drain_state_path), "sha256": _sha256(drain_state_path)}},

@@ -57,6 +57,48 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def ad_preprocessing_config_payload(config: Mapping[str, object]) -> Mapping[str, object]:
+    """Return only configuration values that determine Ada-MGAD input arrays."""
+
+    ad = config.get("ad")
+    ad_model = config.get("ad_model")
+    preprocessing = config.get("ad_preprocessing")
+    event_registry = config.get("event_registry")
+    if not all(isinstance(value, Mapping) for value in (ad, ad_model, preprocessing, event_registry)):
+        raise ValueError("config lacks an Ada-MGAD preprocessing section")
+    return {
+        "fingerprint_version": "gaia_ad_preprocessing_config_v1",
+        "schema_version": preprocessing.get("schema_version"),
+        "services": config.get("services"),
+        "gaia_raw_root": config.get("gaia_raw_root"),
+        "split": config.get("split"),
+        "ad": {
+            "grid_seconds": ad.get("grid_seconds"),
+            "window_bins": ad.get("window_bins"),
+            "label_interval": ad.get("label_interval"),
+        },
+        "ad_model": {"label_percent": ad_model.get("label_percent")},
+        "event_registry": {
+            "path": event_registry.get("path"),
+            "sha256": event_registry.get("sha256"),
+            "taxonomy_version": event_registry.get("taxonomy_version"),
+        },
+        "policy_path": preprocessing.get("policy_path"),
+        "frozen_schema_path": preprocessing.get("frozen_schema_path"),
+    }
+
+
+def ad_preprocessing_config_sha256(config: Mapping[str, object]) -> str:
+    payload = json.dumps(
+        ad_preprocessing_config_payload(config),
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+        allow_nan=False,
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
 def layout_digest(root: Path, paths: Iterable[Path]) -> Mapping[str, object]:
     """Bind a telemetry mirror by relative paths and byte sizes without reading it."""
 

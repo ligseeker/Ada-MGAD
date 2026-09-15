@@ -76,8 +76,8 @@ def _write_outputs(result, artifact_root: Path, metadata: Dict[str, object]):
     artifact_root.mkdir(parents=True, exist_ok=True)
     event_path = artifact_root / "ad_event_predictions.csv"
     matching_path = artifact_root / "event_matching.csv"
-    result["event_predictions"].to_csv(event_path, index=False, line_terminator="\n")
-    result["matching"].to_csv(matching_path, index=False, line_terminator="\n")
+    result["event_predictions"].to_csv(event_path, index=False, lineterminator="\n")
+    result["matching"].to_csv(matching_path, index=False, lineterminator="\n")
     selection = result["threshold_selection"]
     metrics = {
         "schema_version": "p5_v3_event_detection_metrics_v1",

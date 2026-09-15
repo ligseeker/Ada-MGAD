@@ -294,8 +294,8 @@ def train_v3(
     )
     oracle_path = artifact_root / "rca_oracle_predictions.csv"
     frequency_path = artifact_root / "root_frequency_predictions.csv"
-    oracle_frame.to_csv(oracle_path, index=False, line_terminator="\n")
-    frequency_frame.to_csv(frequency_path, index=False, line_terminator="\n")
+    oracle_frame.to_csv(oracle_path, index=False, lineterminator="\n")
+    frequency_frame.to_csv(frequency_path, index=False, lineterminator="\n")
 
     detected_path = None
     detected_metrics = None
@@ -320,7 +320,7 @@ def train_v3(
             method="Ada-RCA-G Detected", default_anchor_type="detected prediction_available_time",
         )
         detected_path = artifact_root / "rca_detected_predictions.csv"
-        detected_frame.to_csv(detected_path, index=False, line_terminator="\n")
+        detected_frame.to_csv(detected_path, index=False, lineterminator="\n")
 
     config_path = _config_path(config, config_path)
     result_status = "FORMAL_FULL_DATA" if formal_result else "SMOKE_TEST_NOT_FORMAL"
