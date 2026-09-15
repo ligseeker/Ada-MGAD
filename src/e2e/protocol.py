@@ -95,10 +95,16 @@ def load_config(path: Path) -> Mapping[str, object]:
         raise ValueError("GAIA V3 Ada-MGAD grid/window protocol drift")
     if int(data["ad"].get("epochs", 0)) != 100 or int(data["ad"].get("patience", 0)) != 10:
         raise ValueError("GAIA V3 requires max_epochs=100 and patience=10")
-    if str(data["ad"].get("early_stopping_metric")) != "train_total_loss":
-        raise ValueError("GAIA V3 early stopping must use train_total_loss")
-    if str(data["ad"].get("primary_checkpoint")) != "best_train_loss.pt":
-        raise ValueError("GAIA V3 primary checkpoint must be best_train_loss.pt")
+    if str(data["ad"].get("early_stopping_metric")) != "train_f1":
+        raise ValueError("GAIA V3 early stopping must use train_f1")
+    if str(data["ad"].get("primary_checkpoint")) != "best_train_f1.pt":
+        raise ValueError("GAIA V3 primary checkpoint must be best_train_f1.pt")
+    if str(data["ad"].get("auxiliary_checkpoint")) != "best_train_loss.pt":
+        raise ValueError("GAIA V3 auxiliary checkpoint must be best_train_loss.pt")
+    if str(data.get("ad_model", {}).get("checkpoint_policy")) != (
+        "best_train_f1_primary_best_train_loss_diagnostic"
+    ):
+        raise ValueError("GAIA V3 checkpoint policy must select Train F1 as primary")
     if "expected_events" in data.get("event_registry", {}):
         raise ValueError("event registry row counts must be derived, not hardcoded")
     if str(data["event_trigger"].get("threshold_selection")) != "train_only_exact_unique_scores":

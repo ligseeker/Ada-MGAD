@@ -55,7 +55,7 @@ class CalibrationTests(unittest.TestCase):
 
 
 class TrainCheckpointTests(unittest.TestCase):
-    def test_train_loss_stopping_and_all_v3_checkpoints(self):
+    def test_train_f1_stopping_test_observation_and_all_v3_checkpoints(self):
         with tempfile.TemporaryDirectory() as directory:
             args = {
                 "gpu": False, "epochs": 5, "patience": 1, "learning_rate": 0.001,
@@ -66,10 +66,20 @@ class TrainCheckpointTests(unittest.TestCase):
                 "contrast_weight": 0.0, "batch_progress": False,
             }
             trainer = MY(DummyDetector(), **args)
-            summary = trainer.fit(train_batches(), train_eval_loader=train_batches())
-            self.assertEqual(summary["early_stopping_metric"], "train_total_loss")
+            summary = trainer.fit(
+                train_batches(),
+                train_eval_loader=train_batches(),
+                test_eval_loader=train_batches(),
+            )
+            self.assertEqual(summary["early_stopping_metric"], "train_f1")
+            self.assertEqual(summary["checkpoint_policy"], "best_train_f1_primary_best_train_loss_diagnostic")
+            self.assertEqual(summary["stop_reason"], "train_f1_patience")
             self.assertEqual(summary["epochs_completed"], 2)
+            self.assertEqual(summary["best_train_f1_epoch"], 0)
+            self.assertEqual(summary["best_train_loss_epoch"], 0)
             self.assertFalse(summary["test_used_for_fit_or_selection"])
+            self.assertEqual(len(summary["history"]), 2)
+            self.assertTrue(all(row["test_metrics"] is not None for row in summary["history"]))
             self.assertEqual(
                 sorted(path.name for path in Path(directory).glob("*.pt")),
                 ["best_train_f1.pt", "best_train_loss.pt", "last.pt"],

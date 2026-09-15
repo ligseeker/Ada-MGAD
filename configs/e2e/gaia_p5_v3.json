@@ -35,9 +35,9 @@
     "prediction_time": "prediction_available_time=target_bin_end",
     "epochs": 100,
     "patience": 10,
-    "early_stopping_metric": "train_total_loss",
-    "primary_checkpoint": "best_train_loss.pt",
-    "auxiliary_checkpoint": "best_train_f1.pt",
+    "early_stopping_metric": "train_f1",
+    "primary_checkpoint": "best_train_f1.pt",
+    "auxiliary_checkpoint": "best_train_loss.pt",
     "last_checkpoint": "last.pt",
     "threshold_selection": "train_only_exact_unique_scores"
   },
@@ -78,7 +78,7 @@
     "num_workers": 2,
     "pin_memory": true,
     "persistent_workers": false,
-    "checkpoint_policy": "best_train_loss_primary_best_train_f1_diagnostic"
+    "checkpoint_policy": "best_train_f1_primary_best_train_loss_diagnostic"
   },
   "ad_preprocessing": {
     "log_features": ["drain_template_counts", "level_INFO", "level_WARNING", "level_ERROR", "level_DEBUG", "level_UNKNOWN", "log_total"],

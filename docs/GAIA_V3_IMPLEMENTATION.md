@@ -91,11 +91,11 @@ PYTHONDONTWRITEBYTECODE=1 python scripts/p5/run_i1_ad.py train \
   --gpu false
 ```
 
-配置固定 `max_epochs=100`、`patience=10`、`early_stopping_metric=train_total_loss`。该命令只允许完整 Train epoch 的平均 total loss 触发 early stopping，并保存 `best_train_loss.pt`、`best_train_f1.pt`、`last.pt`。主 checkpoint 始终是 `best_train_loss.pt`；`best_train_f1.pt` 只用于诊断。
+配置固定 `max_epochs=100`、`patience=10`、`early_stopping_metric=train_f1`。每轮完整 Train epoch 后计算 Train/Test 指标；Test 指标仅用于观察趋势，不参与梯度、早停或 checkpoint 选择。只有 Train F1 的严格提升会重置 patience，并保存 `best_train_f1.pt`、`best_train_loss.pt`、`last.pt`。主 checkpoint 始终是 `best_train_f1.pt`；`best_train_loss.pt` 只用于诊断。
 
 ### 3. Train calibration
 
-训练命令完成主 checkpoint 后，会在同一命令内加载 `best_train_loss.pt`，只用 Train reconstruction scores 拟合并写出 calibration。可用以下无拟合检查确认该 handoff：
+训练命令完成主 checkpoint 后，会在同一命令内加载 `best_train_f1.pt`，只用 Train reconstruction scores 拟合并写出 calibration。可用以下无拟合检查确认该 handoff：
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python - <<'PY'

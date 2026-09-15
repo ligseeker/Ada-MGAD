@@ -256,14 +256,18 @@ def train_and_infer(
     manifest, args, datasets, loaders, system = _load_datasets_and_system(
         config, data_root, artifact_root, checkpoint_dir, gpu, config_path
     )
-    fit_summary = system.fit(train_loader=loaders["train"], train_eval_loader=loaders["train_eval"])
-    primary = checkpoint_dir / "best_train_loss.pt"
-    auxiliary = checkpoint_dir / "best_train_f1.pt"
+    fit_summary = system.fit(
+        train_loader=loaders["train"],
+        train_eval_loader=loaders["train_eval"],
+        test_eval_loader=loaders["test"],
+    )
+    primary = checkpoint_dir / "best_train_f1.pt"
+    auxiliary = checkpoint_dir / "best_train_loss.pt"
     last = checkpoint_dir / "last.pt"
     for path in (primary, auxiliary, last):
         if not path.is_file():
             raise FileNotFoundError(path)
-    system.load_model(str(checkpoint_dir), name="best_train_loss")
+    system.load_model(str(checkpoint_dir), name="best_train_f1")
     _, _, _, train_raw = timestamped_predict(system, loaders["train_eval"], datasets["train"], calibration=None)
     calibration = fit_reconstruction_calibration(train_raw)
     calibration_path = artifact_root / "reconstruction_calibration.json"
@@ -281,8 +285,10 @@ def train_and_infer(
         "schema_artifacts": manifest.get("schema_artifacts", {}),
         "graph_artifact": manifest.get("graph", {}),
         "checkpoint_policy": {
-            "primary": "best_train_loss.pt", "auxiliary": "best_train_f1.pt", "last": "last.pt",
-            "primary_selection": "minimum complete Train epoch average train_total_loss",
+            "primary": "best_train_f1.pt", "auxiliary": "best_train_loss.pt", "last": "last.pt",
+            "primary_selection": "maximum complete Train epoch evaluation F1",
+            "early_stopping": "Train F1 patience",
+            "test_observation": "per-epoch metrics in fit.history; never used for selection",
             "test_used_for_fit_or_selection": False, "validation_split": False,
         },
         "checkpoints": {
@@ -310,7 +316,7 @@ def evaluate_checkpoint(config, data_root, artifact_root, checkpoint_dir, gpu, c
     manifest, args, datasets, loaders, system = _load_datasets_and_system(
         config, data_root, artifact_root, checkpoint_dir, gpu, config_path
     )
-    primary = checkpoint_dir / "best_train_loss.pt"
+    primary = checkpoint_dir / "best_train_f1.pt"
     summary_path = artifact_root / "ad_training_summary.json"
     if not primary.is_file() or not summary_path.is_file():
         raise FileNotFoundError("primary checkpoint or training summary is missing")
@@ -320,10 +326,10 @@ def evaluate_checkpoint(config, data_root, artifact_root, checkpoint_dir, gpu, c
     ).resolve()
     if training_summary.get("config_sha256") != sha256_file(config_path):
         raise ValueError("training summary config SHA differs from execution config")
-    expected_checkpoint_sha = training_summary.get("checkpoints", {}).get("best_train_loss.pt", {}).get("sha256")
+    expected_checkpoint_sha = training_summary.get("checkpoints", {}).get("best_train_f1.pt", {}).get("sha256")
     if expected_checkpoint_sha != sha256_file(primary):
         raise ValueError("primary checkpoint checksum differs from training provenance")
-    system.load_model(str(checkpoint_dir), name="best_train_loss")
+    system.load_model(str(checkpoint_dir), name="best_train_f1")
     calibration = load_reconstruction_calibration(artifact_root / "reconstruction_calibration.json")
     outputs = _predict_splits(system, datasets, loaders, artifact_root, calibration)
     training_summary["inference_replay"] = {
@@ -385,8 +391,12 @@ def smoke(config, data_root: Path, artifact_root: Path, gpu: bool, config_path: 
     seed_everything(int(args["random_seed"]))
     loaders = build_loaders(datasets, args)
     system = MY(MyModel(graph, **args), **args)
-    fit = system.fit(train_loader=loaders["train"], train_eval_loader=loaders["train_eval"])
-    system.load_model(str(checkpoint_dir), name="best_train_loss")
+    fit = system.fit(
+        train_loader=loaders["train"],
+        train_eval_loader=loaders["train_eval"],
+        test_eval_loader=loaders["test"],
+    )
+    system.load_model(str(checkpoint_dir), name="best_train_f1")
     _, _, _, train_raw = timestamped_predict(system, loaders["train_eval"], datasets["train"])
     calibration = fit_reconstruction_calibration(train_raw)
     save_reconstruction_calibration(smoke_root / "reconstruction_calibration.json", calibration)
@@ -467,7 +477,7 @@ def main():
             (PROJECT_ROOT / args.config).resolve(),
         )
         result = {
-            "checkpoint": str((checkpoint_dir / "best_train_loss.pt").resolve()),
+            "checkpoint": str((checkpoint_dir / "best_train_f1.pt").resolve()),
             "train_node_metrics": outputs["train"]["metrics"],
             "test_node_metrics": outputs["test"]["metrics"],
         }

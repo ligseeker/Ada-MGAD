@@ -391,17 +391,34 @@ class MY(Base):
         normalized = (rec_scores - median) / (1.4826 * mad)
         return torch.sigmoid(normalized)
 
-    def fit(self, train_loader, train_eval_loader=None, test_loader=None, val_loader=None, **args):
-        """V3 Train-only trainer with loss-primary checkpoint governance.
+    def fit(
+        self,
+        train_loader,
+        train_eval_loader=None,
+        test_loader=None,
+        val_loader=None,
+        test_eval_loader=None,
+        **args,
+    ):
+        """Fit with Train-F1 early stopping and observation-only Test metrics.
 
-        The earlier method in this file is retained only for source-level
-        comparison with the upstream trainer; this definition is the active
-        method.  Passing a Validation or Test loader is an explicit error so a
-        legacy caller cannot silently contaminate selection or early stopping.
+        ``train_loader`` is the only loader used for gradient updates.
+        ``train_eval_loader`` is a deterministic Train-only view used for
+        per-epoch metrics, early stopping, and the primary checkpoint.
+        ``test_eval_loader`` is evaluated after every epoch only to expose a
+        Test trend; it is never used for gradients, checkpoint selection, or
+        early stopping.  The legacy ``test_loader`` and ``val_loader``
+        arguments remain rejected so callers cannot silently change the
+        selection protocol.
         """
 
         if test_loader is not None or val_loader is not None:
             raise ValueError("V3 training forbids validation/test loaders; use Train-only fit")
+        if self.train_eval_interval != 1:
+            raise ValueError(
+                "Train-F1 early stopping requires train_eval_interval=1 "
+                "so Train F1 is observed after every epoch"
+            )
         train_eval_loader = train_loader if train_eval_loader is None else train_eval_loader
         optimizer = AdaBelief(
             self.model.parameters(), lr=self.learning_rate, weight_decay=self.weight_decay
@@ -413,7 +430,7 @@ class MY(Base):
             "loss": {"score": float("inf"), "state": None, "epoch": 0},
             "f1": {"score": float("-inf"), "state": None, "epoch": 0},
         }
-        worse_count = 0
+        f1_worse_count = 0
         history = []
         completed_epochs = 0
         stop_reason = "max_epochs"
@@ -421,7 +438,7 @@ class MY(Base):
             np.array(list(self.True_list.values())), dtype=torch.float, device=self.device
         )
         losser = nn.BCEWithLogitsLoss(reduction="mean", weight=label_weight)
-        logging.info("optimizer : using AdaBelief; early stopping metric: train_total_loss")
+        logging.info("optimizer : using AdaBelief; early stopping metric: train_f1")
         global_step = 0
 
         for epoch in range(self.epoches):
@@ -466,16 +483,26 @@ class MY(Base):
                 raise ValueError("Train loader yielded no complete batches")
             completed_epochs += 1
             epoch_values = {key: value / batch_count for key, value in sums.items()}
-            train_result = {"pr": 0.0, "rc": 0.0, "auc": 0.0, "ap": 0.0, "f1": 0.0}
-            if self.train_eval_interval > 0 and (
-                (epoch + 1) % self.train_eval_interval == 0 or epoch == self.epoches - 1
-            ):
+            if hasattr(self.model, "reset_dynamic_graph_cache"):
+                self.model.reset_dynamic_graph_cache()
+            train_result = self.evaluate(train_eval_loader)
+            logging.info(
+                "[train] pr:{pr:.4f} rc:{rc:.4f} auc:{auc} ap:{ap} f1:{f1:.4f}".format(
+                    **train_result
+                )
+            )
+
+            # Test is deliberately observation-only.  It is evaluated on the
+            # frozen model after the Train pass, but never contributes to
+            # gradients, checkpoint selection, or patience.
+            test_result = None
+            if test_eval_loader is not None:
                 if hasattr(self.model, "reset_dynamic_graph_cache"):
                     self.model.reset_dynamic_graph_cache()
-                train_result = self.evaluate(train_eval_loader)
+                test_result = self.evaluate(test_eval_loader)
                 logging.info(
-                    "[train] pr:{pr:.4f} rc:{rc:.4f} auc:{auc} ap:{ap} f1:{f1:.4f}".format(
-                        **train_result
+                    "[test-observe] pr:{pr:.4f} rc:{rc:.4f} auc:{auc} ap:{ap} f1:{f1:.4f}".format(
+                        **test_result
                     )
                 )
             if epoch_values["total"] < best["loss"]["score"]:
@@ -484,15 +511,17 @@ class MY(Base):
                     "state": copy.deepcopy(self.model.state_dict()),
                     "epoch": epoch,
                 }
-                worse_count = 0
-            else:
-                worse_count += 1
             if float(train_result["f1"]) > best["f1"]["score"]:
                 best["f1"] = {
                     "score": float(train_result["f1"]),
                     "state": copy.deepcopy(self.model.state_dict()),
                     "epoch": epoch,
                 }
+                f1_worse_count = 0
+            else:
+                # Strict improvement is intentional: a tied Train F1 spends
+                # one patience unit and does not replace the checkpoint.
+                f1_worse_count += 1
             history.append({
                 "epoch": int(epoch),
                 "train_total_loss": float(epoch_values["total"]),
@@ -501,6 +530,11 @@ class MY(Base):
                 "train_contrastive_loss": float(epoch_values["contrast"]),
                 "train_graph_regularization_loss": float(epoch_values["graph"]),
                 "train_metrics": {key: float(value) for key, value in train_result.items()},
+                "test_metrics": (
+                    {key: float(value) for key, value in test_result.items()}
+                    if test_result is not None
+                    else None
+                ),
                 "complete_train_epoch": True,
                 "batch_count": int(batch_count),
                 "epoch_seconds": float(time.time() - epoch_started),
@@ -508,22 +542,31 @@ class MY(Base):
             os.makedirs(self.model_save_dir, exist_ok=True)
             torch.save(self.model.state_dict(), self._checkpoint_path(self.model_save_dir, "last"))
             logging.info(
-                "Epoch %d/%d train_total_loss=%.6f best=%.6f patience=%d",
-                epoch + 1, self.epoches, epoch_values["total"], best["loss"]["score"], worse_count,
+                "Epoch %d/%d train_total_loss=%.6f best_train_loss=%.6f "
+                "train_f1=%.6f best_train_f1=%.6f patience=%d",
+                epoch + 1,
+                self.epoches,
+                epoch_values["total"],
+                best["loss"]["score"],
+                train_result["f1"],
+                best["f1"]["score"],
+                f1_worse_count,
             )
             scheduler.step()
-            if self.patience > 0 and worse_count >= self.patience:
-                stop_reason = "train_total_loss_patience"
+            if self.patience > 0 and f1_worse_count >= self.patience:
+                stop_reason = "train_f1_patience"
                 break
 
         if best["loss"]["state"] is None or best["f1"]["state"] is None:
             raise RuntimeError("Train did not produce complete checkpoint states")
-        self.save_model(best["loss"], self.model_save_dir, name="best_train_loss")
         self.save_model(best["f1"], self.model_save_dir, name="best_train_f1")
+        self.save_model(best["loss"], self.model_save_dir, name="best_train_loss")
         self.fit_summary = {
-            "checkpoint_policy": "best_train_loss_primary_best_train_f1_diagnostic",
-            "early_stopping_metric": "train_total_loss",
-            "selection_split": "train_diagnostic_only",
+            "checkpoint_policy": "best_train_f1_primary_best_train_loss_diagnostic",
+            "early_stopping_metric": "train_f1",
+            "selection_split": "train_only",
+            "patience_reference": "train_f1",
+            "test_observation": "per_epoch_test_metrics",
             "best_train_loss": float(best["loss"]["score"]),
             "best_train_loss_epoch": int(best["loss"]["epoch"]),
             "best_train_f1": float(best["f1"]["score"]),

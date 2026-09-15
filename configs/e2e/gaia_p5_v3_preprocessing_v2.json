@@ -13,7 +13,7 @@
     "train_fraction_numerator": 7,
     "train_fraction_denominator": 10
   },
-  "ad": {"grid_seconds": 30, "window_bins": 10, "window_step": 1, "label_interval": "half-open overlap: bin_start < event_end and bin_end > event_start", "prediction_time": "prediction_available_time=target_bin_end", "epochs": 100, "patience": 10, "early_stopping_metric": "train_total_loss", "primary_checkpoint": "best_train_loss.pt", "auxiliary_checkpoint": "best_train_f1.pt", "last_checkpoint": "last.pt", "threshold_selection": "train_only_exact_unique_scores"},
+  "ad": {"grid_seconds": 30, "window_bins": 10, "window_step": 1, "label_interval": "half-open overlap: bin_start < event_end and bin_end > event_start", "prediction_time": "prediction_available_time=target_bin_end", "epochs": 100, "patience": 10, "early_stopping_metric": "train_f1", "primary_checkpoint": "best_train_f1.pt", "auxiliary_checkpoint": "best_train_loss.pt", "last_checkpoint": "last.pt", "threshold_selection": "train_only_exact_unique_scores"},
   "ad_model": {
     "learning_rate": 0.001, "weight_decay": 0.0005, "learning_change": 30, "learning_gamma": 0.5,
     "eval_interval": 1, "train_eval_interval": 1, "label_weight": 0.01, "label_percent": 0.5,
@@ -24,7 +24,7 @@
     "contrast_weight": 0.1, "contrast_temp": 0.1, "contrast_proj_dim": 32,
     "contrast_summary_mode": "last", "contrast_start_epoch": 1, "contrast_warmup": 2,
     "score_fusion_alpha": 0.7, "batch_size": 32, "num_workers": 2, "pin_memory": true,
-    "persistent_workers": false, "checkpoint_policy": "best_train_loss_primary_best_train_f1_diagnostic"
+    "persistent_workers": false, "checkpoint_policy": "best_train_f1_primary_best_train_loss_diagnostic"
   },
   "event_registry": {"path": "artifacts/p5/v3/protocol/gt_event_registry.csv", "sha256": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b", "taxonomy_version": "gaia-v3-20260913", "semantics": "one raw six-class injection per registry row", "excluded": ["normal", "ERROR", "traceback continuation", "unsupported/unknown"]},
   "ad_preprocessing": {
