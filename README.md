@@ -164,10 +164,11 @@ experiments/p5/gaia_v2/<unique_run_id>/
 也不要把结果写回共享输入根目录。
 
 `experiments/p5/gaia_v2/<run_id>/` 下的每个 run 都只向远程仓库保留用于分析的
-核心记录：训练摘要和 Test 预测、事件指标与匹配表、RCA/E2E 指标与各层排序结果、
-配置、状态和 feature-health manifest。为控制仓库体积并避免暴露训练状态，
-checkpoint、日志、Train 全量预测、RCA 模型权重、完整 68D `.npy` 特征和并行
-shard 均不会提交；`.gitignore` 对未来新建的 run 目录自动应用同一白名单。
+核心记录：训练摘要、事件指标、RCA/E2E 指标与分层报告、配置、状态和
+feature-health manifest。逐时间窗/逐案例的预测 CSV（包括 AD Test 分数、事件匹配
+表和 RCA 排名）保留在本地，不提交到远程仓库；checkpoint、日志、Train 全量预测、
+RCA 模型权重、完整 68D `.npy` 特征和并行 shard 也不会提交。`.gitignore` 对未来
+新建的 run 目录自动应用同一白名单。
 
 ## 环境
 

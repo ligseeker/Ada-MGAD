@@ -29,33 +29,28 @@ experiments/p5/gaia_v2/*/*
 !experiments/p5/gaia_v2/*/run_manifest.json
 !experiments/p5/gaia_v2/*/run_state.json
 
-# Ada-MGAD analysis records and Test scores.  The large Train prediction CSV
-# remains ignored; its metrics and epoch history are in ad_training_summary.
+# Ada-MGAD aggregate analysis records.  All row-level Train/Test prediction
+# CSVs remain local; their aggregate metrics and epoch history are tracked.
 !experiments/p5/gaia_v2/*/ad/
 experiments/p5/gaia_v2/*/ad/*
-!experiments/p5/gaia_v2/*/ad/ad_test_predictions.csv
 !experiments/p5/gaia_v2/*/ad/ad_training_summary.json
 !experiments/p5/gaia_v2/*/ad/reconstruction_calibration.json
 
-# Event-level predictions and one-to-one matching records.
+# Event-level aggregate metrics.  Event predictions and matching tables remain
+# local because they are row-level diagnostic exports.
 !experiments/p5/gaia_v2/*/events/
 experiments/p5/gaia_v2/*/events/*
-!experiments/p5/gaia_v2/*/events/ad_event_predictions.csv
 !experiments/p5/gaia_v2/*/events/event_detection_metrics.json
-!experiments/p5/gaia_v2/*/events/event_matching.csv
 
-# RCA metrics, model-fit metadata, layer comparisons and ranked predictions.
+# RCA metrics, model-fit metadata and layer comparisons.  Ranked prediction
+# CSVs remain local and can be regenerated or inspected from the run directory.
 !experiments/p5/gaia_v2/*/rca/
 experiments/p5/gaia_v2/*/rca/*
 !experiments/p5/gaia_v2/*/rca/conditional_logit.json
-!experiments/p5/gaia_v2/*/rca/detector_only_predictions.csv
 !experiments/p5/gaia_v2/*/rca/e2e_diagnosis_metrics.json
 !experiments/p5/gaia_v2/*/rca/e2e_layered_report.json
-!experiments/p5/gaia_v2/*/rca/rca_detected_predictions.csv
 !experiments/p5/gaia_v2/*/rca/rca_metrics.json
-!experiments/p5/gaia_v2/*/rca/rca_oracle_predictions.csv
 !experiments/p5/gaia_v2/*/rca/rca_train_manifest.json
-!experiments/p5/gaia_v2/*/rca/root_frequency_predictions.csv
 
 # Lightweight detected-case health/registry records; feature arrays and shards
 # are intentionally not versioned.
