@@ -1,0 +1,128 @@
+{
+  "config_sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+  "counts": {
+    "false_alarm_predictions": 65,
+    "ground_truth_events": 5781,
+    "matched_events": 3702,
+    "missed_gt_events": 2079,
+    "predicted_episodes": 3767
+  },
+  "definition": {
+    "FN@k": "unmatched GT or matched GT with labelled service outside Top-k",
+    "FP@k": "unmatched prediction or matched prediction with labelled service outside Top-k",
+    "TP@k": "matched prediction and labelled fault service in Ada-RCA-G Top-k",
+    "note": "a matched ranking failure contributes to both FP and FN"
+  },
+  "detected_feature_file": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/detected_features/z2_features.npy",
+    "sha256": null,
+    "shape": [
+      3702,
+      10,
+      68
+    ],
+    "source": "precomputed detected-anchor ranking artifact"
+  },
+  "diagnosis_f1_at_1": 0.3611227482195224,
+  "evaluation_population": "W300-eligible Test GT and detected anchors after chronological boundary purge",
+  "event_detection_population": {
+    "matching_rows_before_rca_boundary_purge": 5852,
+    "note": "event_detection_metrics.json remains evaluated on all complete Test injections"
+  },
+  "generated_at_utc": "2026-09-15T17:33:52.162105+00:00",
+  "git_commit": "7dea779fc5196218a43d86a9777b591d290f047b",
+  "metrics": {
+    "@1": {
+      "diagnosis_false_negative": 4057,
+      "diagnosis_false_positive": 2043,
+      "diagnosis_true_positive": 1724,
+      "f1": 0.3611227482195224,
+      "precision": 0.45765861428192195,
+      "ranking_failures": 1978,
+      "recall": 0.2982183013319495
+    },
+    "@3": {
+      "diagnosis_false_negative": 2370,
+      "diagnosis_false_positive": 356,
+      "diagnosis_true_positive": 3411,
+      "f1": 0.7144951822371178,
+      "precision": 0.9054950889301832,
+      "ranking_failures": 291,
+      "recall": 0.5900363258951739
+    },
+    "@5": {
+      "diagnosis_false_negative": 2142,
+      "diagnosis_false_positive": 128,
+      "diagnosis_true_positive": 3639,
+      "f1": 0.762253875157101,
+      "precision": 0.9660207061322007,
+      "ranking_failures": 63,
+      "recall": 0.6294758692267773
+    }
+  },
+  "output_artifacts": {
+    "detector_only_predictions.csv": "a7d08b3c8870181d37dd45d37376feb4beb83022bb72f21e497e936070cad8a2",
+    "rca_detected_predictions.csv": "391b865f1c737273579edce259157ef23894d0581ccb7cbaec413a81a7efeb48"
+  },
+  "primary_summary": "Diagnosis F1@1",
+  "random_seed": 42,
+  "rca_boundary_purge": {
+    "detected_anchor_w300_crossing_cases": 1,
+    "detected_anchor_w300_crossing_prediction_ids": [
+      "test-pred-003767"
+    ],
+    "gt_w300_ineligible_case_ids": [
+      "gaia-v3-10776",
+      "gaia-v3-10777",
+      "gaia-v3-10778",
+      "gaia-v3-10779",
+      "gaia-v3-11088"
+    ],
+    "gt_w300_ineligible_rows": 5,
+    "rule": "exclude GT or detected-anchor RCA context crossing the chronological Test boundary"
+  },
+  "schema_version": "p5_v3_e2e_diagnosis_metrics_v1",
+  "source_artifacts": {
+    "ad_test_predictions.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/ad/ad_test_predictions.csv",
+      "sha256": "6b015eeaed8ac7a64e6d96748178c73184ed9203989491f7d45747bf811e098b"
+    },
+    "conditional_logit.json": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/conditional_logit.json",
+      "sha256": "f1ed43532cf01f1e8485180d74ad4dc86fb57560abdff52d9501b9147ff827ac"
+    },
+    "conditional_logit.npz": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/conditional_logit.npz",
+      "sha256": "1714137d166452594e6fc6f9afe5ee6788305cb73b675e6624e3a68b8a202eb9"
+    },
+    "event_matching.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/events/event_matching.csv",
+      "sha256": "bfd1a08be2b677a0a9d450655c3aaaeb8b252dc31ab7c4ec49328abfa352b1d3"
+    },
+    "index_manifest.json": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3/rca_raw_index/index_manifest.json",
+      "sha256": "cd343dfad123e8238be0f9357fddb6bd55625440e96890cba0a2af40b3a88c19"
+    },
+    "rca_case_registry_gt.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/rca/rca_case_registry_gt.csv",
+      "sha256": "40012909a4de1a6d5ab4b46f7f048fa08a9dd164cc45e20b6685a6089b633393"
+    },
+    "rca_detected_predictions.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/rca_detected_predictions.csv",
+      "sha256": "391b865f1c737273579edce259157ef23894d0581ccb7cbaec413a81a7efeb48"
+    },
+    "rca_metrics.json": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/rca_metrics.json",
+      "sha256": "9de0b2af9dee3e136e128e9c704071236dd65433919e78d23d68ea61d66cd19e"
+    },
+    "rca_oracle_predictions.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/rca_oracle_predictions.csv",
+      "sha256": "6f9a50e168387761fafd0f08e192c68d42f31f26c65ab8b5aa119949d7d60310"
+    },
+    "root_frequency_predictions.csv": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/root_frequency_predictions.csv",
+      "sha256": "c6a63e92300609f29130e53d1897c936596a1292cc225c94ba07e0c7ab5f27ce"
+    }
+  },
+  "status": "FORMAL_FULL_DATA"
+}

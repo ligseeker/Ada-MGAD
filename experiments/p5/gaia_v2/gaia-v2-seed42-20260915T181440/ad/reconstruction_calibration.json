@@ -1,0 +1,9 @@
+{
+  "fit_split": "train",
+  "mad": 0.906867265701294,
+  "median": 2.4151718616485596,
+  "scale": 1.3445214081287384,
+  "train_count": 609750,
+  "train_scores_sha256": "d1a182c28f8c452874b27cc098e7d323f596ab6f49019c363d07033dc3de3682",
+  "transform": "sigmoid((score-median)/(1.4826*max(MAD,1e-6)))"
+}

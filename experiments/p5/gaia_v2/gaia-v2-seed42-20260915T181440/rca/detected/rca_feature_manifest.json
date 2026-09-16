@@ -1,0 +1,65 @@
+{
+  "anchor_semantics": "case registry start_ms is GT start for oracle or matched prediction_available_time for detected",
+  "case_registry_sha256": "d6c6775943042091aba0372517d75c03512d4647c26d5e1ad4f48b7d1b7229a6",
+  "config_sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+  "difference_from_canonical": "raw GAIA adapter; temporal constants parameterized to frozen W300-B15",
+  "feature_variant": "z2",
+  "files": {
+    "anchors_ms": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/detected_features/anchors_ms.npy",
+      "sha256": "ab7b6ae27948b5f11fac81c5cecc98cbeb44694be6723236e4aceb2c416895c1"
+    },
+    "case_ids": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/detected_features/case_ids.npy",
+      "sha256": "40ffc4d6df7a5aa9913216eab9b1aae6b06a4094a570843714eac5a60be5f2cf"
+    },
+    "features": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/detected_features/z2_features.npy",
+      "sha256": "cc1983b64d06807f5ab745462c94a218b2420579ef99f12496323777a052ad7a"
+    },
+    "splits": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/detected_features/splits.npy",
+      "sha256": "fd1c411cf3b89f0bab7200669837d042189784f6914c265b5aa929bef429b86b"
+    }
+  },
+  "generated_at_utc": "2026-09-15T17:29:20.160225+00:00",
+  "git_commit": "7dea779fc5196218a43d86a9777b591d290f047b",
+  "health_artifact": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/detected/rca_feature_health.json",
+  "label_firewall": "feature construction received case_id/start_ms/split only; service and fault labels remain in the separate registry",
+  "parallel_execution": {
+    "effective_workers": 24,
+    "max_in_flight": 48,
+    "phase_wall_seconds": {
+      "case_shards": 311.3446571188979,
+      "deterministic_merge": 2.235427316976711,
+      "total": 313.5800844358746
+    },
+    "requested_workers": 24,
+    "result_order": "submitted task order",
+    "start_method": "spawn",
+    "task_count": 220,
+    "worker_native_threads": 1
+  },
+  "prediction_visible_case_inputs_sha256": "1d8bf49571de84e65ebd71cd122f9a642447e1d3e28462f906480edd1a05b6ff",
+  "random_seed": 42,
+  "schema_version": "p5_v3_rca_feature_manifest_v1",
+  "shape": [
+    14045,
+    10,
+    68
+  ],
+  "shard_cache": {
+    "cache_hits": 123,
+    "policy": "binding and checksum validated; shard JSON is completion marker",
+    "run_key": "135ef81a9281ec82db8a",
+    "task_count": 220
+  },
+  "source_commit": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
+  "source_files": [
+    "docs/REPRESENTATION_FREEZE.md",
+    "src/rca/features.py",
+    "src/rca/final_method.py",
+    "src/rca/p4.py"
+  ],
+  "status": "FORMAL"
+}

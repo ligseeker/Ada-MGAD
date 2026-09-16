@@ -1,0 +1,95 @@
+{
+  "artifact_files": {
+    "event_matching": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/events/event_matching.csv",
+      "rows": 16412,
+      "sha256": "bfd1a08be2b677a0a9d450655c3aaaeb8b252dc31ab7c4ec49328abfa352b1d3"
+    },
+    "event_predictions": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/events/ad_event_predictions.csv",
+      "rows": 10426,
+      "sha256": "1098d41d9db72f3cad9091c53eb2ae3c7c26ec05ebae3b0aba0b043cee60a672"
+    }
+  },
+  "config_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+  "config_sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+  "formal_result": true,
+  "generated_at_utc": "2026-09-15T13:37:16.537440+00:00",
+  "git_commit": "7dea779fc5196218a43d86a9777b591d290f047b",
+  "matching_semantics": "causal_max_cardinality_minimum_delay",
+  "prediction_time": "t_hat=prediction_available_time=target_bin_end",
+  "registry_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv",
+  "registry_sha256": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+  "schema_version": "p5_v3_event_detection_metrics_v1",
+  "status": "FORMAL_FULL_DATA",
+  "test_metrics": {
+    "detection_delay": {
+      "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+      "matched_delay_count": 3703,
+      "mean_seconds": 24.106421550094517,
+      "median_seconds": 24.109,
+      "p90_seconds": 37.5998,
+      "p95_seconds": 39.5143
+    },
+    "event_f1": 0.7750915750915751,
+    "event_precision": 0.9827494692144374,
+    "event_recall": 0.6398824952479696,
+    "false_negative_events": 2084,
+    "false_positive_events": 65,
+    "ground_truth_event_count": 5787,
+    "predicted_episode_count": 3768,
+    "true_positive_events": 3703
+  },
+  "test_not_used_for_threshold_selection": true,
+  "test_prediction_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/ad/ad_test_predictions.csv",
+  "test_prediction_sha256": "6b015eeaed8ac7a64e6d96748178c73184ed9203989491f7d45747bf811e098b",
+  "threshold_execution": {
+    "selection_semantics": "exact unique Train-score sweep",
+    "start_method": "spawn",
+    "workers": 2
+  },
+  "threshold_selection": {
+    "candidate_count": 60139,
+    "selection_source": "Train only",
+    "threshold": 0.8693510293960571,
+    "tie_break": "highest threshold among equal Train event F1",
+    "train_metrics": {
+      "detection_delay": {
+        "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+        "matched_delay_count": 6442,
+        "mean_seconds": 24.757959018938216,
+        "median_seconds": 24.871000000000002,
+        "p90_seconds": 37.7464,
+        "p95_seconds": 39.66475
+      },
+      "event_f1": 0.7577932007999059,
+      "event_precision": 0.9675578251727246,
+      "event_recall": 0.6227764887857695,
+      "false_negative_events": 3902,
+      "false_positive_events": 216,
+      "ground_truth_event_count": 10344,
+      "predicted_episode_count": 6658,
+      "true_positive_events": 6442
+    }
+  },
+  "train_metrics": {
+    "detection_delay": {
+      "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+      "matched_delay_count": 6442,
+      "mean_seconds": 24.757959018938216,
+      "median_seconds": 24.871000000000002,
+      "p90_seconds": 37.7464,
+      "p95_seconds": 39.66475
+    },
+    "event_f1": 0.7577932007999059,
+    "event_precision": 0.9675578251727246,
+    "event_recall": 0.6227764887857695,
+    "false_negative_events": 3902,
+    "false_positive_events": 216,
+    "ground_truth_event_count": 10344,
+    "predicted_episode_count": 6658,
+    "true_positive_events": 6442
+  },
+  "train_prediction_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/ad/ad_train_predictions.csv",
+  "train_prediction_sha256": "7b897725bff1e5a00573eee2e14c1fcc64d20801df06cc9d9b3a6830314d99fe"
+}

@@ -1,0 +1,124 @@
+{
+  "artifacts": {
+    "rca_detected_predictions.csv": "64e2c6739f17b7c2835a09b05a4f1996cdf2b6fe517f7589965f4012b0cf5ffd",
+    "rca_metrics.json": "9de0b2af9dee3e136e128e9c704071236dd65433919e78d23d68ea61d66cd19e",
+    "rca_oracle_predictions.csv": "6f9a50e168387761fafd0f08e192c68d42f31f26c65ab8b5aa119949d7d60310",
+    "root_frequency_predictions.csv": "c6a63e92300609f29130e53d1897c936596a1292cc225c94ba07e0c7ab5f27ce"
+  },
+  "case_counts": {
+    "test": 5782,
+    "train": 10342
+  },
+  "case_registry": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/rca/rca_case_registry_gt.csv",
+    "sha256": "40012909a4de1a6d5ab4b46f7f048fa08a9dd164cc45e20b6685a6089b633393"
+  },
+  "checkpoint": {
+    "metadata_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/conditional_logit.json",
+    "metadata_sha256": "f1ed43532cf01f1e8485180d74ad4dc86fb57560abdff52d9501b9147ff827ac",
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/conditional_logit.npz",
+    "sha256": "1714137d166452594e6fc6f9afe5ee6788305cb73b675e6624e3a68b8a202eb9"
+  },
+  "config_sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+  "detected_case_registry": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/detected/rca_case_registry_detected.csv",
+    "sha256": "d6c6775943042091aba0372517d75c03512d4647c26d5e1ad4f48b7d1b7229a6"
+  },
+  "detected_feature_bundle": {
+    "anchors_ms.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/detected_features/anchors_ms.npy",
+      "sha256": "ab7b6ae27948b5f11fac81c5cecc98cbeb44694be6723236e4aceb2c416895c1"
+    },
+    "case_ids.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/detected_features/case_ids.npy",
+      "sha256": "40ffc4d6df7a5aa9913216eab9b1aae6b06a4094a570843714eac5a60be5f2cf"
+    },
+    "splits.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/detected_features/splits.npy",
+      "sha256": "fd1c411cf3b89f0bab7200669837d042189784f6914c265b5aa929bef429b86b"
+    },
+    "z2_features.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/detected_features/z2_features.npy",
+      "sha256": "cc1983b64d06807f5ab745462c94a218b2420579ef99f12496323777a052ad7a"
+    }
+  },
+  "feature_bundle": {
+    "anchors_ms.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3/rca_features_gt/anchors_ms.npy",
+      "sha256": "4f2272b2364a6da425238b2e84fe2c7f0b581f8a2c3b7396308e493caf879008"
+    },
+    "case_ids.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3/rca_features_gt/case_ids.npy",
+      "sha256": "5017240696980d290fd379dcdd14c1ec13baa7460c6a45dd8d5cf6a83f814a54"
+    },
+    "splits.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3/rca_features_gt/splits.npy",
+      "sha256": "194ddd5d7890a43d0050303dea475939f0d61677e8a6b2ed56c2d60c14726040"
+    },
+    "z2_features.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3/rca_features_gt/z2_features.npy",
+      "sha256": "8f850c5d92ca56306b4644c3b7591819ffcbee162f0787aa3b79926e0608dc8d"
+    }
+  },
+  "generated_at_utc": "2026-09-15T17:33:27.614247+00:00",
+  "git_commit": "7dea779fc5196218a43d86a9777b591d290f047b",
+  "random_seed": 42,
+  "root_frequency": {
+    "counts": {
+      "dbservice1": 51,
+      "dbservice2": 62,
+      "logservice1": 49,
+      "logservice2": 44,
+      "mobservice1": 4979,
+      "mobservice2": 4973,
+      "redisservice1": 34,
+      "redisservice2": 39,
+      "webservice1": 55,
+      "webservice2": 56
+    },
+    "fit_split": "train only",
+    "ranking": [
+      "mobservice1",
+      "mobservice2",
+      "dbservice2",
+      "webservice2",
+      "webservice1",
+      "dbservice1",
+      "logservice1",
+      "logservice2",
+      "redisservice2",
+      "redisservice1"
+    ]
+  },
+  "schema_version": "p5_v3_rca_train_manifest_v1",
+  "source_commit": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
+  "status": "FORMAL_FULL_DATA",
+  "training": {
+    "fit": {
+      "array_file": "conditional_logit.npz",
+      "array_sha256": "1714137d166452594e6fc6f9afe5ee6788305cb73b675e6624e3a68b8a202eb9",
+      "candidate_count": 10,
+      "converged": true,
+      "feature_dimension": 68,
+      "final_loss": 4951.46911104093,
+      "gradient_norm": 2.1635789826390806e-09,
+      "gradient_tolerance": 1e-08,
+      "initial_loss": 23813.33503174689,
+      "iterations": 551,
+      "lambda": 1.0,
+      "max_iter": 1000,
+      "message": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH; Newton polish gradient_inf=2.164e-09",
+      "optimizer": "scipy.optimize.minimize:L-BFGS-B with deterministic Newton polish",
+      "schema_version": "p5_i1_conditional_logit_state_v1",
+      "source_commit": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
+      "standard_scaler_fit": "Train candidate rows only"
+    },
+    "gradient_tolerance": 1e-08,
+    "lambda": 1.0,
+    "max_iter": 1000,
+    "split": "train only",
+    "standard_scaler_fit": "Train candidate rows only",
+    "test_use": "final evaluation only; no fitting or selection",
+    "validation": "not present in V3"
+  }
+}

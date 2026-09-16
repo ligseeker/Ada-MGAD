@@ -1,0 +1,74 @@
+{
+  "created_at": "2026-09-15T10:14:46.383488+00:00",
+  "details": {
+    "stage": "post-ad-resume"
+  },
+  "metadata": {
+    "action": "train-evaluate",
+    "command": [
+      "scripts/p5/run_i1_pipeline.py",
+      "train-evaluate",
+      "--config",
+      "configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+      "--run-dir",
+      "experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440",
+      "--feature-workers",
+      "2",
+      "--event-workers",
+      "2",
+      "--case-chunk-size",
+      "64",
+      "--start-method",
+      "spawn",
+      "--gpu",
+      "true"
+    ],
+    "config_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+    "config_sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+    "created_at_utc": "2026-09-15T10:14:46.358758+00:00",
+    "git_commit": "7dea779fc5196218a43d86a9777b591d290f047b",
+    "random_seed": 42,
+    "run_id": "gaia-v2-seed42-20260915T181440",
+    "tracked_worktree_dirty": false
+  },
+  "project_root": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2",
+  "run_dir": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440",
+  "status": "COMPLETE",
+  "transitions": [
+    {
+      "at": "2026-09-15T10:14:46.562030+00:00",
+      "details": {
+        "pid": 3846,
+        "stage": "ad-train"
+      },
+      "from": "INITIALIZED",
+      "to": "AD_RUNNING"
+    },
+    {
+      "at": "2026-09-15T13:01:18.525010+00:00",
+      "details": {
+        "stage": "ad-train"
+      },
+      "from": "AD_RUNNING",
+      "to": "AD_COMPLETE"
+    },
+    {
+      "at": "2026-09-15T13:01:18.623363+00:00",
+      "details": {
+        "pid": 3846,
+        "stage": "post-ad"
+      },
+      "from": "AD_COMPLETE",
+      "to": "POST_AD_RUNNING"
+    },
+    {
+      "at": "2026-09-15T17:34:02.249055+00:00",
+      "details": {
+        "stage": "post-ad-resume"
+      },
+      "from": "POST_AD_RUNNING",
+      "to": "COMPLETE"
+    }
+  ],
+  "updated_at": "2026-09-15T17:34:02.249055+00:00"
+}
