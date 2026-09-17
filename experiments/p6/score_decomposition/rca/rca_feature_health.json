@@ -1,0 +1,48 @@
+{
+  "all_masked_row_ratio": 0.0,
+  "all_masked_rows": 0,
+  "all_zero_row_ratio": 0.0,
+  "all_zero_rows": 0,
+  "candidate_rows": 38560,
+  "candidate_signature_duplication": 0,
+  "candidate_signature_duplication_ratio": 0.0,
+  "case_registry_sha256": "1124f270eb63c30c99226aab3732a2cb273ff04a4b46ec8c32312466c97dd90b",
+  "cases": 3856,
+  "channel_available_ratio": 0.8780666493775934,
+  "config_sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+  "constant_feature_ratio": 0.04411764705882353,
+  "constant_features": 3,
+  "feature_dimension": 68,
+  "finite_ratio": 1.0,
+  "generated_at_utc": "2026-09-17T12:21:47.448327+00:00",
+  "git_commit": "138a9c84385e7e636797f014577571b032cd6a04",
+  "index_manifest_sha256": "cd343dfad123e8238be0f9357fddb6bd55625440e96890cba0a2af40b3a88c19",
+  "mask_coverage": 0.7979509206431535,
+  "morphology_active_ratio": 0.8780666493775934,
+  "parallel_execution": {
+    "effective_workers": 16,
+    "max_in_flight": 31,
+    "phase_wall_seconds": {
+      "case_shards": 11.481362597085536,
+      "deterministic_merge": 0.22446514293551445,
+      "total": 11.70582774002105
+    },
+    "requested_workers": 16,
+    "result_order": "submitted task order",
+    "start_method": "spawn",
+    "task_count": 31,
+    "worker_native_threads": 1
+  },
+  "prediction_visible_case_inputs_sha256": "d85d3dafc72c745e71d1f42e180b9a4b51081b76662776644b813f9b4ca56418",
+  "purpose": "implementation sanity check only; no representation selection",
+  "random_seed": 42,
+  "schema_version": "p5_v3_rca_feature_health_v1",
+  "shard_cache": {
+    "cache_hits": 31,
+    "policy": "binding and checksum validated; shard JSON is completion marker",
+    "run_key": "37ecbfbbba6f9160a10d",
+    "task_count": 31
+  },
+  "status": "FORMAL",
+  "unique_candidate_signatures": 38560
+}

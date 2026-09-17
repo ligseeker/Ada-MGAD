@@ -1,0 +1,65 @@
+{
+  "diagnosis": {
+    "counts": {
+      "false_alarm_predictions": 33,
+      "ground_truth_events": 5781,
+      "matched_events": 3701,
+      "missed_gt_events": 2080,
+      "predicted_episodes": 3734
+    },
+    "definition": {
+      "FN@k": "unmatched GT or matched GT with labelled service outside Top-k",
+      "FP@k": "unmatched prediction or matched prediction with labelled service outside Top-k",
+      "TP@k": "matched prediction and labelled fault service in Ada-RCA-G Top-k",
+      "note": "a matched ranking failure contributes to both FP and FN"
+    },
+    "diagnosis_f1_at_1": 0.3615344193378875,
+    "metrics": {
+      "@1": {
+        "diagnosis_false_negative": 4061,
+        "diagnosis_false_positive": 2014,
+        "diagnosis_true_positive": 1720,
+        "f1": 0.3615344193378875,
+        "precision": 0.4606320299946438,
+        "ranking_failures": 1981,
+        "recall": 0.2975263795191143
+      },
+      "@3": {
+        "diagnosis_false_negative": 2375,
+        "diagnosis_false_positive": 328,
+        "diagnosis_true_positive": 3406,
+        "f1": 0.7159222280609564,
+        "precision": 0.9121585431173005,
+        "ranking_failures": 295,
+        "recall": 0.5891714236291299
+      },
+      "@5": {
+        "diagnosis_false_negative": 2143,
+        "diagnosis_false_positive": 96,
+        "diagnosis_true_positive": 3638,
+        "f1": 0.7646873357856017,
+        "precision": 0.9742903053026245,
+        "ranking_failures": 63,
+        "recall": 0.6293028887735685
+      }
+    },
+    "primary_summary": "Diagnosis F1@1"
+  },
+  "rca_boundary_purge": {
+    "detected_anchor_w300_crossing_cases": 1,
+    "detected_anchor_w300_crossing_prediction_ids": [
+      "test-pred-003734"
+    ],
+    "gt_w300_ineligible_case_ids": [
+      "gaia-v3-10776",
+      "gaia-v3-10777",
+      "gaia-v3-10778",
+      "gaia-v3-10779",
+      "gaia-v3-11088"
+    ],
+    "gt_w300_ineligible_rows": 5,
+    "rule": "exclude GT or detected-anchor RCA context crossing the chronological Test boundary"
+  },
+  "schema_version": "p6_b0_track_diagnosis_metrics_v1",
+  "track": "classification"
+}

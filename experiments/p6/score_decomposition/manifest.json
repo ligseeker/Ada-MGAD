@@ -1,0 +1,176 @@
+{
+  "checkpoint": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/checkpoint/best_train_f1.pt",
+    "sha256": "eb9ae9a83ef4a3b08911b534eb6e40fbdf95cea31673528111683896afe65263"
+  },
+  "code": {
+    "driver": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/scripts/p6/run_score_decomposition.py",
+    "driver_sha256": "83c72e66a19af725b2121bfb7054ffa796a50080c130d24e2c7286054b941cbe",
+    "helper": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/src/e2e/score_decomposition.py",
+    "helper_sha256": "fc59dc948c28b47b0592093ec1e1a36c76206948c9620a7be8b1752b05290049"
+  },
+  "conditional_logit": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/conditional_logit.npz",
+    "sha256": "1714137d166452594e6fc6f9afe5ee6788305cb73b675e6624e3a68b8a202eb9"
+  },
+  "config": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+    "sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35"
+  },
+  "event_registry": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv",
+    "sha256": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b"
+  },
+  "formal_source_input_manifest": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/input_manifest.json",
+    "sha256": "4a55b67b31ebea530e32296eacece9439c4ed18405afad019c3412ddbb037ce2"
+  },
+  "formal_source_run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440",
+  "frozen_preprocessing_schema": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3_preprocessing_v2/schema/frozen_preprocessing_schema.json",
+    "sha256": "cecea203ff6946744d14d256bb3a993c2186a613601dae346d9edaee6b04f95c"
+  },
+  "fused_reproduction_gate": {
+    "algebraic_identity_passed": true,
+    "event_level_reproduction": {
+      "counts": {
+        "false_negative_events": {
+          "formal": 2084,
+          "fused": 2084
+        },
+        "false_positive_events": {
+          "formal": 65,
+          "fused": 65
+        },
+        "ground_truth_event_count": {
+          "formal": 5787,
+          "fused": 5787
+        },
+        "predicted_episode_count": {
+          "formal": 3768,
+          "fused": 3768
+        },
+        "true_positive_events": {
+          "formal": 3703,
+          "fused": 3703
+        }
+      },
+      "delays": {
+        "mean_seconds": {
+          "abs_diff": 0.0,
+          "formal": 24.106421550094517,
+          "fused": 24.106421550094517
+        },
+        "median_seconds": {
+          "abs_diff": 0.0,
+          "formal": 24.109,
+          "fused": 24.109
+        },
+        "p95_seconds": {
+          "abs_diff": 0.0,
+          "formal": 39.5143,
+          "fused": 39.5143
+        }
+      },
+      "formal_artifact": {
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/events/event_detection_metrics.json",
+        "sha256": "9bffe49f863d1b2caac6927d8b099d814684a92425837ce7fdcf10ec11ab8a5d"
+      },
+      "formal_threshold": 0.8693510293960571,
+      "fused_threshold": 0.8693511486053467,
+      "passed": true,
+      "threshold_abs_diff": 1.1920928955078125e-07
+    },
+    "identity_alignment_exact": true,
+    "max_abs_diff": {
+      "test": 1.6093254089355469e-06,
+      "train": 3.784894943292816e-06
+    },
+    "score_level_passed": false,
+    "score_level_tolerance": 1e-06,
+    "verdict": "IDENTITY_EXACT_EVENT_EXACT_FLOAT_NOISE"
+  },
+  "generated_at_utc": "2026-09-17T12:21:52.220740+00:00",
+  "git_commit": "138a9c84385e7e636797f014577571b032cd6a04",
+  "label_identity_audit_summary": {
+    "exact_identity_count": 11364,
+    "exact_identity_ratio": 0.7044820531895108,
+    "labelled_service_identity_ratio": 1.0,
+    "total_events": 16131
+  },
+  "original_formal_detected_ranking": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/rca_detected_predictions.csv",
+    "sha256": "391b865f1c737273579edce259157ef23894d0581ccb7cbaec413a81a7efeb48"
+  },
+  "original_formal_event_matching": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/events/event_matching.csv",
+    "sha256": "bfd1a08be2b677a0a9d450655c3aaaeb8b252dc31ab7c4ec49328abfa352b1d3"
+  },
+  "original_formal_prediction_artifact": {
+    "test": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/ad/ad_test_predictions.csv",
+      "sha256": "6b015eeaed8ac7a64e6d96748178c73184ed9203989491f7d45747bf811e098b"
+    },
+    "train": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/ad/ad_train_predictions.csv",
+      "sha256": "7b897725bff1e5a00573eee2e14c1fcc64d20801df06cc9d9b3a6830314d99fe"
+    }
+  },
+  "policy": {
+    "alpha_sweep_performed": false,
+    "no_retraining": true,
+    "output_dir": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/score_decomposition",
+    "rca_retrained": false,
+    "reconstruction_calibration_refit": false,
+    "reused_frozen_event_thresholds": true,
+    "test_used_for_threshold_selection": false,
+    "writes_into_formal_run": false
+  },
+  "preprocessing_manifest": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json",
+    "sha256": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2"
+  },
+  "rca_anchor_materialization": {
+    "anchor_registry": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/score_decomposition/rca/anchor_registry.csv",
+      "sha256": "1124f270eb63c30c99226aab3732a2cb273ff04a4b46ec8c32312466c97dd90b"
+    },
+    "feature_manifest": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/score_decomposition/rca/rca_feature_manifest.json",
+    "feature_manifest_record": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/score_decomposition/rca/anchor_features/z2_features.npy",
+      "sha256": "66e634a87f16318b738bd0f29e891d7cb0d9d3b0a8871cee9ac67b58e2dde697"
+    },
+    "feature_root": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/score_decomposition/rca/anchor_features",
+    "unique_anchor_count": 3856
+  },
+  "rca_raw_index_manifest": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3/rca_raw_index/index_manifest.json",
+    "sha256": "cd343dfad123e8238be0f9357fddb6bd55625440e96890cba0a2af40b3a88c19"
+  },
+  "reconstruction_calibration": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/ad/reconstruction_calibration.json",
+    "sha256": "7c58b3e20cf4e5d4ea341ade7a53498c34010292ae39278ae9d403bfa9c6536f"
+  },
+  "schema_version": "p6_b0_manifest_v1",
+  "score_fusion_alpha": 0.7,
+  "score_tracks": [
+    "classification",
+    "fused",
+    "reconstruction"
+  ],
+  "status": "FORMAL_AUDIT_COMPLETE",
+  "train_test_case_counts": {
+    "common_case_count": 2214,
+    "common_case_count_pre_rca_purge": 2214,
+    "matched_test_by_track": {
+      "classification": 3702,
+      "fused": 3703,
+      "reconstruction": 2314
+    },
+    "matched_test_by_track_after_rca_purge": {
+      "classification": 3701,
+      "fused": 3702,
+      "reconstruction": 2314
+    }
+  }
+}

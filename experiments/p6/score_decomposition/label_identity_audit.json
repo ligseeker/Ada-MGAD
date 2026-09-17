@@ -1,0 +1,17 @@
+{
+  "ad_label_source_column": "node_label in ad_{train,test}_predictions.csv (registry-service rasterization)",
+  "bins_covered": 30870,
+  "bins_multi_event": 5916,
+  "bins_multi_root_service": 4892,
+  "bins_single_event": 24954,
+  "definition": "For every GT injection, the AD positive node set on each overlapped 30s bin is compared with the RCA labelled root service identity.  Both labels come from the same frozen registry service column, so the identity is structural; this audit quantifies it and measures bin-level multi-event ambiguity.",
+  "exact_identity_count": 11364,
+  "exact_identity_definition": "every overlapped bin has AD positive set exactly equal to the event service",
+  "exact_identity_ratio": 0.7044820531895108,
+  "labelled_service_positive_on_all_bins_count": 16131,
+  "labelled_service_positive_on_all_bins_ratio": 1.0,
+  "rasterization_mismatch_events": 0,
+  "rca_label_source_column": "gt_service / registry service (same registry)",
+  "service_bin_multi_event": 1331,
+  "total_events": 16131
+}

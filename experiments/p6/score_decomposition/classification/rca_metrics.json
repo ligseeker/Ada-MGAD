@@ -1,0 +1,186 @@
+{
+  "artifacts": {
+    "rca_detected_predictions": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/score_decomposition/classification/rca_detected_predictions.csv",
+      "sha256": "62707c33b07ee6bec2b5c9ae7242b6622701b283802007f9315a433e2e37ff9f"
+    }
+  },
+  "conditional_logit_refit": false,
+  "feature_dimension": 68,
+  "feature_window": "W300-B15",
+  "native_population": {
+    "definition": "W300-eligible Test GT and detected anchors after chronological boundary purge",
+    "matched_case_count": 3701,
+    "metrics": {
+      "fault_macro": {
+        "by_group": {
+          "access_permission_denied": {
+            "AC@1": 0.4,
+            "AC@3": 0.8,
+            "AC@5": 1.0,
+            "Avg@5": 0.8,
+            "MRR": 0.65,
+            "case_count": 5
+          },
+          "cpu_anomalies": {
+            "AC@1": 0.0,
+            "AC@3": 0.0,
+            "AC@5": 1.0,
+            "Avg@5": 0.2,
+            "MRR": 0.2,
+            "case_count": 1
+          },
+          "file_moving": {
+            "AC@1": 0.8333333333333334,
+            "AC@3": 1.0,
+            "AC@5": 1.0,
+            "Avg@5": 0.9666666666666667,
+            "MRR": 0.9166666666666666,
+            "case_count": 6
+          },
+          "login_failure": {
+            "AC@1": 0.4715830329914056,
+            "AC@3": 0.9290268921541447,
+            "AC@5": 0.9875242583864707,
+            "Avg@5": 0.8446354311061975,
+            "MRR": 0.7049174664783204,
+            "case_count": 3607
+          },
+          "memory_anomalies": {
+            "AC@1": 0.14634146341463414,
+            "AC@3": 0.5487804878048781,
+            "AC@5": 0.7804878048780488,
+            "Avg@5": 0.4926829268292683,
+            "MRR": 0.389832559039876,
+            "case_count": 82
+          }
+        },
+        "group_count": 5,
+        "macro": {
+          "AC@1": 0.37025156594787456,
+          "AC@3": 0.6555614759918045,
+          "AC@5": 0.9536024126529039,
+          "Avg@5": 0.6607970049204266,
+          "MRR": 0.5722833384369725
+        }
+      },
+      "overall": {
+        "AC@1": 0.4647392596595515,
+        "AC@3": 0.9202918130235072,
+        "AC@5": 0.9829775736287489,
+        "Avg@5": 0.836800864631197,
+        "MRR": 0.6980690546956425,
+        "case_count": 3701
+      },
+      "root_macro": {
+        "by_group": {
+          "dbservice1": {
+            "AC@1": 0.09090909090909091,
+            "AC@3": 0.6363636363636364,
+            "AC@5": 0.9090909090909091,
+            "Avg@5": 0.5272727272727273,
+            "MRR": 0.3772727272727273,
+            "case_count": 11
+          },
+          "dbservice2": {
+            "AC@1": 0.08333333333333333,
+            "AC@3": 0.3333333333333333,
+            "AC@5": 0.6666666666666666,
+            "Avg@5": 0.4000000000000001,
+            "MRR": 0.32083333333333336,
+            "case_count": 12
+          },
+          "logservice1": {
+            "AC@1": 0.125,
+            "AC@3": 0.25,
+            "AC@5": 0.625,
+            "Avg@5": 0.35,
+            "MRR": 0.3177083333333333,
+            "case_count": 8
+          },
+          "logservice2": {
+            "AC@1": 0.0,
+            "AC@3": 0.3333333333333333,
+            "AC@5": 0.3333333333333333,
+            "Avg@5": 0.26666666666666666,
+            "MRR": 0.27777777777777773,
+            "case_count": 3
+          },
+          "mobservice1": {
+            "AC@1": 0.45148625911385304,
+            "AC@3": 0.9203589455973079,
+            "AC@5": 0.9842961301177791,
+            "Avg@5": 0.8348850252383521,
+            "MRR": 0.6916688922718094,
+            "case_count": 1783
+          },
+          "mobservice2": {
+            "AC@1": 0.49293478260869567,
+            "AC@3": 0.9380434782608695,
+            "AC@5": 0.9907608695652174,
+            "Avg@5": 0.8547826086956418,
+            "MRR": 0.7188722826086958,
+            "case_count": 1840
+          },
+          "redisservice1": {
+            "AC@1": 0.0,
+            "AC@3": 0.75,
+            "AC@5": 0.875,
+            "Avg@5": 0.5,
+            "MRR": 0.31145833333333334,
+            "case_count": 8
+          },
+          "redisservice2": {
+            "AC@1": 0.0,
+            "AC@3": 0.4166666666666667,
+            "AC@5": 0.8333333333333334,
+            "Avg@5": 0.38333333333333336,
+            "MRR": 0.2702380952380952,
+            "case_count": 12
+          },
+          "webservice1": {
+            "AC@1": 0.25,
+            "AC@3": 0.5,
+            "AC@5": 0.75,
+            "Avg@5": 0.525,
+            "MRR": 0.453125,
+            "case_count": 8
+          },
+          "webservice2": {
+            "AC@1": 0.1875,
+            "AC@3": 0.625,
+            "AC@5": 0.8125,
+            "Avg@5": 0.5375,
+            "MRR": 0.42802579365079363,
+            "case_count": 16
+          }
+        },
+        "group_count": 10,
+        "macro": {
+          "AC@1": 0.1681163465964973,
+          "AC@3": 0.5703099393555148,
+          "AC@5": 0.7779981242107239,
+          "Avg@5": 0.5179440361206722,
+          "MRR": 0.4166980568819899
+        }
+      }
+    }
+  },
+  "rca_boundary_purge": {
+    "detected_anchor_w300_crossing_cases": 1,
+    "detected_anchor_w300_crossing_prediction_ids": [
+      "test-pred-003734"
+    ],
+    "gt_w300_ineligible_case_ids": [
+      "gaia-v3-10776",
+      "gaia-v3-10777",
+      "gaia-v3-10778",
+      "gaia-v3-10779",
+      "gaia-v3-11088"
+    ],
+    "gt_w300_ineligible_rows": 5,
+    "rule": "exclude GT or detected-anchor RCA context crossing the chronological Test boundary"
+  },
+  "schema_version": "p6_b0_track_rca_metrics_v1",
+  "track": "classification"
+}

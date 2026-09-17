@@ -75,3 +75,30 @@ __pycache__/
 
 *.log
 .env
+
+# P6-B0 score decomposition audit outputs.  The P6 driver is forbidden from
+# writing into the formal P5 run, so only the lightweight aggregate records are
+# versioned; row-level prediction, matching, and RCA feature exports stay local.
+experiments/*
+!experiments/p6/
+experiments/p6/*
+!experiments/p6/score_decomposition/
+experiments/p6/score_decomposition/*
+!experiments/p6/score_decomposition/*.json
+!experiments/p6/score_decomposition/*.md
+!experiments/p6/score_decomposition/common_cases.csv
+!experiments/p6/score_decomposition/classification/
+!experiments/p6/score_decomposition/fused/
+!experiments/p6/score_decomposition/reconstruction/
+!experiments/p6/score_decomposition/rca/
+experiments/p6/score_decomposition/classification/*
+experiments/p6/score_decomposition/fused/*
+experiments/p6/score_decomposition/reconstruction/*
+experiments/p6/score_decomposition/rca/*
+!experiments/p6/score_decomposition/*/threshold.json
+!experiments/p6/score_decomposition/*/event_metrics.json
+!experiments/p6/score_decomposition/*/localization_metrics.json
+!experiments/p6/score_decomposition/*/rca_metrics.json
+!experiments/p6/score_decomposition/*/diagnosis_metrics.json
+!experiments/p6/score_decomposition/rca/rca_feature_manifest.json
+!experiments/p6/score_decomposition/rca/rca_feature_health.json

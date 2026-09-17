@@ -1,0 +1,63 @@
+{
+  "diagnosis": {
+    "counts": {
+      "false_alarm_predictions": 220,
+      "ground_truth_events": 5782,
+      "matched_events": 2314,
+      "missed_gt_events": 3468,
+      "predicted_episodes": 2534
+    },
+    "definition": {
+      "FN@k": "unmatched GT or matched GT with labelled service outside Top-k",
+      "FP@k": "unmatched prediction or matched prediction with labelled service outside Top-k",
+      "TP@k": "matched prediction and labelled fault service in Ada-RCA-G Top-k",
+      "note": "a matched ranking failure contributes to both FP and FN"
+    },
+    "diagnosis_f1_at_1": 0.26238576238576244,
+    "metrics": {
+      "@1": {
+        "diagnosis_false_negative": 4691,
+        "diagnosis_false_positive": 1443,
+        "diagnosis_true_positive": 1091,
+        "f1": 0.26238576238576244,
+        "precision": 0.43054459352801894,
+        "ranking_failures": 1223,
+        "recall": 0.1886890349360083
+      },
+      "@3": {
+        "diagnosis_false_negative": 3631,
+        "diagnosis_false_positive": 383,
+        "diagnosis_true_positive": 2151,
+        "f1": 0.5173160173160173,
+        "precision": 0.8488555643251776,
+        "ranking_failures": 163,
+        "recall": 0.37201660325147007
+      },
+      "@5": {
+        "diagnosis_false_negative": 3502,
+        "diagnosis_false_positive": 254,
+        "diagnosis_true_positive": 2280,
+        "f1": 0.5483405483405484,
+        "precision": 0.8997632202052092,
+        "ranking_failures": 34,
+        "recall": 0.3943272224143895
+      }
+    },
+    "primary_summary": "Diagnosis F1@1"
+  },
+  "rca_boundary_purge": {
+    "detected_anchor_w300_crossing_cases": 0,
+    "detected_anchor_w300_crossing_prediction_ids": [],
+    "gt_w300_ineligible_case_ids": [
+      "gaia-v3-10776",
+      "gaia-v3-10777",
+      "gaia-v3-10778",
+      "gaia-v3-10779",
+      "gaia-v3-11088"
+    ],
+    "gt_w300_ineligible_rows": 5,
+    "rule": "exclude GT or detected-anchor RCA context crossing the chronological Test boundary"
+  },
+  "schema_version": "p6_b0_track_diagnosis_metrics_v1",
+  "track": "reconstruction"
+}

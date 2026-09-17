@@ -1,0 +1,33 @@
+{
+  "candidate_count": 45283,
+  "prediction_artifact_sha256": {
+    "test": "dde6582b84a9195e44f8b4a4bed45bf9543d74beae4409dafc7098b6e1772255",
+    "train": "72946c316752ad02331f96dd52666e74f86bd51dd7034bff9b1f22869a587a08"
+  },
+  "restored_from_frozen_threshold": true,
+  "schema_version": "p6_b0_track_threshold_v1",
+  "selected_score_column": "selected_anomaly_score",
+  "selection_source": "Train only (exact unique Train-score sweep)",
+  "test_used_for_threshold_selection": false,
+  "threshold": 0.9944921731948853,
+  "tie_break": "highest threshold among equal Train event F1",
+  "track": "classification",
+  "train_metrics": {
+    "detection_delay": {
+      "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+      "matched_delay_count": 6727,
+      "mean_seconds": 24.57941920618403,
+      "median_seconds": 24.686,
+      "p90_seconds": 37.6188,
+      "p95_seconds": 39.555299999999995
+    },
+    "event_f1": 0.778362742262077,
+    "event_precision": 0.9691687076790088,
+    "event_recall": 0.6503286929621036,
+    "false_negative_events": 3617,
+    "false_positive_events": 214,
+    "ground_truth_event_count": 10344,
+    "predicted_episode_count": 6941,
+    "true_positive_events": 6727
+  }
+}

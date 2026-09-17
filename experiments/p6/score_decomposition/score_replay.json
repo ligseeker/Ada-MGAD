@@ -1,0 +1,110 @@
+{
+  "algebraic_identity_max_abs_error": 7.152557368605983e-08,
+  "algebraic_identity_passed": true,
+  "algebraic_identity_tolerance": 1e-06,
+  "checkpoint": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/checkpoint/best_train_f1.pt",
+    "sha256": "eb9ae9a83ef4a3b08911b534eb6e40fbdf95cea31673528111683896afe65263"
+  },
+  "event_level_reproduction": {
+    "counts": {
+      "false_negative_events": {
+        "formal": 2084,
+        "fused": 2084
+      },
+      "false_positive_events": {
+        "formal": 65,
+        "fused": 65
+      },
+      "ground_truth_event_count": {
+        "formal": 5787,
+        "fused": 5787
+      },
+      "predicted_episode_count": {
+        "formal": 3768,
+        "fused": 3768
+      },
+      "true_positive_events": {
+        "formal": 3703,
+        "fused": 3703
+      }
+    },
+    "delays": {
+      "mean_seconds": {
+        "abs_diff": 0.0,
+        "formal": 24.106421550094517,
+        "fused": 24.106421550094517
+      },
+      "median_seconds": {
+        "abs_diff": 0.0,
+        "formal": 24.109,
+        "fused": 24.109
+      },
+      "p95_seconds": {
+        "abs_diff": 0.0,
+        "formal": 39.5143,
+        "fused": 39.5143
+      }
+    },
+    "formal_artifact": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/events/event_detection_metrics.json",
+      "sha256": "9bffe49f863d1b2caac6927d8b099d814684a92425837ce7fdcf10ec11ab8a5d"
+    },
+    "formal_threshold": 0.8693510293960571,
+    "fused_threshold": 0.8693511486053467,
+    "passed": true,
+    "threshold_abs_diff": 1.1920928955078125e-07
+  },
+  "fusion_semantics": "fused_anomaly = alpha * P_cls(anomaly) + (1-alpha) * P_rec(anomaly)",
+  "gate_policy": "The score-level tolerance is a numerical target, not a permission to relax the protocol.  If it is exceeded, evaluation proceeds only when the fused track reproduces the formal event detection exactly (threshold, TP/FP/FN, delay).",
+  "generated_at_utc": "2026-09-17T11:17:31.769126+00:00",
+  "git_commit": "138a9c84385e7e636797f014577571b032cd6a04",
+  "identity_alignment_exact": true,
+  "passed": true,
+  "reconstruction_calibration": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/ad/reconstruction_calibration.json",
+    "sha256": "7c58b3e20cf4e5d4ea341ade7a53498c34010292ae39278ae9d403bfa9c6536f"
+  },
+  "reproduction_verdict": "IDENTITY_EXACT_EVENT_EXACT_FLOAT_NOISE",
+  "root_cause_if_not_exact": "Residual differences are multi-threaded CPU float32 reduction-order noise in the shared frozen backbone forward pass.  Calibration, softmax, dtype, fusion order and row identity are reused verbatim from the frozen P5 implementation; a controlled torch thread-count sweep reproduces the same magnitude of variation.  The decisive gate for this audit is the fused event-level reproduction recorded under event_level_reproduction.",
+  "schema_version": "p6_b0_score_replay_v1",
+  "score_fusion_alpha": 0.7,
+  "score_level_passed": false,
+  "score_level_tolerance": 1e-06,
+  "splits": {
+    "test": {
+      "formal_artifact": {
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/ad/ad_test_predictions.csv",
+        "sha256": "6b015eeaed8ac7a64e6d96748178c73184ed9203989491f7d45747bf811e098b"
+      },
+      "formal_rows": 261270,
+      "identity_match": true,
+      "max_abs_diff": 1.6093254089355469e-06,
+      "mean_abs_diff": 1.0821564108268012e-08,
+      "merged_rows": 261270,
+      "new_rows": 261270,
+      "node_label_mismatch_rows": 0,
+      "passed": false,
+      "prediction_available_time_mismatch_rows": 0,
+      "tolerance": 1e-06,
+      "unmatched_rows": 0
+    },
+    "train": {
+      "formal_artifact": {
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/ad/ad_train_predictions.csv",
+        "sha256": "7b897725bff1e5a00573eee2e14c1fcc64d20801df06cc9d9b3a6830314d99fe"
+      },
+      "formal_rows": 609750,
+      "identity_match": true,
+      "max_abs_diff": 3.784894943292816e-06,
+      "mean_abs_diff": 1.9493614776899276e-08,
+      "merged_rows": 609750,
+      "new_rows": 609750,
+      "node_label_mismatch_rows": 0,
+      "passed": false,
+      "prediction_available_time_mismatch_rows": 0,
+      "tolerance": 1e-06,
+      "unmatched_rows": 0
+    }
+  }
+}

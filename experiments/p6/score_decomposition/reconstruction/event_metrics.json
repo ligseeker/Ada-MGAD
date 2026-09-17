@@ -1,0 +1,181 @@
+{
+  "artifacts": {
+    "event_episodes": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/score_decomposition/reconstruction/event_episodes.csv",
+      "sha256": "de3e569301bec4fbec22aaad3b3f4e62ea6e4e9c1735d882e79aa764d10bfe3c"
+    },
+    "event_matches": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/score_decomposition/reconstruction/event_matches.csv",
+      "sha256": "e9b3ea5d3d5824756b7826cef0dc889bac1ec9d9816852bffd930d2d31687a42"
+    }
+  },
+  "grid_seconds": 30,
+  "matching_semantics": "causal_max_cardinality_minimum_delay",
+  "matching_tolerance_seconds": 60,
+  "prediction_time": "t_hat=prediction_available_time=target_bin_end",
+  "schema_version": "p6_b0_track_event_metrics_v1",
+  "test_metrics": {
+    "detection_delay": {
+      "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+      "matched_delay_count": 2314,
+      "mean_seconds": 24.188043647363873,
+      "median_seconds": 24.048499999999997,
+      "p90_seconds": 37.748400000000004,
+      "p95_seconds": 39.78835
+    },
+    "event_f1": 0.5561831510635741,
+    "event_precision": 0.9131807419100236,
+    "event_recall": 0.39986175911525834,
+    "false_negative_events": 3473,
+    "false_positive_events": 220,
+    "ground_truth_event_count": 5787,
+    "predicted_episode_count": 2534,
+    "true_positive_events": 2314
+  },
+  "test_stratified_by_fault_type": {
+    "by_group": {
+      "access_permission_denied": {
+        "case_count": 5,
+        "false_negative": 1,
+        "recall": 0.8,
+        "small_n": true,
+        "true_positive": 4
+      },
+      "cpu_anomalies": {
+        "case_count": 12,
+        "false_negative": 10,
+        "recall": 0.16666666666666666,
+        "small_n": true,
+        "true_positive": 2
+      },
+      "file_moving": {
+        "case_count": 16,
+        "false_negative": 10,
+        "recall": 0.375,
+        "small_n": true,
+        "true_positive": 6
+      },
+      "login_failure": {
+        "case_count": 5546,
+        "false_negative": 3284,
+        "recall": 0.40786152181752616,
+        "small_n": false,
+        "true_positive": 2262
+      },
+      "memory_anomalies": {
+        "case_count": 204,
+        "false_negative": 164,
+        "recall": 0.19607843137254902,
+        "small_n": false,
+        "true_positive": 40
+      },
+      "normal_memory_freed": {
+        "case_count": 4,
+        "false_negative": 4,
+        "recall": 0.0,
+        "small_n": true,
+        "true_positive": 0
+      }
+    },
+    "field": "fault_type",
+    "group_count": 6,
+    "small_n_threshold": 30
+  },
+  "test_stratified_by_root_service": {
+    "by_group": {
+      "dbservice1": {
+        "case_count": 33,
+        "false_negative": 29,
+        "recall": 0.12121212121212122,
+        "small_n": false,
+        "true_positive": 4
+      },
+      "dbservice2": {
+        "case_count": 32,
+        "false_negative": 24,
+        "recall": 0.25,
+        "small_n": false,
+        "true_positive": 8
+      },
+      "logservice1": {
+        "case_count": 18,
+        "false_negative": 14,
+        "recall": 0.2222222222222222,
+        "small_n": true,
+        "true_positive": 4
+      },
+      "logservice2": {
+        "case_count": 20,
+        "false_negative": 18,
+        "recall": 0.1,
+        "small_n": true,
+        "true_positive": 2
+      },
+      "mobservice1": {
+        "case_count": 2799,
+        "false_negative": 1947,
+        "recall": 0.30439442658092175,
+        "small_n": false,
+        "true_positive": 852
+      },
+      "mobservice2": {
+        "case_count": 2787,
+        "false_negative": 1365,
+        "recall": 0.5102260495156081,
+        "small_n": false,
+        "true_positive": 1422
+      },
+      "redisservice1": {
+        "case_count": 20,
+        "false_negative": 17,
+        "recall": 0.15,
+        "small_n": true,
+        "true_positive": 3
+      },
+      "redisservice2": {
+        "case_count": 18,
+        "false_negative": 15,
+        "recall": 0.16666666666666666,
+        "small_n": true,
+        "true_positive": 3
+      },
+      "webservice1": {
+        "case_count": 30,
+        "false_negative": 26,
+        "recall": 0.13333333333333333,
+        "small_n": false,
+        "true_positive": 4
+      },
+      "webservice2": {
+        "case_count": 30,
+        "false_negative": 18,
+        "recall": 0.4,
+        "small_n": false,
+        "true_positive": 12
+      }
+    },
+    "field": "gt_service",
+    "group_count": 10,
+    "small_n_threshold": 30
+  },
+  "threshold": 0.6619510650634766,
+  "track": "reconstruction",
+  "train_metrics": {
+    "detection_delay": {
+      "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+      "matched_delay_count": 2309,
+      "mean_seconds": 24.93488739714162,
+      "median_seconds": 25.194,
+      "p90_seconds": 37.9486,
+      "p95_seconds": 39.925799999999995
+    },
+    "event_f1": 0.3421754593953764,
+    "event_precision": 0.7325507614213198,
+    "event_recall": 0.22322119102861562,
+    "false_negative_events": 8035,
+    "false_positive_events": 843,
+    "ground_truth_event_count": 10344,
+    "predicted_episode_count": 3152,
+    "true_positive_events": 2309
+  }
+}

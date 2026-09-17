@@ -1,0 +1,42 @@
+{
+  "test": {
+    "classification": {
+      "all_finite": true,
+      "max": 1.0,
+      "min": 4.309708839800308e-12,
+      "within_unit_interval": true
+    },
+    "fused": {
+      "all_finite": true,
+      "max": 0.9999986886978149,
+      "min": 0.06223439797759056,
+      "within_unit_interval": true
+    },
+    "reconstruction": {
+      "all_finite": true,
+      "max": 0.9999956488609314,
+      "min": 0.20743723213672638,
+      "within_unit_interval": true
+    }
+  },
+  "train": {
+    "classification": {
+      "all_finite": true,
+      "max": 1.0,
+      "min": 6.843709626780381e-12,
+      "within_unit_interval": true
+    },
+    "fused": {
+      "all_finite": true,
+      "max": 0.9999980926513672,
+      "min": 0.05828160420060158,
+      "within_unit_interval": true
+    },
+    "reconstruction": {
+      "all_finite": true,
+      "max": 0.9999935626983643,
+      "min": 0.19426922500133514,
+      "within_unit_interval": true
+    }
+  }
+}
