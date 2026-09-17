@@ -1,0 +1,438 @@
+{
+  "artifact_files": {
+    "test_episodes": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_episodes.csv",
+      "sha256": "30bacbeecbee4b9f738fc6330fa9d8df5c1adc08e37fb1ee8476f1b47735399b"
+    },
+    "test_matching": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_matching.csv",
+      "sha256": "011332f3537ee6f7d044e9da23df1d88f617fb71d3a552354343db6fd91c9c77"
+    },
+    "test_predictions": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_predictions.csv",
+      "sha256": "985623e06f5d56db9c2c536b8dd65226967ae1c25f36c9a4924ae9e38d5bafab"
+    }
+  },
+  "checkpoint": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/checkpoint/best_validation_event_f1.pt",
+    "sha256": "6a4317d6414774e1ca6be4e418ed3d47d678adfab1f0155e96e04aa3fa9981f5"
+  },
+  "data_manifest": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json",
+    "sha256": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2"
+  },
+  "formal_result": true,
+  "frozen_validation_threshold": 0.9998264908790588,
+  "generated_at_utc": "2026-09-17T19:54:08.870530+00:00",
+  "git_commit": "cedc4a2bd7492933a8295067c8075e631cbf3df9",
+  "historical_node_supervised_reference": {
+    "comparison_note": "historical reference only; it is a node-supervised detector trained on the frozen 70/30 split with a different label definition, so this is not a controlled equal-protocol SOTA comparison",
+    "event_f1": 0.7751,
+    "event_precision": 0.9827,
+    "event_recall": 0.6399,
+    "source": "P5 formal fused Ada-MGAD trigger (node-supervised)"
+  },
+  "model": "P6-C0 root-agnostic system event trigger",
+  "model_parameters": 2903354,
+  "p6_c0_decision": {
+    "gate": {
+      "f1": true,
+      "passed": true,
+      "precision": true,
+      "recall": true,
+      "rule": "all three pre-registered engineering margins must hold for GO"
+    },
+    "outcome": "BORDERLINE",
+    "rule": "GO = gate holds and no stratification failure; NO-GO = F1 < 0.60 or Recall < 0.40; else BORDERLINE",
+    "stratification_failures": [
+      {
+        "kind": "duration_recall",
+        "n": 229,
+        "recall": 0.13973799126637554,
+        "stratum": "gt_300s"
+      },
+      {
+        "kind": "fault_type_recall",
+        "n": 204,
+        "recall": 0.14705882352941177,
+        "stratum": "memory_anomalies"
+      }
+    ]
+  },
+  "pre_registered_gate": {
+    "f1": true,
+    "passed": true,
+    "precision": true,
+    "recall": true,
+    "rule": "all three pre-registered engineering margins must hold for GO"
+  },
+  "rca_executed": false,
+  "schema_version": "p6_c0_test_evaluation_v1",
+  "selected_epoch": 8,
+  "selected_validation_metrics": {
+    "detection_delay": {
+      "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+      "matched_delay_count": 2124,
+      "mean_seconds": 23.942804143126178,
+      "median_seconds": 23.995,
+      "p90_seconds": 37.0805,
+      "p95_seconds": 39.17674999999999
+    },
+    "event_f1": 0.8431917427550616,
+    "event_precision": 0.9939167056621432,
+    "event_recall": 0.7321613236814891,
+    "false_negative_events": 777,
+    "false_positive_events": 13,
+    "ground_truth_event_count": 2901,
+    "predicted_episode_count": 2137,
+    "true_positive_events": 2124
+  },
+  "stage": "frozen_test_evaluation",
+  "test_bin_diagnostics": {
+    "auroc": 0.9546986525564656,
+    "average_precision": 0.9557582989200102,
+    "bce": 0.2447985319653788,
+    "ignore_bins": 2673,
+    "ignore_bins_masked_from_loss_and_metrics": true,
+    "negative_bins": 13772,
+    "positive_bins": 9682,
+    "scored_bins": 23454
+  },
+  "test_event_metrics": {
+    "detection_delay": {
+      "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+      "matched_delay_count": 4198,
+      "mean_seconds": 23.773935683658888,
+      "median_seconds": 23.759999999999998,
+      "p90_seconds": 37.1991,
+      "p95_seconds": 39.148199999999996
+    },
+    "event_f1": 0.8395160483951605,
+    "event_precision": 0.996203132415757,
+    "event_recall": 0.7254190426818732,
+    "false_negative_events": 1589,
+    "false_positive_events": 16,
+    "ground_truth_event_count": 5787,
+    "predicted_episode_count": 4214,
+    "true_positive_events": 4198
+  },
+  "test_ground_truth_events": 5787,
+  "test_stratifications": {
+    "duration": [
+      {
+        "delay_count": 4166,
+        "duration_stratum": "le_15s",
+        "false_negative_events": 1392,
+        "ground_truth_events": 5558,
+        "mean_delay_seconds": 23.818384541526648,
+        "median_delay_seconds": 23.84,
+        "p95_delay_seconds": 39.144,
+        "recall": 0.7495501979129183,
+        "small_n": false,
+        "true_positive_events": 4166
+      },
+      {
+        "delay_count": 0,
+        "duration_stratum": "15_30s",
+        "false_negative_events": 0,
+        "ground_truth_events": 0,
+        "mean_delay_seconds": null,
+        "median_delay_seconds": null,
+        "p95_delay_seconds": null,
+        "recall": null,
+        "small_n": true,
+        "true_positive_events": 0
+      },
+      {
+        "delay_count": 0,
+        "duration_stratum": "30_60s",
+        "false_negative_events": 0,
+        "ground_truth_events": 0,
+        "mean_delay_seconds": null,
+        "median_delay_seconds": null,
+        "p95_delay_seconds": null,
+        "recall": null,
+        "small_n": true,
+        "true_positive_events": 0
+      },
+      {
+        "delay_count": 0,
+        "duration_stratum": "60_300s",
+        "false_negative_events": 0,
+        "ground_truth_events": 0,
+        "mean_delay_seconds": null,
+        "median_delay_seconds": null,
+        "p95_delay_seconds": null,
+        "recall": null,
+        "small_n": true,
+        "true_positive_events": 0
+      },
+      {
+        "delay_count": 32,
+        "duration_stratum": "gt_300s",
+        "false_negative_events": 197,
+        "ground_truth_events": 229,
+        "mean_delay_seconds": 17.987250000000003,
+        "median_delay_seconds": 14.102,
+        "p95_delay_seconds": 41.76149999999999,
+        "recall": 0.13973799126637554,
+        "small_n": false,
+        "true_positive_events": 32
+      }
+    ],
+    "fault_type": [
+      {
+        "delay_count": 1,
+        "false_negative_events": 4,
+        "fault_type": "access_permission_denied",
+        "ground_truth_events": 5,
+        "mean_delay_seconds": 59.792,
+        "median_delay_seconds": 59.792,
+        "p95_delay_seconds": 59.792,
+        "recall": 0.2,
+        "small_n": true,
+        "true_positive_events": 1
+      },
+      {
+        "delay_count": 1,
+        "false_negative_events": 11,
+        "fault_type": "cpu_anomalies",
+        "ground_truth_events": 12,
+        "mean_delay_seconds": 18.102,
+        "median_delay_seconds": 18.102,
+        "p95_delay_seconds": 18.102,
+        "recall": 0.08333333333333333,
+        "small_n": true,
+        "true_positive_events": 1
+      },
+      {
+        "delay_count": 1,
+        "false_negative_events": 15,
+        "fault_type": "file_moving",
+        "ground_truth_events": 16,
+        "mean_delay_seconds": 29.033,
+        "median_delay_seconds": 29.033,
+        "p95_delay_seconds": 29.033,
+        "recall": 0.0625,
+        "small_n": true,
+        "true_positive_events": 1
+      },
+      {
+        "delay_count": 4165,
+        "false_negative_events": 1381,
+        "fault_type": "login_failure",
+        "ground_truth_events": 5546,
+        "mean_delay_seconds": 23.819757022809124,
+        "median_delay_seconds": 23.84,
+        "p95_delay_seconds": 39.1446,
+        "recall": 0.7509917057338622,
+        "small_n": false,
+        "true_positive_events": 4165
+      },
+      {
+        "delay_count": 30,
+        "false_negative_events": 174,
+        "fault_type": "memory_anomalies",
+        "ground_truth_events": 204,
+        "mean_delay_seconds": 16.225566666666666,
+        "median_delay_seconds": 13.668,
+        "p95_delay_seconds": 36.444299999999984,
+        "recall": 0.14705882352941177,
+        "small_n": false,
+        "true_positive_events": 30
+      },
+      {
+        "delay_count": 0,
+        "false_negative_events": 4,
+        "fault_type": "normal_memory_freed",
+        "ground_truth_events": 4,
+        "mean_delay_seconds": null,
+        "median_delay_seconds": null,
+        "p95_delay_seconds": null,
+        "recall": 0.0,
+        "small_n": true,
+        "true_positive_events": 0
+      }
+    ],
+    "onset_density": {
+      "bins_with_multiple_events": 996,
+      "bins_with_multiple_root_services": 531,
+      "bins_with_onsets": 15109,
+      "density_scope": "label-legal GT population, 30 s detector bins",
+      "multi_onset": {
+        "delay_count": 340,
+        "false_negative_events": 481,
+        "ground_truth_events": 821,
+        "mean_delay_seconds": 11.695785294117645,
+        "median_delay_seconds": 9.016,
+        "p95_delay_seconds": 35.35315,
+        "recall": 0.41412911084043846,
+        "small_n": false,
+        "true_positive_events": 340
+      },
+      "onset_count_histogram": {
+        "1": 4966,
+        "2": 782,
+        "3": 39
+      },
+      "same_bin_multi_event_events": 821,
+      "same_bin_multi_root_events": 427,
+      "single_onset": {
+        "delay_count": 3858,
+        "false_negative_events": 1108,
+        "ground_truth_events": 4966,
+        "mean_delay_seconds": 24.838365733540698,
+        "median_delay_seconds": 24.629,
+        "p95_delay_seconds": 39.239349999999995,
+        "recall": 0.7768828030608136,
+        "small_n": false,
+        "true_positive_events": 3858
+      }
+    },
+    "root_service": [
+      {
+        "delay_count": 5,
+        "false_negative_events": 28,
+        "ground_truth_events": 33,
+        "gt_service": "dbservice1",
+        "mean_delay_seconds": 26.749000000000002,
+        "median_delay_seconds": 22.753,
+        "p95_delay_seconds": 52.681,
+        "recall": 0.15151515151515152,
+        "small_n": false,
+        "true_positive_events": 5
+      },
+      {
+        "delay_count": 6,
+        "false_negative_events": 26,
+        "ground_truth_events": 32,
+        "gt_service": "dbservice2",
+        "mean_delay_seconds": 24.989500000000003,
+        "median_delay_seconds": 23.165,
+        "p95_delay_seconds": 42.245,
+        "recall": 0.1875,
+        "small_n": false,
+        "true_positive_events": 6
+      },
+      {
+        "delay_count": 0,
+        "false_negative_events": 18,
+        "ground_truth_events": 18,
+        "gt_service": "logservice1",
+        "mean_delay_seconds": null,
+        "median_delay_seconds": null,
+        "p95_delay_seconds": null,
+        "recall": 0.0,
+        "small_n": true,
+        "true_positive_events": 0
+      },
+      {
+        "delay_count": 2,
+        "false_negative_events": 18,
+        "ground_truth_events": 20,
+        "gt_service": "logservice2",
+        "mean_delay_seconds": 21.054499999999997,
+        "median_delay_seconds": 21.054499999999997,
+        "p95_delay_seconds": 23.866549999999997,
+        "recall": 0.1,
+        "small_n": true,
+        "true_positive_events": 2
+      },
+      {
+        "delay_count": 2066,
+        "false_negative_events": 733,
+        "ground_truth_events": 2799,
+        "gt_service": "mobservice1",
+        "mean_delay_seconds": 24.01737463697967,
+        "median_delay_seconds": 23.869,
+        "p95_delay_seconds": 39.2,
+        "recall": 0.7381207574133619,
+        "small_n": false,
+        "true_positive_events": 2066
+      },
+      {
+        "delay_count": 2106,
+        "false_negative_events": 681,
+        "ground_truth_events": 2787,
+        "gt_service": "mobservice2",
+        "mean_delay_seconds": 23.60168423551757,
+        "median_delay_seconds": 23.8015,
+        "p95_delay_seconds": 39.04325,
+        "recall": 0.7556512378902045,
+        "small_n": false,
+        "true_positive_events": 2106
+      },
+      {
+        "delay_count": 4,
+        "false_negative_events": 16,
+        "ground_truth_events": 20,
+        "gt_service": "redisservice1",
+        "mean_delay_seconds": 14.626,
+        "median_delay_seconds": 13.934999999999999,
+        "p95_delay_seconds": 16.84845,
+        "recall": 0.2,
+        "small_n": true,
+        "true_positive_events": 4
+      },
+      {
+        "delay_count": 5,
+        "false_negative_events": 13,
+        "ground_truth_events": 18,
+        "gt_service": "redisservice2",
+        "mean_delay_seconds": 5.444599999999999,
+        "median_delay_seconds": 3.331,
+        "p95_delay_seconds": 12.465399999999999,
+        "recall": 0.2777777777777778,
+        "small_n": true,
+        "true_positive_events": 5
+      },
+      {
+        "delay_count": 2,
+        "false_negative_events": 28,
+        "ground_truth_events": 30,
+        "gt_service": "webservice1",
+        "mean_delay_seconds": 12.838000000000001,
+        "median_delay_seconds": 12.838000000000001,
+        "p95_delay_seconds": 23.2168,
+        "recall": 0.06666666666666667,
+        "small_n": false,
+        "true_positive_events": 2
+      },
+      {
+        "delay_count": 2,
+        "false_negative_events": 28,
+        "ground_truth_events": 30,
+        "gt_service": "webservice2",
+        "mean_delay_seconds": 20.372500000000002,
+        "median_delay_seconds": 20.372500000000002,
+        "p95_delay_seconds": 28.16695,
+        "recall": 0.06666666666666667,
+        "small_n": false,
+        "true_positive_events": 2
+      }
+    ]
+  },
+  "test_used_for_selection": false,
+  "test_windows": 26127,
+  "validation_replay_at_frozen_threshold": {
+    "matched": true,
+    "metrics": {
+      "detection_delay": {
+        "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+        "matched_delay_count": 2124,
+        "mean_seconds": 23.942804143126178,
+        "median_seconds": 23.995,
+        "p90_seconds": 37.0805,
+        "p95_seconds": 39.17674999999999
+      },
+      "event_f1": 0.8431917427550616,
+      "event_precision": 0.9939167056621432,
+      "event_recall": 0.7321613236814891,
+      "false_negative_events": 777,
+      "false_positive_events": 13,
+      "ground_truth_event_count": 2901,
+      "predicted_episode_count": 2137,
+      "true_positive_events": 2124
+    }
+  }
+}

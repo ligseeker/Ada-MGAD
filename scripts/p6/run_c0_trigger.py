@@ -1236,6 +1236,7 @@ def _write_manifest(state, output_dir, provenance, evaluation, trigger_config, m
         "experiment": "P6-C0 root-agnostic system event trigger",
         "git_commit": git_head(),
         "random_seed": int(trigger_config["seed"]),
+        "torch_threads": int(torch.get_num_threads()),
         "config": provenance.get("trigger_config", {}),
         "base_config": provenance.get("base_config", {}),
         "source_artifacts": provenance.get("source_artifacts", {}),
