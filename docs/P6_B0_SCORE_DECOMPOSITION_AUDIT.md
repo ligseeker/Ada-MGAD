@@ -27,6 +27,25 @@ commit:   138a9c84385e7e636797f014577571b032cd6a04
 outputs:  experiments/p6/score_decomposition/
 ```
 
+### 0.1 Revision note (P6-B0R, 2026-09-17)
+
+This is the corrected version of the P6-B0 audit. Three scientific
+interpretations were clarified; **no measured number, artifact, gate input or
+decision changed**. The corrections are:
+
+1. The pre-registered raw replay condition `max_abs_diff <= 1e-6` is stated as
+   **FAIL** and is never presented as passed. What is claimed instead is
+   decision-level exact reproduction under small float32 numerical noise
+   (Sections 3.2 and 3.4).
+2. The high reconstruction-only localisation is attributed to the
+   **label-conditioned reconstruction objective itself**, not only to the shared
+   classification-trained backbone, with the code path cited (Section 2).
+3. `exact_identity_ratio = 0.7045` is explained as a **same-bin multi-event
+   overlap effect**; it must not be read as partial AD/RCA label disagreement.
+   The identity quantities that matter are
+   `labelled_service_positive_on_all_bins_ratio = 1.0000` and
+   `rasterization_mismatch = 0` (Section 5.1).
+
 ---
 
 ## 1. Executive summary
@@ -38,16 +57,23 @@ The question this round must answer is:
 
 The answer from this audit is **no, not with the current frozen Ada-MGAD.**
 
-1. **The fused score replays the formal baseline exactly at the decision level.**
-   Row identity (`split, sample_index, service, prediction_available_time,
-   node_label`) matches the formal prediction artifacts with **zero** mismatches
-   across all 871,020 rows, and the fused track reproduces the formal event
-   detection **exactly**: same Train threshold, `TP=3703`, `FP=65`, `FN=2084`,
-   `P=0.9827`, `R=0.6399`, `F1=0.7751`, mean delay `24.106 s`. Its downstream
-   Ada-RCA `AC@1=0.4657` and Diagnosis `F1@1=0.3611` are identical to the formal
-   values. At the raw score level, `max_abs_diff` is `1.61e-6` (Test) and
-   `3.78e-6` (Train), marginally above the `1e-6` target; this is multi-threaded
-   CPU float32 reduction-order noise, not a protocol mismatch (Section 3).
+1. **The strict numerical replay gate is FAIL; the fused score reproduces the
+   formal baseline exactly at the decision level.** The pre-registered condition
+   was `max_abs_diff <= 1e-6`. The observed raw deviations are `3.7849e-06`
+   (Train) and `1.6093e-06` (Test), so
+   **`strict numerical replay gate = FAIL`** and this report does not claim
+   otherwise. Everything the downstream decisions depend on is nevertheless
+   exact: row identity (`split, sample_index, service,
+   prediction_available_time, node_label`) matches the formal prediction
+   artifacts with **zero** mismatches across all 871,020 rows, and the fused
+   track reproduces the formal event detection **exactly**: same Train
+   threshold, `TP=3703`, `FP=65`, `FN=2084`, `P=0.9827`, `R=0.6399`,
+   `F1=0.7751`, mean delay `24.106 s`. Its downstream Ada-RCA `AC@1=0.4657` and
+   Diagnosis `F1@1=0.3611` are identical to the formal values. The residual is
+   multi-threaded CPU float32 reduction-order noise, not a protocol mismatch
+   (Section 3). The correct characterisation is therefore **decision-level exact
+   reproduction under small float32 numerical noise** — not "the `1e-6` gate
+   passed".
 2. **Reconstruction-only detection is degraded but not collapsed.** Test
    `P=0.9132`, `R=0.3999`, `F1=0.5562` (72% of fused F1, 62% of fused recall),
    `FP=220`, `FN=3473`. It is a real but clearly weaker trigger.
@@ -55,9 +81,13 @@ The answer from this audit is **no, not with the current frozen Ada-MGAD.**
    anomaly-score localization `AC@1` is `0.9084`, versus `0.9398` for the
    classification score — a gap of only `0.0300`. On the anchor-controlled
    common-case population (`n=2214`, identical GT cases and one fixed anchor
-   set) the gap is only `0.019–0.025`. The reconstruction branch of the shared
-   backbone still encodes the labelled fault-service identity almost as
-   strongly as the node-classification head.
+   set) the gap is only `0.019–0.025`. This is expected from the training
+   objective, not incidental: in `src/model.py:164-176` the reconstruction loss
+   is itself **label-conditioned** — for nodes whose node anomaly label is
+   `abnormal` it optimises the *inverse* reconstruction energy
+   (`node_wrong = node_rec ** -1`), i.e. it is trained to separate
+   labelled-abnormal nodes from normal ones. The reconstruction branch of the
+   shared backbone is therefore not a label-free evidence channel.
 4. **The root margin is where the two branches actually differ.** Median
    root-vs-best-non-root margin is `0.9983` (classification), `0.7358` (fused),
    `0.1821` (reconstruction). Reconstruction still ranks the root first in
@@ -120,11 +150,40 @@ Train threshold:
 | fused | `0.7*cls + 0.3*rec` | `max_i fused_score(t,i)` |
 | reconstruction | `reconstruction_score` | `max_i reconstruction_score(t,i)` |
 
-> **Reconstruction-only is not fully unsupervised.** In the original Ada-MGAD
-> training the shared backbone was still driven by the node-classification loss.
-> This experiment only reduces the *inference trigger's* direct dependence on the
-> node-classification score; it does not remove the classification objective from
-> the representation.
+> **Reconstruction-only is not unsupervised — two separate label paths survive
+> the decomposition.**
+>
+> 1. *Shared representation.* In the original Ada-MGAD training the shared
+>    backbone is driven by the node-classification loss, so even a
+>    "reconstruction-only" trigger consumes a representation shaped by the node
+>    anomaly label.
+> 2. *Label-conditioned reconstruction objective.* The reconstruction loss
+>    itself also applies **different targets to normal and abnormal nodes
+>    according to the node anomaly label**; it is not a label-free
+>    reconstruction error. `src/model.py:164-176`:
+>
+>    ```python
+>    label_pod = torch.argmax(x['groundtruth_cls'], dim=-1)
+>    node_rec  = torch.sum(rec, dim=-1)
+>    node_right  = torch.where(label_pod == 0, node_rec, 0)          # normal   -> minimise energy
+>    node_wrong  = torch.where(label_pod == 1, node_rec ** -1, 0)    # abnormal -> maximise energy
+>    node_unkown = torch.where(label_pod == 2, self.label_weight * node_rec, 0)
+>    rec_loss = [node_right, node_wrong, node_unkown]
+>    ```
+>
+>    `groundtruth_cls` is the rasterized per-service node anomaly label (the
+>    `label_mask` produced by `build_semisupervised_mask`). The `abnormal` term
+>    is the *inverse* of the reconstruction energy, so the reconstruction score
+>    is explicitly trained to separate labelled-abnormal nodes from normal
+>    nodes. Its high root-localisation `AC@1` (Section 5.2) is the expected
+>    consequence, not an unexplained surprise.
+>
+> Consequence for the interpretation: this experiment only reduces the
+> *inference trigger's* direct dependence on the node-classification score. It
+> removes neither the classification objective from the representation nor the
+> label conditioning from the reconstruction objective. A genuinely
+> root-agnostic Stage-1 signal cannot be obtained by re-weighting these two
+> scores; it requires an objective that never consumes the node anomaly label.
 
 `prediction_available_time` and the 30 s episode rule are identical to P5;
 "anomaly-score localization" below is a first-stage score diagnostic and is
@@ -169,8 +228,18 @@ align exactly with the formal prediction artifacts for both splits.
 | Train | `3.7849e-06` | `1.949e-08` | 0 | `1e-6` |
 | Test | `1.6093e-06` | `1.082e-08` | 0 | `1e-6` |
 
-`score_level_passed = false`: the `1e-6` target is exceeded by a factor of ~1.6
-(Test) and ~3.8 (Train), with a mean deviation of ~`1e-8`.
+`score_level_passed = false`. The pre-registered condition is **FAIL**:
+
+```text
+strict numerical replay gate (max_abs_diff <= 1e-6) = FAIL
+  Train max_abs_diff = 3.7849e-06   (3.8x the target)
+  Test  max_abs_diff = 1.6093e-06   (1.6x the target)
+  mean_abs_diff ~ 1e-08, exactly-equal cells = 0
+```
+
+This condition is not met and is not reinterpreted as met anywhere in this
+report. It is kept as a recorded failure. What the audit *can* establish
+independently is the decision-level reproduction of Section 3.4.
 
 ### 3.3 Root-cause check (required, not skipped)
 
@@ -203,11 +272,18 @@ ordering inside the shared frozen backbone forward pass. It is a numerical
 precision limit of re-running the same network in a different process, not a
 semantic, protocol, or configuration mismatch.
 
-### 3.4 Operative gate — fused event-level reproduction — **Confirmed / PASS**
+### 3.4 Decision-level reproduction (not a substitute for the failed gate)
 
-Because a raw tolerance cannot be met for reasons outside the audit's control,
-the decisive gate is whether the fused track reproduces the *formal event
-detection* exactly. It does:
+The strict numerical gate is FAIL (Section 3.2) and stays FAIL. Independently of
+it, the fused track reproduces every quantity the downstream decisions were made
+on *exactly*. The P6-B0 results are therefore retained as
+
+```text
+decision-level exact reproduction under small float32 numerical noise
+```
+
+which is a weaker and different statement than "the `1e-6` gate passed". The
+evidence for the weaker statement:
 
 | quantity | formal | P6 fused | abs diff |
 |---|---:|---:|---:|
@@ -226,17 +302,24 @@ detection* exactly. It does:
 Additional cross-check: the fused track's downstream Ada-RCA `AC@1 = 0.4657` and
 Diagnosis `F1@1 = 0.3611` equal the formal P5-A values exactly.
 
-Gate verdict recorded in `score_replay.json`:
+Verdict recorded in `score_replay.json`:
 
 ```text
 IDENTITY_EXACT_EVENT_EXACT_FLOAT_NOISE
-identity_alignment_exact = true
-algebraic_identity_passed = true
-score_level_passed       = false   (1.6e-6 / 3.8e-6 > 1e-6)
-event_level_reproduction = true
+identity_alignment_exact   = true
+algebraic_identity_passed  = true
+score_level_passed         = false     # strict 1e-6 gate: FAIL (1.6e-6 / 3.8e-6)
+event_level_reproduction   = true      # decision-level exact
+event_level_passed         = true
 ```
 
-The audit therefore proceeded, with the residual recorded rather than waived.
+**Gate policy, stated honestly.** The pre-registered `1e-6` score gate failed and
+is recorded as failed. The audit proceeded on the weaker, independently verified
+decision-level reproduction, and every conclusion below is a decision-level
+conclusion (event counts, event P/R/F1, delays, RCA AC@k, diagnosis F1). No
+conclusion in this report depends on the raw scores agreeing to `1e-6`. The
+residual is recorded rather than waived; it is not silently absorbed by
+redefining the gate as passed.
 
 ---
 
@@ -316,23 +399,34 @@ identity is structural; this audit quantifies it and measures bin-level overlap
 ambiguity. Population: all 16,131 complete GT injections assigned to Train/Test
 (events crossing the chronological boundary are purged by the frozen rule).
 
-| statistic | value |
-|---|---:|
-| total GT events | 16,131 |
-| labelled service positive on all overlapped AD bins | 16,131 → **ratio 1.0000** |
-| rasterization mismatches | 0 |
-| exact identity (AD positive set == {event service} on every overlapped bin) | 11,364 → **ratio 0.7045** |
-| AD bins covered | 30,870 |
-| bins covered by exactly one event | 24,954 |
-| bins covered by multiple events | 5,916 |
-| bins with multiple distinct root services positive | 4,892 |
-| (service, bin) pairs covered by multiple events | 1,331 |
+| statistic | value | meaning |
+|---|---:|---|
+| total GT events | 16,131 | complete injections assigned to Train/Test |
+| `labelled_service_positive_on_all_bins_ratio` | **1.0000** (16,131 / 16,131) | For every GT event, the AD node label marks the RCA-labelled root service as positive on **every** 30 s bin the event overlaps. |
+| `rasterization_mismatch_events` | **0** | No GT event has a labelled service that is not positive on an overlapped AD bin. |
+| `exact_identity_ratio` | 0.7045 (11,364 / 16,131) | Stricter set equality: "the AD positive set at every overlapped bin equals exactly `{this event's service}`". **This is an overlap statistic, not a label-agreement rate.** |
+| AD bins covered | 30,870 | |
+| bins covered by exactly one event | 24,954 | |
+| bins covered by multiple events | 5,916 | |
+| bins with multiple distinct root services positive | 4,892 | |
+| (service, bin) pairs covered by multiple events | 1,331 | |
 
-**Confirmed.** The AD node label is not an independent supervision signal: it is
-the rasterized injected-service identity. `29.6%` of GT events also share at
-least one 30 s bin with another event, and `4,892` bins carry more than one root
-service, so the two tasks are entangled by construction as well as by
-representation.
+**Confirmed — the three quantities above must not be confused.**
+
+**There is no AD/RCA label disagreement in this dataset.** The fall from `1.0000`
+to `0.7045` is produced entirely by the strict set-equality test: whenever a bin
+is shared with another event, the AD positive set at that bin contains more than
+one service, so `positive set == {event service}` is false even though the
+event's own labelled service is correctly positive. `0.7045` is therefore a
+**same-bin multi-event overlap statistic, not a label-agreement rate** and must
+not be quoted as "only 70.45% of AD/RCA labels are consistent".
+
+The overlap it measures is real and large: `29.6%` of GT events share at least
+one 30 s bin with another event, `4,892` bins carry more than one root service,
+and `1,331` `(service, bin)` pairs are covered by multiple events. The AD node
+label is not an independent supervision signal — it is the rasterized
+injected-service identity — so the two tasks are entangled by construction as
+well as by representation.
 
 ### 5.2 Anomaly-score localization diagnostic
 
@@ -368,7 +462,13 @@ scores evaluated at one fixed anchor set):
 **Confirmed.** With identical cases and identical anchors, the reconstruction
 score still localizes the labelled root service at `AC@1 ≈ 0.91`, within ~2
 points of the classification score. The reconstruction representation of the
-shared backbone strongly encodes the root identity.
+shared backbone strongly encodes the root identity. The mechanism is visible in
+the training objective rather than only in the shared representation: the
+reconstruction loss is label-conditioned (`src/model.py:164-176`, quoted in
+Section 2) and is explicitly trained to drive the reconstruction energy *up* on
+nodes whose node anomaly label is `abnormal`. A high reconstruction-score
+localisation `AC@1` is therefore the intended behaviour of the original
+objective, not a coincidental leakage of the classification head.
 
 ### 5.3 Root margin
 
@@ -573,17 +673,21 @@ threshold, alpha, or matching change should be used to rescue this result.
 
 ### 8.5 Open issues
 
-1. **Raw tolerance not met.** `max_abs_diff` is `1.6e-6` (Test) / `3.8e-6`
-   (Train) against a `1e-6` target. Root-caused to CPU float32 reduction order;
-   the residual is irreducible without pinning the formal run's process/thread
-   state. The decision-level (event) reproduction is exact.
+1. **Strict numerical replay gate = FAIL.** `max_abs_diff` is `1.6e-6` (Test) /
+   `3.8e-6` (Train) against a `1e-6` target, so the pre-registered gate did not
+   pass. Root-caused to CPU float32 reduction order; the residual is irreducible
+   without pinning the formal run's process/thread state. Only the decision-level
+   (event / RCA / diagnosis) reproduction is exact, and every conclusion in this
+   report is a decision-level conclusion.
 2. **No per-case score replay.** Only the aggregate replay gate is recorded; a
    per-row `max_abs_diff` distribution is not persisted in the versioned record
    (the row-level decomposition CSVs stay local). **Open question** whether a
    different thread configuration would close the gap further.
-3. **Label identity `exact_identity_ratio = 0.7045`** is limited by bin-level
-   event overlap, not by label inconsistency. `4,892` bins carry multiple root
-   services; `29.6%` of GT events share a bin with another event.
+3. **Label identity `exact_identity_ratio = 0.7045` is an overlap statistic, not
+   a label-agreement rate.** The label-agreement quantities are
+   `labelled_service_positive_on_all_bins_ratio = 1.0000` and
+   `rasterization_mismatch = 0`. `4,892` bins carry multiple root services;
+   `29.6%` of GT events share a bin with another event.
 4. **Population skew is severe.** `login_failure` is `95.8%` of Test GT events
    and `mobservice1/2` is `96.5%`. All non-dominant strata are small-n and were
    marked as such.
