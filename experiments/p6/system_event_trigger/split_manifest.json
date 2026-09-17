@@ -1,0 +1,269 @@
+{
+  "blocks": {
+    "fit": {
+      "end_ms": 1626440400000,
+      "start_ms": 1625133600000
+    },
+    "test": {
+      "end_ms": 1627747200000,
+      "start_ms": 1626963120000
+    },
+    "validation": {
+      "end_ms": 1626963120000,
+      "start_ms": 1626440400000
+    }
+  },
+  "events": {
+    "fit": {
+      "duration_seconds": {
+        "max": 3600.0,
+        "mean": 41.6620986161494,
+        "median": 11.0,
+        "min": 11.0,
+        "p95": 11.0
+      },
+      "duration_stratum_counts": {
+        "gt_300s": 362,
+        "le_15s": 7081
+      },
+      "fault_type_distribution": {
+        "access_permission_denied": 5,
+        "file_moving": 19,
+        "login_failure": 7081,
+        "memory_anomalies": 328,
+        "normal_memory_freed": 10
+      },
+      "ground_truth_events": 7443,
+      "root_service_distribution": {
+        "dbservice1": 38,
+        "dbservice2": 41,
+        "logservice1": 40,
+        "logservice2": 36,
+        "mobservice1": 3564,
+        "mobservice2": 3587,
+        "redisservice1": 24,
+        "redisservice2": 32,
+        "webservice1": 39,
+        "webservice2": 42
+      }
+    },
+    "test": {
+      "duration_seconds": {
+        "max": 3600.0,
+        "mean": 36.88301987212718,
+        "median": 11.0,
+        "min": 2.892,
+        "p95": 11.0
+      },
+      "duration_stratum_counts": {
+        "gt_300s": 229,
+        "le_15s": 5558
+      },
+      "fault_type_distribution": {
+        "access_permission_denied": 5,
+        "cpu_anomalies": 12,
+        "file_moving": 16,
+        "login_failure": 5546,
+        "memory_anomalies": 204,
+        "normal_memory_freed": 4
+      },
+      "ground_truth_events": 5787,
+      "root_service_distribution": {
+        "dbservice1": 33,
+        "dbservice2": 32,
+        "logservice1": 18,
+        "logservice2": 20,
+        "mobservice1": 2799,
+        "mobservice2": 2787,
+        "redisservice1": 20,
+        "redisservice2": 18,
+        "webservice1": 30,
+        "webservice2": 30
+      }
+    },
+    "validation": {
+      "duration_seconds": {
+        "max": 3600.0,
+        "mean": 41.54981041020338,
+        "median": 11.0,
+        "min": 11.0,
+        "p95": 11.0
+      },
+      "duration_stratum_counts": {
+        "gt_300s": 125,
+        "le_15s": 2776
+      },
+      "fault_type_distribution": {
+        "access_permission_denied": 5,
+        "file_moving": 8,
+        "login_failure": 2776,
+        "memory_anomalies": 110,
+        "normal_memory_freed": 2
+      },
+      "ground_truth_events": 2901,
+      "root_service_distribution": {
+        "dbservice1": 13,
+        "dbservice2": 21,
+        "logservice1": 9,
+        "logservice2": 8,
+        "mobservice1": 1417,
+        "mobservice2": 1386,
+        "redisservice1": 10,
+        "redisservice2": 7,
+        "webservice1": 16,
+        "webservice2": 14
+      }
+    }
+  },
+  "generated_at_utc": "2026-09-17T15:29:42.332729+00:00",
+  "git_commit": "4dcf43a68bc8d61fb80d73adf7199a874739c6a4",
+  "grid_seconds": 30,
+  "history_seconds": 300,
+  "labels": {
+    "fit": {
+      "counts": {
+        "ignore": 4682,
+        "negative": 25970,
+        "positive": 12898
+      },
+      "fractions": {
+        "ignore": 0.10750861079219289,
+        "negative": 0.5963260619977038,
+        "positive": 0.2961653272101033
+      },
+      "ignore_region_count": 950,
+      "positive_region_count": 4922,
+      "total": 43550
+    },
+    "test": {
+      "counts": {
+        "ignore": 2673,
+        "negative": 13772,
+        "positive": 9682
+      },
+      "fractions": {
+        "ignore": 0.10230795728556666,
+        "negative": 0.527117541240862,
+        "positive": 0.3705745014735714
+      },
+      "ignore_region_count": 625,
+      "positive_region_count": 3432,
+      "total": 26127
+    },
+    "validation": {
+      "counts": {
+        "ignore": 1676,
+        "negative": 10851,
+        "positive": 4887
+      },
+      "fractions": {
+        "ignore": 0.0962444010566211,
+        "negative": 0.6231193292752958,
+        "positive": 0.28063626966808314
+      },
+      "ignore_region_count": 376,
+      "positive_region_count": 1744,
+      "total": 17414
+    }
+  },
+  "purge_rule": "a window is kept only when its full [t-history, t) input interval lies inside the block that owns t = prediction_available_time; a GT event is a metric case only when it is complete inside one block (frozen assign_event_blocks rule)",
+  "purged_events": {
+    "case_ids": [
+      "gaia-v3-10508"
+    ],
+    "count": 1,
+    "fault_type_distribution": {
+      "memory_anomalies": 1
+    }
+  },
+  "purged_window_label_counts": {
+    "ignore": 6,
+    "negative": 3,
+    "positive": 2
+  },
+  "schema_version": "p6_c0_split_manifest_v1",
+  "source_artifacts": {
+    "ad_data_manifest.json": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json",
+      "sha256": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2"
+    },
+    "base_config": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+      "sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35"
+    },
+    "event_registry": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv",
+      "sha256": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b"
+    },
+    "graph.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/graph.npy",
+      "sha256": "04cf2a6bdbd4a2137cafe8140794750875c690b210f1d1f8347a14a34804a809"
+    },
+    "test_log.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/test/log.npy",
+      "sha256": "854860677d7740b52c322c91245b5b19aced4d3df27b5e6c5619e9671e6dd524"
+    },
+    "test_metric.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/test/metric.npy",
+      "sha256": "9d40c3c4ad27682a84ffdc1f66bf00a1df19bafd0244efdfb8589ceeb67fd249"
+    },
+    "test_timestamps.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/test/timestamps.npy",
+      "sha256": "82116aac4da43d287ea0fb904a5ff7fee937f477182678c7d11ca94bcfcea5ab"
+    },
+    "test_trace.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/test/trace.npy",
+      "sha256": "fb90c0a29cfb9f00b705f0c95d1f1efe78311f2b008f49342514ebfecbc0052b"
+    },
+    "train_log.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/train/log.npy",
+      "sha256": "02af8ad63423cfaebadc336f122c984a0a6b7c718db4674c62a6ddd40f9ff9dc"
+    },
+    "train_metric.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/train/metric.npy",
+      "sha256": "8fb92322f56007f59007b102f6eb07b0cad6496b44b4292f63ced0d797956ee0"
+    },
+    "train_timestamps.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/train/timestamps.npy",
+      "sha256": "ed06402501a887099df16b0353ef4825beda2f24a74d6dae6c38b7d34de91735"
+    },
+    "train_trace.npy": {
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/train/trace.npy",
+      "sha256": "fd49c42223e5dd99420bb5e13432b72c801e6c86e5562620e938599f74d628f2"
+    }
+  },
+  "split_mode": "chronological_50_20_30",
+  "test_used_for_split_design": false,
+  "window_bins": 10,
+  "windows": {
+    "test": {
+      "kept": 26127,
+      "kept_by_split": {
+        "fit": 0,
+        "test": 26127,
+        "validation": 0
+      },
+      "purged": 0,
+      "purged_by_owning_block": {},
+      "purged_by_reason": {},
+      "windows_in_array": 26127
+    },
+    "train": {
+      "kept": 60964,
+      "kept_by_split": {
+        "fit": 43550,
+        "test": 0,
+        "validation": 17414
+      },
+      "purged": 11,
+      "purged_by_owning_block": {
+        "test": 1,
+        "validation": 10
+      },
+      "purged_by_reason": {
+        "input_history_crosses_split_boundary": 11
+      },
+      "windows_in_array": 60975
+    }
+  }
+}

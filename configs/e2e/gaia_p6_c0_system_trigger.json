@@ -1,0 +1,94 @@
+{
+  "schema_version": "p6_c0_trigger_v1",
+  "protocol_id": "P6-C0-ROOT-AGNOSTIC-SYSTEM-EVENT-TRIGGER",
+  "base_config": "configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+  "data_root": "data/p5/v3_preprocessing_v2/ad",
+  "artifact_root": "artifacts/p5/v3_preprocessing_v2/ad",
+  "output_root": "experiments/p6/system_event_trigger",
+  "seed": 42,
+  "task": {
+    "name": "System-level Event Trigger",
+    "outputs": ["system trigger score", "predicted event episode", "detected t_hat"],
+    "forbidden_outputs": ["root service", "service ranking", "10-service classification result"],
+    "stage2_rca_separate": true
+  },
+  "split_mode": "chronological_50_20_30",
+  "split": {
+    "fit_fraction": [5, 10],
+    "validation_cumulative_fraction": [7, 10],
+    "test_definition": "identical to the frozen P5 Test block [boundary_ms, absolute_end_ms)",
+    "random_split": false,
+    "purge_history_seconds": 300,
+    "purge_rule": "keep a window only if [t-history, t) lies inside the block owning t; keep a GT event as a metric case only if it is complete inside one block"
+  },
+  "trigger_label": {
+    "target": "recent_onset_trigger",
+    "positive_window_seconds": 60,
+    "long_event_ignore": true,
+    "service_specific_supervision": false,
+    "positive_rule": "0 <= prediction_available_time - gt_start_ms <= 60000",
+    "ignore_rule": "gt_start_ms + 60000 < prediction_available_time < gt_end_ms and not positive",
+    "negative_rule": "neither positive nor ignore",
+    "overlapping_events": "collapse to a single system-level positive",
+    "label_source": "every GT event inside the frozen metric detector timeline"
+  },
+  "model": {
+    "architecture": "reused multimodal encoder + permutation-invariant service pooling + scalar MLP head",
+    "pooling": "concat[mean_service(H), max_service(H), std_service(H)]",
+    "pooling_scope": "ten service representations at the target bin (last window step)",
+    "head_hidden": 32,
+    "random_initialization": true,
+    "loads_ada_mgad_checkpoint": false,
+    "node_anomaly_label_consumed": false,
+    "root_service_label_consumed": false,
+    "label_conditioned_reconstruction": false,
+    "node_score_fusion": false
+  },
+  "training": {
+    "max_epochs": 30,
+    "patience": 8,
+    "eval_interval": 1,
+    "batch_size": 32,
+    "num_workers": 2,
+    "optimizer": "AdaBelief",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0005,
+    "scheduler": "StepLR",
+    "scheduler_step": 10,
+    "scheduler_gamma": 0.5,
+    "grad_clip_norm": 10.0,
+    "loss": "masked_BCEWithLogitsLoss",
+    "ignore_bins_loss_mask": 0.0,
+    "pos_weight": "fit_negative_bins / fit_positive_bins (Detector-Fit only)",
+    "auxiliary_terms": [
+      "label_free dynamic-graph sparsity regularizer (graph_sparse_weight=0.001, depends only on encoder inputs and the static service graph)"
+    ],
+    "forbidden_terms": ["focal loss", "fault-type weighting", "service weighting", "duration weighting", "test-tuned class weights"]
+  },
+  "threshold_selection": "validation_only_exact_unique_scores",
+  "threshold": {
+    "objective": "validation_event_f1",
+    "tie_break": "highest_threshold_among_equal_f1",
+    "checkpoint_tie_break": ["validation_event_f1", "validation_event_recall", "threshold"],
+    "test_used": false,
+    "frozen_after_selection": true
+  },
+  "matching_semantics": "causal_max_cardinality_minimum_delay",
+  "evaluation": {
+    "grid_seconds": 30,
+    "window_bins": 10,
+    "history_seconds": 300,
+    "tolerance_seconds": 60,
+    "prediction_time": "t_hat = prediction_available_time = target_bin_end",
+    "duration_strata_seconds": [15, 30, 60, 300],
+    "gate": {"precision": 0.9, "recall": 0.6, "f1": 0.72},
+    "gate_kind": "pre-registered engineering acceptance margins, not statistical significance"
+  },
+  "historical_reference": {
+    "source": "P5 formal fused Ada-MGAD trigger (node-supervised)",
+    "precision": 0.9827,
+    "recall": 0.6399,
+    "f1": 0.7751,
+    "note": "historical reference only; different supervision target and split, not a controlled equal-protocol SOTA comparison"
+  }
+}

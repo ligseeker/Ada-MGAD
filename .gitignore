@@ -102,3 +102,12 @@ experiments/p6/score_decomposition/rca/*
 !experiments/p6/score_decomposition/*/diagnosis_metrics.json
 !experiments/p6/score_decomposition/rca/rca_feature_manifest.json
 !experiments/p6/score_decomposition/rca/rca_feature_health.json
+
+# P6-C0 root-agnostic system event trigger outputs.  Only the aggregate records
+# (split audit, split manifest, validation selection, frozen Test metrics,
+# training log, manifest) are versioned; the detector checkpoint, the raw log
+# and the row-level CSV exports stay local.
+experiments/p6/system_event_trigger/*
+!experiments/p6/system_event_trigger/
+!experiments/p6/system_event_trigger/*.json
+!experiments/p6/system_event_trigger/*.md
