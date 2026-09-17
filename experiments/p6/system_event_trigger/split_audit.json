@@ -116,8 +116,8 @@
     }
   },
   "formal_result": false,
-  "generated_at_utc": "2026-09-17T15:29:42.143895+00:00",
-  "git_commit": "4dcf43a68bc8d61fb80d73adf7199a874739c6a4",
+  "generated_at_utc": "2026-09-17T17:42:23.661542+00:00",
+  "git_commit": "75ffd002a70687bd1c9a09fbfff8cbc8fe22fdee",
   "history_seconds": 300,
   "label_legal_event_population": {
     "count": 16132,
@@ -127,13 +127,13 @@
     "fit": {
       "counts": {
         "ignore": 4682,
-        "negative": 25970,
-        "positive": 12898
+        "negative": 25971,
+        "positive": 12897
       },
       "fractions": {
         "ignore": 0.10750861079219289,
-        "negative": 0.5963260619977038,
-        "positive": 0.2961653272101033
+        "negative": 0.5963490241102182,
+        "positive": 0.29614236509758896
       },
       "ignore_region_count": 950,
       "positive_region_count": 4922,
@@ -165,7 +165,7 @@
         "negative": 0.6231193292752958,
         "positive": 0.28063626966808314
       },
-      "ignore_region_count": 376,
+      "ignore_region_count": 375,
       "positive_region_count": 1744,
       "total": 17414
     }
@@ -219,7 +219,7 @@
       "tolerance_seconds": 60,
       "window_bins": 10
     },
-    "git_commit": "4dcf43a68bc8d61fb80d73adf7199a874739c6a4",
+    "git_commit": "75ffd002a70687bd1c9a09fbfff8cbc8fe22fdee",
     "no_retraining_of_ada_mgad": true,
     "node_anomaly_labels_read": false,
     "random_seed": 42,
@@ -291,8 +291,8 @@
     }
   },
   "purged_window_label_counts": {
-    "ignore": 6,
-    "negative": 3,
+    "ignore": 7,
+    "negative": 2,
     "positive": 2
   },
   "schema_version": "p6_c0_split_audit_v1",
@@ -306,7 +306,7 @@
         "ok": true
       },
       {
-        "detail": 12898,
+        "detail": 12897,
         "name": "fit_has_positive_labels",
         "ok": true
       },

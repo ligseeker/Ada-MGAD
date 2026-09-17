@@ -70,6 +70,8 @@ from src.e2e.system_trigger import (
     evaluate_system_threshold,
     field_stratified_metrics,
     onset_density_stratified_metrics,
+    prediction_time_grid,
+    assert_prediction_time_grid,
     select_system_threshold,
     system_score_frame,
     to_builtin,
@@ -265,10 +267,17 @@ class ProtocolState:
             timestamps = np.load(Path(data_root) / source / "timestamps.npy", mmap_mode="r")
             timestamps = np.asarray(timestamps, dtype=np.int64)
             self.timestamps[source] = timestamps
-            self.labels[source] = build_trigger_labels(
-                timestamps, self.legal_events,
+            # The trigger label is defined at the prediction time
+            # (prediction_available_time = target_bin_end), so it is rasterized on
+            # the prediction-time grid.  Indexing it with a window's target bin
+            # index then returns the state at that window's prediction time.
+            prediction_grid = prediction_time_grid(timestamps, grid_seconds=self.grid_seconds)
+            labels = build_trigger_labels(
+                prediction_grid, self.legal_events,
                 positive_window_seconds=self.positive_window_seconds,
             )
+            assert_prediction_time_grid(prediction_grid, timestamps, grid_seconds=self.grid_seconds)
+            self.labels[source] = labels
             assignment = window_split_assignment(
                 timestamps, self.blocks,
                 grid_seconds=self.grid_seconds, window_bins=self.window_bins,

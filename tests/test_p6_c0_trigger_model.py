@@ -17,6 +17,7 @@ from src.e2e.system_trigger import (
     TRIGGER_NEGATIVE,
     TRIGGER_POSITIVE,
     build_trigger_labels,
+    prediction_time_grid,
     trigger_temporal_blocks,
 )
 from src.e2e.system_trigger_data import TriggerWindowDataset, build_trigger_loader
@@ -194,6 +195,98 @@ class DatasetContractTests(unittest.TestCase):
         loader = build_trigger_loader(dataset, batch_size=4, num_workers=0)
         indices = np.concatenate([batch["sample_index"].numpy() for batch in loader])
         self.assertTrue((np.diff(indices) >= 0).all())
+
+
+class LabelPredictionTimeContractTests(unittest.TestCase):
+    """Dataset-level contract: the label of a window is the recent-onset state at
+    that window's ``prediction_available_time``, not at its target-bin start."""
+
+    def setUp(self):
+        import tempfile
+        self.root = Path(tempfile.mkdtemp(prefix="p6c0_grid_"))
+
+    def _dataset(self, onsets):
+        import tempfile
+        count = 60
+        timestamps = ORIGIN + np.arange(count, dtype=np.int64) * GRID_MS
+        rng = np.random.RandomState(1)
+        save_split_arrays(self.root, "train", {
+            "timestamps": timestamps,
+            "metric": rng.normal(size=(count, 10, 16)).astype(np.float32),
+            "log": rng.uniform(size=(count, 10, 8)).astype(np.float32),
+            "trace": rng.uniform(size=(count, 10, 10, 4)).astype(np.float32),
+            "labels": np.zeros((count, 10), dtype=np.int8),
+            "label_mask": np.zeros((count, 10), dtype=np.int8),
+        })
+        events = pd.DataFrame([
+            {"case_id": "e{}".format(index), "start_ms": onset, "end_ms": onset + 11_000}
+            for index, onset in enumerate(onsets)
+        ])
+        labels = build_trigger_labels(prediction_time_grid(timestamps, grid_seconds=30), events)
+        return TriggerWindowDataset(
+            self.root / "train", window_bins=10, grid_seconds=30,
+            sample_indices=np.arange(count - 9, dtype=np.int64),
+            trigger_labels=labels, split_name="fit",
+        ), events
+
+    def test_bin_containing_the_onset_is_labelled_positive(self):
+        onset = ORIGIN + 9 * GRID_MS + 11_000  # inside bin 9, the first usable target bin
+        dataset, _ = self._dataset([onset])
+        # target bin 9 -> prediction time ORIGIN + 300 s -> 19 s after the onset
+        self.assertEqual(int(dataset[0]["trigger_label"]), TRIGGER_POSITIVE)
+        metadata = dataset.metadata(0)
+        self.assertEqual(metadata.prediction_available_time, ORIGIN + 300_000)
+        self.assertGreaterEqual(metadata.prediction_available_time - onset, 0)
+        self.assertLessEqual(metadata.prediction_available_time - onset, 60_000)
+
+    def test_label_matches_the_preregistered_rule_for_every_window(self):
+        onsets = [ORIGIN + 5_000, ORIGIN + 400_000, ORIGIN + 900_000]
+        dataset, _ = self._dataset(onsets)
+        for position in range(len(dataset)):
+            metadata = dataset.metadata(position)
+            predicted = metadata.trigger_label
+            recent = any(0 <= metadata.prediction_available_time - onset <= 60_000 for onset in onsets)
+            self.assertEqual(
+                predicted == TRIGGER_POSITIVE, recent,
+                "window {} at {} disagrees with the recent-onset rule".format(
+                    position, metadata.prediction_available_time
+                ),
+            )
+
+    def test_long_event_ignore_starts_after_the_positive_band(self):
+        onset = ORIGIN + 9 * GRID_MS + 11_000  # inside bin 9
+        count = 60
+        timestamps = ORIGIN + np.arange(count, dtype=np.int64) * GRID_MS
+        rng = np.random.RandomState(2)
+        save_split_arrays(self.root, "train", {
+            "timestamps": timestamps,
+            "metric": rng.normal(size=(count, 10, 16)).astype(np.float32),
+            "log": rng.uniform(size=(count, 10, 8)).astype(np.float32),
+            "trace": rng.uniform(size=(count, 10, 10, 4)).astype(np.float32),
+            "labels": np.zeros((count, 10), dtype=np.int8),
+            "label_mask": np.zeros((count, 10), dtype=np.int8),
+        })
+        events = pd.DataFrame([{
+            "case_id": "long", "start_ms": onset, "end_ms": onset + 3_600_000,
+        }])
+        labels = build_trigger_labels(prediction_time_grid(timestamps, grid_seconds=30), events)
+        dataset = TriggerWindowDataset(
+            self.root / "train", window_bins=10, grid_seconds=30,
+            sample_indices=np.arange(count - 9, dtype=np.int64),
+            trigger_labels=labels, split_name="fit",
+        )
+        states = [int(dataset[position]["trigger_label"]) for position in range(5)]
+        deltas = [
+            dataset.metadata(position).prediction_available_time - onset for position in range(5)
+        ]
+        self.assertEqual(deltas, [19_000, 49_000, 79_000, 109_000, 139_000])
+        self.assertEqual(states[:2], [TRIGGER_POSITIVE, TRIGGER_POSITIVE])
+        self.assertEqual(states[2:], [TRIGGER_IGNORE, TRIGGER_IGNORE, TRIGGER_IGNORE])
+
+    def test_driver_builds_labels_on_the_prediction_time_grid(self):
+        source = DRIVER_PATH.read_text(encoding="utf-8")
+        self.assertIn("prediction_time_grid(timestamps", source)
+        self.assertIn("assert_prediction_time_grid(prediction_grid, timestamps", source)
 
 
 class DriverGuaranteeTests(unittest.TestCase):

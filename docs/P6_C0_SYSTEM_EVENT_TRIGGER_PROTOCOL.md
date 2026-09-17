@@ -93,6 +93,16 @@ produce one system-level POSITIVE. The label is a single scalar per timestamp:
 there is no service axis, and an 11 s event and a 3600 s event contribute the
 same bounded number of positive supervision bins (verified by unit test).
 
+**Evaluation grid.** `t` is the *prediction time*
+`prediction_available_time = target_bin_end = target_bin_start + 30 s`, so the
+label is rasterized on `timestamps + 30 s` (the `prediction_time_grid`), not on
+the bin-start grid. Indexing that array with a window's target bin index yields
+the state at that window's prediction time, which is the anchor `t_hat` the
+episode/matching code uses. Rasterizing on the bin-start grid instead would lag
+the supervision target by one bin relative to the evaluation anchor; the driver
+fails closed on that (`assert_prediction_time_grid`) and the contract is pinned
+by unit tests (`LabelGridAlignmentTests`, `LabelPredictionTimeContractTests`).
+
 ### 3.1 Why not "duration overlap"
 
 The frozen AD node label marks every 30 s bin overlapping an injection. That

@@ -181,15 +181,16 @@ def window_split_assignment(
 
 
 def build_trigger_labels(
-    timestamps_ms: np.ndarray,
+    prediction_times_ms: np.ndarray,
     events: pd.DataFrame,
     *,
     positive_window_seconds: int = DEFAULT_POSITIVE_WINDOW_SECONDS,
 ) -> np.ndarray:
     """Rasterize the recent-onset trigger target, one tri-state value per time.
 
-    For a prediction time ``t`` (``prediction_available_time``) and a legal GT
-    event onset ``t_start``:
+    ``prediction_times_ms`` must be the **prediction-time** grid, i.e. the array
+    of ``prediction_available_time = target_bin_end`` values of the sliding
+    windows.  For a prediction time ``t`` and a legal GT event onset ``t_start``:
 
     ```text
     POSITIVE : exists an event with 0 <= t - t_start <= positive_window
@@ -199,13 +200,18 @@ def build_trigger_labels(
     NEGATIVE : neither of the above
     ```
 
+    Indexing this array with the window's target bin index therefore yields the
+    label of the state at that window's ``prediction_available_time``.  Passing
+    the bin-start grid instead would silently lag the supervision target by one
+    bin; ``assert_prediction_time_grid`` guards that contract.
+
     The label is system-level: several events, several root services or overlapping
     events in the same bin collapse into a single POSITIVE.  No service-specific
     target is produced, and an 11 s event and a 3600 s event contribute the same
     (bounded) number of positive supervision bins.
     """
 
-    timestamps = np.asarray(timestamps_ms, dtype=np.int64)
+    timestamps = np.asarray(prediction_times_ms, dtype=np.int64)
     labels = np.full(len(timestamps), TRIGGER_NEGATIVE, dtype=np.int8)
     if len(timestamps) == 0:
         return labels
@@ -235,6 +241,39 @@ def build_trigger_labels(
         if right > left:
             labels[left:right] = TRIGGER_POSITIVE
     return labels
+
+
+def prediction_time_grid(timestamps_ms: np.ndarray, *, grid_seconds: int = DEFAULT_GRID_SECONDS) -> np.ndarray:
+    """Map a bin-start grid to the prediction-time grid ``target_bin_end``.
+
+    ``prediction_available_time = target_bin_start + grid``, so the trigger label
+    must be rasterized on ``timestamps + grid``.  Using the raw bin-start grid
+    lags the supervision target by one bin (see ``build_trigger_labels``).
+    """
+
+    values = np.asarray(timestamps_ms, dtype=np.int64)
+    return values + int(grid_seconds) * 1000
+
+
+def assert_prediction_time_grid(
+    prediction_times_ms: np.ndarray, timestamps_ms: np.ndarray, *, grid_seconds: int = DEFAULT_GRID_SECONDS
+) -> None:
+    """Fail closed when a caller hands a bin-start grid to the label builder."""
+
+    step = int(grid_seconds) * 1000
+    prediction_times = np.asarray(prediction_times_ms, dtype=np.int64)
+    timestamps = np.asarray(timestamps_ms, dtype=np.int64)
+    if len(prediction_times) != len(timestamps):
+        raise ValueError("trigger label grid must have the same length as the split timeline")
+    if len(timestamps) == 0:
+        return
+    if np.array_equal(prediction_times, timestamps):
+        raise ValueError(
+            "trigger labels must be rasterized on the prediction-time grid "
+            "(target_bin_end = target_bin_start + grid), not on the bin-start grid"
+        )
+    if not np.array_equal(prediction_times, timestamps + step):
+        raise ValueError("trigger label grid must equal timestamps + grid_seconds")
 
 
 def trigger_label_counts(labels: np.ndarray) -> Mapping[str, object]:

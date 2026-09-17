@@ -12,6 +12,7 @@ from src.e2e.system_trigger import (
     TRIGGER_IGNORE,
     TRIGGER_NEGATIVE,
     TRIGGER_POSITIVE,
+    assert_prediction_time_grid,
     assign_legal_events,
     block_bounds,
     build_trigger_labels,
@@ -20,6 +21,7 @@ from src.e2e.system_trigger import (
     evaluate_system_threshold,
     onset_density,
     onset_density_stratified_metrics,
+    prediction_time_grid,
     select_system_threshold,
     system_score_frame,
     trigger_binary_mask,
@@ -176,6 +178,50 @@ class TriggerLabelTests(unittest.TestCase):
             build_trigger_labels(grid_timestamps(4), pd.DataFrame([
                 {"case_id": "bad", "start_ms": 100, "end_ms": 100},
             ]))
+
+
+class LabelGridAlignmentTests(unittest.TestCase):
+    """The label must be rasterized on the prediction-time grid (target_bin_end)."""
+
+    def test_prediction_time_grid_is_target_bin_end(self):
+        timestamps = grid_timestamps(5)
+        self.assertTrue(np.array_equal(prediction_time_grid(timestamps, grid_seconds=30), timestamps + 30_000))
+
+    def test_bin_start_grid_is_rejected(self):
+        timestamps = grid_timestamps(5)
+        with self.assertRaisesRegex(ValueError, "prediction-time grid"):
+            assert_prediction_time_grid(timestamps, timestamps, grid_seconds=30)
+        with self.assertRaisesRegex(ValueError, "must equal timestamps"):
+            assert_prediction_time_grid(timestamps + 15_000, timestamps, grid_seconds=30)
+        assert_prediction_time_grid(timestamps + 30_000, timestamps, grid_seconds=30)
+
+    def test_bin_containing_the_onset_is_positive_at_its_prediction_time(self):
+        timestamps = grid_timestamps(6)
+        events = pd.DataFrame([{
+            "case_id": "in-bin", "start_ms": ORIGIN + 11_000, "end_ms": ORIGIN + 22_000,
+        }])
+        # the onset falls inside bin 0 [ORIGIN, ORIGIN+30 s); that bin's prediction
+        # time is ORIGIN+30 s, which is 19 s after the onset -> POSITIVE
+        labels = build_trigger_labels(prediction_time_grid(timestamps), events)
+        self.assertEqual(labels[0], TRIGGER_POSITIVE)
+        self.assertEqual(labels[1], TRIGGER_POSITIVE)
+        self.assertEqual(labels[2], TRIGGER_NEGATIVE)
+        self.assertEqual(labels[3], TRIGGER_NEGATIVE)
+        # the bin-start grid would have produced NEGATIVE at bin 0
+        stale = build_trigger_labels(timestamps, events)
+        self.assertNotEqual(stale[0], TRIGGER_POSITIVE)
+
+    def test_every_onset_bin_gets_a_positive_label(self):
+        timestamps = grid_timestamps(20)
+        onsets = [ORIGIN + 1_000, ORIGIN + 31_000, ORIGIN + 330_000, ORIGIN + 555_000]
+        events = pd.DataFrame([
+            {"case_id": "e{}".format(index), "start_ms": onset, "end_ms": onset + 11_000}
+            for index, onset in enumerate(onsets)
+        ])
+        labels = build_trigger_labels(prediction_time_grid(timestamps), events)
+        for onset in onsets:
+            bin_index = int((onset - ORIGIN) // 30_000)
+            self.assertEqual(labels[bin_index], TRIGGER_POSITIVE, "bin {} of onset {}".format(bin_index, onset))
 
 
 class SplitTests(unittest.TestCase):
