@@ -111,3 +111,15 @@ experiments/p6/system_event_trigger/*
 !experiments/p6/system_event_trigger/
 !experiments/p6/system_event_trigger/*.json
 !experiments/p6/system_event_trigger/*.md
+
+# P6-C0F failure-mechanism audit outputs.  Only the run-level aggregate records
+# (config, manifests, integrity, replay, ledger invariants, stratified and
+# confounding tables, capacity summary, evidence ledger, decision, report,
+# completion manifest) are versioned; the per-window scores, the row-level
+# ledger/trajectory exports and the oracle witness files stay local.
+experiments/p6/c0f_failure_audit/*
+!experiments/p6/c0f_failure_audit/
+!experiments/p6/c0f_failure_audit/*/
+experiments/p6/c0f_failure_audit/*/*
+!experiments/p6/c0f_failure_audit/*/*.json
+!experiments/p6/c0f_failure_audit/*/*.md
