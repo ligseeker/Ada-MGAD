@@ -1,0 +1,117 @@
+{
+  "claims": [
+    {
+      "artifact_field": "source_integrity.json:status",
+      "claim_id": "C0F-INTEGRITY",
+      "grade": "CONFIRMED",
+      "limitations": "a mismatch would have stopped the run; the snapshot is the plan's documented value, not a re-derivation",
+      "population": "inputs",
+      "statement": "frozen input SHAs and the C0 artifact snapshot match the plan binding"
+    },
+    {
+      "artifact_field": "split_population_checks.json",
+      "claim_id": "C0F-SPLIT",
+      "grade": "CONFIRMED",
+      "limitations": "counts are verification targets, not filters",
+      "population": "fit/validation/test",
+      "statement": "the three split populations reproduce the plan table (windows, complete GT, >300 s GT)"
+    },
+    {
+      "artifact_field": "validation_replay.json:comparison",
+      "claim_id": "C0F-REPLAY",
+      "grade": "CONFIRMED",
+      "limitations": "row-level Validation scores were never persisted by C0, so only aggregate replay is verifiable",
+      "population": "validation",
+      "statement": "the frozen checkpoint reproduces the recorded Validation metrics at the frozen threshold"
+    },
+    {
+      "artifact_field": "event_failure_ledger.csv, ledger_invariants.json",
+      "claim_id": "C0F-LEDGER",
+      "grade": "CONFIRMED",
+      "limitations": "codes are occurrence locations, not causal explanations",
+      "population": "fit/validation/test",
+      "statement": "every complete GT event has exactly one failure location code and the ledger closes"
+    },
+    {
+      "artifact_field": "capacity_summary.json:ordering",
+      "claim_id": "C0F-ORACLE",
+      "grade": "CONFIRMED",
+      "limitations": "U_grid is a relaxation and usually not realisable; U_episode is exact only with its witness replay",
+      "population": "fit/validation/test",
+      "statement": "the label reference, the relaxed grid bound and the complete-protocol episode bound hold the ordering observed <= U_episode <= U_grid <= 1"
+    },
+    {
+      "artifact_field": "event_failure_ledger.csv:failure_category",
+      "claim_id": "C0F-MIX-FIT",
+      "grade": "CONFIRMED",
+      "limitations": "the mix describes where detection is lost, not why",
+      "population": "fit",
+      "statement": "failure-location mix for fit: {\"BELOW_THRESHOLD\": 0.05212951766760715, \"MATCHED\": 0.7558780061803037, \"MATCHING_COMPETITION\": 0.09982533924492812, \"NO_LEGAL_PREDICTION\": 0.00013435442697836894, \"NO_NEW_EPISODE\": 0.09203278248018272}"
+    },
+    {
+      "artifact_field": "event_failure_ledger.csv:first_positive_time",
+      "claim_id": "C0F-NO-FIRST-POSITIVE-FIT",
+      "grade": "OBSERVED",
+      "limitations": "no crossing is an observation about the frozen operating point, not a diagnosis of the score",
+      "population": "fit",
+      "statement": "62 events reach no threshold crossing at all inside [onset, onset+60 s]"
+    },
+    {
+      "artifact_field": "event_failure_ledger.csv:failure_category",
+      "claim_id": "C0F-MIX-VALIDATION",
+      "grade": "CONFIRMED",
+      "limitations": "the mix describes where detection is lost, not why",
+      "population": "validation",
+      "statement": "failure-location mix for validation: {\"BELOW_THRESHOLD\": 0.06135815236125474, \"MATCHED\": 0.7321613236814891, \"MATCHING_COMPETITION\": 0.11409858669424336, \"NO_LEGAL_PREDICTION\": 0.0003447087211306446, \"NO_NEW_EPISODE\": 0.09203722854188211}"
+    },
+    {
+      "artifact_field": "event_failure_ledger.csv:first_positive_time",
+      "claim_id": "C0F-NO-FIRST-POSITIVE-VALIDATION",
+      "grade": "OBSERVED",
+      "limitations": "no crossing is an observation about the frozen operating point, not a diagnosis of the score",
+      "population": "validation",
+      "statement": "18 events reach no threshold crossing at all inside [onset, onset+60 s]"
+    },
+    {
+      "artifact_field": "event_failure_ledger.csv:failure_category",
+      "claim_id": "C0F-MIX-TEST",
+      "grade": "CONFIRMED",
+      "limitations": "the mix describes where detection is lost, not why",
+      "population": "test",
+      "statement": "failure-location mix for test: {\"BELOW_THRESHOLD\": 0.06808363573526871, \"MATCHED\": 0.7254190426818732, \"MATCHING_COMPETITION\": 0.11802315534819423, \"NO_LEGAL_PREDICTION\": 0.0005184033177812338, \"NO_NEW_EPISODE\": 0.08795576291688267}"
+    },
+    {
+      "artifact_field": "event_failure_ledger.csv:first_positive_time",
+      "claim_id": "C0F-NO-FIRST-POSITIVE-TEST",
+      "grade": "OBSERVED",
+      "limitations": "no crossing is an observation about the frozen operating point, not a diagnosis of the score",
+      "population": "test",
+      "statement": "56 events reach no threshold crossing at all inside [onset, onset+60 s]"
+    }
+  ],
+  "generated_at_utc": "2026-09-19T07:01:28.130758+00:00",
+  "grades": [
+    "CONFIRMED",
+    "OBSERVED",
+    "HYPOTHESIS",
+    "UNRESOLVED"
+  ],
+  "schema_version": "p6_c0f_failure_audit_v1",
+  "unresolved": [
+    {
+      "evidence": "event_score_trajectories.csv:other_onset_count_60s",
+      "id": "C0F-U1",
+      "statement": "concurrent onsets can carry a score crossing that is not attributable to the event under audit; the marker columns expose it but most long events live in busy regions"
+    },
+    {
+      "evidence": "confounding_tables.json:fault_x_duration",
+      "id": "C0F-U2",
+      "statement": "the frozen registry has no injections between 15 s and 300 s and no cpu_anomalies in Fit/Validation, so duration and fault-type effects cannot be separated"
+    },
+    {
+      "evidence": "event_response_summary.csv",
+      "id": "C0F-U3",
+      "statement": "whether the IGNORE band, the recent-onset objective, the representation or telemetry observability causes the sustained-state behaviour is not identifiable from these artifacts; no causal mechanism is claimed"
+    }
+  ]
+}

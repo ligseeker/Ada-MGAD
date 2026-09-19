@@ -1,0 +1,21 @@
+{
+  "all_hold": true,
+  "fit": {
+    "categories_sum_to_total": true,
+    "matched_equals_tp": true,
+    "unmatched_episodes_equal_fp": true,
+    "unmatched_events_equal_fn": true
+  },
+  "test": {
+    "categories_sum_to_total": true,
+    "matched_equals_tp": true,
+    "unmatched_episodes_equal_fp": true,
+    "unmatched_events_equal_fn": true
+  },
+  "validation": {
+    "categories_sum_to_total": true,
+    "matched_equals_tp": true,
+    "unmatched_episodes_equal_fp": true,
+    "unmatched_events_equal_fn": true
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "c0_original_verdict": "BORDERLINE",
+  "created_at_utc": "2026-09-19T06:12:00.116773+00:00",
+  "read_only_contract": "no training, no checkpoint selection, no threshold rescan, no Test inference, no RCA, no write into any frozen artifact tree",
+  "run_id": "c0f-seed42-20260919T0700",
+  "schema_version": "p6_c0f_run_state_v1",
+  "stages": {
+    "analyze": {
+      "finished_at_utc": "2026-09-19T06:23:38.616196+00:00",
+      "outputs": {
+        "invariants": true,
+        "ledger_rows": 16131
+      },
+      "status": "COMPLETE"
+    },
+    "capacity": {
+      "finished_at_utc": "2026-09-19T07:00:22.369905+00:00",
+      "outputs": {
+        "ordering": {
+          "fit": true,
+          "test": true,
+          "validation": true
+        }
+      },
+      "status": "COMPLETE"
+    },
+    "finalize": {
+      "finished_at_utc": "2026-09-19T07:01:28.562870+00:00",
+      "status": "COMPLETE"
+    },
+    "prepare": {
+      "finished_at_utc": "2026-09-19T06:12:02.212732+00:00",
+      "outputs": {
+        "integrity": "PASS",
+        "population": "PASS"
+      },
+      "status": "COMPLETE"
+    },
+    "scores": {
+      "finished_at_utc": "2026-09-19T06:15:14.542865+00:00",
+      "outputs": {
+        "files": {
+          "fit": {
+            "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/scores/fit.csv",
+            "rows": 43550,
+            "sha256": "140c58508263cd5c5fca280cac284c6d3e52798275eb40b36c8921f9a797687b"
+          },
+          "validation": {
+            "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/scores/validation.csv",
+            "rows": 17414,
+            "sha256": "5b5e592636753ada3615ff4c373ef739660dcc5196908a78bceb9eb85892ce2f"
+          }
+        },
+        "validation_replay": "MATCH"
+      },
+      "status": "COMPLETE"
+    }
+  },
+  "status": "COMPLETE",
+  "updated_at_utc": "2026-09-19T07:01:28.562881+00:00"
+}

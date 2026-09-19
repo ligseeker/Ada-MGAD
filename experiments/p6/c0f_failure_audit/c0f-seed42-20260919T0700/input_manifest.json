@@ -1,0 +1,38 @@
+{
+  "artifact_root": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3_preprocessing_v2/ad",
+  "c0_first_run_root": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger_v1_label_lag",
+  "c0_root": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger",
+  "data_root": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad",
+  "generated_at_utc": "2026-09-19T06:12:02.149118+00:00",
+  "p5_root": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5",
+  "read_only": true,
+  "registry_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv",
+  "run_id": "c0f-seed42-20260919T0700",
+  "schema_version": "p6_c0f_failure_audit_v1",
+  "splits": {
+    "fit": {
+      "block": {
+        "end_ms": 1626440400000,
+        "start_ms": 1625133600000
+      },
+      "events": 7443,
+      "windows": 43550
+    },
+    "test": {
+      "block": {
+        "end_ms": 1627747200000,
+        "start_ms": 1626963120000
+      },
+      "events": 5787,
+      "windows": 26127
+    },
+    "validation": {
+      "block": {
+        "end_ms": 1626963120000,
+        "start_ms": 1626440400000
+      },
+      "events": 2901,
+      "windows": 17414
+    }
+  }
+}

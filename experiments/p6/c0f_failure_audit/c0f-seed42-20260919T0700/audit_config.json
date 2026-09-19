@@ -1,0 +1,60 @@
+{
+  "boundaries": [
+    "no training or backpropagation",
+    "no checkpoint or threshold selection",
+    "no Test model inference; the frozen Test CSVs are read and re-verified",
+    "no RCA, no 68D feature work, no conditional logit",
+    "no modification of frozen artifacts; the C0 verdict is recorded unchanged"
+  ],
+  "c0_execution_commit": "cedc4a2bd7492933a8295067c8075e631cbf3df9",
+  "frozen_checkpoint": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/checkpoint/best_validation_event_f1.pt",
+  "frozen_epoch": 8,
+  "frozen_protocol": {
+    "event_registry": {
+      "excluded": [
+        "normal",
+        "ERROR",
+        "traceback continuation",
+        "unsupported/unknown"
+      ],
+      "path": "artifacts/p5/v3/protocol/gt_event_registry.csv",
+      "semantics": "one raw six-class injection per registry row",
+      "sha256": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+      "taxonomy_version": "gaia-v3-20260913"
+    },
+    "grid_seconds": 30,
+    "history_seconds": 300,
+    "matching_semantics": "causal_max_cardinality_minimum_delay",
+    "tolerance_seconds": 60,
+    "window_bins": 10
+  },
+  "frozen_threshold": 0.9998264908790588,
+  "generated_at_utc": "2026-09-19T06:12:02.118912+00:00",
+  "git_commit": "b3a3ceb61bd22af594fdbdb3721380e9679f70f2",
+  "grid_seconds": 30,
+  "inspection_head": "b3a3ceb61bd22af594fdbdb3721380e9679f70f2",
+  "interpretation_rules": {
+    "concurrency_contamination_share": 0.5,
+    "dominant_population_share": 0.9,
+    "long_event_seconds": 300.0,
+    "near_threshold_margin": 0.05,
+    "response_window_ms": 60000,
+    "rules": [
+      "recall is reported per stratum with n; strata with n < 30 are flagged small_n and never used for mechanism claims",
+      "a 'response' is a frozen-score crossing of the frozen threshold; a 'new episode' is an official episode start; the two are always reported separately",
+      "a long-event response later than 60 s is only reported as a late frozen-model response; it is never attributed to the event unless the timestamp has no other recent-onset marker",
+      "observed recall is compared against U_episode (complete-protocol) and U_grid (relaxed); no gap-to-bound acceptance threshold is defined in this audit",
+      "sustained low scores are reported as OBSERVED; a representation/objective/observability diagnosis stays HYPOTHESIS unless the trajectory shows a separable pattern"
+    ],
+    "small_n": 30
+  },
+  "numpy": "1.24.1",
+  "pandas": "1.5.3",
+  "python": "3.8.20",
+  "run_id": "c0f-seed42-20260919T0700",
+  "schema_version": "p6_c0f_failure_audit_v1",
+  "seed": 42,
+  "threads": 8,
+  "tolerance_seconds": 60,
+  "torch": "1.12.0"
+}

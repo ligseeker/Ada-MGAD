@@ -1,0 +1,1063 @@
+{
+  "collision": {
+    "label_legal_all": {
+      "bins_with_exactly_three_onsets": 27,
+      "bins_with_exactly_two_onsets": 969,
+      "definition": "onset bin = floor((onset_ms - grid_origin) / 30 s); collisions are bins with more than one onset, independent of whether the onsets belong to the same fault or service",
+      "distinct_onset_bins": 15109,
+      "events": 16132,
+      "events_in_multi_onset_bins": 2019,
+      "events_in_three_onset_bins": 81,
+      "events_in_two_onset_bins": 1938,
+      "onsets_on_grid_boundary": 1,
+      "onsets_per_bin_histogram": {
+        "1": 14113,
+        "2": 969,
+        "3": 27
+      },
+      "population": "label-legal-all"
+    },
+    "per_split": {
+      "fit": {
+        "bins_with_exactly_three_onsets": 10,
+        "bins_with_exactly_two_onsets": 394,
+        "definition": "onset bin = floor((onset_ms - grid_origin) / 30 s); collisions are bins with more than one onset, independent of whether the onsets belong to the same fault or service",
+        "distinct_onset_bins": 7029,
+        "events": 7443,
+        "events_in_multi_onset_bins": 818,
+        "events_in_three_onset_bins": 30,
+        "events_in_two_onset_bins": 788,
+        "onsets_on_grid_boundary": 0,
+        "onsets_per_bin_histogram": {
+          "1": 6625,
+          "2": 394,
+          "3": 10
+        },
+        "population": "fit-complete-gt"
+      },
+      "test": {
+        "bins_with_exactly_three_onsets": 13,
+        "bins_with_exactly_two_onsets": 391,
+        "definition": "onset bin = floor((onset_ms - grid_origin) / 30 s); collisions are bins with more than one onset, independent of whether the onsets belong to the same fault or service",
+        "distinct_onset_bins": 5370,
+        "events": 5787,
+        "events_in_multi_onset_bins": 821,
+        "events_in_three_onset_bins": 39,
+        "events_in_two_onset_bins": 782,
+        "onsets_on_grid_boundary": 1,
+        "onsets_per_bin_histogram": {
+          "1": 4966,
+          "2": 391,
+          "3": 13
+        },
+        "population": "test-complete-gt"
+      },
+      "validation": {
+        "bins_with_exactly_three_onsets": 4,
+        "bins_with_exactly_two_onsets": 184,
+        "definition": "onset bin = floor((onset_ms - grid_origin) / 30 s); collisions are bins with more than one onset, independent of whether the onsets belong to the same fault or service",
+        "distinct_onset_bins": 2709,
+        "events": 2901,
+        "events_in_multi_onset_bins": 380,
+        "events_in_three_onset_bins": 12,
+        "events_in_two_onset_bins": 368,
+        "onsets_on_grid_boundary": 0,
+        "onsets_per_bin_histogram": {
+          "1": 2521,
+          "2": 184,
+          "3": 4
+        },
+        "population": "validation-complete-gt"
+      }
+    }
+  },
+  "label_legal_vs_split_note": "the label-legal population covers the whole frozen detector timeline; the per-split populations only contain complete in-block events, so the two must not be mixed",
+  "splits": {
+    "fit": {
+      "cartesian_product_size": 250,
+      "empty_cell_policy": "only observed combinations are listed; the full cartesian product was checked to be empty elsewhere",
+      "fault_x_duration": [
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "access_permission_denied",
+          "n": 5
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "file_moving",
+          "n": 19
+        },
+        {
+          "duration_stratum": "le_15s",
+          "fault_type": "login_failure",
+          "n": 7081
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 328
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 10
+        }
+      ],
+      "fault_x_duration_x_service": [
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "access_permission_denied",
+          "n": 4,
+          "service": "dbservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "access_permission_denied",
+          "n": 1,
+          "service": "dbservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "file_moving",
+          "n": 11,
+          "service": "webservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "file_moving",
+          "n": 8,
+          "service": "webservice2"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "fault_type": "login_failure",
+          "n": 3531,
+          "service": "mobservice1"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "fault_type": "login_failure",
+          "n": 3550,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 32,
+          "service": "dbservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 40,
+          "service": "dbservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 39,
+          "service": "logservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 36,
+          "service": "logservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 32,
+          "service": "mobservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 36,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 23,
+          "service": "redisservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 32,
+          "service": "redisservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 27,
+          "service": "webservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 31,
+          "service": "webservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 2,
+          "service": "dbservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "logservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "mobservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "redisservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "webservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 3,
+          "service": "webservice2"
+        }
+      ],
+      "fault_x_service": [
+        {
+          "fault_type": "access_permission_denied",
+          "n": 4,
+          "service": "dbservice1"
+        },
+        {
+          "fault_type": "access_permission_denied",
+          "n": 1,
+          "service": "dbservice2"
+        },
+        {
+          "fault_type": "file_moving",
+          "n": 11,
+          "service": "webservice1"
+        },
+        {
+          "fault_type": "file_moving",
+          "n": 8,
+          "service": "webservice2"
+        },
+        {
+          "fault_type": "login_failure",
+          "n": 3531,
+          "service": "mobservice1"
+        },
+        {
+          "fault_type": "login_failure",
+          "n": 3550,
+          "service": "mobservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 32,
+          "service": "dbservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 40,
+          "service": "dbservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 39,
+          "service": "logservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 36,
+          "service": "logservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 32,
+          "service": "mobservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 36,
+          "service": "mobservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 23,
+          "service": "redisservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 32,
+          "service": "redisservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 27,
+          "service": "webservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 31,
+          "service": "webservice2"
+        },
+        {
+          "fault_type": "normal_memory_freed",
+          "n": 2,
+          "service": "dbservice1"
+        },
+        {
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "logservice1"
+        },
+        {
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "mobservice1"
+        },
+        {
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "mobservice2"
+        },
+        {
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "redisservice1"
+        },
+        {
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "webservice1"
+        },
+        {
+          "fault_type": "normal_memory_freed",
+          "n": 3,
+          "service": "webservice2"
+        }
+      ],
+      "observed_combination_count": 23,
+      "service_x_duration": [
+        {
+          "duration_stratum": "gt_300s",
+          "n": 38,
+          "service": "dbservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 41,
+          "service": "dbservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 40,
+          "service": "logservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 36,
+          "service": "logservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 33,
+          "service": "mobservice1"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "n": 3531,
+          "service": "mobservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 37,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "n": 3550,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 24,
+          "service": "redisservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 32,
+          "service": "redisservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 39,
+          "service": "webservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 42,
+          "service": "webservice2"
+        }
+      ]
+    },
+    "test": {
+      "cartesian_product_size": 300,
+      "empty_cell_policy": "only observed combinations are listed; the full cartesian product was checked to be empty elsewhere",
+      "fault_x_duration": [
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "access_permission_denied",
+          "n": 5
+        },
+        {
+          "duration_stratum": "le_15s",
+          "fault_type": "cpu_anomalies",
+          "n": 12
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "file_moving",
+          "n": 16
+        },
+        {
+          "duration_stratum": "le_15s",
+          "fault_type": "login_failure",
+          "n": 5546
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 204
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 4
+        }
+      ],
+      "fault_x_duration_x_service": [
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "access_permission_denied",
+          "n": 2,
+          "service": "dbservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "access_permission_denied",
+          "n": 3,
+          "service": "dbservice2"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "fault_type": "cpu_anomalies",
+          "n": 8,
+          "service": "dbservice1"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "fault_type": "cpu_anomalies",
+          "n": 4,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "file_moving",
+          "n": 7,
+          "service": "webservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "file_moving",
+          "n": 9,
+          "service": "webservice2"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "fault_type": "login_failure",
+          "n": 2781,
+          "service": "mobservice1"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "fault_type": "login_failure",
+          "n": 2765,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 23,
+          "service": "dbservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 29,
+          "service": "dbservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 18,
+          "service": "logservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 19,
+          "service": "logservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 18,
+          "service": "mobservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 18,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 20,
+          "service": "redisservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 17,
+          "service": "redisservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 21,
+          "service": "webservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 21,
+          "service": "webservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "logservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "redisservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 2,
+          "service": "webservice1"
+        }
+      ],
+      "fault_x_service": [
+        {
+          "fault_type": "access_permission_denied",
+          "n": 2,
+          "service": "dbservice1"
+        },
+        {
+          "fault_type": "access_permission_denied",
+          "n": 3,
+          "service": "dbservice2"
+        },
+        {
+          "fault_type": "cpu_anomalies",
+          "n": 8,
+          "service": "dbservice1"
+        },
+        {
+          "fault_type": "cpu_anomalies",
+          "n": 4,
+          "service": "mobservice2"
+        },
+        {
+          "fault_type": "file_moving",
+          "n": 7,
+          "service": "webservice1"
+        },
+        {
+          "fault_type": "file_moving",
+          "n": 9,
+          "service": "webservice2"
+        },
+        {
+          "fault_type": "login_failure",
+          "n": 2781,
+          "service": "mobservice1"
+        },
+        {
+          "fault_type": "login_failure",
+          "n": 2765,
+          "service": "mobservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 23,
+          "service": "dbservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 29,
+          "service": "dbservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 18,
+          "service": "logservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 19,
+          "service": "logservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 18,
+          "service": "mobservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 18,
+          "service": "mobservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 20,
+          "service": "redisservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 17,
+          "service": "redisservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 21,
+          "service": "webservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 21,
+          "service": "webservice2"
+        },
+        {
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "logservice2"
+        },
+        {
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "redisservice2"
+        },
+        {
+          "fault_type": "normal_memory_freed",
+          "n": 2,
+          "service": "webservice1"
+        }
+      ],
+      "observed_combination_count": 21,
+      "service_x_duration": [
+        {
+          "duration_stratum": "gt_300s",
+          "n": 25,
+          "service": "dbservice1"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "n": 8,
+          "service": "dbservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 32,
+          "service": "dbservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 18,
+          "service": "logservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 20,
+          "service": "logservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 18,
+          "service": "mobservice1"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "n": 2781,
+          "service": "mobservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 18,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "n": 2769,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 20,
+          "service": "redisservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 18,
+          "service": "redisservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 30,
+          "service": "webservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 30,
+          "service": "webservice2"
+        }
+      ]
+    },
+    "validation": {
+      "cartesian_product_size": 250,
+      "empty_cell_policy": "only observed combinations are listed; the full cartesian product was checked to be empty elsewhere",
+      "fault_x_duration": [
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "access_permission_denied",
+          "n": 5
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "file_moving",
+          "n": 8
+        },
+        {
+          "duration_stratum": "le_15s",
+          "fault_type": "login_failure",
+          "n": 2776
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 110
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 2
+        }
+      ],
+      "fault_x_duration_x_service": [
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "access_permission_denied",
+          "n": 2,
+          "service": "dbservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "access_permission_denied",
+          "n": 3,
+          "service": "dbservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "file_moving",
+          "n": 4,
+          "service": "webservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "file_moving",
+          "n": 4,
+          "service": "webservice2"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "fault_type": "login_failure",
+          "n": 1401,
+          "service": "mobservice1"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "fault_type": "login_failure",
+          "n": 1375,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 11,
+          "service": "dbservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 18,
+          "service": "dbservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 9,
+          "service": "logservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 8,
+          "service": "logservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 16,
+          "service": "mobservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 11,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 10,
+          "service": "redisservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 7,
+          "service": "redisservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 11,
+          "service": "webservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "memory_anomalies",
+          "n": 9,
+          "service": "webservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "webservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "webservice2"
+        }
+      ],
+      "fault_x_service": [
+        {
+          "fault_type": "access_permission_denied",
+          "n": 2,
+          "service": "dbservice1"
+        },
+        {
+          "fault_type": "access_permission_denied",
+          "n": 3,
+          "service": "dbservice2"
+        },
+        {
+          "fault_type": "file_moving",
+          "n": 4,
+          "service": "webservice1"
+        },
+        {
+          "fault_type": "file_moving",
+          "n": 4,
+          "service": "webservice2"
+        },
+        {
+          "fault_type": "login_failure",
+          "n": 1401,
+          "service": "mobservice1"
+        },
+        {
+          "fault_type": "login_failure",
+          "n": 1375,
+          "service": "mobservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 11,
+          "service": "dbservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 18,
+          "service": "dbservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 9,
+          "service": "logservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 8,
+          "service": "logservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 16,
+          "service": "mobservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 11,
+          "service": "mobservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 10,
+          "service": "redisservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 7,
+          "service": "redisservice2"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 11,
+          "service": "webservice1"
+        },
+        {
+          "fault_type": "memory_anomalies",
+          "n": 9,
+          "service": "webservice2"
+        },
+        {
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "webservice1"
+        },
+        {
+          "fault_type": "normal_memory_freed",
+          "n": 1,
+          "service": "webservice2"
+        }
+      ],
+      "observed_combination_count": 18,
+      "service_x_duration": [
+        {
+          "duration_stratum": "gt_300s",
+          "n": 13,
+          "service": "dbservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 21,
+          "service": "dbservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 9,
+          "service": "logservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 8,
+          "service": "logservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 16,
+          "service": "mobservice1"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "n": 1401,
+          "service": "mobservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 11,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "le_15s",
+          "n": 1375,
+          "service": "mobservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 10,
+          "service": "redisservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 7,
+          "service": "redisservice2"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 16,
+          "service": "webservice1"
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "n": 14,
+          "service": "webservice2"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1348 @@
+{
+  "splits": {
+    "fit": {
+      "by_duration_stratum": [
+        {
+          "duration_stratum": "le_15s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 128,
+            "MATCHED": 5585,
+            "MATCHING_COMPETITION": 687,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 680
+          },
+          "fn": 1496,
+          "matched": 5585,
+          "n": 7081,
+          "recall": 0.7887304053099845,
+          "small_n": false
+        },
+        {
+          "duration_stratum": "15_30s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "30_60s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "60_300s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 260,
+            "MATCHED": 41,
+            "MATCHING_COMPETITION": 56,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 5
+          },
+          "fn": 321,
+          "matched": 41,
+          "n": 362,
+          "recall": 0.1132596685082873,
+          "small_n": false
+        }
+      ],
+      "by_fault_type": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 1,
+            "MATCHED": 2,
+            "MATCHING_COMPETITION": 2,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "access_permission_denied",
+          "fn": 3,
+          "matched": 2,
+          "n": 5,
+          "recall": 0.4,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 15,
+            "MATCHED": 1,
+            "MATCHING_COMPETITION": 3,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "file_moving",
+          "fn": 18,
+          "matched": 1,
+          "n": 19,
+          "recall": 0.05263157894736842,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 128,
+            "MATCHED": 5585,
+            "MATCHING_COMPETITION": 687,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 680
+          },
+          "fault_type": "login_failure",
+          "fn": 1496,
+          "matched": 5585,
+          "n": 7081,
+          "recall": 0.7887304053099845,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 234,
+            "MATCHED": 38,
+            "MATCHING_COMPETITION": 51,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 5
+          },
+          "fault_type": "memory_anomalies",
+          "fn": 290,
+          "matched": 38,
+          "n": 328,
+          "recall": 0.11585365853658537,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 10,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "normal_memory_freed",
+          "fn": 10,
+          "matched": 0,
+          "n": 10,
+          "recall": 0.0,
+          "small_n": true
+        }
+      ],
+      "by_onset_bin_count": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 371,
+            "MATCHED": 5287,
+            "MATCHING_COMPETITION": 391,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 575
+          },
+          "fn": 1338,
+          "matched": 5287,
+          "n": 6625,
+          "onset_bin_count": "1",
+          "recall": 0.7980377358490566,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 14,
+            "MATCHED": 332,
+            "MATCHING_COMPETITION": 338,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 104
+          },
+          "fn": 456,
+          "matched": 332,
+          "n": 788,
+          "onset_bin_count": "2",
+          "recall": 0.4213197969543147,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 3,
+            "MATCHED": 7,
+            "MATCHING_COMPETITION": 14,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 6
+          },
+          "fn": 23,
+          "matched": 7,
+          "n": 30,
+          "onset_bin_count": "3",
+          "recall": 0.23333333333333334,
+          "small_n": false
+        }
+      ],
+      "by_response_band": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 183,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 184,
+          "matched": 0,
+          "n": 184,
+          "recall": 0.0,
+          "response_band": "120_300s",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 93,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 93,
+          "matched": 0,
+          "n": 93,
+          "recall": 0.0,
+          "response_band": "60_120s",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 50,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 50,
+          "matched": 0,
+          "n": 50,
+          "recall": 0.0,
+          "response_band": "gt_300s",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 5626,
+            "MATCHING_COMPETITION": 743,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 685
+          },
+          "fn": 1428,
+          "matched": 5626,
+          "n": 7054,
+          "recall": 0.7975616671392118,
+          "response_band": "le_60s",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 62,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 62,
+          "matched": 0,
+          "n": 62,
+          "recall": 0.0,
+          "response_band": "never",
+          "small_n": false
+        }
+      ],
+      "by_service": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 24,
+            "MATCHED": 7,
+            "MATCHING_COMPETITION": 7,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 31,
+          "matched": 7,
+          "n": 38,
+          "recall": 0.18421052631578946,
+          "service": "dbservice1",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 27,
+            "MATCHED": 4,
+            "MATCHING_COMPETITION": 10,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 37,
+          "matched": 4,
+          "n": 41,
+          "recall": 0.0975609756097561,
+          "service": "dbservice2",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 25,
+            "MATCHED": 6,
+            "MATCHING_COMPETITION": 8,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 1
+          },
+          "fn": 34,
+          "matched": 6,
+          "n": 40,
+          "recall": 0.15,
+          "service": "logservice1",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 27,
+            "MATCHED": 4,
+            "MATCHING_COMPETITION": 4,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 1
+          },
+          "fn": 32,
+          "matched": 4,
+          "n": 36,
+          "recall": 0.1111111111111111,
+          "service": "logservice2",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 85,
+            "MATCHED": 2795,
+            "MATCHING_COMPETITION": 357,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 327
+          },
+          "fn": 769,
+          "matched": 2795,
+          "n": 3564,
+          "recall": 0.7842312008978676,
+          "service": "mobservice1",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 94,
+            "MATCHED": 2798,
+            "MATCHING_COMPETITION": 340,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 354
+          },
+          "fn": 789,
+          "matched": 2798,
+          "n": 3587,
+          "recall": 0.7800390298299414,
+          "service": "mobservice2",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 19,
+            "MATCHED": 2,
+            "MATCHING_COMPETITION": 2,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 1
+          },
+          "fn": 22,
+          "matched": 2,
+          "n": 24,
+          "recall": 0.08333333333333333,
+          "service": "redisservice1",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 21,
+            "MATCHED": 4,
+            "MATCHING_COMPETITION": 6,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 1
+          },
+          "fn": 28,
+          "matched": 4,
+          "n": 32,
+          "recall": 0.125,
+          "service": "redisservice2",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 30,
+            "MATCHED": 3,
+            "MATCHING_COMPETITION": 6,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 36,
+          "matched": 3,
+          "n": 39,
+          "recall": 0.07692307692307693,
+          "service": "webservice1",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 36,
+            "MATCHED": 3,
+            "MATCHING_COMPETITION": 3,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 39,
+          "matched": 3,
+          "n": 42,
+          "recall": 0.07142857142857142,
+          "service": "webservice2",
+          "small_n": false
+        }
+      ],
+      "definition": "recall and failure-category mix per stratum; empty strata keep n=0 with a null recall; categories are occurrence locations, not causal explanations",
+      "response_band_totals": {
+        "120_300s": 184,
+        "60_120s": 93,
+        "censored": 0,
+        "gt_300s": 50,
+        "le_60s": 7054,
+        "never": 62,
+        "no_grid_observation": 0
+      },
+      "split": "fit"
+    },
+    "test": {
+      "by_duration_stratum": [
+        {
+          "duration_stratum": "le_15s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 246,
+            "MATCHED": 4166,
+            "MATCHING_COMPETITION": 639,
+            "NO_LEGAL_PREDICTION": 3,
+            "NO_NEW_EPISODE": 504
+          },
+          "fn": 1392,
+          "matched": 4166,
+          "n": 5558,
+          "recall": 0.7495501979129183,
+          "small_n": false
+        },
+        {
+          "duration_stratum": "15_30s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "30_60s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "60_300s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 148,
+            "MATCHED": 32,
+            "MATCHING_COMPETITION": 44,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 5
+          },
+          "fn": 197,
+          "matched": 32,
+          "n": 229,
+          "recall": 0.13973799126637554,
+          "small_n": false
+        }
+      ],
+      "by_fault_type": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 3,
+            "MATCHED": 1,
+            "MATCHING_COMPETITION": 1,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "access_permission_denied",
+          "fn": 4,
+          "matched": 1,
+          "n": 5,
+          "recall": 0.2,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 10,
+            "MATCHED": 1,
+            "MATCHING_COMPETITION": 1,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "cpu_anomalies",
+          "fn": 11,
+          "matched": 1,
+          "n": 12,
+          "recall": 0.08333333333333333,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 11,
+            "MATCHED": 1,
+            "MATCHING_COMPETITION": 4,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "file_moving",
+          "fn": 15,
+          "matched": 1,
+          "n": 16,
+          "recall": 0.0625,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 236,
+            "MATCHED": 4165,
+            "MATCHING_COMPETITION": 638,
+            "NO_LEGAL_PREDICTION": 3,
+            "NO_NEW_EPISODE": 504
+          },
+          "fault_type": "login_failure",
+          "fn": 1381,
+          "matched": 4165,
+          "n": 5546,
+          "recall": 0.7509917057338622,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 130,
+            "MATCHED": 30,
+            "MATCHING_COMPETITION": 39,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 5
+          },
+          "fault_type": "memory_anomalies",
+          "fn": 174,
+          "matched": 30,
+          "n": 204,
+          "recall": 0.14705882352941177,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 4,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "normal_memory_freed",
+          "fn": 4,
+          "matched": 0,
+          "n": 4,
+          "recall": 0.0,
+          "small_n": true
+        }
+      ],
+      "by_onset_bin_count": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 380,
+            "MATCHED": 3858,
+            "MATCHING_COMPETITION": 314,
+            "NO_LEGAL_PREDICTION": 3,
+            "NO_NEW_EPISODE": 411
+          },
+          "fn": 1108,
+          "matched": 3858,
+          "n": 4966,
+          "onset_bin_count": "1",
+          "recall": 0.7768828030608136,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 14,
+            "MATCHED": 331,
+            "MATCHING_COMPETITION": 351,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 86
+          },
+          "fn": 451,
+          "matched": 331,
+          "n": 782,
+          "onset_bin_count": "2",
+          "recall": 0.42327365728900257,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 9,
+            "MATCHING_COMPETITION": 18,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 12
+          },
+          "fn": 30,
+          "matched": 9,
+          "n": 39,
+          "onset_bin_count": "3",
+          "recall": 0.23076923076923078,
+          "small_n": false
+        }
+      ],
+      "by_response_band": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 193,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 2,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 195,
+          "matched": 0,
+          "n": 195,
+          "recall": 0.0,
+          "response_band": "120_300s",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 128,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 128,
+          "matched": 0,
+          "n": 128,
+          "recall": 0.0,
+          "response_band": "60_120s",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 17,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 17,
+          "matched": 0,
+          "n": 17,
+          "recall": 0.0,
+          "response_band": "gt_300s",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 4198,
+            "MATCHING_COMPETITION": 683,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 509
+          },
+          "fn": 1192,
+          "matched": 4198,
+          "n": 5390,
+          "recall": 0.7788497217068646,
+          "response_band": "le_60s",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 56,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 57,
+          "matched": 0,
+          "n": 57,
+          "recall": 0.0,
+          "response_band": "never",
+          "small_n": false
+        }
+      ],
+      "by_service": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 20,
+            "MATCHED": 5,
+            "MATCHING_COMPETITION": 7,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 1
+          },
+          "fn": 28,
+          "matched": 5,
+          "n": 33,
+          "recall": 0.15151515151515152,
+          "service": "dbservice1",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 18,
+            "MATCHED": 6,
+            "MATCHING_COMPETITION": 7,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 1
+          },
+          "fn": 26,
+          "matched": 6,
+          "n": 32,
+          "recall": 0.1875,
+          "service": "dbservice2",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 13,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 2,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 3
+          },
+          "fn": 18,
+          "matched": 0,
+          "n": 18,
+          "recall": 0.0,
+          "service": "logservice1",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 14,
+            "MATCHED": 2,
+            "MATCHING_COMPETITION": 4,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 18,
+          "matched": 2,
+          "n": 20,
+          "recall": 0.1,
+          "service": "logservice2",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 134,
+            "MATCHED": 2066,
+            "MATCHING_COMPETITION": 332,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 266
+          },
+          "fn": 733,
+          "matched": 2066,
+          "n": 2799,
+          "recall": 0.7381207574133619,
+          "service": "mobservice1",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 129,
+            "MATCHED": 2106,
+            "MATCHING_COMPETITION": 312,
+            "NO_LEGAL_PREDICTION": 2,
+            "NO_NEW_EPISODE": 238
+          },
+          "fn": 681,
+          "matched": 2106,
+          "n": 2787,
+          "recall": 0.7556512378902045,
+          "service": "mobservice2",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 14,
+            "MATCHED": 4,
+            "MATCHING_COMPETITION": 2,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 16,
+          "matched": 4,
+          "n": 20,
+          "recall": 0.2,
+          "service": "redisservice1",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 11,
+            "MATCHED": 5,
+            "MATCHING_COMPETITION": 2,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 13,
+          "matched": 5,
+          "n": 18,
+          "recall": 0.2777777777777778,
+          "service": "redisservice2",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 21,
+            "MATCHED": 2,
+            "MATCHING_COMPETITION": 7,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 28,
+          "matched": 2,
+          "n": 30,
+          "recall": 0.06666666666666667,
+          "service": "webservice1",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 20,
+            "MATCHED": 2,
+            "MATCHING_COMPETITION": 8,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 28,
+          "matched": 2,
+          "n": 30,
+          "recall": 0.06666666666666667,
+          "service": "webservice2",
+          "small_n": false
+        }
+      ],
+      "definition": "recall and failure-category mix per stratum; empty strata keep n=0 with a null recall; categories are occurrence locations, not causal explanations",
+      "response_band_totals": {
+        "120_300s": 195,
+        "60_120s": 128,
+        "censored": 0,
+        "gt_300s": 17,
+        "le_60s": 5390,
+        "never": 57,
+        "no_grid_observation": 0
+      },
+      "split": "test"
+    },
+    "validation": {
+      "by_duration_stratum": [
+        {
+          "duration_stratum": "le_15s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 93,
+            "MATCHED": 2108,
+            "MATCHING_COMPETITION": 308,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 267
+          },
+          "fn": 668,
+          "matched": 2108,
+          "n": 2776,
+          "recall": 0.7593659942363112,
+          "small_n": false
+        },
+        {
+          "duration_stratum": "15_30s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "30_60s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "60_300s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 85,
+            "MATCHED": 16,
+            "MATCHING_COMPETITION": 23,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 109,
+          "matched": 16,
+          "n": 125,
+          "recall": 0.128,
+          "small_n": false
+        }
+      ],
+      "by_fault_type": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 3,
+            "MATCHED": 1,
+            "MATCHING_COMPETITION": 1,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "access_permission_denied",
+          "fn": 4,
+          "matched": 1,
+          "n": 5,
+          "recall": 0.2,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 6,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 2,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "file_moving",
+          "fn": 8,
+          "matched": 0,
+          "n": 8,
+          "recall": 0.0,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 93,
+            "MATCHED": 2108,
+            "MATCHING_COMPETITION": 308,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 267
+          },
+          "fault_type": "login_failure",
+          "fn": 668,
+          "matched": 2108,
+          "n": 2776,
+          "recall": 0.7593659942363112,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 74,
+            "MATCHED": 15,
+            "MATCHING_COMPETITION": 20,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "memory_anomalies",
+          "fn": 95,
+          "matched": 15,
+          "n": 110,
+          "recall": 0.13636363636363635,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 2,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "normal_memory_freed",
+          "fn": 2,
+          "matched": 0,
+          "n": 2,
+          "recall": 0.0,
+          "small_n": true
+        }
+      ],
+      "by_onset_bin_count": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 172,
+            "MATCHED": 1968,
+            "MATCHING_COMPETITION": 166,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 214
+          },
+          "fn": 553,
+          "matched": 1968,
+          "n": 2521,
+          "onset_bin_count": "1",
+          "recall": 0.7806426021420071,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 6,
+            "MATCHED": 153,
+            "MATCHING_COMPETITION": 159,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 50
+          },
+          "fn": 215,
+          "matched": 153,
+          "n": 368,
+          "onset_bin_count": "2",
+          "recall": 0.4157608695652174,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 3,
+            "MATCHING_COMPETITION": 6,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 3
+          },
+          "fn": 9,
+          "matched": 3,
+          "n": 12,
+          "onset_bin_count": "3",
+          "recall": 0.25,
+          "small_n": true
+        }
+      ],
+      "by_response_band": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 84,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 85,
+          "matched": 0,
+          "n": 85,
+          "recall": 0.0,
+          "response_band": "120_300s",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 61,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 61,
+          "matched": 0,
+          "n": 61,
+          "recall": 0.0,
+          "response_band": "60_120s",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 15,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 15,
+          "matched": 0,
+          "n": 15,
+          "recall": 0.0,
+          "response_band": "gt_300s",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 2124,
+            "MATCHING_COMPETITION": 331,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 267
+          },
+          "fn": 598,
+          "matched": 2124,
+          "n": 2722,
+          "recall": 0.7803085966201323,
+          "response_band": "le_60s",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 18,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 18,
+          "matched": 0,
+          "n": 18,
+          "recall": 0.0,
+          "response_band": "never",
+          "small_n": true
+        }
+      ],
+      "by_service": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 6,
+            "MATCHED": 4,
+            "MATCHING_COMPETITION": 3,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 9,
+          "matched": 4,
+          "n": 13,
+          "recall": 0.3076923076923077,
+          "service": "dbservice1",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 13,
+            "MATCHED": 3,
+            "MATCHING_COMPETITION": 5,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 18,
+          "matched": 3,
+          "n": 21,
+          "recall": 0.14285714285714285,
+          "service": "dbservice2",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 6,
+            "MATCHED": 1,
+            "MATCHING_COMPETITION": 2,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 8,
+          "matched": 1,
+          "n": 9,
+          "recall": 0.1111111111111111,
+          "service": "logservice1",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 6,
+            "MATCHED": 1,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 7,
+          "matched": 1,
+          "n": 8,
+          "recall": 0.125,
+          "service": "logservice2",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 56,
+            "MATCHED": 1074,
+            "MATCHING_COMPETITION": 160,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 127
+          },
+          "fn": 343,
+          "matched": 1074,
+          "n": 1417,
+          "recall": 0.757939308398024,
+          "service": "mobservice1",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 54,
+            "MATCHED": 1038,
+            "MATCHING_COMPETITION": 154,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 140
+          },
+          "fn": 348,
+          "matched": 1038,
+          "n": 1386,
+          "recall": 0.7489177489177489,
+          "service": "mobservice2",
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 7,
+            "MATCHED": 2,
+            "MATCHING_COMPETITION": 1,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 8,
+          "matched": 2,
+          "n": 10,
+          "recall": 0.2,
+          "service": "redisservice1",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 5,
+            "MATCHED": 1,
+            "MATCHING_COMPETITION": 1,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 6,
+          "matched": 1,
+          "n": 7,
+          "recall": 0.14285714285714285,
+          "service": "redisservice2",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 13,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 3,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 16,
+          "matched": 0,
+          "n": 16,
+          "recall": 0.0,
+          "service": "webservice1",
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 12,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 2,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 14,
+          "matched": 0,
+          "n": 14,
+          "recall": 0.0,
+          "service": "webservice2",
+          "small_n": true
+        }
+      ],
+      "definition": "recall and failure-category mix per stratum; empty strata keep n=0 with a null recall; categories are occurrence locations, not causal explanations",
+      "response_band_totals": {
+        "120_300s": 85,
+        "60_120s": 61,
+        "censored": 0,
+        "gt_300s": 15,
+        "le_60s": 2722,
+        "never": 18,
+        "no_grid_observation": 0
+      },
+      "split": "validation"
+    }
+  }
+}

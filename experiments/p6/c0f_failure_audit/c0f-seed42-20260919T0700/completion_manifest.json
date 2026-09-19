@@ -1,0 +1,297 @@
+{
+  "c0_verdict": "BORDERLINE",
+  "commands": {
+    "analyze": "python scripts/p6/audit_c0_failure.py analyze --output-dir <run>",
+    "capacity": "python scripts/p6/audit_c0_failure.py capacity --output-dir <run>",
+    "finalize": "python scripts/p6/audit_c0_failure.py finalize --output-dir <run>",
+    "prepare": "python scripts/p6/audit_c0_failure.py prepare --output-dir <run> --threads 8",
+    "scores": "python scripts/p6/audit_c0_failure.py scores --output-dir <run> --threads 8"
+  },
+  "environment": {
+    "numpy": "1.24.1",
+    "pandas": "1.5.3",
+    "python": "3.8.20",
+    "threads": 8,
+    "torch": "1.12.0"
+  },
+  "generated_at_utc": "2026-09-19T07:01:28.286968+00:00",
+  "git_commit": "b3a3ceb61bd22af594fdbdb3721380e9679f70f2",
+  "input_binding": {
+    "ad_data_manifest": {
+      "actual": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2",
+      "expected": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json"
+    },
+    "base_config": {
+      "actual": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+      "expected": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p5_v3_preprocessing_v2.json"
+    },
+    "c0:manifest.json": {
+      "actual": "cb222bb5c21d20d8a7546e8b1ee1b4882daaac5d4a397d0e07655fe646cf9794",
+      "expected": "cb222bb5c21d20d8a7546e8b1ee1b4882daaac5d4a397d0e07655fe646cf9794",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/manifest.json"
+    },
+    "c0:split_audit.json": {
+      "actual": "e5c60574f4c36ba5c7ebddbc869ede70f6f9aa83cf35c46fd611dbfba310463e",
+      "expected": "e5c60574f4c36ba5c7ebddbc869ede70f6f9aa83cf35c46fd611dbfba310463e",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/split_audit.json"
+    },
+    "c0:split_manifest.json": {
+      "actual": "1cad441a2d207379ffd8838bc2d655e9c68f3e03b6f4f7e666413a0b33aca193",
+      "expected": "1cad441a2d207379ffd8838bc2d655e9c68f3e03b6f4f7e666413a0b33aca193",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/split_manifest.json"
+    },
+    "c0:test_episodes.csv": {
+      "actual": "30bacbeecbee4b9f738fc6330fa9d8df5c1adc08e37fb1ee8476f1b47735399b",
+      "expected": "30bacbeecbee4b9f738fc6330fa9d8df5c1adc08e37fb1ee8476f1b47735399b",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_episodes.csv"
+    },
+    "c0:test_matching.csv": {
+      "actual": "011332f3537ee6f7d044e9da23df1d88f617fb71d3a552354343db6fd91c9c77",
+      "expected": "011332f3537ee6f7d044e9da23df1d88f617fb71d3a552354343db6fd91c9c77",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_matching.csv"
+    },
+    "c0:test_metrics.json": {
+      "actual": "2968632cc4da1b807d976d8bb1c449f9d755cb1c15d2ee43bcd440b74946ce5b",
+      "expected": "2968632cc4da1b807d976d8bb1c449f9d755cb1c15d2ee43bcd440b74946ce5b",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_metrics.json"
+    },
+    "c0:test_predictions.csv": {
+      "actual": "985623e06f5d56db9c2c536b8dd65226967ae1c25f36c9a4924ae9e38d5bafab",
+      "expected": "985623e06f5d56db9c2c536b8dd65226967ae1c25f36c9a4924ae9e38d5bafab",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_predictions.csv"
+    },
+    "c0:validation_selection.json": {
+      "actual": "b5167c8d5df9cd9eebd7812cb76733799aa3f7829f3fe1a2c5cdb0ec51715a24",
+      "expected": "b5167c8d5df9cd9eebd7812cb76733799aa3f7829f3fe1a2c5cdb0ec51715a24",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/validation_selection.json"
+    },
+    "checkpoint": {
+      "actual": "6a4317d6414774e1ca6be4e418ed3d47d678adfab1f0155e96e04aa3fa9981f5",
+      "expected": "6a4317d6414774e1ca6be4e418ed3d47d678adfab1f0155e96e04aa3fa9981f5",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/checkpoint/best_validation_event_f1.pt"
+    },
+    "gt_registry": {
+      "actual": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+      "expected": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv"
+    },
+    "trigger_config": {
+      "actual": "a2c42beb19f5a234ab74958cf3db32301524f909d5605001bdaeb9c141e3b4f8",
+      "expected": "a2c42beb19f5a234ab74958cf3db32301524f909d5605001bdaeb9c141e3b4f8",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p6_c0_system_trigger.json"
+    }
+  },
+  "input_binding_status": "PASS",
+  "limitations": [
+    "C0F-U1: concurrent onsets can carry a score crossing that is not attributable to the event under audit; the marker columns expose it but most long events live in busy regions",
+    "C0F-U2: the frozen registry has no injections between 15 s and 300 s and no cpu_anomalies in Fit/Validation, so duration and fault-type effects cannot be separated",
+    "C0F-U3: whether the IGNORE band, the recent-onset objective, the representation or telemetry observability causes the sustained-state behaviour is not identifiable from these artifacts; no causal mechanism is claimed"
+  ],
+  "missing_outputs": [],
+  "oracle_status": {
+    "fit": "EXACT",
+    "test": "EXACT",
+    "validation": "EXACT"
+  },
+  "required_outputs": {
+    "audit_config.json": {
+      "bytes": 2705,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/audit_config.json",
+      "sha256": "078c633bc1097b558439d0bc247118bf079cdbc177eac2bbe26a83b628bbbf40"
+    },
+    "capacity_summary.json": {
+      "bytes": 12933,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/capacity_summary.json",
+      "sha256": "e479dfa5b2af41d141b4fd08ecbfa76a107148e57ade5e17eaa818b880821124"
+    },
+    "confounding_tables.json": {
+      "bytes": 27744,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/confounding_tables.json",
+      "sha256": "bab17cda93dcb9747e23cd4519396edc2975e38bc31ed96e2ad3fc2d8fe5c9c6"
+    },
+    "decision.json": {
+      "bytes": 20118,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/decision.json",
+      "sha256": "9eb7ca1ee3c04c4b8fdc1d0a9a75b873add03bfce61b026f0e4abc9f55ba9493"
+    },
+    "event_failure_ledger.csv": {
+      "bytes": 5310266,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/event_failure_ledger.csv",
+      "sha256": "b43c7a8cd0446a0efa5e48955d8ff3828297addc8b82460acb034151121ee062"
+    },
+    "event_response_summary.csv": {
+      "bytes": 7390661,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/event_response_summary.csv",
+      "sha256": "1fdf7c89bc5c7feb6d2370c1e6ba77236e92d2ebad447542066ee5f23e5586e7"
+    },
+    "event_score_trajectories.csv": {
+      "bytes": 37061375,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/event_score_trajectories.csv",
+      "sha256": "212251987436fa8a7ed04beddfd52e969c669f8ebb0d36f303d9b4948137f9a6"
+    },
+    "evidence_ledger.json": {
+      "bytes": 5830,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/evidence_ledger.json",
+      "sha256": "1eaca4aac0c592a5110acadb7681366ceba696f0fedc1803ec1c03379d16f90b"
+    },
+    "final_report.md": {
+      "bytes": 9472,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/final_report.md",
+      "sha256": "563ac665ce2641c94e80a4bd12e124473956db1c49113eb60859ba4f6f2a291f"
+    },
+    "input_manifest.json": {
+      "bytes": 1267,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/input_manifest.json",
+      "sha256": "cd5a7b02c8e78bb6021343dd2e76ca8d87819503afdecefc8cb80c5fcfdc48ef"
+    },
+    "oracle/fit/episode_bound_summary.json": {
+      "bytes": 1129,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/fit/episode_bound_summary.json",
+      "sha256": "41b0e55815f517944f516ec5dece9c7e703f8b296ca093f3a3b78e913099df77"
+    },
+    "oracle/fit/episode_bound_witness.csv": {
+      "bytes": 696841,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/fit/episode_bound_witness.csv",
+      "sha256": "c6918650fc45e3e8eaebbab1b2dcd228e7d56476b2b4730729eb9bfdbade16cc"
+    },
+    "oracle/fit/grid_bound_summary.json": {
+      "bytes": 600,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/fit/grid_bound_summary.json",
+      "sha256": "aac9964034e5bec31df7648d4c062fc16a22e7e64ac2d72899c36de6f1ded899"
+    },
+    "oracle/fit/label_reference_episodes.csv": {
+      "bytes": 285565,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/fit/label_reference_episodes.csv",
+      "sha256": "d43125a7e1403a40355ccaf5a9ae9afa625efcd411cdc2032d8cae8e239a757f"
+    },
+    "oracle/fit/label_reference_summary.json": {
+      "bytes": 1025,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/fit/label_reference_summary.json",
+      "sha256": "7b8e769af3803c3c4a314ad39b7308bc52a6a5d6ae3fc276312eb91e18e0d735"
+    },
+    "oracle/fit/replay_validation.json": {
+      "bytes": 267,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/fit/replay_validation.json",
+      "sha256": "598036f1d2da9dee1ad75c22458fb499299d0bae7f51f08a6995ea642506e65e"
+    },
+    "oracle/test/episode_bound_summary.json": {
+      "bytes": 1155,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/test/episode_bound_summary.json",
+      "sha256": "66894ea2b0da71508b36318a508c32d4ccb60f669c5e1c76895958b9828393ad"
+    },
+    "oracle/test/episode_bound_witness.csv": {
+      "bytes": 418073,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/test/episode_bound_witness.csv",
+      "sha256": "cdd1cb875556972104c4e3cb20bcaf6f1dd874cb0eb46f108374bb60091572fc"
+    },
+    "oracle/test/grid_bound_summary.json": {
+      "bytes": 600,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/test/grid_bound_summary.json",
+      "sha256": "89abf4aed565ce05cc6ee646c97ef85dce5e9f452822cdb7129ebd8156d34529"
+    },
+    "oracle/test/label_reference_episodes.csv": {
+      "bytes": 206013,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/test/label_reference_episodes.csv",
+      "sha256": "bdcecbff718f79053f1d60560d1492a7093df9ec283568ed307a897214ac83f3"
+    },
+    "oracle/test/label_reference_summary.json": {
+      "bytes": 1014,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/test/label_reference_summary.json",
+      "sha256": "a5a9ebac9f80516cb9f347b5ac395e2c7fdf09992ad619358849dd5153f9a8d5"
+    },
+    "oracle/test/replay_validation.json": {
+      "bytes": 268,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/test/replay_validation.json",
+      "sha256": "0fd46190504daeec506561084c7448be88a531178738172645e1c71398659d92"
+    },
+    "oracle/validation/episode_bound_summary.json": {
+      "bytes": 1161,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/validation/episode_bound_summary.json",
+      "sha256": "772b49191d4c7bedf7783cdfef6afb7428044e9246111ca1f3ea7b52126e9122"
+    },
+    "oracle/validation/episode_bound_witness.csv": {
+      "bytes": 278665,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/validation/episode_bound_witness.csv",
+      "sha256": "8e36b020331c472b60ded13b8bc6b33b97a9dbe66bdaaa386d4413b75979b22c"
+    },
+    "oracle/validation/grid_bound_summary.json": {
+      "bytes": 600,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/validation/grid_bound_summary.json",
+      "sha256": "c94cb2921426f3f1fd291eb37ba6753a0e3e706ba77009c492b977f3469e1502"
+    },
+    "oracle/validation/label_reference_episodes.csv": {
+      "bytes": 125656,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/validation/label_reference_episodes.csv",
+      "sha256": "65e58d49a17dcbf34eddbb1bb0443593598a016977a7ca44eee0705677b2b5d7"
+    },
+    "oracle/validation/label_reference_summary.json": {
+      "bytes": 1026,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/validation/label_reference_summary.json",
+      "sha256": "3bbb1d29d26794e72dc14b89f4abd7f443397eeeb63e66fd7d109d145854d559"
+    },
+    "oracle/validation/replay_validation.json": {
+      "bytes": 274,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/oracle/validation/replay_validation.json",
+      "sha256": "03ec4e98674f8bae10ce1dae8de54316931ded3a054e699ae6ea9d42b996c00c"
+    },
+    "run_state.json": {
+      "bytes": 1983,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/run_state.json",
+      "sha256": "5c81eb7dfb89d713ac40de4da60d8f9803b89ac1c6260ff9ca7a07e59fe40edc"
+    },
+    "scores/fit.csv": {
+      "bytes": 6159468,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/scores/fit.csv",
+      "sha256": "140c58508263cd5c5fca280cac284c6d3e52798275eb40b36c8921f9a797687b"
+    },
+    "scores/validation.csv": {
+      "bytes": 2591810,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/scores/validation.csv",
+      "sha256": "5b5e592636753ada3615ff4c373ef739660dcc5196908a78bceb9eb85892ce2f"
+    },
+    "source_integrity.json": {
+      "bytes": 4603,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/source_integrity.json",
+      "sha256": "7507a5bb490607692a0c7e4065f1ba79e8cde8d67305f4d8f20638feb6228c8d"
+    },
+    "split_population_checks.json": {
+      "bytes": 968,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/split_population_checks.json",
+      "sha256": "e5cad5ac9211384da9c73c83304625bb4274585228b1b733edd92f4352dfd820"
+    },
+    "stratified_summary.json": {
+      "bytes": 35445,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/stratified_summary.json",
+      "sha256": "babde167b0390f10a20108026516463a250f74340fcd46c8729e386610f39b57"
+    },
+    "test_artifact_verification.json": {
+      "bytes": 1190,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/test_artifact_verification.json",
+      "sha256": "ccec4113e1846fd3509fc626a6cc14a7b64fe05ae31fa81c31bcf9ab68e22e28"
+    },
+    "validation_replay.json": {
+      "bytes": 1781,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/validation_replay.json",
+      "sha256": "24ea8a62815c7c6172bac2e3e3a0f3bfc639b803fc8bbd28c17d9e33c98fb93f"
+    }
+  },
+  "run_id": "c0f-seed42-20260919T0700",
+  "run_state_final_status": "COMPLETE",
+  "schema_version": "p6_c0f_failure_audit_v1",
+  "status": "COMPLETE"
+}

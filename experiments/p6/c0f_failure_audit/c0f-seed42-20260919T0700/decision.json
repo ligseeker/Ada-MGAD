@@ -1,0 +1,666 @@
+{
+  "audit_completion": {
+    "analyze": "COMPLETE",
+    "capacity": "COMPLETE",
+    "input_integrity": "PASS",
+    "ledger_invariants_hold": true,
+    "oracle_status": "EXACT",
+    "prepare": "COMPLETE",
+    "scores": "COMPLETE",
+    "split_population": "PASS",
+    "validation_replay": "MATCH"
+  },
+  "c0_original_verdict": "BORDERLINE",
+  "c0_verdict_changed": false,
+  "collision_highlights": {
+    "label_legal_all": {
+      "bins_with_exactly_three_onsets": 27,
+      "bins_with_exactly_two_onsets": 969,
+      "definition": "onset bin = floor((onset_ms - grid_origin) / 30 s); collisions are bins with more than one onset, independent of whether the onsets belong to the same fault or service",
+      "distinct_onset_bins": 15109,
+      "events": 16132,
+      "events_in_multi_onset_bins": 2019,
+      "events_in_three_onset_bins": 81,
+      "events_in_two_onset_bins": 1938,
+      "onsets_on_grid_boundary": 1,
+      "onsets_per_bin_histogram": {
+        "1": 14113,
+        "2": 969,
+        "3": 27
+      },
+      "population": "label-legal-all"
+    },
+    "per_split": {
+      "fit": {
+        "bins_with_exactly_three_onsets": 10,
+        "bins_with_exactly_two_onsets": 394,
+        "definition": "onset bin = floor((onset_ms - grid_origin) / 30 s); collisions are bins with more than one onset, independent of whether the onsets belong to the same fault or service",
+        "distinct_onset_bins": 7029,
+        "events": 7443,
+        "events_in_multi_onset_bins": 818,
+        "events_in_three_onset_bins": 30,
+        "events_in_two_onset_bins": 788,
+        "onsets_on_grid_boundary": 0,
+        "onsets_per_bin_histogram": {
+          "1": 6625,
+          "2": 394,
+          "3": 10
+        },
+        "population": "fit-complete-gt"
+      },
+      "test": {
+        "bins_with_exactly_three_onsets": 13,
+        "bins_with_exactly_two_onsets": 391,
+        "definition": "onset bin = floor((onset_ms - grid_origin) / 30 s); collisions are bins with more than one onset, independent of whether the onsets belong to the same fault or service",
+        "distinct_onset_bins": 5370,
+        "events": 5787,
+        "events_in_multi_onset_bins": 821,
+        "events_in_three_onset_bins": 39,
+        "events_in_two_onset_bins": 782,
+        "onsets_on_grid_boundary": 1,
+        "onsets_per_bin_histogram": {
+          "1": 4966,
+          "2": 391,
+          "3": 13
+        },
+        "population": "test-complete-gt"
+      },
+      "validation": {
+        "bins_with_exactly_three_onsets": 4,
+        "bins_with_exactly_two_onsets": 184,
+        "definition": "onset bin = floor((onset_ms - grid_origin) / 30 s); collisions are bins with more than one onset, independent of whether the onsets belong to the same fault or service",
+        "distinct_onset_bins": 2709,
+        "events": 2901,
+        "events_in_multi_onset_bins": 380,
+        "events_in_three_onset_bins": 12,
+        "events_in_two_onset_bins": 368,
+        "onsets_on_grid_boundary": 0,
+        "onsets_per_bin_histogram": {
+          "1": 2521,
+          "2": 184,
+          "3": 4
+        },
+        "population": "validation-complete-gt"
+      }
+    }
+  },
+  "generated_at_utc": "2026-09-19T07:01:27.675891+00:00",
+  "loss_dominance": {
+    "per_split": {
+      "fit": {
+        "score_side_loss_share": 0.052263872094585516,
+        "structural_loss_share": 0.19185812172511085,
+        "structural_to_score_ratio": 3.6709511568123396
+      },
+      "test": {
+        "score_side_loss_share": 0.06860203905304994,
+        "structural_loss_share": 0.20597891826507692,
+        "structural_to_score_ratio": 3.0025188916876577
+      },
+      "validation": {
+        "score_side_loss_share": 0.06170286108238539,
+        "structural_loss_share": 0.20613581523612545,
+        "structural_to_score_ratio": 3.3407821229050274
+      }
+    },
+    "recommendation": "the loss is dominated by the episode/matching structure on every split; a separately frozen P6-C0R2 candidate may study episode/selection structure, keeping P6-C0 BORDERLINE and without changing the frozen checkpoint or threshold in this round",
+    "rule": "structural = NO_NEW_EPISODE + MATCHING_COMPETITION; score-side = BELOW_THRESHOLD + NO_LEGAL_PREDICTION; structural_dominant iff structural >= 1.5 x score-side on every split, score_side_dominant iff the reverse holds on every split",
+    "specified_at": "declared while implementing the audit driver, after the frozen ledger was computed; it is a descriptive summary convention used to select between the next-scope options listed in docs/P6_RESEARCH_ROADMAP.md section 4, not a pre-registered acceptance gate",
+    "verdict": "structural_dominant"
+  },
+  "mechanism_findings": {
+    "fit": {
+      "episode_recall_upper_bound": 0.9191186349590219,
+      "events": 7443,
+      "grid_recall_upper_bound": 0.661292489587532,
+      "observed_recall": 0.7558780061803037,
+      "response_band_mix": {
+        "120_300s": 184,
+        "60_120s": 93,
+        "censored": 0,
+        "gt_300s": 50,
+        "le_60s": 7054,
+        "never": 62
+      },
+      "response_gap": "observed recall 0.7559 vs complete-protocol bound 0.9191"
+    },
+    "test": {
+      "episode_recall_upper_bound": 0.8939001209607742,
+      "events": 5787,
+      "grid_recall_upper_bound": 0.5930533955417314,
+      "observed_recall": 0.7254190426818732,
+      "response_band_mix": {
+        "120_300s": 195,
+        "60_120s": 128,
+        "censored": 0,
+        "gt_300s": 17,
+        "le_60s": 5390,
+        "never": 57
+      },
+      "response_gap": "observed recall 0.7254 vs complete-protocol bound 0.8939"
+    },
+    "validation": {
+      "episode_recall_upper_bound": 0.8986556359875905,
+      "events": 2901,
+      "grid_recall_upper_bound": 0.6011720096518441,
+      "observed_recall": 0.7321613236814891,
+      "response_band_mix": {
+        "120_300s": 85,
+        "60_120s": 61,
+        "censored": 0,
+        "gt_300s": 15,
+        "le_60s": 2722,
+        "never": 18
+      },
+      "response_gap": "observed recall 0.7322 vs complete-protocol bound 0.8987"
+    }
+  },
+  "notes": [
+    "this audit does not select, retrain, rescan thresholds or run Test inference",
+    "the same Test has been observed in the design loop, so no new independent confirmation is claimed"
+  ],
+  "recommended_next_scope": "the loss is dominated by the episode/matching structure on every split; a separately frozen P6-C0R2 candidate may study episode/selection structure, keeping P6-C0 BORDERLINE and without changing the frozen checkpoint or threshold in this round",
+  "schema_version": "p6_c0f_failure_audit_v1",
+  "stratified_highlights": {
+    "fit": {
+      "by_duration_stratum": [
+        {
+          "duration_stratum": "le_15s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 128,
+            "MATCHED": 5585,
+            "MATCHING_COMPETITION": 687,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 680
+          },
+          "fn": 1496,
+          "matched": 5585,
+          "n": 7081,
+          "recall": 0.7887304053099845,
+          "small_n": false
+        },
+        {
+          "duration_stratum": "15_30s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "30_60s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "60_300s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 260,
+            "MATCHED": 41,
+            "MATCHING_COMPETITION": 56,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 5
+          },
+          "fn": 321,
+          "matched": 41,
+          "n": 362,
+          "recall": 0.1132596685082873,
+          "small_n": false
+        }
+      ],
+      "by_fault_type": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 1,
+            "MATCHED": 2,
+            "MATCHING_COMPETITION": 2,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "access_permission_denied",
+          "fn": 3,
+          "matched": 2,
+          "n": 5,
+          "recall": 0.4,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 15,
+            "MATCHED": 1,
+            "MATCHING_COMPETITION": 3,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "file_moving",
+          "fn": 18,
+          "matched": 1,
+          "n": 19,
+          "recall": 0.05263157894736842,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 128,
+            "MATCHED": 5585,
+            "MATCHING_COMPETITION": 687,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 680
+          },
+          "fault_type": "login_failure",
+          "fn": 1496,
+          "matched": 5585,
+          "n": 7081,
+          "recall": 0.7887304053099845,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 234,
+            "MATCHED": 38,
+            "MATCHING_COMPETITION": 51,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 5
+          },
+          "fault_type": "memory_anomalies",
+          "fn": 290,
+          "matched": 38,
+          "n": 328,
+          "recall": 0.11585365853658537,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 10,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "normal_memory_freed",
+          "fn": 10,
+          "matched": 0,
+          "n": 10,
+          "recall": 0.0,
+          "small_n": true
+        }
+      ]
+    },
+    "test": {
+      "by_duration_stratum": [
+        {
+          "duration_stratum": "le_15s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 246,
+            "MATCHED": 4166,
+            "MATCHING_COMPETITION": 639,
+            "NO_LEGAL_PREDICTION": 3,
+            "NO_NEW_EPISODE": 504
+          },
+          "fn": 1392,
+          "matched": 4166,
+          "n": 5558,
+          "recall": 0.7495501979129183,
+          "small_n": false
+        },
+        {
+          "duration_stratum": "15_30s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "30_60s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "60_300s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 148,
+            "MATCHED": 32,
+            "MATCHING_COMPETITION": 44,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 5
+          },
+          "fn": 197,
+          "matched": 32,
+          "n": 229,
+          "recall": 0.13973799126637554,
+          "small_n": false
+        }
+      ],
+      "by_fault_type": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 3,
+            "MATCHED": 1,
+            "MATCHING_COMPETITION": 1,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "access_permission_denied",
+          "fn": 4,
+          "matched": 1,
+          "n": 5,
+          "recall": 0.2,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 10,
+            "MATCHED": 1,
+            "MATCHING_COMPETITION": 1,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "cpu_anomalies",
+          "fn": 11,
+          "matched": 1,
+          "n": 12,
+          "recall": 0.08333333333333333,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 11,
+            "MATCHED": 1,
+            "MATCHING_COMPETITION": 4,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "file_moving",
+          "fn": 15,
+          "matched": 1,
+          "n": 16,
+          "recall": 0.0625,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 236,
+            "MATCHED": 4165,
+            "MATCHING_COMPETITION": 638,
+            "NO_LEGAL_PREDICTION": 3,
+            "NO_NEW_EPISODE": 504
+          },
+          "fault_type": "login_failure",
+          "fn": 1381,
+          "matched": 4165,
+          "n": 5546,
+          "recall": 0.7509917057338622,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 130,
+            "MATCHED": 30,
+            "MATCHING_COMPETITION": 39,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 5
+          },
+          "fault_type": "memory_anomalies",
+          "fn": 174,
+          "matched": 30,
+          "n": 204,
+          "recall": 0.14705882352941177,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 4,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "normal_memory_freed",
+          "fn": 4,
+          "matched": 0,
+          "n": 4,
+          "recall": 0.0,
+          "small_n": true
+        }
+      ]
+    },
+    "validation": {
+      "by_duration_stratum": [
+        {
+          "duration_stratum": "le_15s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 93,
+            "MATCHED": 2108,
+            "MATCHING_COMPETITION": 308,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 267
+          },
+          "fn": 668,
+          "matched": 2108,
+          "n": 2776,
+          "recall": 0.7593659942363112,
+          "small_n": false
+        },
+        {
+          "duration_stratum": "15_30s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "30_60s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "60_300s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 0,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 0,
+          "matched": 0,
+          "n": 0,
+          "recall": null,
+          "small_n": true
+        },
+        {
+          "duration_stratum": "gt_300s",
+          "failure_mix": {
+            "BELOW_THRESHOLD": 85,
+            "MATCHED": 16,
+            "MATCHING_COMPETITION": 23,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 0
+          },
+          "fn": 109,
+          "matched": 16,
+          "n": 125,
+          "recall": 0.128,
+          "small_n": false
+        }
+      ],
+      "by_fault_type": [
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 3,
+            "MATCHED": 1,
+            "MATCHING_COMPETITION": 1,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "access_permission_denied",
+          "fn": 4,
+          "matched": 1,
+          "n": 5,
+          "recall": 0.2,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 6,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 2,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "file_moving",
+          "fn": 8,
+          "matched": 0,
+          "n": 8,
+          "recall": 0.0,
+          "small_n": true
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 93,
+            "MATCHED": 2108,
+            "MATCHING_COMPETITION": 308,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 267
+          },
+          "fault_type": "login_failure",
+          "fn": 668,
+          "matched": 2108,
+          "n": 2776,
+          "recall": 0.7593659942363112,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 74,
+            "MATCHED": 15,
+            "MATCHING_COMPETITION": 20,
+            "NO_LEGAL_PREDICTION": 1,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "memory_anomalies",
+          "fn": 95,
+          "matched": 15,
+          "n": 110,
+          "recall": 0.13636363636363635,
+          "small_n": false
+        },
+        {
+          "failure_mix": {
+            "BELOW_THRESHOLD": 2,
+            "MATCHED": 0,
+            "MATCHING_COMPETITION": 0,
+            "NO_LEGAL_PREDICTION": 0,
+            "NO_NEW_EPISODE": 0
+          },
+          "fault_type": "normal_memory_freed",
+          "fn": 2,
+          "matched": 0,
+          "n": 2,
+          "recall": 0.0,
+          "small_n": true
+        }
+      ]
+    }
+  },
+  "unresolved": [
+    {
+      "evidence": "event_score_trajectories.csv:other_onset_count_60s",
+      "id": "C0F-U1",
+      "statement": "concurrent onsets can carry a score crossing that is not attributable to the event under audit; the marker columns expose it but most long events live in busy regions"
+    },
+    {
+      "evidence": "confounding_tables.json:fault_x_duration",
+      "id": "C0F-U2",
+      "statement": "the frozen registry has no injections between 15 s and 300 s and no cpu_anomalies in Fit/Validation, so duration and fault-type effects cannot be separated"
+    },
+    {
+      "evidence": "event_response_summary.csv",
+      "id": "C0F-U3",
+      "statement": "whether the IGNORE band, the recent-onset objective, the representation or telemetry observability causes the sustained-state behaviour is not identifiable from these artifacts; no causal mechanism is claimed"
+    }
+  ]
+}

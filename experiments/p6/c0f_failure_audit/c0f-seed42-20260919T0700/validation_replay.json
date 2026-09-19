@@ -1,0 +1,67 @@
+{
+  "comparison": {
+    "event_f1": {
+      "abs_diff": 0.0,
+      "audit": 0.8431917427550616,
+      "match": true,
+      "recorded": 0.8431917427550616
+    },
+    "event_precision": {
+      "abs_diff": 0.0,
+      "audit": 0.9939167056621432,
+      "match": true,
+      "recorded": 0.9939167056621432
+    },
+    "event_recall": {
+      "abs_diff": 0.0,
+      "audit": 0.7321613236814891,
+      "match": true,
+      "recorded": 0.7321613236814891
+    },
+    "false_negative_events": {
+      "audit": 777,
+      "match": true,
+      "recorded": 777
+    },
+    "false_positive_events": {
+      "audit": 13,
+      "match": true,
+      "recorded": 13
+    },
+    "predicted_episode_count": {
+      "audit": 2137,
+      "match": true,
+      "recorded": 2137
+    },
+    "true_positive_events": {
+      "audit": 2124,
+      "match": true,
+      "recorded": 2124
+    }
+  },
+  "detection_delay_comparison": {
+    "mean_seconds": {
+      "abs_diff": 0.0,
+      "audit": 23.942804143126178,
+      "recorded": 23.942804143126178
+    },
+    "median_seconds": {
+      "abs_diff": 0.0,
+      "audit": 23.995,
+      "recorded": 23.995
+    },
+    "p95_seconds": {
+      "abs_diff": 0.0,
+      "audit": 39.17674999999999,
+      "recorded": 39.17674999999999
+    }
+  },
+  "frozen_threshold": 0.9998264908790588,
+  "generated_at_utc": "2026-09-19T06:15:14.540759+00:00",
+  "policy": "a mismatch stops the merged conclusions; the tolerance is never widened and no epoch is reselected",
+  "primary_counts_match": true,
+  "row_level_note": "the original C0 run did not persist per-row Validation scores, so a row-level replay cannot be verified; only the aggregate replay and the identity binding can be checked",
+  "schema_version": "p6_c0f_failure_audit_v1",
+  "status": "MATCH",
+  "tolerance": 1e-12
+}

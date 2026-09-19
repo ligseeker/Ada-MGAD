@@ -1,0 +1,311 @@
+{
+  "generated_at_utc": "2026-09-19T07:00:22.111193+00:00",
+  "policy": "upper bounds are diagnostic; they never become deployable detectors and never modify the frozen episode, tolerance or GT populations",
+  "schema_version": "p6_c0f_failure_audit_v1",
+  "splits": {
+    "fit": {
+      "episode_bound": {
+        "dp_states": 56447,
+        "ground_truth_events": 7443,
+        "n_slots": 43550,
+        "proof": "episode starts form a stable set of the slot path; pulse-only sequences realise every stable set; EDF is optimal for a fixed anchor set; the DP enumerates all stable sets with the exact EDF state",
+        "recall_upper_bound": 0.9191186349590219,
+        "split": "fit",
+        "status": "EXACT",
+        "upper_bound_tp": 6841,
+        "witness_anchor_count": 6841,
+        "witness_anchors_match": true,
+        "witness_episodes": 6841,
+        "witness_event_metrics": {
+          "detection_delay": {
+            "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+            "matched_delay_count": 6841,
+            "mean_seconds": 18.77095161526093,
+            "median_seconds": 16.963,
+            "p90_seconds": 37.6,
+            "p95_seconds": 48.214
+          },
+          "event_f1": 0.9578549425931112,
+          "event_precision": 1.0,
+          "event_recall": 0.9191186349590219,
+          "false_negative_events": 602,
+          "false_positive_events": 0,
+          "ground_truth_event_count": 7443,
+          "predicted_episode_count": 6841,
+          "true_positive_events": 6841
+        },
+        "witness_realised_tp": 6841,
+        "witness_replay_agrees": true
+      },
+      "grid_bound": {
+        "cross_check_agrees": null,
+        "cross_check_scope": "skipped on this full split grid; the greedy is validated against the frozen matcher and against exhaustive enumeration on synthetic instances in tests/test_p6_c0f_capacity.py",
+        "frozen_matching_matched_events": null,
+        "ground_truth_events": 7443,
+        "matched_events": 7427,
+        "n_slots": 43550,
+        "recall_upper_bound": 0.9978503291683462,
+        "relaxation": "slots are matched individually; the episode-merging constraint of the real protocol is not applied, so this bound is usually not attainable by one binary sequence",
+        "status": "EXACT"
+      },
+      "label_reference": {
+        "decoding_rule": "POSITIVE -> 1, NEGATIVE -> 0, IGNORE -> 0 (IGNORE rows kept on the timeline)",
+        "episode_count": 4922,
+        "event_metrics": {
+          "detection_delay": {
+            "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+            "matched_delay_count": 4922,
+            "mean_seconds": 14.690880739536777,
+            "median_seconds": 14.384,
+            "p90_seconds": 26.916900000000002,
+            "p95_seconds": 28.577599999999997
+          },
+          "event_f1": 0.7961180752122928,
+          "event_precision": 1.0,
+          "event_recall": 0.661292489587532,
+          "false_negative_events": 2521,
+          "false_positive_events": 0,
+          "ground_truth_event_count": 7443,
+          "predicted_episode_count": 4922,
+          "true_positive_events": 4922
+        },
+        "ground_truth_events": 7443,
+        "n_slots": 43550,
+        "note": "label-decoding reference only: it measures whether the frozen label decoding and the event evaluation agree.  It is NOT an upper bound on model-reachable recall.",
+        "positive_regions": 4922,
+        "positive_slots": 12897,
+        "status": "EXACT"
+      },
+      "observed_event_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 5626,
+          "mean_seconds": 24.496927301813013,
+          "median_seconds": 24.65,
+          "p90_seconds": 37.4255,
+          "p95_seconds": 39.2465
+        },
+        "event_f1": 0.8580797681689927,
+        "event_precision": 0.9922398589065256,
+        "event_recall": 0.7558780061803037,
+        "false_negative_events": 1817,
+        "false_positive_events": 44,
+        "ground_truth_event_count": 7443,
+        "predicted_episode_count": 5670,
+        "true_positive_events": 5626
+      },
+      "ordering": {
+        "all_hold": true,
+        "episode_bound_tp": 6841,
+        "episode_le_grid": true,
+        "grid_bound_tp": 7427,
+        "grid_le_all_events": true,
+        "observed_le_episode": true,
+        "observed_tp": 5626
+      }
+    },
+    "test": {
+      "episode_bound": {
+        "dp_states": 35810,
+        "ground_truth_events": 5787,
+        "n_slots": 26127,
+        "proof": "episode starts form a stable set of the slot path; pulse-only sequences realise every stable set; EDF is optimal for a fixed anchor set; the DP enumerates all stable sets with the exact EDF state",
+        "recall_upper_bound": 0.8939001209607742,
+        "split": "test",
+        "status": "EXACT",
+        "upper_bound_tp": 5173,
+        "witness_anchor_count": 5173,
+        "witness_anchors_match": true,
+        "witness_episodes": 5173,
+        "witness_event_metrics": {
+          "detection_delay": {
+            "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+            "matched_delay_count": 5173,
+            "mean_seconds": 19.429617823313357,
+            "median_seconds": 17.448,
+            "p90_seconds": 39.81080000000001,
+            "p95_seconds": 48.89399999999992
+          },
+          "event_f1": 0.9439781021897811,
+          "event_precision": 1.0,
+          "event_recall": 0.8939001209607742,
+          "false_negative_events": 614,
+          "false_positive_events": 0,
+          "ground_truth_event_count": 5787,
+          "predicted_episode_count": 5173,
+          "true_positive_events": 5173
+        },
+        "witness_realised_tp": 5173,
+        "witness_replay_agrees": true
+      },
+      "grid_bound": {
+        "cross_check_agrees": null,
+        "cross_check_scope": "skipped on this full split grid; the greedy is validated against the frozen matcher and against exhaustive enumeration on synthetic instances in tests/test_p6_c0f_capacity.py",
+        "frozen_matching_matched_events": null,
+        "ground_truth_events": 5787,
+        "matched_events": 5766,
+        "n_slots": 26127,
+        "recall_upper_bound": 0.9963711767755313,
+        "relaxation": "slots are matched individually; the episode-merging constraint of the real protocol is not applied, so this bound is usually not attainable by one binary sequence",
+        "status": "EXACT"
+      },
+      "label_reference": {
+        "decoding_rule": "POSITIVE -> 1, NEGATIVE -> 0, IGNORE -> 0 (IGNORE rows kept on the timeline)",
+        "episode_count": 3432,
+        "event_metrics": {
+          "detection_delay": {
+            "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+            "matched_delay_count": 3432,
+            "mean_seconds": 14.873621794871797,
+            "median_seconds": 15.009,
+            "p90_seconds": 26.8105,
+            "p95_seconds": 28.212149999999998
+          },
+          "event_f1": 0.7445493003579564,
+          "event_precision": 1.0,
+          "event_recall": 0.5930533955417314,
+          "false_negative_events": 2355,
+          "false_positive_events": 0,
+          "ground_truth_event_count": 5787,
+          "predicted_episode_count": 3432,
+          "true_positive_events": 3432
+        },
+        "ground_truth_events": 5787,
+        "n_slots": 26127,
+        "note": "label-decoding reference only: it measures whether the frozen label decoding and the event evaluation agree.  It is NOT an upper bound on model-reachable recall.",
+        "positive_regions": 3432,
+        "positive_slots": 9682,
+        "status": "EXACT"
+      },
+      "observed_event_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 4198,
+          "mean_seconds": 23.773935683658888,
+          "median_seconds": 23.759999999999998,
+          "p90_seconds": 37.1991,
+          "p95_seconds": 39.148199999999996
+        },
+        "event_f1": 0.8395160483951605,
+        "event_precision": 0.996203132415757,
+        "event_recall": 0.7254190426818732,
+        "false_negative_events": 1589,
+        "false_positive_events": 16,
+        "ground_truth_event_count": 5787,
+        "predicted_episode_count": 4214,
+        "true_positive_events": 4198
+      },
+      "ordering": {
+        "all_hold": true,
+        "episode_bound_tp": 5173,
+        "episode_le_grid": true,
+        "grid_bound_tp": 5766,
+        "grid_le_all_events": true,
+        "observed_le_episode": true,
+        "observed_tp": 4198
+      }
+    },
+    "validation": {
+      "episode_bound": {
+        "dp_states": 22300,
+        "ground_truth_events": 2901,
+        "n_slots": 17414,
+        "proof": "episode starts form a stable set of the slot path; pulse-only sequences realise every stable set; EDF is optimal for a fixed anchor set; the DP enumerates all stable sets with the exact EDF state",
+        "recall_upper_bound": 0.8986556359875905,
+        "split": "validation",
+        "status": "EXACT",
+        "upper_bound_tp": 2607,
+        "witness_anchor_count": 2607,
+        "witness_anchors_match": true,
+        "witness_episodes": 2607,
+        "witness_event_metrics": {
+          "detection_delay": {
+            "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+            "matched_delay_count": 2607,
+            "mean_seconds": 19.330666283084003,
+            "median_seconds": 17.597,
+            "p90_seconds": 37.91580000000001,
+            "p95_seconds": 48.97819999999996
+          },
+          "event_f1": 0.9466230936819172,
+          "event_precision": 1.0,
+          "event_recall": 0.8986556359875905,
+          "false_negative_events": 294,
+          "false_positive_events": 0,
+          "ground_truth_event_count": 2901,
+          "predicted_episode_count": 2607,
+          "true_positive_events": 2607
+        },
+        "witness_realised_tp": 2607,
+        "witness_replay_agrees": true
+      },
+      "grid_bound": {
+        "cross_check_agrees": null,
+        "cross_check_scope": "skipped on this full split grid; the greedy is validated against the frozen matcher and against exhaustive enumeration on synthetic instances in tests/test_p6_c0f_capacity.py",
+        "frozen_matching_matched_events": null,
+        "ground_truth_events": 2901,
+        "matched_events": 2890,
+        "n_slots": 17414,
+        "recall_upper_bound": 0.9962082040675629,
+        "relaxation": "slots are matched individually; the episode-merging constraint of the real protocol is not applied, so this bound is usually not attainable by one binary sequence",
+        "status": "EXACT"
+      },
+      "label_reference": {
+        "decoding_rule": "POSITIVE -> 1, NEGATIVE -> 0, IGNORE -> 0 (IGNORE rows kept on the timeline)",
+        "episode_count": 1744,
+        "event_metrics": {
+          "detection_delay": {
+            "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+            "matched_delay_count": 1744,
+            "mean_seconds": 15.005201834862385,
+            "median_seconds": 14.6335,
+            "p90_seconds": 27.041700000000002,
+            "p95_seconds": 28.600799999999996
+          },
+          "event_f1": 0.7509149623250806,
+          "event_precision": 1.0,
+          "event_recall": 0.6011720096518441,
+          "false_negative_events": 1157,
+          "false_positive_events": 0,
+          "ground_truth_event_count": 2901,
+          "predicted_episode_count": 1744,
+          "true_positive_events": 1744
+        },
+        "ground_truth_events": 2901,
+        "n_slots": 17414,
+        "note": "label-decoding reference only: it measures whether the frozen label decoding and the event evaluation agree.  It is NOT an upper bound on model-reachable recall.",
+        "positive_regions": 1744,
+        "positive_slots": 4887,
+        "status": "EXACT"
+      },
+      "observed_event_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2124,
+          "mean_seconds": 23.942804143126178,
+          "median_seconds": 23.995,
+          "p90_seconds": 37.0805,
+          "p95_seconds": 39.17674999999999
+        },
+        "event_f1": 0.8431917427550616,
+        "event_precision": 0.9939167056621432,
+        "event_recall": 0.7321613236814891,
+        "false_negative_events": 777,
+        "false_positive_events": 13,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2137,
+        "true_positive_events": 2124
+      },
+      "ordering": {
+        "all_hold": true,
+        "episode_bound_tp": 2607,
+        "episode_le_grid": true,
+        "grid_bound_tp": 2890,
+        "grid_le_all_events": true,
+        "observed_le_episode": true,
+        "observed_tp": 2124
+      }
+    }
+  },
+  "status": "EXACT"
+}

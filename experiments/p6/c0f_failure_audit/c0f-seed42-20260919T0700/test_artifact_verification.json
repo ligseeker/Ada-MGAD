@@ -1,0 +1,36 @@
+{
+  "checks": {
+    "binary_prediction_matches_threshold": true,
+    "episode_identity": true,
+    "episode_rows": true,
+    "episodes": true,
+    "fn": true,
+    "fp": true,
+    "matching_identity": true,
+    "matching_rows": true,
+    "recorded_tp": true,
+    "tp": true
+  },
+  "generated_at_utc": "2026-09-19T06:17:16.142880+00:00",
+  "policy": "the frozen Test predictions are reused as they are; this verification never re-runs the model, never regenerates the artifacts and never writes into the C0 root",
+  "recomputed": {
+    "detection_delay": {
+      "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+      "matched_delay_count": 4198,
+      "mean_seconds": 23.773935683658888,
+      "median_seconds": 23.759999999999998,
+      "p90_seconds": 37.1991,
+      "p95_seconds": 39.148199999999996
+    },
+    "event_f1": 0.8395160483951605,
+    "event_precision": 0.996203132415757,
+    "event_recall": 0.7254190426818732,
+    "false_negative_events": 1589,
+    "false_positive_events": 16,
+    "ground_truth_event_count": 5787,
+    "predicted_episode_count": 4214,
+    "true_positive_events": 4198
+  },
+  "schema_version": "p6_c0f_failure_audit_v1",
+  "status": "PASS"
+}

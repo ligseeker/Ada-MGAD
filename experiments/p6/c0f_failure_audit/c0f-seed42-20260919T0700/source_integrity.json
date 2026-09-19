@@ -1,0 +1,85 @@
+{
+  "checked": {
+    "ad_data_manifest": {
+      "actual": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2",
+      "expected": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json"
+    },
+    "base_config": {
+      "actual": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+      "expected": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p5_v3_preprocessing_v2.json"
+    },
+    "c0:manifest.json": {
+      "actual": "cb222bb5c21d20d8a7546e8b1ee1b4882daaac5d4a397d0e07655fe646cf9794",
+      "expected": "cb222bb5c21d20d8a7546e8b1ee1b4882daaac5d4a397d0e07655fe646cf9794",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/manifest.json"
+    },
+    "c0:split_audit.json": {
+      "actual": "e5c60574f4c36ba5c7ebddbc869ede70f6f9aa83cf35c46fd611dbfba310463e",
+      "expected": "e5c60574f4c36ba5c7ebddbc869ede70f6f9aa83cf35c46fd611dbfba310463e",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/split_audit.json"
+    },
+    "c0:split_manifest.json": {
+      "actual": "1cad441a2d207379ffd8838bc2d655e9c68f3e03b6f4f7e666413a0b33aca193",
+      "expected": "1cad441a2d207379ffd8838bc2d655e9c68f3e03b6f4f7e666413a0b33aca193",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/split_manifest.json"
+    },
+    "c0:test_episodes.csv": {
+      "actual": "30bacbeecbee4b9f738fc6330fa9d8df5c1adc08e37fb1ee8476f1b47735399b",
+      "expected": "30bacbeecbee4b9f738fc6330fa9d8df5c1adc08e37fb1ee8476f1b47735399b",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_episodes.csv"
+    },
+    "c0:test_matching.csv": {
+      "actual": "011332f3537ee6f7d044e9da23df1d88f617fb71d3a552354343db6fd91c9c77",
+      "expected": "011332f3537ee6f7d044e9da23df1d88f617fb71d3a552354343db6fd91c9c77",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_matching.csv"
+    },
+    "c0:test_metrics.json": {
+      "actual": "2968632cc4da1b807d976d8bb1c449f9d755cb1c15d2ee43bcd440b74946ce5b",
+      "expected": "2968632cc4da1b807d976d8bb1c449f9d755cb1c15d2ee43bcd440b74946ce5b",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_metrics.json"
+    },
+    "c0:test_predictions.csv": {
+      "actual": "985623e06f5d56db9c2c536b8dd65226967ae1c25f36c9a4924ae9e38d5bafab",
+      "expected": "985623e06f5d56db9c2c536b8dd65226967ae1c25f36c9a4924ae9e38d5bafab",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_predictions.csv"
+    },
+    "c0:validation_selection.json": {
+      "actual": "b5167c8d5df9cd9eebd7812cb76733799aa3f7829f3fe1a2c5cdb0ec51715a24",
+      "expected": "b5167c8d5df9cd9eebd7812cb76733799aa3f7829f3fe1a2c5cdb0ec51715a24",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/validation_selection.json"
+    },
+    "checkpoint": {
+      "actual": "6a4317d6414774e1ca6be4e418ed3d47d678adfab1f0155e96e04aa3fa9981f5",
+      "expected": "6a4317d6414774e1ca6be4e418ed3d47d678adfab1f0155e96e04aa3fa9981f5",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/checkpoint/best_validation_event_f1.pt"
+    },
+    "gt_registry": {
+      "actual": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+      "expected": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv"
+    },
+    "trigger_config": {
+      "actual": "a2c42beb19f5a234ab74958cf3db32301524f909d5605001bdaeb9c141e3b4f8",
+      "expected": "a2c42beb19f5a234ab74958cf3db32301524f909d5605001bdaeb9c141e3b4f8",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p6_c0_system_trigger.json"
+    }
+  },
+  "mismatches": [],
+  "policy": "documented SHA-256 snapshots are compared as they are; a mismatch stops the affected path and is never silently rewritten to the current value",
+  "status": "PASS"
+}
