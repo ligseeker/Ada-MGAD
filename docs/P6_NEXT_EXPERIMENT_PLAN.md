@@ -5,9 +5,9 @@
 - Origin Skill: `academic-research-suite/experiment-agent`
 - Origin Mode: `plan`
 - Origin Date: 2026-09-23
-- Verification Status: `UNVERIFIED` for future experiments; historical inputs cited below are archived
-- Version Label: `p6_next_plan_v1`
-- Status: **proposal, not an execution protocol or an experiment result**
+- Verification Status: G1 static inputs verified; G2 design locked; future experiment results remain `UNVERIFIED`
+- Version Label: `p6_next_plan_v2`
+- Status: **research sequence with a linked G2 design lock; no C1 experiment result**
 
 ## 1. Research question and priority
 
@@ -36,16 +36,17 @@ explain that numeric drop.
 |---|---|---|
 | G0 archive | C0F code, protocol, aggregate evidence and local detailed run are archived at `eac0f44677ba1baba6b2ecac2e7b8e0e606856bd`; retain the correction limitations. | A required file/hash no longer matches the completion manifest. |
 | G1 C1 feasibility | Static inventory completed in the [G1 report](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md). It maps chronology, GT cohort upper bounds, fitting sources and open OOS/Train-case gates. | Current shared arrays cannot support strict forward-OOS; actual OOS anchor coverage and common Train RCA cohort remain unknown. Execution is NO-GO as is. |
-| G2 C1 protocol freeze | Freeze exact folds, fit/selection/anchor periods, purge, preprocessing mode, cohorts, scaler, arms, metrics, paired analysis, resource budget, run ID and failure semantics **before results**. Review label firewall and all paths. | Any choice remains open or depends on Test performance. |
+| G2 C1 protocol freeze | [G2 design lock](P6_C1_G2_FROZEN_DESIGN.md) fixes folds, evidence grade, fit/selection/generation, cohort floors, shared scaler, arms, metrics, paired analysis, budget, run ID and firewall before results. Raw content and C0/G1 file hashes are bound in its machine config. | A binding or frozen choice changes; version the design before any fold result. |
 | G3 C1 implementation and smoke | Build the protocol-specific adapters; use synthetic fixtures and small, isolated smoke inputs. Confirm workers=1 equivalence if parallel preprocessing is introduced. | Identity, ordering, label isolation, Train-only fitting, window or schema checks fail. |
 | G4 C1 execution | Use new run directories for necessary fold detector fitting, RCA fitting and ranking generation. Read the frozen C0 Test predictions/episodes without rerunning Stage-1 Test inference. Complete RCA rankings for all legal detected Test episodes; lock their bytes and universe before Test label join. | Required input/source/output hash changes, missing rankings, incomplete folds or budget exceedance. Preserve failure rows. |
 | G5 C2 evaluation | Consume the locked predictions; publish matched-case RCA contrasts and full diagnosis results with all misses, false alarms and ranking failures. Archive hashes, commands, counts and limitations. | Prediction/scope lock or denominator checks fail. No post hoc repair of the formal result. |
 
-G0 and the **static inventory portion** of G1 are complete. G1 did not
-establish strict OOS inputs or an actual common Train cohort; G2–G5 remain
-pending and have no authorized executable command. Full preprocessing,
-training, Test inference and RCA execution require their own frozen protocol
-and explicit execution request. Every new run gets a unique directory.
+G0, the **static inventory portion** of G1, and the G2 design lock are
+complete. G1 did not establish actual OOS inputs or a common Train cohort;
+G3–G5 remain pending. Read-only G2 integrity commands exist, but no C1 full
+execution command exists until G3 builds and validates the required interfaces.
+Full preprocessing, training, Test inference and RCA execution require an
+explicit execution request. Every new run gets a unique directory.
 Existing P5, C0 and C0F artifacts remain immutable.
 
 The fixed inputs for planning are
@@ -53,11 +54,13 @@ The fixed inputs for planning are
 `configs/e2e/gaia_p6_c0_system_trigger.json`, the C0
 `experiments/p6/system_event_trigger/{manifest.json,validation_selection.json,test_predictions.csv,test_episodes.csv,test_matching.csv}`,
 the C0F correction completion manifest/decision, and the frozen shared
-preprocessing roots in the current context. G2 must bind exact paths and
-hashes; this list does not authorize reuse of a mutable shared output.
-Proposed new output families are `experiments/p6/c1_detector_aligned/<run_id>/`
-and `experiments/p6/c2_full_e2e/<run_id>/`, with the precise names frozen at
-G2. The current plan does not invent a runnable entry command.
+preprocessing roots in the current context. G2 binds exact paths and
+hashes in its machine config. This list does not
+authorize reuse of a mutable shared output.
+The C1 intended run directory is
+`experiments/p6/c1_detector_aligned/c1-prefix-oos-v1-seed42/`; C2 will receive
+a separate locked directory before it runs. The current plan does not invent
+a runnable C1 full-experiment entry command.
 
 ## 3. C1 controlled design
 
@@ -101,22 +104,19 @@ model, threshold, calibration, schema, vocabulary, graph and scalers must fit
 only on that fold's past for a claim of **full forward-OOS**.
 
 The shared preprocessing used by C0 was fitted over the original 70% Train
-and may contain future information relative to internal folds. G2 must choose
-and document one of these two evidence levels:
+and may contain future information relative to internal folds. The
+[G2 design lock](P6_C1_G2_FROZEN_DESIGN.md) selects prefix-fitted detector
+inputs with a frozen, label-free raw filename catalog and the fixed RCA
+indicator catalog. The resulting claim is detector prefix-OOS conditional on
+that transductive structural catalog; it does not claim unconstrained
+full-pipeline forward-OOS. A stricter prefix-bound RCA catalog or a narrower
+supervision-OOS design would require a new design version before execution.
 
-1. **Full forward-OOS:** create isolated, prefix-fitted preprocessing for each
-   fold, freeze its schema and transform later fold data. This is a separate
-   preprocessing task and cannot overwrite shared artifacts.
-2. **Supervision-OOS only:** reuse the current frozen preprocessing and
-   explicitly disclose cross-fold preprocessing information. This supports a
-   narrower anchor-supervision question and must not be called full
-   forward-OOS.
-
-The strict option is preferred for the primary claim. If it proves infeasible,
-record that outcome and re-freeze the narrower option before any run; do not
-silently downgrade. G1's static GT counts provide only an upper bound; G2
-must freeze a performance-blind minimum actual OOS cohort, exact dates, fold
-count, purge and low-count behavior before fold results. Respect both the
+If prefix fitting proves infeasible, record `PREFIX_SCHEMA_NO_GO`; a narrower
+supervision-OOS variant needs a new design version before any run. G1's static
+GT counts provide only an upper bound. G2 freezes the performance-blind
+minimum actual OOS cohort, exact dates, fold count, purge and low-count
+behavior before fold results. Respect both the
 detector's 300-second history and the distinct
 `[anchor-300s, anchor+300s)` RCA context, including injection/split crossings.
 Time-match Train OOS episodes to supervision within Train and keep unmatched
@@ -177,12 +177,14 @@ pre-isolated outer evaluation; reuse of the present Test remains limited.
 
 - `C1_FEASIBILITY_LEDGER`: [static ledger](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/feasibility_ledger.json)
   and [report](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md)
-  are complete. Actual fold OOS anchors, common Train cohort and the final
-  full-OOS versus supervision-OOS choice remain open; the current result is
+  are complete. Actual fold OOS anchors and the common Train cohort remain
+  unknown; G2 resolved the evidence-grade choice. The G1 result was
   `EXECUTION_NO_GO_AS_IS`.
-- `C1_FROZEN_PROTOCOL`: run ID, frozen inputs, folds, candidate universe,
-  cohort, scaler, all arm definitions, label firewall, metrics, paired method,
-  acceptance/NO-GO rules, budget and stop conditions. **Pending G2.**
+- `C1_G2_DESIGN_LOCK`: [protocol](P6_C1_G2_FROZEN_DESIGN.md) and
+  [machine config](../configs/e2e/gaia_p6_c1_g2_v1.json) fix the run ID,
+  input hashes, folds, candidate universe, minimum cohort, shared scaler,
+  arms, firewall, metrics, paired method, budget and stop conditions.
+  **Design locked; implementation and smoke pending G3.**
 - C1 predictions/scope lock and C2 evidence package. **Pending G4/G5.**
 
 The [2026-09-18 roadmap](P6_RESEARCH_ROADMAP.md) preserves the original

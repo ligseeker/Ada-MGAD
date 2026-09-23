@@ -137,3 +137,12 @@ experiments/p6/c1_feasibility/c1-g1-20260923T104315Z/*
 experiments/p6/c1_feasibility/c1-g1-20260923T104558Z/*
 experiments/p6/c1_feasibility/c1-g1-20260923T104734Z/*
 experiments/p6/c1_feasibility/c1-g1-20260923T105220Z/*
+
+# P6-C1 G2 content and design bindings only. Fold arrays, checkpoints and
+# row-level predictions belong to separate future execution directories.
+experiments/p6/c1_protocol/*
+!experiments/p6/c1_protocol/
+!experiments/p6/c1_protocol/*/
+experiments/p6/c1_protocol/*/*
+!experiments/p6/c1_protocol/*/*.json
+!experiments/p6/c1_protocol/*/*.md
