@@ -2,11 +2,11 @@
 
 > 本文件是给新的 code-agent CLI 的单一入口。它只保留当前有效的背景、状态、约束和下一步；完整审计与实现细节继续放在现有文档中，不在这里复制。
 
-更新时间：2026-09-23（Asia/Shanghai）
+更新时间：2026-09-24（Asia/Shanghai）
 
-**当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计和 P6-C0 系统级触发实验已完成。P6-C0 的 aggregate gate 为 PASS，正式 verdict 仍为 BORDERLINE，尚未运行新 RCA/E2E。P6-C0F 于 2026-09-19 运行；2026-09-23 的独立更正审计已完成并归档，状态为 `COMPLETE_WITH_DECLARED_LIMITATIONS`。C1→C2 主线和 C0R2 条件支线的后续方案已保存，具体执行协议尚未冻结。**
+**当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计和 P6-C0 系统级触发实验已完成。P6-C0 的 aggregate gate 为 PASS，正式 verdict 仍为 BORDERLINE，尚未运行新 RCA/E2E。P6-C0F 独立更正审计已完成并归档，状态为 `COMPLETE_WITH_DECLARED_LIMITATIONS`。C1 的 G1 静态可行性账本已完成，但现有输入下正式执行仍为 `EXECUTION_NO_GO_AS_IS`：严格前向 OOS 预处理和真实 OOS 锚点尚不存在，具体 C1 执行协议尚未冻结。**
 
-后续 coding agent 先读本文件、[C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md)、[C0F 更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) 与 [更正协议](P6_C0F_CORRECTION_PROTOCOL.md)，再读 [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md)、[P6 研究路线](P6_RESEARCH_ROADMAP.md) 和 [C0F 原实施方案](P6_C0F_FAILURE_MECHANISM_AUDIT_PLAN.md)。路线图和原方案的“C0F 尚未执行”段落是 2026-09-18 的历史状态，不是当前状态。
+后续 coding agent 先读本文件、[C1 G1 静态可行性报告](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md)、[C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md)、[C0F 更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) 与 [更正协议](P6_C0F_CORRECTION_PROTOCOL.md)，再读 [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md)、[P6 研究路线](P6_RESEARCH_ROADMAP.md) 和 [C0F 原实施方案](P6_C0F_FAILURE_MECHANISM_AUDIT_PLAN.md)。路线图和原方案的“C0F 尚未执行”段落是 2026-09-18 的历史状态，不是当前状态。
 
 ## 1. 项目身份与研究边界
 
@@ -23,7 +23,7 @@
 按以下顺序读取即可，不要从旧文档的历史状态重新推断当前进度：
 
 1. 本文件；
-2. [C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md) → [更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) → [更正协议](P6_C0F_CORRECTION_PROTOCOL.md) → [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md) → [P6 研究路线与交接](P6_RESEARCH_ROADMAP.md)：当前审计结论、来源绑定、后续研究顺序与历史设计；
+2. [C1 G1 静态报告](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md) → [C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md) → [更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) → [更正协议](P6_C0F_CORRECTION_PROTOCOL.md) → [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md) → [P6 研究路线与交接](P6_RESEARCH_ROADMAP.md)：当前静态可行性、审计结论、来源绑定、后续顺序与历史设计；
 3. [P6-C0 结果](P6_C0_SYSTEM_EVENT_TRIGGER_RESULT.md) 和 [原协议](P6_C0_SYSTEM_EVENT_TRIGGER_PROTOCOL.md)，并按路线图第 8 节读取解释性勘误；数值以对应 JSON 为准；
 4. [P6-A 失败审计](P6_E2E_FAILURE_AUDIT.md) 与 [P6-B0/B0R 分数分解](P6_B0_SCORE_DECOMPOSITION_AUDIT.md)；
 5. P5 baseline 的 [`final_report.md`](../experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/final_report.md) 和 [`GAIA_V3_IMPLEMENTATION.md`](GAIA_V3_IMPLEMENTATION.md)：既有完整 E2E 与入口说明；
@@ -68,7 +68,8 @@ experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/
 | P6-C0 修正版 system trigger | 完成，BORDERLINE | `experiments/p6/system_event_trigger/`；仅 Stage 1，未运行 RCA |
 | P6-C0 首轮 label-lag 历史 | 保留 | `experiments/p6/system_event_trigger_v1_label_lag/`；不能替代修正版结果 |
 | P6-C0F | 原 run 完成；独立更正 run `COMPLETE_WITH_DECLARED_LIMITATIONS` | `experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/`；不训练、不改阈值、不运行 Test 模型推理或 RCA；旧 Fit/Validation 推理源码仍 `UNVERIFIED` |
-| P6-C0R2/C1/C2 | 后续方案已保存，未执行 | `docs/P6_NEXT_EXPERIMENT_PLAN.md`；必须另行冻结具体协议，不能自动执行 |
+| P6-C1 G1 静态可行性 | 完成，`EXECUTION_NO_GO_AS_IS` | `experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/`；Fit-only 三折的静态 GT/窗口上界 4,254，实际 OOS 锚点与共同 Train cohort 未知 |
+| P6-C0R2/C1 执行/C2 | 后续方案已保存，未执行 | `docs/P6_NEXT_EXPERIMENT_PLAN.md`；必须另行冻结具体协议，不能自动执行 |
 
 ## 4. 数据、预处理和输入契约
 
@@ -213,8 +214,8 @@ Test 既有预测/episode/matching 复核为 `PASS`。
 ## 8. 推荐下一步（不自动执行）
 
 1. C0F 更正已经归档。保留旧 C0F 和更正 run 为独立历史记录；不要将旧 `structural_dominant` 路线建议当作冻结验收规则，也不要将旧 Fit/Validation 推理源码标为已验证。
-2. 按 [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md) 先做 C1 静态可行性核查，明确时间外样本锚点、preprocessing 拟合边界、共同 Train cohort、scaler、窗口与预测锁能否成立；接受 C0 的 Stage-1 限制，或记录 NO-GO。C0R2 作为独立条件支线，不根据已看过的 Test 挑选配置。
-3. 具体 C1/C0R2 执行协议必须在结果前另行冻结；本方案不自动启动训练、Test 推理或 RCA。C2 才报告完整 failure semantics；当前 Test 已被看过，只能作为复用 Test 评价。
+2. C1 G1 静态账本已给出 Fit-only 三折的候选时间区间及 GT 支持上界，现有共享 AD 预处理不能作为严格 forward-OOS 输入。下一步是解决逐折 prefix-fit schema/manifest/dataset、RCA filename schema 政策与实际 OOS 生成的协议门槛，并冻结共同 Train cohort、scaler、窗口与预测锁。不得把 4,254 当作已生成的 OOS 案例。
+3. 具体 C1/C0R2 执行协议必须在结果前另行冻结；本方案不自动启动训练、Test 推理或 RCA。C2 才报告完整 failure semantics；当前 Test 已被看过，只能作为复用 Test 评价。C0R2 仍是独立条件支线，不根据已看过的 Test 挑选配置。
 4. P5 provenance 修订属于独立归档工作，不通过修改本轮实验数值解决；保留原输入/结果和更正记录。
 
 ## 9. 只读快速检查命令

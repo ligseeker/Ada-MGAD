@@ -35,17 +35,18 @@ explain that numeric drop.
 | Gate | Work and output | Stop condition |
 |---|---|---|
 | G0 archive | C0F code, protocol, aggregate evidence and local detailed run are archived at `eac0f44677ba1baba6b2ecac2e7b8e0e606856bd`; retain the correction limitations. | A required file/hash no longer matches the completion manifest. |
-| G1 C1 feasibility | Read-only map of chronology, fold populations, frozen preprocessing fit sources, window boundaries, OOS anchor coverage and common Train RCA cases. Produce a feasibility ledger with counts and source hashes. | Strict temporal isolation or a sufficient common cohort cannot be established under the chosen evidence grade; record NO-GO or propose an explicitly limited variant. |
+| G1 C1 feasibility | Static inventory completed in the [G1 report](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md). It maps chronology, GT cohort upper bounds, fitting sources and open OOS/Train-case gates. | Current shared arrays cannot support strict forward-OOS; actual OOS anchor coverage and common Train RCA cohort remain unknown. Execution is NO-GO as is. |
 | G2 C1 protocol freeze | Freeze exact folds, fit/selection/anchor periods, purge, preprocessing mode, cohorts, scaler, arms, metrics, paired analysis, resource budget, run ID and failure semantics **before results**. Review label firewall and all paths. | Any choice remains open or depends on Test performance. |
 | G3 C1 implementation and smoke | Build the protocol-specific adapters; use synthetic fixtures and small, isolated smoke inputs. Confirm workers=1 equivalence if parallel preprocessing is introduced. | Identity, ordering, label isolation, Train-only fitting, window or schema checks fail. |
 | G4 C1 execution | Use new run directories for necessary fold detector fitting, RCA fitting and ranking generation. Read the frozen C0 Test predictions/episodes without rerunning Stage-1 Test inference. Complete RCA rankings for all legal detected Test episodes; lock their bytes and universe before Test label join. | Required input/source/output hash changes, missing rankings, incomplete folds or budget exceedance. Preserve failure rows. |
 | G5 C2 evaluation | Consume the locked predictions; publish matched-case RCA contrasts and full diagnosis results with all misses, false alarms and ranking failures. Archive hashes, commands, counts and limitations. | Prediction/scope lock or denominator checks fail. No post hoc repair of the formal result. |
 
-G0 is complete. G1–G5 are **not** complete and have no authorized executable
-command yet. G1 is a static feasibility study; full preprocessing, training,
-Test inference and RCA execution require their own frozen protocol and
-explicit execution request. Every new run gets a unique directory. Existing
-P5, C0 and C0F artifacts remain immutable.
+G0 and the **static inventory portion** of G1 are complete. G1 did not
+establish strict OOS inputs or an actual common Train cohort; G2–G5 remain
+pending and have no authorized executable command. Full preprocessing,
+training, Test inference and RCA execution require their own frozen protocol
+and explicit execution request. Every new run gets a unique directory.
+Existing P5, C0 and C0F artifacts remain immutable.
 
 The fixed inputs for planning are
 `configs/e2e/gaia_p5_v3_preprocessing_v2.json`,
@@ -100,7 +101,7 @@ model, threshold, calibration, schema, vocabulary, graph and scalers must fit
 only on that fold's past for a claim of **full forward-OOS**.
 
 The shared preprocessing used by C0 was fitted over the original 70% Train
-and may contain future information relative to internal folds. G1 must choose
+and may contain future information relative to internal folds. G2 must choose
 and document one of these two evidence levels:
 
 1. **Full forward-OOS:** create isolated, prefix-fitted preprocessing for each
@@ -113,9 +114,10 @@ and document one of these two evidence levels:
 
 The strict option is preferred for the primary claim. If it proves infeasible,
 record that outcome and re-freeze the narrower option before any run; do not
-silently downgrade. G1 must count usable onsets and minority classes per
-proposed fold before fixing exact dates, fold count, purge and low-count
-behavior. Respect both the detector's 300-second history and the distinct
+silently downgrade. G1's static GT counts provide only an upper bound; G2
+must freeze a performance-blind minimum actual OOS cohort, exact dates, fold
+count, purge and low-count behavior before fold results. Respect both the
+detector's 300-second history and the distinct
 `[anchor-300s, anchor+300s)` RCA context, including injection/split crossings.
 Time-match Train OOS episodes to supervision within Train and keep unmatched
 episodes in the accounting.
@@ -173,9 +175,11 @@ pre-isolated outer evaluation; reuse of the present Test remains limited.
 
 ## 6. Files to produce before execution
 
-- `C1_FEASIBILITY_LEDGER`: exact temporal ranges, per-fold event/cohort counts,
-  preprocessing fit-source map, boundary and OOS checks, source/input hashes,
-  and a full-OOS versus supervision-OOS decision. **Pending G1.**
+- `C1_FEASIBILITY_LEDGER`: [static ledger](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/feasibility_ledger.json)
+  and [report](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md)
+  are complete. Actual fold OOS anchors, common Train cohort and the final
+  full-OOS versus supervision-OOS choice remain open; the current result is
+  `EXECUTION_NO_GO_AS_IS`.
 - `C1_FROZEN_PROTOCOL`: run ID, frozen inputs, folds, candidate universe,
   cohort, scaler, all arm definitions, label firewall, metrics, paired method,
   acceptance/NO-GO rules, budget and stop conditions. **Pending G2.**

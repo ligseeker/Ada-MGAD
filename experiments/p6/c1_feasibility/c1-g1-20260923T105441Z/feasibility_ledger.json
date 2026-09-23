@@ -1,0 +1,776 @@
+{
+  "audit_source": {
+    "bytes": 15161,
+    "path": "scripts/p6/audit_c1_g1_feasibility.py",
+    "sha256": "da2779ce670141a6de8addfdb97c0918d0aa9ca6099445aae65dcbb850a166f0"
+  },
+  "data_boundary": {
+    "ad_shared_schema_fit_interval_ms": [
+      1625133600000,
+      1626963120000
+    ],
+    "ad_shared_schema_fit_source": "original 70 percent Train; future relative to internal C1 folds",
+    "rca_raw_index": "full raw timeline indexed; per-case values are exact-window local; metric indicator set is selected from complete raw filename inventory",
+    "strict_forward_oos_from_current_ad_arrays": false
+  },
+  "designs": {
+    "all_train_4fold": {
+      "folds": [
+        {
+          "actual_common_train_cohort": null,
+          "actual_oos_detected_anchors": null,
+          "complete_gt": {
+            "fit": 3177,
+            "generation": 1534,
+            "selection": 1195
+          },
+          "fit_fault_types": {
+            "access_permission_denied": 0,
+            "cpu_anomalies": 0,
+            "file_moving": 9,
+            "login_failure": 3051,
+            "memory_anomalies": 115,
+            "normal_memory_freed": 2
+          },
+          "fit_services": {
+            "dbservice1": 13,
+            "dbservice2": 13,
+            "logservice1": 14,
+            "logservice2": 20,
+            "mobservice1": 1537,
+            "mobservice2": 1534,
+            "redisservice1": 9,
+            "redisservice2": 10,
+            "webservice1": 13,
+            "webservice2": 14
+          },
+          "fold": 1,
+          "generation_context_safe_for_any_0_to_60s_detection_delay": 1528,
+          "generation_eligible_fault_types": {
+            "access_permission_denied": 1,
+            "cpu_anomalies": 0,
+            "file_moving": 2,
+            "login_failure": 1448,
+            "memory_anomalies": 76,
+            "normal_memory_freed": 2
+          },
+          "generation_eligible_services": {
+            "dbservice1": 6,
+            "dbservice2": 10,
+            "logservice1": 12,
+            "logservice2": 4,
+            "mobservice1": 699,
+            "mobservice2": 768,
+            "redisservice1": 5,
+            "redisservice2": 8,
+            "webservice1": 7,
+            "webservice2": 10
+          },
+          "generation_exclusions": {
+            "gt_rca_context_crosses_generation_block": 5
+          },
+          "generation_gt_feature_and_rca_context_eligible": 1529,
+          "intervals_ms": {
+            "anchor_generation": [
+              1625917680000,
+              1626179040000
+            ],
+            "detector_fit": [
+              1625133600000,
+              1625656320000
+            ],
+            "detector_selection": [
+              1625656320000,
+              1625917680000
+            ]
+          },
+          "selection_fault_types": {
+            "access_permission_denied": 0,
+            "cpu_anomalies": 0,
+            "file_moving": 5,
+            "login_failure": 1121,
+            "memory_anomalies": 66,
+            "normal_memory_freed": 3
+          },
+          "selection_services": {
+            "dbservice1": 7,
+            "dbservice2": 5,
+            "logservice1": 6,
+            "logservice2": 6,
+            "mobservice1": 592,
+            "mobservice2": 544,
+            "redisservice1": 5,
+            "redisservice2": 9,
+            "webservice1": 11,
+            "webservice2": 10
+          }
+        },
+        {
+          "actual_common_train_cohort": null,
+          "actual_oos_detected_anchors": null,
+          "complete_gt": {
+            "fit": 4372,
+            "generation": 1536,
+            "selection": 1534
+          },
+          "fit_fault_types": {
+            "access_permission_denied": 0,
+            "cpu_anomalies": 0,
+            "file_moving": 14,
+            "login_failure": 4172,
+            "memory_anomalies": 181,
+            "normal_memory_freed": 5
+          },
+          "fit_services": {
+            "dbservice1": 20,
+            "dbservice2": 18,
+            "logservice1": 20,
+            "logservice2": 26,
+            "mobservice1": 2129,
+            "mobservice2": 2078,
+            "redisservice1": 14,
+            "redisservice2": 19,
+            "webservice1": 24,
+            "webservice2": 24
+          },
+          "fold": 2,
+          "generation_context_safe_for_any_0_to_60s_detection_delay": 1532,
+          "generation_eligible_fault_types": {
+            "access_permission_denied": 4,
+            "cpu_anomalies": 0,
+            "file_moving": 3,
+            "login_failure": 1453,
+            "memory_anomalies": 70,
+            "normal_memory_freed": 3
+          },
+          "generation_eligible_services": {
+            "dbservice1": 12,
+            "dbservice2": 13,
+            "logservice1": 7,
+            "logservice2": 6,
+            "mobservice1": 732,
+            "mobservice2": 737,
+            "redisservice1": 5,
+            "redisservice2": 5,
+            "webservice1": 8,
+            "webservice2": 8
+          },
+          "generation_exclusions": {
+            "gt_rca_context_crosses_generation_block": 3
+          },
+          "generation_gt_feature_and_rca_context_eligible": 1533,
+          "intervals_ms": {
+            "anchor_generation": [
+              1626179040000,
+              1626440400000
+            ],
+            "detector_fit": [
+              1625133600000,
+              1625917680000
+            ],
+            "detector_selection": [
+              1625917680000,
+              1626179040000
+            ]
+          },
+          "selection_fault_types": {
+            "access_permission_denied": 1,
+            "cpu_anomalies": 0,
+            "file_moving": 2,
+            "login_failure": 1453,
+            "memory_anomalies": 76,
+            "normal_memory_freed": 2
+          },
+          "selection_services": {
+            "dbservice1": 6,
+            "dbservice2": 10,
+            "logservice1": 12,
+            "logservice2": 4,
+            "mobservice1": 703,
+            "mobservice2": 769,
+            "redisservice1": 5,
+            "redisservice2": 8,
+            "webservice1": 7,
+            "webservice2": 10
+          }
+        },
+        {
+          "actual_common_train_cohort": null,
+          "actual_oos_detected_anchors": null,
+          "complete_gt": {
+            "fit": 5906,
+            "generation": 1270,
+            "selection": 1536
+          },
+          "fit_fault_types": {
+            "access_permission_denied": 1,
+            "cpu_anomalies": 0,
+            "file_moving": 16,
+            "login_failure": 5625,
+            "memory_anomalies": 257,
+            "normal_memory_freed": 7
+          },
+          "fit_services": {
+            "dbservice1": 26,
+            "dbservice2": 28,
+            "logservice1": 32,
+            "logservice2": 30,
+            "mobservice1": 2832,
+            "mobservice2": 2847,
+            "redisservice1": 19,
+            "redisservice2": 27,
+            "webservice1": 31,
+            "webservice2": 34
+          },
+          "fold": 3,
+          "generation_context_safe_for_any_0_to_60s_detection_delay": 1268,
+          "generation_eligible_fault_types": {
+            "access_permission_denied": 3,
+            "cpu_anomalies": 0,
+            "file_moving": 1,
+            "login_failure": 1224,
+            "memory_anomalies": 40,
+            "normal_memory_freed": 0
+          },
+          "generation_eligible_services": {
+            "dbservice1": 7,
+            "dbservice2": 7,
+            "logservice1": 6,
+            "logservice2": 2,
+            "mobservice1": 637,
+            "mobservice2": 598,
+            "redisservice1": 3,
+            "redisservice2": 1,
+            "webservice1": 4,
+            "webservice2": 3
+          },
+          "generation_exclusions": {
+            "gt_rca_context_crosses_generation_block": 2
+          },
+          "generation_gt_feature_and_rca_context_eligible": 1268,
+          "intervals_ms": {
+            "anchor_generation": [
+              1626440400000,
+              1626701760000
+            ],
+            "detector_fit": [
+              1625133600000,
+              1626179040000
+            ],
+            "detector_selection": [
+              1626179040000,
+              1626440400000
+            ]
+          },
+          "selection_fault_types": {
+            "access_permission_denied": 4,
+            "cpu_anomalies": 0,
+            "file_moving": 3,
+            "login_failure": 1456,
+            "memory_anomalies": 70,
+            "normal_memory_freed": 3
+          },
+          "selection_services": {
+            "dbservice1": 12,
+            "dbservice2": 13,
+            "logservice1": 7,
+            "logservice2": 6,
+            "mobservice1": 732,
+            "mobservice2": 740,
+            "redisservice1": 5,
+            "redisservice2": 5,
+            "webservice1": 8,
+            "webservice2": 8
+          }
+        },
+        {
+          "actual_common_train_cohort": null,
+          "actual_oos_detected_anchors": null,
+          "complete_gt": {
+            "fit": 7443,
+            "generation": 1631,
+            "selection": 1270
+          },
+          "fit_fault_types": {
+            "access_permission_denied": 5,
+            "cpu_anomalies": 0,
+            "file_moving": 19,
+            "login_failure": 7081,
+            "memory_anomalies": 328,
+            "normal_memory_freed": 10
+          },
+          "fit_services": {
+            "dbservice1": 38,
+            "dbservice2": 41,
+            "logservice1": 40,
+            "logservice2": 36,
+            "mobservice1": 3564,
+            "mobservice2": 3587,
+            "redisservice1": 24,
+            "redisservice2": 32,
+            "webservice1": 39,
+            "webservice2": 42
+          },
+          "fold": 4,
+          "generation_context_safe_for_any_0_to_60s_detection_delay": 1628,
+          "generation_eligible_fault_types": {
+            "access_permission_denied": 2,
+            "cpu_anomalies": 0,
+            "file_moving": 7,
+            "login_failure": 1549,
+            "memory_anomalies": 69,
+            "normal_memory_freed": 2
+          },
+          "generation_eligible_services": {
+            "dbservice1": 6,
+            "dbservice2": 14,
+            "logservice1": 3,
+            "logservice2": 5,
+            "mobservice1": 777,
+            "mobservice2": 788,
+            "redisservice1": 7,
+            "redisservice2": 6,
+            "webservice1": 12,
+            "webservice2": 11
+          },
+          "generation_exclusions": {
+            "no_existing_p5_gt_feature": 2
+          },
+          "generation_gt_feature_and_rca_context_eligible": 1629,
+          "intervals_ms": {
+            "anchor_generation": [
+              1626701760000,
+              1626963120000
+            ],
+            "detector_fit": [
+              1625133600000,
+              1626440400000
+            ],
+            "detector_selection": [
+              1626440400000,
+              1626701760000
+            ]
+          },
+          "selection_fault_types": {
+            "access_permission_denied": 3,
+            "cpu_anomalies": 0,
+            "file_moving": 1,
+            "login_failure": 1225,
+            "memory_anomalies": 41,
+            "normal_memory_freed": 0
+          },
+          "selection_services": {
+            "dbservice1": 7,
+            "dbservice2": 7,
+            "logservice1": 6,
+            "logservice2": 3,
+            "mobservice1": 638,
+            "mobservice2": 598,
+            "redisservice1": 3,
+            "redisservice2": 1,
+            "webservice1": 4,
+            "webservice2": 3
+          }
+        }
+      ],
+      "gt_feature_and_context_eligible_sum": 5959,
+      "uses_original_c0_validation_as_generation": true
+    },
+    "fit_only_3fold": {
+      "folds": [
+        {
+          "actual_common_train_cohort": null,
+          "actual_oos_detected_anchors": null,
+          "complete_gt": {
+            "fit": 1763,
+            "generation": 1195,
+            "selection": 1414
+          },
+          "fit_fault_types": {
+            "access_permission_denied": 0,
+            "cpu_anomalies": 0,
+            "file_moving": 5,
+            "login_failure": 1699,
+            "memory_anomalies": 59,
+            "normal_memory_freed": 0
+          },
+          "fit_services": {
+            "dbservice1": 7,
+            "dbservice2": 5,
+            "logservice1": 6,
+            "logservice2": 8,
+            "mobservice1": 883,
+            "mobservice2": 829,
+            "redisservice1": 4,
+            "redisservice2": 7,
+            "webservice1": 7,
+            "webservice2": 7
+          },
+          "fold": 1,
+          "generation_context_safe_for_any_0_to_60s_detection_delay": 1192,
+          "generation_eligible_fault_types": {
+            "access_permission_denied": 0,
+            "cpu_anomalies": 0,
+            "file_moving": 5,
+            "login_failure": 1118,
+            "memory_anomalies": 66,
+            "normal_memory_freed": 3
+          },
+          "generation_eligible_services": {
+            "dbservice1": 7,
+            "dbservice2": 5,
+            "logservice1": 6,
+            "logservice2": 6,
+            "mobservice1": 591,
+            "mobservice2": 542,
+            "redisservice1": 5,
+            "redisservice2": 9,
+            "webservice1": 11,
+            "webservice2": 10
+          },
+          "generation_exclusions": {
+            "gt_rca_context_crosses_generation_block": 3
+          },
+          "generation_gt_feature_and_rca_context_eligible": 1192,
+          "intervals_ms": {
+            "anchor_generation": [
+              1625656320000,
+              1625917680000
+            ],
+            "detector_fit": [
+              1625133600000,
+              1625394960000
+            ],
+            "detector_selection": [
+              1625394960000,
+              1625656320000
+            ]
+          },
+          "selection_fault_types": {
+            "access_permission_denied": 0,
+            "cpu_anomalies": 0,
+            "file_moving": 4,
+            "login_failure": 1352,
+            "memory_anomalies": 56,
+            "normal_memory_freed": 2
+          },
+          "selection_services": {
+            "dbservice1": 6,
+            "dbservice2": 8,
+            "logservice1": 8,
+            "logservice2": 12,
+            "mobservice1": 654,
+            "mobservice2": 705,
+            "redisservice1": 5,
+            "redisservice2": 3,
+            "webservice1": 6,
+            "webservice2": 7
+          }
+        },
+        {
+          "actual_common_train_cohort": null,
+          "actual_oos_detected_anchors": null,
+          "complete_gt": {
+            "fit": 3177,
+            "generation": 1534,
+            "selection": 1195
+          },
+          "fit_fault_types": {
+            "access_permission_denied": 0,
+            "cpu_anomalies": 0,
+            "file_moving": 9,
+            "login_failure": 3051,
+            "memory_anomalies": 115,
+            "normal_memory_freed": 2
+          },
+          "fit_services": {
+            "dbservice1": 13,
+            "dbservice2": 13,
+            "logservice1": 14,
+            "logservice2": 20,
+            "mobservice1": 1537,
+            "mobservice2": 1534,
+            "redisservice1": 9,
+            "redisservice2": 10,
+            "webservice1": 13,
+            "webservice2": 14
+          },
+          "fold": 2,
+          "generation_context_safe_for_any_0_to_60s_detection_delay": 1528,
+          "generation_eligible_fault_types": {
+            "access_permission_denied": 1,
+            "cpu_anomalies": 0,
+            "file_moving": 2,
+            "login_failure": 1448,
+            "memory_anomalies": 76,
+            "normal_memory_freed": 2
+          },
+          "generation_eligible_services": {
+            "dbservice1": 6,
+            "dbservice2": 10,
+            "logservice1": 12,
+            "logservice2": 4,
+            "mobservice1": 699,
+            "mobservice2": 768,
+            "redisservice1": 5,
+            "redisservice2": 8,
+            "webservice1": 7,
+            "webservice2": 10
+          },
+          "generation_exclusions": {
+            "gt_rca_context_crosses_generation_block": 5
+          },
+          "generation_gt_feature_and_rca_context_eligible": 1529,
+          "intervals_ms": {
+            "anchor_generation": [
+              1625917680000,
+              1626179040000
+            ],
+            "detector_fit": [
+              1625133600000,
+              1625656320000
+            ],
+            "detector_selection": [
+              1625656320000,
+              1625917680000
+            ]
+          },
+          "selection_fault_types": {
+            "access_permission_denied": 0,
+            "cpu_anomalies": 0,
+            "file_moving": 5,
+            "login_failure": 1121,
+            "memory_anomalies": 66,
+            "normal_memory_freed": 3
+          },
+          "selection_services": {
+            "dbservice1": 7,
+            "dbservice2": 5,
+            "logservice1": 6,
+            "logservice2": 6,
+            "mobservice1": 592,
+            "mobservice2": 544,
+            "redisservice1": 5,
+            "redisservice2": 9,
+            "webservice1": 11,
+            "webservice2": 10
+          }
+        },
+        {
+          "actual_common_train_cohort": null,
+          "actual_oos_detected_anchors": null,
+          "complete_gt": {
+            "fit": 4372,
+            "generation": 1536,
+            "selection": 1534
+          },
+          "fit_fault_types": {
+            "access_permission_denied": 0,
+            "cpu_anomalies": 0,
+            "file_moving": 14,
+            "login_failure": 4172,
+            "memory_anomalies": 181,
+            "normal_memory_freed": 5
+          },
+          "fit_services": {
+            "dbservice1": 20,
+            "dbservice2": 18,
+            "logservice1": 20,
+            "logservice2": 26,
+            "mobservice1": 2129,
+            "mobservice2": 2078,
+            "redisservice1": 14,
+            "redisservice2": 19,
+            "webservice1": 24,
+            "webservice2": 24
+          },
+          "fold": 3,
+          "generation_context_safe_for_any_0_to_60s_detection_delay": 1532,
+          "generation_eligible_fault_types": {
+            "access_permission_denied": 4,
+            "cpu_anomalies": 0,
+            "file_moving": 3,
+            "login_failure": 1453,
+            "memory_anomalies": 70,
+            "normal_memory_freed": 3
+          },
+          "generation_eligible_services": {
+            "dbservice1": 12,
+            "dbservice2": 13,
+            "logservice1": 7,
+            "logservice2": 6,
+            "mobservice1": 732,
+            "mobservice2": 737,
+            "redisservice1": 5,
+            "redisservice2": 5,
+            "webservice1": 8,
+            "webservice2": 8
+          },
+          "generation_exclusions": {
+            "gt_rca_context_crosses_generation_block": 3
+          },
+          "generation_gt_feature_and_rca_context_eligible": 1533,
+          "intervals_ms": {
+            "anchor_generation": [
+              1626179040000,
+              1626440400000
+            ],
+            "detector_fit": [
+              1625133600000,
+              1625917680000
+            ],
+            "detector_selection": [
+              1625917680000,
+              1626179040000
+            ]
+          },
+          "selection_fault_types": {
+            "access_permission_denied": 1,
+            "cpu_anomalies": 0,
+            "file_moving": 2,
+            "login_failure": 1453,
+            "memory_anomalies": 76,
+            "normal_memory_freed": 2
+          },
+          "selection_services": {
+            "dbservice1": 6,
+            "dbservice2": 10,
+            "logservice1": 12,
+            "logservice2": 4,
+            "mobservice1": 703,
+            "mobservice2": 769,
+            "redisservice1": 5,
+            "redisservice2": 8,
+            "webservice1": 7,
+            "webservice2": 10
+          }
+        }
+      ],
+      "gt_feature_and_context_eligible_sum": 4254,
+      "uses_original_c0_validation_as_generation": false
+    }
+  },
+  "existing_gt_bundle": {
+    "cases_all_splits": 16124,
+    "identity_and_anchor_alignment": "PASS",
+    "shape": [
+      16124,
+      10,
+      68
+    ]
+  },
+  "fold_design_status": "EXPLORATORY_FIXED_TIME_FRACTIONS_NOT_FROZEN_PROTOCOL",
+  "generated_at_utc": "2026-09-23T10:55:48.906085+00:00",
+  "git_head": "ba0ecdb5faf61ed98a2446f553303e7b70b31668",
+  "input_files": {
+    "artifacts/p5/v3/protocol/gt_event_registry.csv": {
+      "bytes": 2067208,
+      "path": "artifacts/p5/v3/protocol/gt_event_registry.csv",
+      "sha256": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b"
+    },
+    "artifacts/p5/v3/rca/rca_case_registry_gt.csv": {
+      "bytes": 3050852,
+      "path": "artifacts/p5/v3/rca/rca_case_registry_gt.csv",
+      "sha256": "40012909a4de1a6d5ab4b46f7f048fa08a9dd164cc45e20b6685a6089b633393"
+    },
+    "artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json": {
+      "bytes": 13766,
+      "path": "artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json",
+      "sha256": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2"
+    },
+    "artifacts/p5/v3_preprocessing_v2/schema/frozen_preprocessing_schema.json": {
+      "bytes": 90054,
+      "path": "artifacts/p5/v3_preprocessing_v2/schema/frozen_preprocessing_schema.json",
+      "sha256": "cecea203ff6946744d14d256bb3a993c2186a613601dae346d9edaee6b04f95c"
+    },
+    "configs/e2e/gaia_p5_v3_preprocessing_v2.json": {
+      "bytes": 5077,
+      "path": "configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+      "sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35"
+    },
+    "configs/e2e/gaia_p6_c0_system_trigger.json": {
+      "bytes": 4061,
+      "path": "configs/e2e/gaia_p6_c0_system_trigger.json",
+      "sha256": "a2c42beb19f5a234ab74958cf3db32301524f909d5605001bdaeb9c141e3b4f8"
+    },
+    "data/p5/v3/rca_features_gt/anchors_ms.npy": {
+      "bytes": 129120,
+      "path": "data/p5/v3/rca_features_gt/anchors_ms.npy",
+      "sha256": "4f2272b2364a6da425238b2e84fe2c7f0b581f8a2c3b7396308e493caf879008"
+    },
+    "data/p5/v3/rca_features_gt/case_ids.npy": {
+      "bytes": 2064000,
+      "path": "data/p5/v3/rca_features_gt/case_ids.npy",
+      "sha256": "5017240696980d290fd379dcdd14c1ec13baa7460c6a45dd8d5cf6a83f814a54"
+    },
+    "data/p5/v3/rca_features_gt/splits.npy": {
+      "bytes": 645088,
+      "path": "data/p5/v3/rca_features_gt/splits.npy",
+      "sha256": "194ddd5d7890a43d0050303dea475939f0d61677e8a6b2ed56c2d60c14726040"
+    },
+    "data/p5/v3/rca_features_gt/z2_features.npy": {
+      "bytes": 43857408,
+      "path": "data/p5/v3/rca_features_gt/z2_features.npy",
+      "sha256": "8f850c5d92ca56306b4644c3b7591819ffcbee162f0787aa3b79926e0608dc8d"
+    },
+    "data/p5/v3/rca_raw_index/index_manifest.json": {
+      "bytes": 953444,
+      "path": "data/p5/v3/rca_raw_index/index_manifest.json",
+      "sha256": "cd343dfad123e8238be0f9357fddb6bd55625440e96890cba0a2af40b3a88c19"
+    },
+    "experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/completion_manifest.json": {
+      "bytes": 76920,
+      "path": "experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/completion_manifest.json",
+      "sha256": "faabd0a5e6486a89c6e6e3cab1af8f146af6cdab9fe5e728c027f5d18f80745a"
+    },
+    "experiments/p6/system_event_trigger/manifest.json": {
+      "bytes": 28509,
+      "path": "experiments/p6/system_event_trigger/manifest.json",
+      "sha256": "cb222bb5c21d20d8a7546e8b1ee1b4882daaac5d4a397d0e07655fe646cf9794"
+    },
+    "experiments/p6/system_event_trigger/split_manifest.json": {
+      "bytes": 8121,
+      "path": "experiments/p6/system_event_trigger/split_manifest.json",
+      "sha256": "1cad441a2d207379ffd8838bc2d655e9c68f3e03b6f4f7e666413a0b33aca193"
+    }
+  },
+  "interpretation": "GT feature/context counts are static upper bounds, not detected-anchor counts or predicted C1 performance. Even fit-only folds remain historical development data. No Test labels or model scores were analyzed.",
+  "open_gates": [
+    "prefix-fitted per-fold Metric/Log/Trace schema, graph and detector arrays are absent",
+    "fold-specific detector checkpoints/selection and genuine OOS anchors are absent",
+    "actual common legal GT/OOS-detected Train cohort size and class mix are unknown",
+    "RCA raw-index metric-schema future-filename policy and fold boundary semantics need freezing",
+    "strict fit/selection/generation window purge and fold-specific run/source locks need freezing"
+  ],
+  "pre_test_population": {
+    "c0_fit_complete_gt": 7443,
+    "c0_validation_complete_gt": 2901,
+    "crossing_case_ids": [
+      "gaia-v3-10508"
+    ],
+    "detector_domain_registry_rows": 10345,
+    "train_test_boundary_crossing": 1
+  },
+  "preferred_candidate_reason": "keeps fold selection and generation outside the original C0 Validation period; this avoids a known historical model-selection reuse, not a claim of new holdout data",
+  "preferred_static_candidate": "fit_only_3fold",
+  "schema_version": "p6_c1_g1_static_feasibility_v5",
+  "status": "STATIC_INVENTORY_COMPLETE_EXECUTION_NO_GO_AS_IS",
+  "timeline": {
+    "absolute_end_ms": 1627747200000,
+    "absolute_start_ms": 1625133600000,
+    "candidate_boundaries_ms": {
+      "0": 1625133600000,
+      "1": 1625394960000,
+      "2": 1625656320000,
+      "3": 1625917680000,
+      "4": 1626179040000,
+      "5": 1626440400000,
+      "6": 1626701760000,
+      "7": 1626963120000,
+      "10": 1627747200000
+    },
+    "grid_ms": 30000,
+    "pre_test_end_ms": 1626963120000,
+    "total_bins": 87120
+  }
+}

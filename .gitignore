@@ -123,3 +123,17 @@ experiments/p6/c0f_failure_audit/*
 experiments/p6/c0f_failure_audit/*/*
 !experiments/p6/c0f_failure_audit/*/*.json
 !experiments/p6/c0f_failure_audit/*/*.md
+
+# P6-C1 G1 static feasibility inventories. Keep only the small, source-bound
+# aggregate ledger and report; no fold preprocessing or model outputs exist yet.
+experiments/p6/c1_feasibility/*
+!experiments/p6/c1_feasibility/
+!experiments/p6/c1_feasibility/*/
+experiments/p6/c1_feasibility/*/*
+!experiments/p6/c1_feasibility/*/*.json
+!experiments/p6/c1_feasibility/*/*.md
+# Preliminary G1 probes were superseded before publication. Retain locally.
+experiments/p6/c1_feasibility/c1-g1-20260923T104315Z/*
+experiments/p6/c1_feasibility/c1-g1-20260923T104558Z/*
+experiments/p6/c1_feasibility/c1-g1-20260923T104734Z/*
+experiments/p6/c1_feasibility/c1-g1-20260923T105220Z/*
