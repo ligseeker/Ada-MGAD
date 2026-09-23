@@ -1,0 +1,7 @@
+{
+  "checked_at_utc": "2026-09-23T08:37:43.918667+00:00",
+  "files_checked": 564,
+  "policy": "every snapshotted frozen input and historical-run artifact is unchanged",
+  "snapshot": "input_snapshot.json",
+  "status": "PASS"
+}

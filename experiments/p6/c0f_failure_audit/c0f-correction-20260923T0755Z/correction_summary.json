@@ -1,0 +1,39 @@
+{
+  "changed_event_fields": {
+    "censored_by_score_coverage": 13,
+    "episode_band": 2,
+    "other_active_event_count": 5,
+    "other_onset_count_60s": 0,
+    "response_band": 2
+  },
+  "concurrency_context": "label-legal population includes purged cross-boundary events; counts may change for that reason as well",
+  "corrections": [
+    "sorted/swept active intervals",
+    "per-window lattice coverage and right censoring",
+    "correct grid-bound field and 60-second evidence counts",
+    "fail-closed stage/publication checks",
+    "archived executing source, tests, complete outputs and pre/post input hashes",
+    "full empty cross-cells, quantiles, clean-window coverage and witness strata",
+    "retired the post-hoc 1.5x route-selection rule"
+  ],
+  "historical_source_status": "UNVERIFIED",
+  "parent": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700",
+  "unchanged_checks": {
+    "candidate_episode_count": true,
+    "eligible_slots": true,
+    "end_ms": true,
+    "event_identities": true,
+    "failure_category": true,
+    "fit:capacity": true,
+    "fit:label_reference": true,
+    "matched_prediction_id": true,
+    "official_matched_time": true,
+    "onset_ms": true,
+    "positive_slots": true,
+    "split": true,
+    "test:capacity": true,
+    "test:label_reference": true,
+    "validation:capacity": true,
+    "validation:label_reference": true
+  }
+}

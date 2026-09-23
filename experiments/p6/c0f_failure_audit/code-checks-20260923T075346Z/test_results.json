@@ -1,0 +1,31 @@
+{
+  "command": [
+    "/home/zhangll24/miniconda3/envs/DAG/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--junitxml=/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/code-checks-20260923T075346Z/pytest.xml",
+    "tests/test_p6_c0_trigger_model.py",
+    "tests/test_p6_c0_trigger_protocol.py",
+    "tests/test_p6_c0f_capacity.py",
+    "tests/test_p6_c0f_corrections.py",
+    "tests/test_p6_c0f_failure_audit.py"
+  ],
+  "exit_code": 0,
+  "files": {
+    "pytest.log": {
+      "bytes": 332,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/code-checks-20260923T075346Z/pytest.log",
+      "sha256": "cc76d7ac92d1ef42d0dc4d1fe0744884e53fe8f39c1a7c4a91a1bb849cdee7c2"
+    },
+    "pytest.xml": {
+      "bytes": 17581,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/code-checks-20260923T075346Z/pytest.xml",
+      "sha256": "9da9a63539f53766f27f833af39a13e4c9510e34bcf112a92df0da7236d23839"
+    }
+  },
+  "runtime_seconds": 74.22868544934317,
+  "source_digest": "afbcf349692e2746ab99e961b15bb3bf129b8205c3ca9d62ee6e3f3d7716b720"
+}

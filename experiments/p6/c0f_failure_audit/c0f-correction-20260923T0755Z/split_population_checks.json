@@ -1,0 +1,48 @@
+{
+  "fit": {
+    "expected_from_plan": {
+      "events": 7443,
+      "events_gt_300s": 362,
+      "windows": 43550
+    },
+    "matches_plan": true,
+    "observed": {
+      "events": 7443,
+      "events_gt_300s": 362,
+      "sample_index_max": 43549,
+      "sample_index_min": 0,
+      "windows": 43550
+    }
+  },
+  "status": "PASS",
+  "test": {
+    "expected_from_plan": {
+      "events": 5787,
+      "events_gt_300s": 229,
+      "windows": 26127
+    },
+    "matches_plan": true,
+    "observed": {
+      "events": 5787,
+      "events_gt_300s": 229,
+      "sample_index_max": 26126,
+      "sample_index_min": 0,
+      "windows": 26127
+    }
+  },
+  "validation": {
+    "expected_from_plan": {
+      "events": 2901,
+      "events_gt_300s": 125,
+      "windows": 17414
+    },
+    "matches_plan": true,
+    "observed": {
+      "events": 2901,
+      "events_gt_300s": 125,
+      "sample_index_max": 60973,
+      "sample_index_min": 43560,
+      "windows": 17414
+    }
+  }
+}

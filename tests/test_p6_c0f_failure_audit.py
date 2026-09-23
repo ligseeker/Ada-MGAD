@@ -156,7 +156,7 @@ class FailureLedgerTests(unittest.TestCase):
         self.assertTrue(bool(late["in_other_recent_onset_window"].iloc[0]))
 
     def test_censoring_is_distinguished_from_a_complete_no_response(self):
-        slots = slot_times(10)
+        slots = slot_times(12)  # covers the short event's full +300 s follow-up
         covered = events_frame([{"onset_ms": 5_000, "duration_ms": 60_000}])
         cut = events_frame([{"onset_ms": 5_000, "duration_ms": 600_000}])
         ledger_complete, _, _, _ = ledger_for(slots, np.zeros(len(slots)), covered)
@@ -248,8 +248,8 @@ class StratificationTests(unittest.TestCase):
         self.assertIn(("login_failure", "le_15s"), pairs)
         self.assertIn(("memory_anomalies", "gt_300s"), pairs)
         self.assertEqual(tables["observed_combination_count"], 2)
-        # the full cartesian size is computed from the observed marginal cardinalities
-        self.assertEqual(tables["cartesian_product_size"], 2 * 5 * 2)
+        # Empty canonical services and absent fault types remain explicit.
+        self.assertEqual(tables["cartesian_product_size"], 6 * 5 * 10)
 
     def test_collision_audit_counts_bins_and_boundary_onsets(self):
         ground_truth = events_frame([

@@ -1,0 +1,36 @@
+{
+  "command": [
+    "/home/zhangll24/miniconda3/envs/DAG/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--junitxml=/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/validation/pytest.xml",
+    "tests/test_p6_c0_trigger_model.py",
+    "tests/test_p6_c0_trigger_protocol.py",
+    "tests/test_p6_c0f_capacity.py",
+    "tests/test_p6_c0f_corrections.py",
+    "tests/test_p6_c0f_failure_audit.py"
+  ],
+  "exit_code": 0,
+  "files": {
+    "pytest.log": {
+      "bytes": 344,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/validation/pytest.log",
+      "sha256": "d0a0af5bb2431e5280ff5b3de31a8e655f60caad22632553e1226980c84bb4e7"
+    },
+    "pytest.xml": {
+      "bytes": 17581,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/validation/pytest.xml",
+      "sha256": "ab9d6c61b8e7d20869287bea56f8e5251bdab7a3d84f0abe9628162c85e978fc"
+    }
+  },
+  "precheck_record": {
+    "bytes": 1175,
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/code-checks-20260923T075346Z/test_results.json",
+    "sha256": "51017a28cf2e25a31b463a4d5ead6ec19bc3062006a0f72ce40da0a60dbc43df"
+  },
+  "runtime_seconds": 71.27633641194552,
+  "source_digest": "afbcf349692e2746ab99e961b15bb3bf129b8205c3ca9d62ee6e3f3d7716b720"
+}

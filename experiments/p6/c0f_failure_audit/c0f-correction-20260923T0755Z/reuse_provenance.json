@@ -1,0 +1,24 @@
+{
+  "copied_score_records": {
+    "fit": {
+      "bytes": 6159468,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/scores/fit.csv",
+      "sha256": "140c58508263cd5c5fca280cac284c6d3e52798275eb40b36c8921f9a797687b"
+    },
+    "validation": {
+      "bytes": 2591810,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/scores/validation.csv",
+      "sha256": "5b5e592636753ada3615ff4c373ef739660dcc5196908a78bceb9eb85892ce2f"
+    }
+  },
+  "historical_execution_head": "b3a3ceb61bd22af594fdbdb3721380e9679f70f2",
+  "historical_source_identity": "UNVERIFIED: original run did not archive its executing source bytes",
+  "limitation": "Current source/inputs are bound; copying scores does not repair historical inference provenance.",
+  "model_inference": false,
+  "parent_completion": {
+    "bytes": 16950,
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700/completion_manifest.json",
+    "sha256": "97e1fd3e34da06e7b64808b9f38372628c7007b9a2533c46582b50e5b7ace53a"
+  },
+  "parent_run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700"
+}

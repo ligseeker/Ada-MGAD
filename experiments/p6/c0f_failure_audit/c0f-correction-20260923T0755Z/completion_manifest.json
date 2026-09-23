@@ -1,0 +1,1230 @@
+{
+  "audit_status": "COMPLETE_WITH_DECLARED_LIMITATIONS",
+  "c0_verdict": "BORDERLINE",
+  "commands": [
+    {
+      "argv": [
+        "scripts/p6/audit_c0_failure.py",
+        "correct",
+        "--output-dir",
+        "experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z",
+        "--reuse-run",
+        "experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700",
+        "--validation-record",
+        "experiments/p6/c0f_failure_audit/code-checks-20260923T075346Z/test_results.json",
+        "--threads",
+        "8"
+      ],
+      "python_executable": "/home/zhangll24/miniconda3/envs/DAG/bin/python",
+      "stage": "prepare",
+      "started_at_utc": "2026-09-23T07:56:53.850884+00:00"
+    },
+    {
+      "argv": [
+        "scripts/p6/audit_c0_failure.py",
+        "correct",
+        "--output-dir",
+        "experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z",
+        "--reuse-run",
+        "experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700",
+        "--validation-record",
+        "experiments/p6/c0f_failure_audit/code-checks-20260923T075346Z/test_results.json",
+        "--threads",
+        "8"
+      ],
+      "python_executable": "/home/zhangll24/miniconda3/envs/DAG/bin/python",
+      "stage": "scores",
+      "started_at_utc": "2026-09-23T07:57:26.475078+00:00"
+    },
+    {
+      "argv": [
+        "scripts/p6/audit_c0_failure.py",
+        "correct",
+        "--output-dir",
+        "experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z",
+        "--reuse-run",
+        "experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700",
+        "--validation-record",
+        "experiments/p6/c0f_failure_audit/code-checks-20260923T075346Z/test_results.json",
+        "--threads",
+        "8"
+      ],
+      "python_executable": "/home/zhangll24/miniconda3/envs/DAG/bin/python",
+      "stage": "analyze",
+      "started_at_utc": "2026-09-23T07:58:29.513914+00:00"
+    },
+    {
+      "argv": [
+        "scripts/p6/audit_c0_failure.py",
+        "correct",
+        "--output-dir",
+        "experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z",
+        "--reuse-run",
+        "experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700",
+        "--validation-record",
+        "experiments/p6/c0f_failure_audit/code-checks-20260923T075346Z/test_results.json",
+        "--threads",
+        "8"
+      ],
+      "python_executable": "/home/zhangll24/miniconda3/envs/DAG/bin/python",
+      "stage": "capacity",
+      "started_at_utc": "2026-09-23T08:13:11.412269+00:00"
+    },
+    {
+      "argv": [
+        "scripts/p6/audit_c0_failure.py",
+        "correct",
+        "--output-dir",
+        "experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z",
+        "--reuse-run",
+        "experiments/p6/c0f_failure_audit/c0f-seed42-20260919T0700",
+        "--validation-record",
+        "experiments/p6/c0f_failure_audit/code-checks-20260923T075346Z/test_results.json",
+        "--threads",
+        "8"
+      ],
+      "python_executable": "/home/zhangll24/miniconda3/envs/DAG/bin/python",
+      "stage": "finalize",
+      "started_at_utc": "2026-09-23T08:37:40.372284+00:00"
+    }
+  ],
+  "environment": {
+    "numpy": "1.24.1",
+    "pandas": "1.5.3",
+    "python": "3.8.20",
+    "threads": 8,
+    "torch": "1.12.0"
+  },
+  "generated_at_utc": "2026-09-23T08:37:46.921692+00:00",
+  "git_commit": "d518c17f4a76ddb30e9bfaeb33fecc982fad3f21",
+  "historical_inference_source_status": "UNVERIFIED",
+  "input_binding": {
+    "ad_data_manifest": {
+      "actual": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2",
+      "expected": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json"
+    },
+    "base_config": {
+      "actual": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+      "expected": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p5_v3_preprocessing_v2.json"
+    },
+    "c0:manifest.json": {
+      "actual": "cb222bb5c21d20d8a7546e8b1ee1b4882daaac5d4a397d0e07655fe646cf9794",
+      "expected": "cb222bb5c21d20d8a7546e8b1ee1b4882daaac5d4a397d0e07655fe646cf9794",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/manifest.json"
+    },
+    "c0:split_audit.json": {
+      "actual": "e5c60574f4c36ba5c7ebddbc869ede70f6f9aa83cf35c46fd611dbfba310463e",
+      "expected": "e5c60574f4c36ba5c7ebddbc869ede70f6f9aa83cf35c46fd611dbfba310463e",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/split_audit.json"
+    },
+    "c0:split_manifest.json": {
+      "actual": "1cad441a2d207379ffd8838bc2d655e9c68f3e03b6f4f7e666413a0b33aca193",
+      "expected": "1cad441a2d207379ffd8838bc2d655e9c68f3e03b6f4f7e666413a0b33aca193",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/split_manifest.json"
+    },
+    "c0:test_episodes.csv": {
+      "actual": "30bacbeecbee4b9f738fc6330fa9d8df5c1adc08e37fb1ee8476f1b47735399b",
+      "expected": "30bacbeecbee4b9f738fc6330fa9d8df5c1adc08e37fb1ee8476f1b47735399b",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_episodes.csv"
+    },
+    "c0:test_matching.csv": {
+      "actual": "011332f3537ee6f7d044e9da23df1d88f617fb71d3a552354343db6fd91c9c77",
+      "expected": "011332f3537ee6f7d044e9da23df1d88f617fb71d3a552354343db6fd91c9c77",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_matching.csv"
+    },
+    "c0:test_metrics.json": {
+      "actual": "2968632cc4da1b807d976d8bb1c449f9d755cb1c15d2ee43bcd440b74946ce5b",
+      "expected": "2968632cc4da1b807d976d8bb1c449f9d755cb1c15d2ee43bcd440b74946ce5b",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_metrics.json"
+    },
+    "c0:test_predictions.csv": {
+      "actual": "985623e06f5d56db9c2c536b8dd65226967ae1c25f36c9a4924ae9e38d5bafab",
+      "expected": "985623e06f5d56db9c2c536b8dd65226967ae1c25f36c9a4924ae9e38d5bafab",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_predictions.csv"
+    },
+    "c0:validation_selection.json": {
+      "actual": "b5167c8d5df9cd9eebd7812cb76733799aa3f7829f3fe1a2c5cdb0ec51715a24",
+      "expected": "b5167c8d5df9cd9eebd7812cb76733799aa3f7829f3fe1a2c5cdb0ec51715a24",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/validation_selection.json"
+    },
+    "checkpoint": {
+      "actual": "6a4317d6414774e1ca6be4e418ed3d47d678adfab1f0155e96e04aa3fa9981f5",
+      "expected": "6a4317d6414774e1ca6be4e418ed3d47d678adfab1f0155e96e04aa3fa9981f5",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/checkpoint/best_validation_event_f1.pt"
+    },
+    "gt_registry": {
+      "actual": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+      "expected": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv"
+    },
+    "source:ad_data_manifest.json": {
+      "actual": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2",
+      "expected": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json"
+    },
+    "source:base_config": {
+      "actual": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+      "expected": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p5_v3_preprocessing_v2.json"
+    },
+    "source:event_registry": {
+      "actual": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+      "expected": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv"
+    },
+    "source:graph.npy": {
+      "actual": "04cf2a6bdbd4a2137cafe8140794750875c690b210f1d1f8347a14a34804a809",
+      "expected": "04cf2a6bdbd4a2137cafe8140794750875c690b210f1d1f8347a14a34804a809",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/graph.npy"
+    },
+    "source:test_log.npy": {
+      "actual": "854860677d7740b52c322c91245b5b19aced4d3df27b5e6c5619e9671e6dd524",
+      "expected": "854860677d7740b52c322c91245b5b19aced4d3df27b5e6c5619e9671e6dd524",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/test/log.npy"
+    },
+    "source:test_metric.npy": {
+      "actual": "9d40c3c4ad27682a84ffdc1f66bf00a1df19bafd0244efdfb8589ceeb67fd249",
+      "expected": "9d40c3c4ad27682a84ffdc1f66bf00a1df19bafd0244efdfb8589ceeb67fd249",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/test/metric.npy"
+    },
+    "source:test_timestamps.npy": {
+      "actual": "82116aac4da43d287ea0fb904a5ff7fee937f477182678c7d11ca94bcfcea5ab",
+      "expected": "82116aac4da43d287ea0fb904a5ff7fee937f477182678c7d11ca94bcfcea5ab",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/test/timestamps.npy"
+    },
+    "source:test_trace.npy": {
+      "actual": "fb90c0a29cfb9f00b705f0c95d1f1efe78311f2b008f49342514ebfecbc0052b",
+      "expected": "fb90c0a29cfb9f00b705f0c95d1f1efe78311f2b008f49342514ebfecbc0052b",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/test/trace.npy"
+    },
+    "source:train_log.npy": {
+      "actual": "02af8ad63423cfaebadc336f122c984a0a6b7c718db4674c62a6ddd40f9ff9dc",
+      "expected": "02af8ad63423cfaebadc336f122c984a0a6b7c718db4674c62a6ddd40f9ff9dc",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/train/log.npy"
+    },
+    "source:train_metric.npy": {
+      "actual": "8fb92322f56007f59007b102f6eb07b0cad6496b44b4292f63ced0d797956ee0",
+      "expected": "8fb92322f56007f59007b102f6eb07b0cad6496b44b4292f63ced0d797956ee0",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/train/metric.npy"
+    },
+    "source:train_timestamps.npy": {
+      "actual": "ed06402501a887099df16b0353ef4825beda2f24a74d6dae6c38b7d34de91735",
+      "expected": "ed06402501a887099df16b0353ef4825beda2f24a74d6dae6c38b7d34de91735",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/train/timestamps.npy"
+    },
+    "source:train_trace.npy": {
+      "actual": "fd49c42223e5dd99420bb5e13432b72c801e6c86e5562620e938599f74d628f2",
+      "expected": "fd49c42223e5dd99420bb5e13432b72c801e6c86e5562620e938599f74d628f2",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/train/trace.npy"
+    },
+    "trigger_config": {
+      "actual": "a2c42beb19f5a234ab74958cf3db32301524f909d5605001bdaeb9c141e3b4f8",
+      "expected": "a2c42beb19f5a234ab74958cf3db32301524f909d5605001bdaeb9c141e3b4f8",
+      "ok": true,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p6_c0_system_trigger.json"
+    }
+  },
+  "input_binding_status": "PASS",
+  "limitations": [
+    "C0F-U1: concurrent onsets can carry a score crossing that is not attributable to the event under audit; clean-window coverage is descriptive and does not establish causal attribution",
+    "C0F-U2: the frozen registry has no injections between 15 s and 300 s and no cpu_anomalies in Fit/Validation, so duration and fault-type effects cannot be separated",
+    "C0F-U3: whether the IGNORE band, the recent-onset objective, the representation or telemetry observability causes the sustained-state behaviour is not identifiable from these artifacts; no causal mechanism is claimed",
+    "C0F-U4: historical Fit/Validation inference source bytes were not archived; their exact executing source remains UNVERIFIED. This correction binds reused score bytes and its own source, without relabeling the historical execution commit."
+  ],
+  "missing_outputs": [],
+  "oracle_status": {
+    "fit": "EXACT",
+    "test": "EXACT",
+    "validation": "EXACT"
+  },
+  "required_outputs": {
+    "analysis_validation.json": {
+      "bytes": 296,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/analysis_validation.json",
+      "sha256": "ad7a15071946ca8749cbfc26c134304b3771c8e610fe1b8b2bbb81c01767fdde"
+    },
+    "audit_config.json": {
+      "bytes": 3064,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/audit_config.json",
+      "sha256": "6e66534cd7adb078d7342fd189a891d59e8dd1b9c893868cbf06f92c34c6c820"
+    },
+    "capacity_summary.json": {
+      "bytes": 13508,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/capacity_summary.json",
+      "sha256": "aaa4fe3bc740aad3c1b97dac8a8c9224fcdc766b59e693f2b07a678139eccbda"
+    },
+    "confounding_tables.json": {
+      "bytes": 196447,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/confounding_tables.json",
+      "sha256": "676bf2913aefd265292b4d25c6c8fc11d9bec5813f5aebf9a3d7a6e49933487d"
+    },
+    "correction_summary.json": {
+      "bytes": 1427,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/correction_summary.json",
+      "sha256": "95cdd9d0c51a29a47d84b851a8dda40c3d56e877203793781c4701a6852db181"
+    },
+    "decision.json": {
+      "bytes": 21910,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/decision.json",
+      "sha256": "3cdf539f1bfe2367c9e0e34430118a565645a293138e121970832cce7984c552"
+    },
+    "event_failure_ledger.csv": {
+      "bytes": 6113021,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/event_failure_ledger.csv",
+      "sha256": "f153b2780ee9fe15af5777297da2fe44e180d131bb5358dc7c4a20969bd899a2"
+    },
+    "event_response_summary.csv": {
+      "bytes": 23447451,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/event_response_summary.csv",
+      "sha256": "2e48903d2b5796289a51572065d9997db245b6d9fc987dc79f4e879204e2a04d"
+    },
+    "event_score_trajectories.csv": {
+      "bytes": 49338534,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/event_score_trajectories.csv",
+      "sha256": "1716a852616d816a6b5da6275079a4cec688f339ae74e323f8900cedbb5889ce"
+    },
+    "evidence_ledger.json": {
+      "bytes": 7998,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/evidence_ledger.json",
+      "sha256": "eaf1b0a9bb641e3dd59c540512f03a61a793b4ebb83c7115b19f86ac7318e1fe"
+    },
+    "final_report.md": {
+      "bytes": 12767,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md",
+      "sha256": "cfac59ff1f3d4ac489a3c11b9670e43e3e8216999019e821d1711970fdfea656"
+    },
+    "input_integrity_after.json": {
+      "bytes": 227,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/input_integrity_after.json",
+      "sha256": "bc834dc3b45aa4814b8e27a6d7b15d88994488d574057dcf8e18c5647782c7e4"
+    },
+    "input_manifest.json": {
+      "bytes": 1272,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/input_manifest.json",
+      "sha256": "8a22a55fe1b951a78aa30fa6a185339f45235779a9b0c4a92852cc97f11fa972"
+    },
+    "input_snapshot.json": {
+      "bytes": 254827,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/input_snapshot.json",
+      "sha256": "1fdc4e0e3b82c9849e7e965471ee4431621aa3b8b7d9ec86f7afbc0fa5b9b87f"
+    },
+    "isolation_case_summary.csv": {
+      "bytes": 5959983,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/isolation_case_summary.csv",
+      "sha256": "3f3c898e75e65a65170417501eceb7583f709686946250ac917dcba18537dc82"
+    },
+    "isolation_summary.json": {
+      "bytes": 46108,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/isolation_summary.json",
+      "sha256": "439b4311ae6cdeeb896971b52602928cd8f8f00581b1762b7dc199338eb8cdd9"
+    },
+    "ledger_invariants.json": {
+      "bytes": 520,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/ledger_invariants.json",
+      "sha256": "a497cd0e28dc4627d27a343038ecda70ff3e2cd2c7579674175c7b0c1ebe8ab3"
+    },
+    "logs/correct.log": {
+      "bytes": 415,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/logs/correct.log",
+      "sha256": "8afb7a3b2a430632c1a291444ee25a40bbd50fc3842c82e38f92cdd9ac304aa0"
+    },
+    "observed/fit/episodes.csv": {
+      "bytes": 497699,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/observed/fit/episodes.csv",
+      "sha256": "c4d9e42c1b4e230047a78580f1d888ae1bd5b1c2c9ef70f6261184778eeb42a0"
+    },
+    "observed/fit/matching.csv": {
+      "bytes": 1273715,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/observed/fit/matching.csv",
+      "sha256": "3c3b5239515e4c9cb55aebed87d4aad3c5df125c982cdbf5b1071fabf79a98ba"
+    },
+    "observed/fit/metrics.json": {
+      "bytes": 536,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/observed/fit/metrics.json",
+      "sha256": "c30ee6162727f892068e7557ce02dfdecb0bbc498e164e6c46544c778cd5e4e3"
+    },
+    "observed/test/episodes.csv": {
+      "bytes": 378399,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/observed/test/episodes.csv",
+      "sha256": "27a1e9d5b6987a7cbaa4f118d0bd38abf1ad8cafef36d41830b857949cbbf455"
+    },
+    "observed/test/matching.csv": {
+      "bytes": 987306,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/observed/test/matching.csv",
+      "sha256": "0769d1b6736b179db7295bfe3dfd0883a20490531a786bc68f77403a77a31b33"
+    },
+    "observed/test/metrics.json": {
+      "bytes": 559,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/observed/test/metrics.json",
+      "sha256": "823fc69faa3b3e052d33a156a850b5422b58f987134d008b21c1bbfa29d083ec"
+    },
+    "observed/validation/episodes.csv": {
+      "bytes": 217552,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/observed/validation/episodes.csv",
+      "sha256": "94842697b12348cfd4c8a8f5421161652fdd67c3df57ba7c580310b1d5e1b648"
+    },
+    "observed/validation/matching.csv": {
+      "bytes": 526036,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/observed/validation/matching.csv",
+      "sha256": "8fff3e6b303a0ce11b60bcd0ae22cd84389c168d1e9d3cf647c4f36bfe1ada10"
+    },
+    "observed/validation/metrics.json": {
+      "bytes": 546,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/observed/validation/metrics.json",
+      "sha256": "2c91129f9fd9e9b506c13e6021951b998d7166ab6354d1a0576ae121387a0ae7"
+    },
+    "oracle/fit/episode_bound_matching.csv": {
+      "bytes": 1136631,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/fit/episode_bound_matching.csv",
+      "sha256": "5b43fdaa6881030f5a2269de7dc2ab32f99bd69725cc6ca689c978fc70e65486"
+    },
+    "oracle/fit/episode_bound_summary.json": {
+      "bytes": 1296,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/fit/episode_bound_summary.json",
+      "sha256": "aff7cb88d12743c89427989eb5ec5e285e95eab44b97593c6e41dcce4cc9a5a1"
+    },
+    "oracle/fit/episode_bound_witness.csv": {
+      "bytes": 696841,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/fit/episode_bound_witness.csv",
+      "sha256": "c6918650fc45e3e8eaebbab1b2dcd228e7d56476b2b4730729eb9bfdbade16cc"
+    },
+    "oracle/fit/episode_bound_witness_anchors.csv": {
+      "bytes": 109469,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/fit/episode_bound_witness_anchors.csv",
+      "sha256": "bb68115c011fdf74b06296c89672363f717fb79c916ba424a879351a2a0de2c7"
+    },
+    "oracle/fit/grid_bound_summary.json": {
+      "bytes": 600,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/fit/grid_bound_summary.json",
+      "sha256": "aac9964034e5bec31df7648d4c062fc16a22e7e64ac2d72899c36de6f1ded899"
+    },
+    "oracle/fit/grid_bound_witness.csv": {
+      "bytes": 78390,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/fit/grid_bound_witness.csv",
+      "sha256": "6dc39171b1d0cb4ae59000d2e10432fde5ed35e741152b0f087201e19970842c"
+    },
+    "oracle/fit/label_reference_episodes.csv": {
+      "bytes": 285565,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/fit/label_reference_episodes.csv",
+      "sha256": "d43125a7e1403a40355ccaf5a9ae9afa625efcd411cdc2032d8cae8e239a757f"
+    },
+    "oracle/fit/label_reference_matching.csv": {
+      "bytes": 1005329,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/fit/label_reference_matching.csv",
+      "sha256": "6e4ef967f5d53461fd193e2f430032aa04c04211789817f607b8d7cf38315963"
+    },
+    "oracle/fit/label_reference_summary.json": {
+      "bytes": 1025,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/fit/label_reference_summary.json",
+      "sha256": "7b8e769af3803c3c4a314ad39b7308bc52a6a5d6ae3fc276312eb91e18e0d735"
+    },
+    "oracle/fit/replay_validation.json": {
+      "bytes": 267,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/fit/replay_validation.json",
+      "sha256": "598036f1d2da9dee1ad75c22458fb499299d0bae7f51f08a6995ea642506e65e"
+    },
+    "oracle/fit/witness_strata.json": {
+      "bytes": 3915,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/fit/witness_strata.json",
+      "sha256": "2c0ca25c2e49e40b76a985614df452c97c820f9779b9ba1a4045756a3f0576e4"
+    },
+    "oracle/test/episode_bound_matching.csv": {
+      "bytes": 891435,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/test/episode_bound_matching.csv",
+      "sha256": "bd701d858ecc4aab3a906dcc17f9a8fc37d607a62483f2b76f7537fba785017c"
+    },
+    "oracle/test/episode_bound_summary.json": {
+      "bytes": 1323,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/test/episode_bound_summary.json",
+      "sha256": "3e756de3f816a40f561178aa77de9ee1279c74ccb87e8b28ecc58353caaedb80"
+    },
+    "oracle/test/episode_bound_witness.csv": {
+      "bytes": 418073,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/test/episode_bound_witness.csv",
+      "sha256": "cdd1cb875556972104c4e3cb20bcaf6f1dd874cb0eb46f108374bb60091572fc"
+    },
+    "oracle/test/episode_bound_witness_anchors.csv": {
+      "bytes": 82781,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/test/episode_bound_witness_anchors.csv",
+      "sha256": "8e1d150963d587bba2d72b0bc38369c10ea6ec189b56b165408c1f804d4e0c6c"
+    },
+    "oracle/test/grid_bound_summary.json": {
+      "bytes": 600,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/test/grid_bound_summary.json",
+      "sha256": "89abf4aed565ce05cc6ee646c97ef85dce5e9f452822cdb7129ebd8156d34529"
+    },
+    "oracle/test/grid_bound_witness.csv": {
+      "bytes": 59931,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/test/grid_bound_witness.csv",
+      "sha256": "83de1e7700d6f27c9e1b88282d8258548077d1006265d406503dd43e80fbbc28"
+    },
+    "oracle/test/label_reference_episodes.csv": {
+      "bytes": 206013,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/test/label_reference_episodes.csv",
+      "sha256": "bdcecbff718f79053f1d60560d1492a7093df9ec283568ed307a897214ac83f3"
+    },
+    "oracle/test/label_reference_matching.csv": {
+      "bytes": 770600,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/test/label_reference_matching.csv",
+      "sha256": "308afe85eca0b864f4835c9d15d5ee7f25cdb67e265a5116e489f0d96b8ec509"
+    },
+    "oracle/test/label_reference_summary.json": {
+      "bytes": 1014,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/test/label_reference_summary.json",
+      "sha256": "a5a9ebac9f80516cb9f347b5ac395e2c7fdf09992ad619358849dd5153f9a8d5"
+    },
+    "oracle/test/replay_validation.json": {
+      "bytes": 268,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/test/replay_validation.json",
+      "sha256": "0fd46190504daeec506561084c7448be88a531178738172645e1c71398659d92"
+    },
+    "oracle/test/witness_strata.json": {
+      "bytes": 4087,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/test/witness_strata.json",
+      "sha256": "55031d91d2e2cf882e894857ea54cc7d7fea954c820cbf8b14a4f4fdf8f7cb3a"
+    },
+    "oracle/validation/episode_bound_matching.csv": {
+      "bytes": 479132,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/validation/episode_bound_matching.csv",
+      "sha256": "12bc67ee6f90a73f9a8bf2ba0a53ff8d9ee43f4cf2202646e92e2e7ec4d8c761"
+    },
+    "oracle/validation/episode_bound_summary.json": {
+      "bytes": 1329,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/validation/episode_bound_summary.json",
+      "sha256": "c27b660775a254e89028b0c129778916d2c1a166719e71419f227e2825669974"
+    },
+    "oracle/validation/episode_bound_witness.csv": {
+      "bytes": 278665,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/validation/episode_bound_witness.csv",
+      "sha256": "8e36b020331c472b60ded13b8bc6b33b97a9dbe66bdaaa386d4413b75979b22c"
+    },
+    "oracle/validation/episode_bound_witness_anchors.csv": {
+      "bytes": 41725,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/validation/episode_bound_witness_anchors.csv",
+      "sha256": "c0b4237f8888d3850191987f2932084f3926e25230c9c56744bdb60ed86488be"
+    },
+    "oracle/validation/grid_bound_summary.json": {
+      "bytes": 600,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/validation/grid_bound_summary.json",
+      "sha256": "c94cb2921426f3f1fd291eb37ba6753a0e3e706ba77009c492b977f3469e1502"
+    },
+    "oracle/validation/grid_bound_witness.csv": {
+      "bytes": 29053,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/validation/grid_bound_witness.csv",
+      "sha256": "7da0548af1bd583f59e993871e168b404579b36db38a7b162ebd324eca34b497"
+    },
+    "oracle/validation/label_reference_episodes.csv": {
+      "bytes": 125656,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/validation/label_reference_episodes.csv",
+      "sha256": "65e58d49a17dcbf34eddbb1bb0443593598a016977a7ca44eee0705677b2b5d7"
+    },
+    "oracle/validation/label_reference_matching.csv": {
+      "bytes": 414074,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/validation/label_reference_matching.csv",
+      "sha256": "b8f172561070c316ad96f7479112ef4565a4eed4efa9a47f2cc440347e1bc904"
+    },
+    "oracle/validation/label_reference_summary.json": {
+      "bytes": 1026,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/validation/label_reference_summary.json",
+      "sha256": "3bbb1d29d26794e72dc14b89f4abd7f443397eeeb63e66fd7d109d145854d559"
+    },
+    "oracle/validation/replay_validation.json": {
+      "bytes": 274,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/validation/replay_validation.json",
+      "sha256": "03ec4e98674f8bae10ce1dae8de54316931ded3a054e699ae6ea9d42b996c00c"
+    },
+    "oracle/validation/witness_strata.json": {
+      "bytes": 3886,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/oracle/validation/witness_strata.json",
+      "sha256": "e8a354e9f8b04b553a37a4fa3a17af44fa720d86b3d8041f64e21a078f2575b9"
+    },
+    "provenance/source_snapshot/configs/e2e/gaia_p5_v3_preprocessing_v2.json": {
+      "bytes": 5077,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+      "sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35"
+    },
+    "provenance/source_snapshot/configs/e2e/gaia_p6_c0_system_trigger.json": {
+      "bytes": 4061,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/configs/e2e/gaia_p6_c0_system_trigger.json",
+      "sha256": "a2c42beb19f5a234ab74958cf3db32301524f909d5605001bdaeb9c141e3b4f8"
+    },
+    "provenance/source_snapshot/docs/P6_C0F_CORRECTION_PROTOCOL.md": {
+      "bytes": 6330,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/docs/P6_C0F_CORRECTION_PROTOCOL.md",
+      "sha256": "86b338f098fbfe7ba21782a643b384e8cc7778f8556f0c0d2ecc3d197a4bdf4b"
+    },
+    "provenance/source_snapshot/main.py": {
+      "bytes": 70,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/main.py",
+      "sha256": "0e2d1ae8d8b6e5b7b45b11cbf86edd0a7d2a50c2436470b72c470cb1dbabbf34"
+    },
+    "provenance/source_snapshot/pytest.ini": {
+      "bytes": 42,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/pytest.ini",
+      "sha256": "b160d82f7811555051f8966d8e02750a985227c1d022208c784e606946f2eada"
+    },
+    "provenance/source_snapshot/scripts/p5/__init__.py": {
+      "bytes": 46,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/__init__.py",
+      "sha256": "7d871e2fe2a9e8b4cfb106121806c39356f364006b2ae4cf8792b58c94b69f34"
+    },
+    "provenance/source_snapshot/scripts/p5/audit_injection_resolution.py": {
+      "bytes": 12794,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/audit_injection_resolution.py",
+      "sha256": "1d96cb8acc63b8fc3184c02bd8107d77f76e0915288ab830d17d5e4fe1305e1f"
+    },
+    "provenance/source_snapshot/scripts/p5/audit_label_reconciliation.py": {
+      "bytes": 14267,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/audit_label_reconciliation.py",
+      "sha256": "9993964069f4b8e97d45f10bf934d10c9f4f5fb9294a06cf78aa6525ead979d1"
+    },
+    "provenance/source_snapshot/scripts/p5/audit_p5_split_feasibility.py": {
+      "bytes": 17844,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/audit_p5_split_feasibility.py",
+      "sha256": "a8880529d9224d72c30f8d3d28a1ee5a009db2b7b7ece774184fed98061576d8"
+    },
+    "provenance/source_snapshot/scripts/p5/audit_raw_telemetry.py": {
+      "bytes": 11147,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/audit_raw_telemetry.py",
+      "sha256": "ec475d75ac2aa5d894610c100b7796617e5a6d30b0eef14a48b9c9380530ec64"
+    },
+    "provenance/source_snapshot/scripts/p5/audit_rca_compatibility.py": {
+      "bytes": 21880,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/audit_rca_compatibility.py",
+      "sha256": "24cc1ee021483e18acbe3112c24667dbe2f139bea4759bbfb3352cb5f791e948"
+    },
+    "provenance/source_snapshot/scripts/p5/build_audit_manifest.py": {
+      "bytes": 2493,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/build_audit_manifest.py",
+      "sha256": "3ee6aad18efc69d3d73ce6da4c062e63e7e0772217eca70bcd86cd6732c20e42"
+    },
+    "provenance/source_snapshot/scripts/p5/build_historical_reuse_and_ledger.py": {
+      "bytes": 25902,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/build_historical_reuse_and_ledger.py",
+      "sha256": "afe288f92cf66bf1ff9cb951d171e668e05b42b3c0ec356dbdc620e6be90a4fb"
+    },
+    "provenance/source_snapshot/scripts/p5/build_i1_protocol.py": {
+      "bytes": 7222,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/build_i1_protocol.py",
+      "sha256": "01fc6961852363f7054bd444d9cb4efb6c78572265918d81126a19d3964986ca"
+    },
+    "provenance/source_snapshot/scripts/p5/build_v3_gt.py": {
+      "bytes": 3948,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/build_v3_gt.py",
+      "sha256": "42fb15551ba8af07a788bc9aaa37df020f8e13a4aa1c366a313c6e1d975ed842"
+    },
+    "provenance/source_snapshot/scripts/p5/build_v3_protocol.py": {
+      "bytes": 5455,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/build_v3_protocol.py",
+      "sha256": "a0e51795c64374acb37b4d4143c48eb8d3a5280fd348d586162b10cc17d7e3a7"
+    },
+    "provenance/source_snapshot/scripts/p5/capture_repository_state.py": {
+      "bytes": 3669,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/capture_repository_state.py",
+      "sha256": "2c81c438809f730fa569c96b7d0755bde6ec130c14e4f61967e5d7d9bbd3d2a8"
+    },
+    "provenance/source_snapshot/scripts/p5/common.py": {
+      "bytes": 3566,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/common.py",
+      "sha256": "7c1fc3396977b48f2b5901029c8feeb9c4e2035baf67bacae60ae4bce2bdd567"
+    },
+    "provenance/source_snapshot/scripts/p5/finalize_i1_manifest.py": {
+      "bytes": 5414,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/finalize_i1_manifest.py",
+      "sha256": "93bef9f9a8fc17a16038ad96f435a95a4eb0a037db67f0e58780b4a12163ecb5"
+    },
+    "provenance/source_snapshot/scripts/p5/finalize_v3_manifest.py": {
+      "bytes": 15791,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/finalize_v3_manifest.py",
+      "sha256": "c1ceef832fc5c8c45c51c99eebe9541b44ac62254edc8bbc6ed26bc53b380400"
+    },
+    "provenance/source_snapshot/scripts/p5/revalidate_gaia_events.py": {
+      "bytes": 20835,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/revalidate_gaia_events.py",
+      "sha256": "f2c715885e553d5b682c487ff6e760208a8ced752ba49fef336e612b5ed45666"
+    },
+    "provenance/source_snapshot/scripts/p5/run_i1_ad.py": {
+      "bytes": 29488,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/run_i1_ad.py",
+      "sha256": "5f27390371e8b9fc4cd14dd765087ba1cc987aace57b59aaf6a0b2c42408fe4a"
+    },
+    "provenance/source_snapshot/scripts/p5/run_i1_e2e.py": {
+      "bytes": 28779,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/run_i1_e2e.py",
+      "sha256": "a103eebce86a4fc58866d98ee1c7f010620721810880740c9f2b85ed849ad168"
+    },
+    "provenance/source_snapshot/scripts/p5/run_i1_events.py": {
+      "bytes": 9162,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/run_i1_events.py",
+      "sha256": "607ff1d6300e192dc851e458b7614e67faad47cac56834335e9c6b805bd0482d"
+    },
+    "provenance/source_snapshot/scripts/p5/run_i1_pipeline.py": {
+      "bytes": 20781,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/run_i1_pipeline.py",
+      "sha256": "648c332d2e183461a9f8092c42e1c9ee6066f4334741733d03b7bdd9cbb22d87"
+    },
+    "provenance/source_snapshot/scripts/p5/run_i1_rca.py": {
+      "bytes": 26045,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/run_i1_rca.py",
+      "sha256": "eb9e902cfaaef34f232b42b8bfceff6731f20f330946cb8e324253f49943c72d"
+    },
+    "provenance/source_snapshot/scripts/p5/run_i1_rca_features.py": {
+      "bytes": 31322,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/run_i1_rca_features.py",
+      "sha256": "b6f8f3d696036b3a95a4d5b335c0e23989f5e89571f9386c7cc834b1f3460b12"
+    },
+    "provenance/source_snapshot/scripts/p5/validate_p5_audit.py": {
+      "bytes": 7075,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5/validate_p5_audit.py",
+      "sha256": "bf11227b81e0ce7864ac171019f46c19c3898f495aaf0beeb801852e9c83dacb"
+    },
+    "provenance/source_snapshot/scripts/p5_v2/audit_gt/audit_gt_taxonomy.py": {
+      "bytes": 32064,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5_v2/audit_gt/audit_gt_taxonomy.py",
+      "sha256": "d8588dcc430f4eca83acacb1dbd45672ad9f8427eab81716f3d1b8b65e262bcf"
+    },
+    "provenance/source_snapshot/scripts/p5_v2/audit_merge/merge_split_audit.py": {
+      "bytes": 17209,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5_v2/audit_merge/merge_split_audit.py",
+      "sha256": "3f070bc8cfbfbc2b6080c2c544cd879b2aa75152c3a8fa54a6f2aaafe3de2713"
+    },
+    "provenance/source_snapshot/scripts/p5_v2/audit_telemetry/build_timeline.py": {
+      "bytes": 5216,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p5_v2/audit_telemetry/build_timeline.py",
+      "sha256": "7c2a5ec042a6d0dfd8bc7738230abac92cf584dfaabf48ac79e1a76eb6f18fba"
+    },
+    "provenance/source_snapshot/scripts/p6/__init__.py": {
+      "bytes": 69,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p6/__init__.py",
+      "sha256": "492d5fd80c8ac52269b699f7d1d01fa58503f6bb0b7ebbfd4d1cbdc1b4f61129"
+    },
+    "provenance/source_snapshot/scripts/p6/audit_c0_failure.py": {
+      "bytes": 95981,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p6/audit_c0_failure.py",
+      "sha256": "23e24947694c6cb56a4d7d9adb7a24cd6ccebec7aeec65bdc07c57745a9226ee"
+    },
+    "provenance/source_snapshot/scripts/p6/audit_e2e_failure.py": {
+      "bytes": 32941,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p6/audit_e2e_failure.py",
+      "sha256": "84869a8b8e5caa5c3cdcf76e31be97091c69c193a3da9b9606ec57a7791b79c5"
+    },
+    "provenance/source_snapshot/scripts/p6/run_c0_trigger.py": {
+      "bytes": 59683,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p6/run_c0_trigger.py",
+      "sha256": "c46ddd4e8182c4e5afc58d143a297a18acac6ca62ddf39d6a676595ad0f11628"
+    },
+    "provenance/source_snapshot/scripts/p6/run_score_decomposition.py": {
+      "bytes": 58714,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/scripts/p6/run_score_decomposition.py",
+      "sha256": "83c72e66a19af725b2121bfb7054ffa796a50080c130d24e2c7286054b941cbe"
+    },
+    "provenance/source_snapshot/src/__init__.py": {
+      "bytes": 31,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/__init__.py",
+      "sha256": "de3b23545d4ca965dd14ae6f7223e3d090294714fdd785bb23f3916112261cd5"
+    },
+    "provenance/source_snapshot/src/e2e/__init__.py": {
+      "bytes": 228,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/__init__.py",
+      "sha256": "6b59d1a05b7a930ffa6a570b83dc029e6f5b8e184f16d8e2ff8dea663f36bd30"
+    },
+    "provenance/source_snapshot/src/e2e/ad_data.py": {
+      "bytes": 9619,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/ad_data.py",
+      "sha256": "ee2e3e402c7d392cc4ad94a443e1e138a8477cf83b516a8eb0ecfefc9a03f504"
+    },
+    "provenance/source_snapshot/src/e2e/ad_preprocess.py": {
+      "bytes": 2017,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/ad_preprocess.py",
+      "sha256": "b51ac1d79f8182e761868228d1dd777f9761b26acd981b9cf672fa75f5a25086"
+    },
+    "provenance/source_snapshot/src/e2e/calibration.py": {
+      "bytes": 2964,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/calibration.py",
+      "sha256": "f569e86f3e8feea55f3f2087bbf1ffb335783fc1752ab477147a0d98ca969d75"
+    },
+    "provenance/source_snapshot/src/e2e/e2e_evaluation.py": {
+      "bytes": 10051,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/e2e_evaluation.py",
+      "sha256": "12cb4d810fddaf41581081ed75e6a34b69eea15bf93d9a7d20f259b2ebfd0989"
+    },
+    "provenance/source_snapshot/src/e2e/event_detection.py": {
+      "bytes": 27000,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/event_detection.py",
+      "sha256": "115819a5e8162f116da109dfbb584b755b12dc508d51dba7449d43b0734d837a"
+    },
+    "provenance/source_snapshot/src/e2e/experiment_layout.py": {
+      "bytes": 18248,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/experiment_layout.py",
+      "sha256": "2e11538a73ea19947d20928718e3bbfe3105c95d1a7a873f04529dde4068d0d6"
+    },
+    "provenance/source_snapshot/src/e2e/gaia_preprocessing/__init__.py": {
+      "bytes": 600,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/gaia_preprocessing/__init__.py",
+      "sha256": "23406b5d58ad05712310eb6938054b983ca8f018d4b967165e6938079caacef6"
+    },
+    "provenance/source_snapshot/src/e2e/gaia_preprocessing/logs.py": {
+      "bytes": 5592,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/gaia_preprocessing/logs.py",
+      "sha256": "65d0e5e2ac4bbb542ec22531efd2a5da6a5673c5187433c54ee982f7231b5b9c"
+    },
+    "provenance/source_snapshot/src/e2e/gaia_preprocessing/materialize.py": {
+      "bytes": 15828,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/gaia_preprocessing/materialize.py",
+      "sha256": "e3a142ab8bc22e19c6accfccc7ad0f42e38bf80b0f0140e692861473ad0895ed"
+    },
+    "provenance/source_snapshot/src/e2e/gaia_preprocessing/metric.py": {
+      "bytes": 9797,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/gaia_preprocessing/metric.py",
+      "sha256": "cc8b0da3492bbfccf69c7287cc60646f2be788a81dc957722ce041460d8b22ef"
+    },
+    "provenance/source_snapshot/src/e2e/gaia_preprocessing/raw.py": {
+      "bytes": 53026,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/gaia_preprocessing/raw.py",
+      "sha256": "feeb15d9e0678102c7a042a4a378cf487c02cd0eee46ede97c5abe660bb7830d"
+    },
+    "provenance/source_snapshot/src/e2e/gaia_preprocessing/schema.py": {
+      "bytes": 8888,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/gaia_preprocessing/schema.py",
+      "sha256": "909660b89bdca9c9783caaec1876b04e29baa2f5c0a34239b04e188f393802c7"
+    },
+    "provenance/source_snapshot/src/e2e/gaia_preprocessing/traces.py": {
+      "bytes": 11844,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/gaia_preprocessing/traces.py",
+      "sha256": "89b75654e59a24dded4c365ed5d4f7acdc10a8f9f653b1a650956ce2523313a4"
+    },
+    "provenance/source_snapshot/src/e2e/gaia_rca_adapter.py": {
+      "bytes": 33739,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/gaia_rca_adapter.py",
+      "sha256": "657c2bff29c4a07c85b2ea3e01e030bb9344458c0a8b46805593c81c2f9b17c0"
+    },
+    "provenance/source_snapshot/src/e2e/gt.py": {
+      "bytes": 15674,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/gt.py",
+      "sha256": "4cf7f3274eda51ebad2134940255d5c5bc08d25c500f2016f5edfc4d30270fad"
+    },
+    "provenance/source_snapshot/src/e2e/parallel.py": {
+      "bytes": 7011,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/parallel.py",
+      "sha256": "9230cce0405d9e459ee38c03c0270c27985a9007ab438a4c6a3933e1e85a35aa"
+    },
+    "provenance/source_snapshot/src/e2e/protocol.py": {
+      "bytes": 16271,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/protocol.py",
+      "sha256": "5e4ae346db695b1d8059a00df82c22ea3177f66a81a0339f9f9d8318f3a1d86b"
+    },
+    "provenance/source_snapshot/src/e2e/rca_features.py": {
+      "bytes": 19566,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/rca_features.py",
+      "sha256": "3d13755621121586e8b87b663d3b15a81a74353d7921966496d8181baac49be8"
+    },
+    "provenance/source_snapshot/src/e2e/rca_model.py": {
+      "bytes": 19257,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/rca_model.py",
+      "sha256": "63a79c1e4408342fe6a1709e49e13f16d43bc0a71e699a2e14fd39952ad8d5cc"
+    },
+    "provenance/source_snapshot/src/e2e/score_decomposition.py": {
+      "bytes": 25281,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/score_decomposition.py",
+      "sha256": "fc59dc948c28b47b0592093ec1e1a36c76206948c9620a7be8b1752b05290049"
+    },
+    "provenance/source_snapshot/src/e2e/system_trigger.py": {
+      "bytes": 26271,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/system_trigger.py",
+      "sha256": "89cb54355cfebe54147c9788eda0822de659bed7db2f9fba03cc15ebc59102f0"
+    },
+    "provenance/source_snapshot/src/e2e/system_trigger_audit_provenance.py": {
+      "bytes": 7732,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/system_trigger_audit_provenance.py",
+      "sha256": "2e25bf99b489e8b8775ce0b9de86530ea5494607fa4fe645e8389daaf7ab6e84"
+    },
+    "provenance/source_snapshot/src/e2e/system_trigger_capacity.py": {
+      "bytes": 17270,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/system_trigger_capacity.py",
+      "sha256": "e5b69e9d34c81b2497adbcd5ad2b7f73b449d571604dd012d64d1c37679a8d2f"
+    },
+    "provenance/source_snapshot/src/e2e/system_trigger_data.py": {
+      "bytes": 6650,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/system_trigger_data.py",
+      "sha256": "14c6c7986884af9b06ec99c3e5aac024f4a3c92cda02ebbf44bf2e8f731bef2a"
+    },
+    "provenance/source_snapshot/src/e2e/system_trigger_failure_audit.py": {
+      "bytes": 36124,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/system_trigger_failure_audit.py",
+      "sha256": "42cc6a728421f2d13a6a593cf8c01ab36da9173c59d35aeb05eb0098dea106bf"
+    },
+    "provenance/source_snapshot/src/e2e/system_trigger_model.py": {
+      "bytes": 6284,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/e2e/system_trigger_model.py",
+      "sha256": "dd6fa9e6eaf3cbdb530541b11fc6e92d2bf9ba0f58f187dd0377379f64d38472"
+    },
+    "provenance/source_snapshot/src/model.py": {
+      "bytes": 8244,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/model.py",
+      "sha256": "edfbbf06e1b17927ca766fa5c9e91fb62ad8a47380df6da5cf27d3a558e0d635"
+    },
+    "provenance/source_snapshot/src/model_util.py": {
+      "bytes": 26493,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/src/model_util.py",
+      "sha256": "39401ae1bfc326fa776fbac66854662c1fa51613e2ef901c65d697fe20c25faa"
+    },
+    "provenance/source_snapshot/tests/test_experiment_layout.py": {
+      "bytes": 5380,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_experiment_layout.py",
+      "sha256": "01d12c0683afe1ef8a0c2b9f4a07f80bdbed2853c51c7e23f86ac62101edf506"
+    },
+    "provenance/source_snapshot/tests/test_gaia_preprocessing_v2.py": {
+      "bytes": 16692,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_gaia_preprocessing_v2.py",
+      "sha256": "efb3f9d697942fd0a15d75c5d51ec50abdcd57cda659a220c7538ac8faad84a3"
+    },
+    "provenance/source_snapshot/tests/test_gaia_raw_adapters.py": {
+      "bytes": 10623,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_gaia_raw_adapters.py",
+      "sha256": "3b53f26e163884a0cfc0ce9cd4e254d8b987985ffd244e053958b78782c6f678"
+    },
+    "provenance/source_snapshot/tests/test_model_util_equivalence.py": {
+      "bytes": 1641,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_model_util_equivalence.py",
+      "sha256": "8beef78399931626e740f156f6d6e641f99429bc3a3e9751a9692ba45599c7fe"
+    },
+    "provenance/source_snapshot/tests/test_p5_ad_artifact_roots.py": {
+      "bytes": 2755,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_ad_artifact_roots.py",
+      "sha256": "007c572d91bef9614bb8a865945062438f5f4b42c4120d17ea71ffff86c78ea0"
+    },
+    "provenance/source_snapshot/tests/test_p5_ad_data.py": {
+      "bytes": 3045,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_ad_data.py",
+      "sha256": "a835ee1b71ab8099cbef3b2b1c5e64097291fa569ff16d62b0b89a697a998f1a"
+    },
+    "provenance/source_snapshot/tests/test_p5_e2e_evaluation.py": {
+      "bytes": 4168,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_e2e_evaluation.py",
+      "sha256": "1ebc7f697eb83ecc4406f510052d9ae9a527fe4c1ebcf74ee7385dffefed700b"
+    },
+    "provenance/source_snapshot/tests/test_p5_e2e_integration.py": {
+      "bytes": 4659,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_e2e_integration.py",
+      "sha256": "e23b32ff5ea764f6b7865865f625ccf76cb72b075b39ef9800dfd1b625ecaa95"
+    },
+    "provenance/source_snapshot/tests/test_p5_event_detection.py": {
+      "bytes": 9387,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_event_detection.py",
+      "sha256": "bf96dca99c639c4b733f679906a34740e997ef8cc7449246d44f33b46d781e8f"
+    },
+    "provenance/source_snapshot/tests/test_p5_experiment_pipeline.py": {
+      "bytes": 10102,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_experiment_pipeline.py",
+      "sha256": "38685a268e4615b72de328bc5fad55af98322e6dc778f53bf291de0561cff5a3"
+    },
+    "provenance/source_snapshot/tests/test_p5_gaia_rca_adapter.py": {
+      "bytes": 5357,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_gaia_rca_adapter.py",
+      "sha256": "719807fdaf5bc83c52a7fd1414ffb42c3de385a57c705ceed833b076428242d0"
+    },
+    "provenance/source_snapshot/tests/test_p5_parallel.py": {
+      "bytes": 1920,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_parallel.py",
+      "sha256": "17552c4b51f78ca7e4dd01276eabe8ad5d54427e8fb864982352d6998011e891"
+    },
+    "provenance/source_snapshot/tests/test_p5_pipeline_lock.py": {
+      "bytes": 683,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_pipeline_lock.py",
+      "sha256": "3f2ea4a0db50450db682cbc103fc6afa2abdfe87c619b6f23a1ad29ed6cddba9"
+    },
+    "provenance/source_snapshot/tests/test_p5_protocol.py": {
+      "bytes": 5532,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_protocol.py",
+      "sha256": "4f82a2ac4253da44f9777b55fbd5ccbd14227ea9d2b61ba0465c29b9fd286b37"
+    },
+    "provenance/source_snapshot/tests/test_p5_rca_features.py": {
+      "bytes": 4228,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_rca_features.py",
+      "sha256": "4806b92f96a14a37564d21ca997e22811729cb5ab4b7b406b12225d6352baffd"
+    },
+    "provenance/source_snapshot/tests/test_p5_rca_model.py": {
+      "bytes": 2926,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_rca_model.py",
+      "sha256": "f88b5643be16910edfdee5bcaba0e008a9e1a9e53f0c5e0f723e5e780476f433"
+    },
+    "provenance/source_snapshot/tests/test_p5_rca_training_integration.py": {
+      "bytes": 2435,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_rca_training_integration.py",
+      "sha256": "7dbce0d9d66177a622c84a464abc86f73fc1e1ea58e1ae1a0b7a2386b0f7b875"
+    },
+    "provenance/source_snapshot/tests/test_p5_training_logging.py": {
+      "bytes": 911,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_training_logging.py",
+      "sha256": "740e10ed3c923a70499ae8a1849ba6674326fc995c8efca4807e1ee4bb533cb7"
+    },
+    "provenance/source_snapshot/tests/test_p5_v2_output_paths.py": {
+      "bytes": 3530,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_v2_output_paths.py",
+      "sha256": "2d7a7eddb9fb1fd9d2589e77ca84d68b1142c20d9cfe89f8151619ad74b3c6fd"
+    },
+    "provenance/source_snapshot/tests/test_p5_v3_calibration_training.py": {
+      "bytes": 4522,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_v3_calibration_training.py",
+      "sha256": "58cf6b95cdd72ffa57d7ace3ca5d0d9a4385e75e86150ec9cf9bdffc23f8cf49"
+    },
+    "provenance/source_snapshot/tests/test_p5_v3_event_protocol.py": {
+      "bytes": 3106,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_v3_event_protocol.py",
+      "sha256": "9c85e83b7939e4b65e0e8121c09113330bc0ec8447579cf9037d11dab77cc23b"
+    },
+    "provenance/source_snapshot/tests/test_p5_v3_protocol.py": {
+      "bytes": 4564,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_v3_protocol.py",
+      "sha256": "329e9350b1d1ecaeac77255786703f2d73bc7ecafe482c2b41a2010343c24cbf"
+    },
+    "provenance/source_snapshot/tests/test_p5_v3_rca_pipeline.py": {
+      "bytes": 9614,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p5_v3_rca_pipeline.py",
+      "sha256": "4ae3aa6ab0022db2e16a7f292627671abf8fc14c142eec32f1f0f86f3cc62bf7"
+    },
+    "provenance/source_snapshot/tests/test_p6_c0_trigger_model.py": {
+      "bytes": 20374,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p6_c0_trigger_model.py",
+      "sha256": "a70618b9987bf4d98c76a906e4e654d1e81eefb308da1d763a3b736129dc4082"
+    },
+    "provenance/source_snapshot/tests/test_p6_c0_trigger_protocol.py": {
+      "bytes": 26327,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p6_c0_trigger_protocol.py",
+      "sha256": "4eed87793df8c6ff9ba7b0847d951bf63fa6a595e654c744a152832f1f8c90d8"
+    },
+    "provenance/source_snapshot/tests/test_p6_c0f_capacity.py": {
+      "bytes": 9786,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p6_c0f_capacity.py",
+      "sha256": "cee959db71d361954d055062749c7587ea35f6618d7f60905628d05412cdeca2"
+    },
+    "provenance/source_snapshot/tests/test_p6_c0f_corrections.py": {
+      "bytes": 15651,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p6_c0f_corrections.py",
+      "sha256": "db7c5127b51f3d3074804132efa408d817903caad262e437fd88a49d1198d116"
+    },
+    "provenance/source_snapshot/tests/test_p6_c0f_failure_audit.py": {
+      "bytes": 16344,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p6_c0f_failure_audit.py",
+      "sha256": "1c2e64430285c35486081db1911d41bc337f6e7539657d7240ce3fcda490302b"
+    },
+    "provenance/source_snapshot/tests/test_p6_score_decomposition.py": {
+      "bytes": 26598,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/tests/test_p6_score_decomposition.py",
+      "sha256": "31f13d5d456058d04a150ae21a00d48dbb5ec3ccff974d70739eeed71e43c996"
+    },
+    "provenance/source_snapshot/util/GAIA/__init__.py": {
+      "bytes": 33,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/GAIA/__init__.py",
+      "sha256": "a84f6c832b04612dcb00fdb1e34c14466205372fecb3cf90887927d5b94f27ed"
+    },
+    "provenance/source_snapshot/util/GAIA/constant.py": {
+      "bytes": 760,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/GAIA/constant.py",
+      "sha256": "b2c84ff57a3001bfc97c5859bd5bd236ccb13918ac0ad8ee6bd3444545b8e346"
+    },
+    "provenance/source_snapshot/util/GAIA/data_GAIA.py": {
+      "bytes": 21215,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/GAIA/data_GAIA.py",
+      "sha256": "95e31ffbd2c168daa4191389a61731c9764f42b12e5d3ff11640ea56d4f99adc"
+    },
+    "provenance/source_snapshot/util/GAIA/parser_GAIA.py": {
+      "bytes": 7024,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/GAIA/parser_GAIA.py",
+      "sha256": "b2f99333e2abd56f3c86c8cbf30f923fe6cf48d8b880afb1b5ee6e5c7d549deb"
+    },
+    "provenance/source_snapshot/util/GAIA/pre_GAIA.py": {
+      "bytes": 40452,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/GAIA/pre_GAIA.py",
+      "sha256": "82b71e4a2a597012561584d42ba9bb829299e93c478506cc34e313c83ed9f90c"
+    },
+    "provenance/source_snapshot/util/MSDS/__init__.py": {
+      "bytes": 1,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/MSDS/__init__.py",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    "provenance/source_snapshot/util/MSDS/constant.py": {
+      "bytes": 67,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/MSDS/constant.py",
+      "sha256": "5df89daf96fbcef83ba950f7279c52539b76e7ee25aa4a9b90959951fec440d7"
+    },
+    "provenance/source_snapshot/util/MSDS/data_MSDS.py": {
+      "bytes": 9480,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/MSDS/data_MSDS.py",
+      "sha256": "e74f8772eff13fbf9c2410fa9c404afbd814dc087168f8bea4c344fb3de4196d"
+    },
+    "provenance/source_snapshot/util/MSDS/parser_MSDS.py": {
+      "bytes": 6763,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/MSDS/parser_MSDS.py",
+      "sha256": "6cace37c860721682eec73ffd992d911c62b295fa7b7d1fa679bad577055cb53"
+    },
+    "provenance/source_snapshot/util/MSDS/pre_MSDS.py": {
+      "bytes": 8539,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/MSDS/pre_MSDS.py",
+      "sha256": "53cb060083b47a4daa63c0365a748b4c612027ed9c7eabc4c1f0667a7eb1c9f8"
+    },
+    "provenance/source_snapshot/util/runtime.py": {
+      "bytes": 3821,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/runtime.py",
+      "sha256": "9d49b59088c91d2c3ca16de42a8e8fac9d5064d933d1301dfe8e6f37504e3832"
+    },
+    "provenance/source_snapshot/util/runtime_config.py": {
+      "bytes": 7886,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/runtime_config.py",
+      "sha256": "b7ed33b4310c589025bb16aafb08434a7eb8fa25c0a92bccc2a785610fdcaa68"
+    },
+    "provenance/source_snapshot/util/train.py": {
+      "bytes": 28316,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/train.py",
+      "sha256": "89c8143cbdafd192764c3ffa18f14d45bb79c0b0b8b065e8f2f8fa51b3aa1c0b"
+    },
+    "provenance/source_snapshot/util/util.py": {
+      "bytes": 3429,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/source_snapshot/util/util.py",
+      "sha256": "dbd57c0f0eb7303c02f9c6ac20d9b14a3527ef189ce733ffd54ac68db9cf0651"
+    },
+    "provenance/working_tree.diff": {
+      "bytes": 102305,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/provenance/working_tree.diff",
+      "sha256": "39539235aeb679ee3d8cc72de4b095f0cc38416af5eaba893eb1a65c0a449f8f"
+    },
+    "reuse_provenance.json": {
+      "bytes": 1297,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/reuse_provenance.json",
+      "sha256": "5d40d373429d92073ad1f677ed930107abdcfec9973afa3fd940c00d79a6ad82"
+    },
+    "run_state.json": {
+      "bytes": 70344,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/run_state.json",
+      "sha256": "4f58cdf5cf3c06bcc2b8ea3b12a608c6c9287a8a996a4ae0007f2a3cede3fb78"
+    },
+    "scores/fit.csv": {
+      "bytes": 6159468,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/scores/fit.csv",
+      "sha256": "140c58508263cd5c5fca280cac284c6d3e52798275eb40b36c8921f9a797687b"
+    },
+    "scores/validation.csv": {
+      "bytes": 2591810,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/scores/validation.csv",
+      "sha256": "5b5e592636753ada3615ff4c373ef739660dcc5196908a78bceb9eb85892ce2f"
+    },
+    "source_integrity.json": {
+      "bytes": 8617,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/source_integrity.json",
+      "sha256": "ae61ded34933922feea8dad052f115aa50abf7c311593f0a49f47b5e73270e73"
+    },
+    "source_snapshot.json": {
+      "bytes": 27487,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/source_snapshot.json",
+      "sha256": "808bb33502694359a809657c56db3bc4ecf1a67887e45ba4c7949e67009d17fe"
+    },
+    "split_population_checks.json": {
+      "bytes": 968,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/split_population_checks.json",
+      "sha256": "e5cad5ac9211384da9c73c83304625bb4274585228b1b733edd92f4352dfd820"
+    },
+    "stratified_summary.json": {
+      "bytes": 38692,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/stratified_summary.json",
+      "sha256": "c3d3148227ad27756001b6d6b7ba1fadb603e390741e29fad34fcb8292c4962e"
+    },
+    "test_artifact_verification.json": {
+      "bytes": 1286,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/test_artifact_verification.json",
+      "sha256": "0385232d6ff22eb82747264c9bdf7a4d0f6b4112b40a5edc9675ec12ddd72282"
+    },
+    "test_results.json": {
+      "bytes": 1478,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/test_results.json",
+      "sha256": "001ef8cbe1e1997d6a608df763aefb994e5d99b6e932f97de0c4cf88b4aa504e"
+    },
+    "validation/pytest.log": {
+      "bytes": 344,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/validation/pytest.log",
+      "sha256": "d0a0af5bb2431e5280ff5b3de31a8e655f60caad22632553e1226980c84bb4e7"
+    },
+    "validation/pytest.xml": {
+      "bytes": 17581,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/validation/pytest.xml",
+      "sha256": "ab9d6c61b8e7d20869287bea56f8e5251bdab7a3d84f0abe9628162c85e978fc"
+    },
+    "validation/test_results.json": {
+      "bytes": 1211,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/validation/test_results.json",
+      "sha256": "573ff5783a4d2215ff049bb54d4723d3c0ebe27aa84490ebeec420906c638898"
+    },
+    "validation_replay.json": {
+      "bytes": 1781,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/validation_replay.json",
+      "sha256": "e802370c18a4bc38e497d3ab398705a0434f91bbe8c02dbf1710c7f1ad904360"
+    }
+  },
+  "run_id": "c0f-correction-20260923T0755Z",
+  "run_state_final_status": "COMPLETE",
+  "schema_version": "p6_c0f_failure_audit_v2",
+  "source_digest": "afbcf349692e2746ab99e961b15bb3bf129b8205c3ca9d62ee6e3f3d7716b720",
+  "source_identity": "HEAD plus the archived working-tree source bytes; not a claim of a clean committed execution",
+  "status": "COMPLETE",
+  "tests": {
+    "command": [
+      "/home/zhangll24/miniconda3/envs/DAG/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--junitxml=/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/validation/pytest.xml",
+      "tests/test_p6_c0_trigger_model.py",
+      "tests/test_p6_c0_trigger_protocol.py",
+      "tests/test_p6_c0f_capacity.py",
+      "tests/test_p6_c0f_corrections.py",
+      "tests/test_p6_c0f_failure_audit.py"
+    ],
+    "exit_code": 0,
+    "files": {
+      "pytest.log": {
+        "bytes": 344,
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/validation/pytest.log",
+        "sha256": "d0a0af5bb2431e5280ff5b3de31a8e655f60caad22632553e1226980c84bb4e7"
+      },
+      "pytest.xml": {
+        "bytes": 17581,
+        "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/validation/pytest.xml",
+        "sha256": "ab9d6c61b8e7d20869287bea56f8e5251bdab7a3d84f0abe9628162c85e978fc"
+      }
+    },
+    "precheck_record": {
+      "bytes": 1175,
+      "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/code-checks-20260923T075346Z/test_results.json",
+      "sha256": "51017a28cf2e25a31b463a4d5ead6ec19bc3062006a0f72ce40da0a60dbc43df"
+    },
+    "runtime_seconds": 71.27633641194552,
+    "source_digest": "afbcf349692e2746ab99e961b15bb3bf129b8205c3ca9d62ee6e3f3d7716b720"
+  }
+}
