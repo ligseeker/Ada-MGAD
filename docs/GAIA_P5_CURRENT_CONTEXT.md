@@ -4,15 +4,15 @@
 
 更新时间：2026-09-23（Asia/Shanghai）
 
-**当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计和 P6-C0 系统级触发实验已完成。P6-C0 的 aggregate gate 为 PASS，正式 verdict 仍为 BORDERLINE，尚未运行新 RCA/E2E。P6-C0F 于 2026-09-19 运行；2026-09-23 的独立更正审计已完成，状态为 `COMPLETE_WITH_DECLARED_LIMITATIONS`。下一步是归档更正证据，并另行决定是否制定 C0R2 或 C1 协议。**
+**当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计和 P6-C0 系统级触发实验已完成。P6-C0 的 aggregate gate 为 PASS，正式 verdict 仍为 BORDERLINE，尚未运行新 RCA/E2E。P6-C0F 于 2026-09-19 运行；2026-09-23 的独立更正审计已完成并归档，状态为 `COMPLETE_WITH_DECLARED_LIMITATIONS`。C1→C2 主线和 C0R2 条件支线的后续方案已保存，具体执行协议尚未冻结。**
 
-后续 coding agent 先读本文件、[C0F 更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) 与 [更正协议](P6_C0F_CORRECTION_PROTOCOL.md)，再读 [P6 研究路线](P6_RESEARCH_ROADMAP.md) 和 [C0F 原实施方案](P6_C0F_FAILURE_MECHANISM_AUDIT_PLAN.md)。路线图和原方案的“C0F 尚未执行”段落是 2026-09-18 的历史状态，不是当前状态。
+后续 coding agent 先读本文件、[C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md)、[C0F 更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) 与 [更正协议](P6_C0F_CORRECTION_PROTOCOL.md)，再读 [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md)、[P6 研究路线](P6_RESEARCH_ROADMAP.md) 和 [C0F 原实施方案](P6_C0F_FAILURE_MECHANISM_AUDIT_PLAN.md)。路线图和原方案的“C0F 尚未执行”段落是 2026-09-18 的历史状态，不是当前状态。
 
 ## 1. 项目身份与研究边界
 
 - 工作目录：`/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2`
 - 当前分支：`e2e-v2`
-- 本次文档更新时核对的 HEAD：`d518c17f4a76ddb30e9bfaeb33fecc982fad3f21`，有未提交 C0F 更正源码/文档；更正 run 通过 `source_snapshot.json` 归档实际工作树源码，source digest 为 `afbcf349692e2746ab99e961b15bb3bf129b8205c3ca9d62ee6e3f3d7716b720`。P5 执行 commit 为 `7dea779fc5196218a43d86a9777b591d290f047b`，P6-C0 修正版执行 commit 为 `cedc4a2bd7492933a8295067c8075e631cbf3df9`。后续会话仍需现场核对 HEAD、工作树和哈希。
+- C0F 更正执行时的 base HEAD 是 `d518c17f4a76ddb30e9bfaeb33fecc982fad3f21`；归档 commit 是 `eac0f44677ba1baba6b2ecac2e7b8e0e606856bd`。更正 run 的实际执行源码由 `source_snapshot.json` 绑定，source digest 为 `afbcf349692e2746ab99e961b15bb3bf129b8205c3ca9d62ee6e3f3d7716b720`，不能把 base HEAD 误写为完整执行源码。P5 执行 commit 为 `7dea779fc5196218a43d86a9777b591d290f047b`，P6-C0 修正版执行 commit 为 `cedc4a2bd7492933a8295067c8075e631cbf3df9`。后续会话仍需现场核对 HEAD、工作树和哈希。
 - 任务：在 GAIA/MicroSS 上运行 Ada-MGAD 多模态异常检测，并通过冻结的 Ada-RCA 适配器完成两阶段事件检测与故障服务定位。
 - Ada-MGAD 和 Ada-RCA 的核心模型、损失和 68D Z2 表示不在本轮重新设计；本仓库主要负责 GAIA 适配、预处理、事件协议、编排、指标和 provenance。
 - P6-C0 是独立训练的 system-level trigger，不加载 Ada-MGAD checkpoint；使用 root-service-label-agnostic supervision，但仍消费具体服务的 telemetry 与 graph，不能说模型完全没有服务身份信息。
@@ -23,7 +23,7 @@
 按以下顺序读取即可，不要从旧文档的历史状态重新推断当前进度：
 
 1. 本文件；
-2. [C0F 更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) → [更正协议](P6_C0F_CORRECTION_PROTOCOL.md) → [P6 研究路线与交接](P6_RESEARCH_ROADMAP.md) → [C0F 原实施方案](P6_C0F_FAILURE_MECHANISM_AUDIT_PLAN.md)：当前审计结论、输入绑定、历史设计与后续 C1/C2 框架；
+2. [C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md) → [更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) → [更正协议](P6_C0F_CORRECTION_PROTOCOL.md) → [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md) → [P6 研究路线与交接](P6_RESEARCH_ROADMAP.md)：当前审计结论、来源绑定、后续研究顺序与历史设计；
 3. [P6-C0 结果](P6_C0_SYSTEM_EVENT_TRIGGER_RESULT.md) 和 [原协议](P6_C0_SYSTEM_EVENT_TRIGGER_PROTOCOL.md)，并按路线图第 8 节读取解释性勘误；数值以对应 JSON 为准；
 4. [P6-A 失败审计](P6_E2E_FAILURE_AUDIT.md) 与 [P6-B0/B0R 分数分解](P6_B0_SCORE_DECOMPOSITION_AUDIT.md)；
 5. P5 baseline 的 [`final_report.md`](../experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/final_report.md) 和 [`GAIA_V3_IMPLEMENTATION.md`](GAIA_V3_IMPLEMENTATION.md)：既有完整 E2E 与入口说明；
@@ -68,7 +68,7 @@ experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/
 | P6-C0 修正版 system trigger | 完成，BORDERLINE | `experiments/p6/system_event_trigger/`；仅 Stage 1，未运行 RCA |
 | P6-C0 首轮 label-lag 历史 | 保留 | `experiments/p6/system_event_trigger_v1_label_lag/`；不能替代修正版结果 |
 | P6-C0F | 原 run 完成；独立更正 run `COMPLETE_WITH_DECLARED_LIMITATIONS` | `experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/`；不训练、不改阈值、不运行 Test 模型推理或 RCA；旧 Fit/Validation 推理源码仍 `UNVERIFIED` |
-| P6-C0R2/C1/C2 | 仅后续框架 | 必须另行冻结具体协议，不能自动执行 |
+| P6-C0R2/C1/C2 | 后续方案已保存，未执行 | `docs/P6_NEXT_EXPERIMENT_PLAN.md`；必须另行冻结具体协议，不能自动执行 |
 
 ## 4. 数据、预处理和输入契约
 
@@ -212,9 +212,9 @@ Test 既有预测/episode/matching 复核为 `PASS`。
 
 ## 8. 推荐下一步（不自动执行）
 
-1. 归档 C0F 更正源码/协议与新 run 的完成清单、证据账本和历史限制；保留旧 C0F 结果作为未改写的历史记录。不要将旧 `structural_dominant` 路线建议当作冻结验收规则。
-2. 依据更正报告区分已确认的发生位置、轨迹观察和未决因果机制；允许保留 `UNRESOLVED`。若要重新取得源码绑定的 Fit/Validation 前向分数，须另建独立 run，不能把更正 run 的复用分数称为新推理。
-3. 如继续 C0R2 或 C1，先另行冻结具体协议、输入拟合边界、选择规则、共同总体与运行目录；不自动启动训练、Test 推理或 RCA。C1 前必须解决 OOS anchors、共同 Train cohort、scaler、窗口边界与预测锁；C2 再报告完整 failure semantics。
+1. C0F 更正已经归档。保留旧 C0F 和更正 run 为独立历史记录；不要将旧 `structural_dominant` 路线建议当作冻结验收规则，也不要将旧 Fit/Validation 推理源码标为已验证。
+2. 按 [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md) 先做 C1 静态可行性核查，明确时间外样本锚点、preprocessing 拟合边界、共同 Train cohort、scaler、窗口与预测锁能否成立；接受 C0 的 Stage-1 限制，或记录 NO-GO。C0R2 作为独立条件支线，不根据已看过的 Test 挑选配置。
+3. 具体 C1/C0R2 执行协议必须在结果前另行冻结；本方案不自动启动训练、Test 推理或 RCA。C2 才报告完整 failure semantics；当前 Test 已被看过，只能作为复用 Test 评价。
 4. P5 provenance 修订属于独立归档工作，不通过修改本轮实验数值解决；保留原输入/结果和更正记录。
 
 ## 9. 只读快速检查命令
