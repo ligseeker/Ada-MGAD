@@ -28,6 +28,15 @@ def sha256(path):
     return digest.hexdigest()
 
 
+def is_within(path, root):
+    """Path containment check compatible with the Python 3.8 DAG environment."""
+    try:
+        path.relative_to(root)
+    except ValueError:
+        return False
+    return True
+
+
 def inventory():
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
     raw_root = Path(config["gaia_raw_root"]).resolve()
@@ -41,7 +50,7 @@ def inventory():
             raise ValueError("empty raw modality: {}".format(directory))
         paths.extend(files)
     run_table = Path(config["run_table"]["path"]).resolve()
-    if not run_table.is_relative_to(raw_root) or not run_table.is_file():
+    if not is_within(run_table, raw_root) or not run_table.is_file():
         raise ValueError("run table is missing or outside raw root")
     paths.append(run_table)
     paths = sorted(paths, key=lambda path: str(path.relative_to(raw_root)))

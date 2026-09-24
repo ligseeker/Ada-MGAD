@@ -1,0 +1,239 @@
+{
+  "bindings": {
+    "base_config": {
+      "bytes": 5077,
+      "path": "configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+      "role": "all_stages",
+      "sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35"
+    },
+    "c0_checkpoint": {
+      "bytes": 11780761,
+      "path": "experiments/p6/system_event_trigger/checkpoint/best_validation_event_f1.pt",
+      "role": "test_source_provenance",
+      "sha256": "6a4317d6414774e1ca6be4e418ed3d47d678adfab1f0155e96e04aa3fa9981f5"
+    },
+    "c0_manifest": {
+      "bytes": 28509,
+      "path": "experiments/p6/system_event_trigger/manifest.json",
+      "role": "provenance",
+      "sha256": "cb222bb5c21d20d8a7546e8b1ee1b4882daaac5d4a397d0e07655fe646cf9794"
+    },
+    "c0_selection": {
+      "bytes": 21174,
+      "path": "experiments/p6/system_event_trigger/validation_selection.json",
+      "role": "test_source_provenance",
+      "sha256": "b5167c8d5df9cd9eebd7812cb76733799aa3f7829f3fe1a2c5cdb0ec51715a24"
+    },
+    "c0_test_episodes": {
+      "bytes": 378858,
+      "path": "experiments/p6/system_event_trigger/test_episodes.csv",
+      "role": "test_scoring_source",
+      "sha256": "30bacbeecbee4b9f738fc6330fa9d8df5c1adc08e37fb1ee8476f1b47735399b"
+    },
+    "c0_test_matching": {
+      "bytes": 987765,
+      "path": "experiments/p6/system_event_trigger/test_matching.csv",
+      "role": "evaluator_only",
+      "sha256": "011332f3537ee6f7d044e9da23df1d88f617fb71d3a552354343db6fd91c9c77"
+    },
+    "c0_test_metrics": {
+      "bytes": 14261,
+      "path": "experiments/p6/system_event_trigger/test_metrics.json",
+      "role": "evaluator_only",
+      "sha256": "2968632cc4da1b807d976d8bb1c449f9d755cb1c15d2ee43bcd440b74946ce5b"
+    },
+    "c0_test_predictions": {
+      "bytes": 3219195,
+      "path": "experiments/p6/system_event_trigger/test_predictions.csv",
+      "role": "provenance_hash_only_contains_trigger_label",
+      "sha256": "985623e06f5d56db9c2c536b8dd65226967ae1c25f36c9a4924ae9e38d5bafab"
+    },
+    "c0_trigger_config": {
+      "bytes": 4061,
+      "path": "configs/e2e/gaia_p6_c0_system_trigger.json",
+      "role": "fold_training",
+      "sha256": "a2c42beb19f5a234ab74958cf3db32301524f909d5605001bdaeb9c141e3b4f8"
+    },
+    "g1_ledger": {
+      "bytes": 25618,
+      "path": "experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/feasibility_ledger.json",
+      "role": "planning",
+      "sha256": "80718e06a801f4a4cfac085eec999285a162b4e1ebf5afff082f17925a99b3da"
+    },
+    "preprocessing_policy": {
+      "bytes": 693,
+      "path": "configs/e2e/gaia_p5_v3_preprocessing_v2.policy.json",
+      "role": "fold_fit",
+      "sha256": "8ab40f77d5ae924678de3f3ea8d92c6eb3b1e425c876177a5831b3665ddd651f"
+    },
+    "raw_binding_source": {
+      "bytes": 3763,
+      "path": "scripts/p6/bind_c1_raw_inputs.py",
+      "role": "raw_content_verifier",
+      "sha256": "1bfa57851e42ef8121d17ed8ad9ed6a33e3888af340772ca9f646e18955cdfea"
+    },
+    "raw_content_manifest": {
+      "bytes": 1584322,
+      "path": "experiments/p6/c1_protocol/c1-g2-v1-20260924/raw_content_manifest.json",
+      "role": "all_stages",
+      "sha256": "03bdefc1ad817802a9f015a5cc07c71f5e8d625c66c5d5e9fbff31d0d5671718"
+    },
+    "rca_index_manifest": {
+      "bytes": 953444,
+      "path": "data/p5/v3/rca_raw_index/index_manifest.json",
+      "role": "rca_feature_source",
+      "sha256": "cd343dfad123e8238be0f9357fddb6bd55625440e96890cba0a2af40b3a88c19"
+    }
+  },
+  "claim_limit": "detector prefix-fit OOS conditional on frozen full-corpus raw filename catalog; RCA indicator catalog is transductive and label-free; reused Test",
+  "correction_of": "P6-C1-G2-v1: Python 3.8 path-containment compatibility and source-hash rebind only",
+  "raw_manifest_creation_source": {
+    "git_commit": "00cc3e3f717a944ebf7a3d2c1df0dba761ca8ca6",
+    "path": "scripts/p6/bind_c1_raw_inputs.py",
+    "sha256": "67a793896312c5d2cac8df79e3269676ffb341159d157bd6dae529c0191c5225"
+  },
+  "detector": {
+    "checkpoint_selection": "selection_event_f1_then_recall_then_threshold",
+    "fit_policy": "prefix_only_metric_log_trace_schema_scalers_and_graph",
+    "generation_inference": "label_free_then_train_only_causal_matching",
+    "grid_seconds": 30,
+    "history_seconds": 300,
+    "matching_tolerance_seconds": 60,
+    "max_epochs": 30,
+    "patience": 8,
+    "prefix_schema_failure": "PREFIX_SCHEMA_NO_GO",
+    "source": "p6_c0_frozen_architecture_and_training",
+    "threshold_selection": "selection_exact_unique_scores"
+  },
+  "evaluation": {
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 42,
+    "ci": "UTC_onset_day_cluster_bootstrap_percentile_95",
+    "macro_min_group_n": 20,
+    "primary": "paired_AC_at_1_C_minus_B",
+    "secondary": [
+      "AC_at_3",
+      "AC_at_5",
+      "MRR",
+      "root_macro",
+      "fault_macro"
+    ],
+    "test_reuse": "disclose"
+  },
+  "evidence_grade": "prefix_fit_detector_fixed_transductive_raw_catalog",
+  "folds": [
+    {
+      "fold": 1,
+      "intervals_ms": {
+        "anchor_generation": [
+          1625656320000,
+          1625917680000
+        ],
+        "detector_fit": [
+          1625133600000,
+          1625394960000
+        ],
+        "detector_selection": [
+          1625394960000,
+          1625656320000
+        ]
+      },
+      "minimum_actual_common_cases": 596,
+      "static_gt_context_upper_bound": 1192
+    },
+    {
+      "fold": 2,
+      "intervals_ms": {
+        "anchor_generation": [
+          1625917680000,
+          1626179040000
+        ],
+        "detector_fit": [
+          1625133600000,
+          1625656320000
+        ],
+        "detector_selection": [
+          1625656320000,
+          1625917680000
+        ]
+      },
+      "minimum_actual_common_cases": 765,
+      "static_gt_context_upper_bound": 1529
+    },
+    {
+      "fold": 3,
+      "intervals_ms": {
+        "anchor_generation": [
+          1626179040000,
+          1626440400000
+        ],
+        "detector_fit": [
+          1625133600000,
+          1625917680000
+        ],
+        "detector_selection": [
+          1625917680000,
+          1626179040000
+        ]
+      },
+      "minimum_actual_common_cases": 767,
+      "static_gt_context_upper_bound": 1533
+    }
+  ],
+  "g3_required_before_execution": [
+    "fold_prefix_materializer_and_manifest",
+    "segment_aware_detector_train_and_generation",
+    "train_oos_matching_and_common_case_features",
+    "shared_scaler_two_arm_rca_fit",
+    "label_free_all_episode_test_scorer_and_lock",
+    "post_lock_evaluator_and_finalizer",
+    "isolated_smoke_and_source_snapshot"
+  ],
+  "output_root": "experiments/p6/c1_detector_aligned/c1-prefix-oos-v1-seed42",
+  "prediction_lock": {
+    "before_test_matching_or_root_label_join": true,
+    "missing_ranking": "count_as_failure",
+    "no_fallback": true,
+    "scope": "all_legal_c0_test_detected_episodes"
+  },
+  "protocol_id": "P6-C1-G2-v1.1",
+  "rca": {
+    "arms": {
+      "A": "GT_Train_to_GT_Test_oracle_after_lock",
+      "B": "GT_Train_to_detected_Test",
+      "C": "OOS_detected_Train_to_detected_Test"
+    },
+    "below_minimum": "NO_GO_no_rescue",
+    "bin_seconds": 15,
+    "candidates": 10,
+    "case_weight": "unit",
+    "context_rule": "both_anchor_windows_within_generation",
+    "feature_dimension": 68,
+    "l2_lambda": 1.0,
+    "minimum_actual_common_cases_by_fold": [
+      596,
+      765,
+      767
+    ],
+    "shared_scaler_fit": "common_train_gt_candidate_rows",
+    "source_commit": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
+    "window_seconds": 300
+  },
+  "resource_budget": {
+    "ad_preprocessing_workers": 24,
+    "detector_fits": 3,
+    "detector_loader_workers": 2,
+    "fold_preprocessing_fits": 3,
+    "formal_run_repair": "new_protocol_version_and_new_run_id",
+    "hyperparameter_search": false,
+    "max_epochs_per_fold": 30,
+    "preprocessing_start_method": "spawn",
+    "rca_fits": 2,
+    "torch_threads": 8
+  },
+  "run_id": "c1-prefix-oos-v1-seed42",
+  "schema_version": "p6_c1_g2_design_lock_v1",
+  "seed": 42,
+  "status": "DESIGN_LOCKED_EXECUTION_BLOCKED_G3",
+  "test_policy": "read_frozen_c0_episodes_only_no_test_model_inference"
+}

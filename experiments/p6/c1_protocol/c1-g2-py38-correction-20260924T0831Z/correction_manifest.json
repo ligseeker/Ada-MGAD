@@ -1,0 +1,55 @@
+{
+  "schema_version": "p6_c1_g2_python38_correction_v1",
+  "status": "G2_CORRECTION_VALIDATED_EXECUTION_BLOCKED_G3",
+  "base_commit": "00cc3e3f717a944ebf7a3d2c1df0dba761ca8ca6",
+  "dag_python": "3.8.20",
+  "historical": {
+    "design_lock_report": {
+      "path": "experiments/p6/c1_protocol/c1-g2-v1-20260924/design_lock_report.md",
+      "sha256": "105b44683c01ffc8ef6eded385ec1dc3d6032415e40c58cdfd2815595c02a23f"
+    },
+    "machine_config": {
+      "path": "configs/e2e/gaia_p6_c1_g2_v1.json",
+      "sha256": "58bf044fef89674ba5bf472c57b70199ca39e41922801217dd860ca5f6d87b92"
+    },
+    "raw_manifest_creation_source": {
+      "commit": "00cc3e3f717a944ebf7a3d2c1df0dba761ca8ca6",
+      "path": "scripts/p6/bind_c1_raw_inputs.py",
+      "sha256": "67a793896312c5d2cac8df79e3269676ffb341159d157bd6dae529c0191c5225"
+    }
+  },
+  "correction": {
+    "machine_config": {
+      "path": "configs/e2e/gaia_p6_c1_g2_v1_1.json",
+      "sha256": "a8b0d67f9aa06f4fe01fceaa982a9742145082be88096d73d310f4aa02a791ac"
+    },
+    "raw_content_verifier": {
+      "path": "scripts/p6/bind_c1_raw_inputs.py",
+      "sha256": "1bfa57851e42ef8121d17ed8ad9ed6a33e3888af340772ca9f646e18955cdfea"
+    },
+    "protocol_checker": {
+      "path": "scripts/p6/check_c1_g2_protocol.py",
+      "sha256": "5cf2bdb3794c813c8ad91ef4dcaeaa0635946aedacc1e0b1faa19b686b180db1"
+    },
+    "regression_test": {
+      "path": "tests/test_p6_c1_g2_python38.py",
+      "sha256": "c6b8a87525efa1b0d68a815181c306bb3f46f1abba532f45bda8e578faff04e4"
+    }
+  },
+  "inputs": {
+    "raw_content_manifest": {
+      "path": "experiments/p6/c1_protocol/c1-g2-v1-20260924/raw_content_manifest.json",
+      "sha256": "03bdefc1ad817802a9f015a5cc07c71f5e8d625c66c5d5e9fbff31d0d5671718",
+      "file_count": 6661,
+      "total_bytes": 31583130281,
+      "records_sha256": "ee1ce9d50bf4002636223b31045e86c3d7000736700201ff655bb05a74776052"
+    }
+  },
+  "validation": {
+    "regression_tests": "PASS 3 tests in DAG Python 3.8.20",
+    "protocol_check_require_new_run": "PASS G2 design and bound inputs; C1 execution remains blocked pending G3",
+    "full_raw_content_check": "PASS 6661 31583130281 ee1ce9d50bf4002636223b31045e86c3d7000736700201ff655bb05a74776052",
+    "normalized_scientific_design_equals_v1": true
+  },
+  "formal_c1_execution": "NO_GO_G3_IMPLEMENTATION_AND_SMOKE_PENDING"
+}

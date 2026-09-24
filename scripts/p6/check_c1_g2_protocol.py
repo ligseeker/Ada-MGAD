@@ -6,10 +6,11 @@ import csv
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT = ROOT / "configs/e2e/gaia_p6_c1_g2_v1.json"
+DEFAULT = ROOT / "configs/e2e/gaia_p6_c1_g2_v1_1.json"
 
 
 def sha256(path):
@@ -20,9 +21,18 @@ def sha256(path):
     return digest.hexdigest()
 
 
+def is_within(path, root):
+    """Path containment check compatible with the Python 3.8 DAG environment."""
+    try:
+        path.relative_to(root)
+    except ValueError:
+        return False
+    return True
+
+
 def checked_binding(binding):
     path = (ROOT / binding["path"]).resolve()
-    if not path.is_relative_to(ROOT) or not path.is_file():
+    if not is_within(path, ROOT) or not path.is_file():
         raise ValueError("bound input missing or outside repository: {}".format(path))
     if path.stat().st_size != binding["bytes"] or sha256(path) != binding["sha256"]:
         raise ValueError("bound input drift: {}".format(path))
@@ -40,6 +50,18 @@ def main():
             or config["status"] != "DESIGN_LOCKED_EXECUTION_BLOCKED_G3"
             or config["evidence_grade"] != "prefix_fit_detector_fixed_transductive_raw_catalog"):
         raise ValueError("G2 design identity/status drift")
+    if config["protocol_id"] != "P6-C1-G2-v1.1" or "Python 3.8" not in config["correction_of"]:
+        raise ValueError("G2 Python 3.8 correction identity drift")
+    creator = config["raw_manifest_creation_source"]
+    if (creator["git_commit"] != "00cc3e3f717a944ebf7a3d2c1df0dba761ca8ca6"
+            or creator["path"] != "scripts/p6/bind_c1_raw_inputs.py"
+            or creator["sha256"] != "67a793896312c5d2cac8df79e3269676ffb341159d157bd6dae529c0191c5225"
+            or config["bindings"]["raw_binding_source"]["role"] != "raw_content_verifier"):
+        raise ValueError("raw manifest creator/verifier identity drift")
+    historical_source = subprocess.check_output(
+        ["git", "show", "{}:{}".format(creator["git_commit"], creator["path"])], cwd=str(ROOT))
+    if hashlib.sha256(historical_source).hexdigest() != creator["sha256"]:
+        raise ValueError("historical raw manifest creator source drift")
     if config["run_id"] != "c1-prefix-oos-v1-seed42" or config["seed"] != 42:
         raise ValueError("G2 run identity drift")
     if config["rca"]["shared_scaler_fit"] != "common_train_gt_candidate_rows":
@@ -133,7 +155,7 @@ def main():
         raise ValueError("Test prediction file label-firewall premise drift")
     if args.require_new_run:
         run_root = (ROOT / config["output_root"]).resolve()
-        if (not run_root.is_relative_to(ROOT / "experiments/p6/c1_detector_aligned")
+        if (not is_within(run_root, ROOT / "experiments/p6/c1_detector_aligned")
                 or run_root.name != config["run_id"] or run_root.exists()):
             raise ValueError("formal C1 run directory is invalid or already exists")
     print("PASS G2 design and bound inputs; C1 execution remains blocked pending G3")

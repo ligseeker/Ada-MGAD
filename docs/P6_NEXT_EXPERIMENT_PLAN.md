@@ -36,7 +36,7 @@ explain that numeric drop.
 |---|---|---|
 | G0 archive | C0F code, protocol, aggregate evidence and local detailed run are archived at `eac0f44677ba1baba6b2ecac2e7b8e0e606856bd`; retain the correction limitations. | A required file/hash no longer matches the completion manifest. |
 | G1 C1 feasibility | Static inventory completed in the [G1 report](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md). It maps chronology, GT cohort upper bounds, fitting sources and open OOS/Train-case gates. | Current shared arrays cannot support strict forward-OOS; actual OOS anchor coverage and common Train RCA cohort remain unknown. Execution is NO-GO as is. |
-| G2 C1 protocol freeze | [G2 design lock](P6_C1_G2_FROZEN_DESIGN.md) fixes folds, evidence grade, fit/selection/generation, cohort floors, shared scaler, arms, metrics, paired analysis, budget, run ID and firewall before results. Raw content and C0/G1 file hashes are bound in its machine config. | A binding or frozen choice changes; version the design before any fold result. |
+| G2 C1 protocol freeze | [G2 design lock](P6_C1_G2_FROZEN_DESIGN.md) fixes folds, evidence grade, fit/selection/generation, cohort floors, shared scaler, arms, metrics, paired analysis, budget, run ID and firewall before results. Current Python 3.8-compatible source bindings use [v1.1](../configs/e2e/gaia_p6_c1_g2_v1_1.json); the [correction record](../experiments/p6/c1_protocol/c1-g2-py38-correction-20260924T0831Z/correction_report.md) keeps v1 historical. | A binding or frozen choice changes; version the design before any fold result. |
 | G3 C1 implementation and smoke | Build the protocol-specific adapters; use synthetic fixtures and small, isolated smoke inputs. Confirm workers=1 equivalence if parallel preprocessing is introduced. | Identity, ordering, label isolation, Train-only fitting, window or schema checks fail. |
 | G4 C1 execution | Use new run directories for necessary fold detector fitting, RCA fitting and ranking generation. Read the frozen C0 Test predictions/episodes without rerunning Stage-1 Test inference. Complete RCA rankings for all legal detected Test episodes; lock their bytes and universe before Test label join. | Required input/source/output hash changes, missing rankings, incomplete folds or budget exceedance. Preserve failure rows. |
 | G5 C2 evaluation | Consume the locked predictions; publish matched-case RCA contrasts and full diagnosis results with all misses, false alarms and ranking failures. Archive hashes, commands, counts and limitations. | Prediction/scope lock or denominator checks fail. No post hoc repair of the formal result. |
@@ -181,7 +181,7 @@ pre-isolated outer evaluation; reuse of the present Test remains limited.
   unknown; G2 resolved the evidence-grade choice. The G1 result was
   `EXECUTION_NO_GO_AS_IS`.
 - `C1_G2_DESIGN_LOCK`: [protocol](P6_C1_G2_FROZEN_DESIGN.md) and
-  [machine config](../configs/e2e/gaia_p6_c1_g2_v1.json) fix the run ID,
+  [current machine config](../configs/e2e/gaia_p6_c1_g2_v1_1.json) fix the run ID,
   input hashes, folds, candidate universe, minimum cohort, shared scaler,
   arms, firewall, metrics, paired method, budget and stop conditions.
   **Design locked; implementation and smoke pending G3.**

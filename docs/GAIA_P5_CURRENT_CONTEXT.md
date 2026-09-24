@@ -4,9 +4,9 @@
 
 更新时间：2026-09-24（Asia/Shanghai）
 
-**当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计和 P6-C0 系统级触发实验已完成。P6-C0 的 aggregate gate 为 PASS，正式 verdict 仍为 BORDERLINE，尚未运行新 RCA/E2E。P6-C0F 独立更正审计已完成并归档，状态为 `COMPLETE_WITH_DECLARED_LIMITATIONS`。C1 的 G1 静态账本已完成，G2 设计选择与输入绑定已锁定；G3 逐折实现和 smoke 尚未完成，真实 OOS 锚点与共同 Train cohort 仍不存在，C1 正式执行继续 `NO_GO`。**
+**当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计和 P6-C0 系统级触发实验已完成。P6-C0 的 aggregate gate 为 PASS，正式 verdict 仍为 BORDERLINE，尚未运行新 RCA/E2E。P6-C0F 独立更正审计已完成并归档，状态为 `COMPLETE_WITH_DECLARED_LIMITATIONS`。C1 的 G1 静态账本已完成，G2 设计选择已锁定；G2 校验脚本已更正为兼容 DAG Python 3.8，当前来源绑定使用 v1.1 配置，原 v1 记录保留为历史。G3 逐折实现和 smoke 尚未完成，真实 OOS 锚点与共同 Train cohort 仍不存在，C1 正式执行继续 `NO_GO`。**
 
-后续 coding agent 先读本文件、[C1 G2 设计锁](P6_C1_G2_FROZEN_DESIGN.md)、[C1 G1 静态可行性报告](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md)、[C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md)、[C0F 更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) 与 [更正协议](P6_C0F_CORRECTION_PROTOCOL.md)，再读 [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md)、[P6 研究路线](P6_RESEARCH_ROADMAP.md) 和 [C0F 原实施方案](P6_C0F_FAILURE_MECHANISM_AUDIT_PLAN.md)。路线图和原方案的“C0F 尚未执行”段落是 2026-09-18 的历史状态，不是当前状态。
+后续 coding agent 先读本文件、[C1 G2 Python 3.8 更正记录](../experiments/p6/c1_protocol/c1-g2-py38-correction-20260924T0831Z/correction_report.md)、[C1 G2 设计锁](P6_C1_G2_FROZEN_DESIGN.md)、[C1 G1 静态可行性报告](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md)、[C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md)、[C0F 更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) 与 [更正协议](P6_C0F_CORRECTION_PROTOCOL.md)，再读 [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md)、[P6 研究路线](P6_RESEARCH_ROADMAP.md) 和 [C0F 原实施方案](P6_C0F_FAILURE_MECHANISM_AUDIT_PLAN.md)。路线图和原方案的“C0F 尚未执行”段落是 2026-09-18 的历史状态，不是当前状态。
 
 ## 1. 项目身份与研究边界
 
@@ -23,7 +23,7 @@
 按以下顺序读取即可，不要从旧文档的历史状态重新推断当前进度：
 
 1. 本文件；
-2. [C1 G2 设计锁](P6_C1_G2_FROZEN_DESIGN.md) → [G1 静态报告](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md) → [C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md) → [更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) → [更正协议](P6_C0F_CORRECTION_PROTOCOL.md) → [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md) → [P6 研究路线与交接](P6_RESEARCH_ROADMAP.md)：当前设计、静态可行性、审计结论、来源绑定与历史决策；
+2. [C1 G2 Python 3.8 更正记录](../experiments/p6/c1_protocol/c1-g2-py38-correction-20260924T0831Z/correction_report.md) → [G2 设计锁](P6_C1_G2_FROZEN_DESIGN.md) → [G1 静态报告](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md) → [C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md) → [更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) → [更正协议](P6_C0F_CORRECTION_PROTOCOL.md) → [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md) → [P6 研究路线与交接](P6_RESEARCH_ROADMAP.md)：当前来源绑定、设计、静态可行性、审计结论与历史决策；
 3. [P6-C0 结果](P6_C0_SYSTEM_EVENT_TRIGGER_RESULT.md) 和 [原协议](P6_C0_SYSTEM_EVENT_TRIGGER_PROTOCOL.md)，并按路线图第 8 节读取解释性勘误；数值以对应 JSON 为准；
 4. [P6-A 失败审计](P6_E2E_FAILURE_AUDIT.md) 与 [P6-B0/B0R 分数分解](P6_B0_SCORE_DECOMPOSITION_AUDIT.md)；
 5. P5 baseline 的 [`final_report.md`](../experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/final_report.md) 和 [`GAIA_V3_IMPLEMENTATION.md`](GAIA_V3_IMPLEMENTATION.md)：既有完整 E2E 与入口说明；
@@ -69,7 +69,7 @@ experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/
 | P6-C0 首轮 label-lag 历史 | 保留 | `experiments/p6/system_event_trigger_v1_label_lag/`；不能替代修正版结果 |
 | P6-C0F | 原 run 完成；独立更正 run `COMPLETE_WITH_DECLARED_LIMITATIONS` | `experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/`；不训练、不改阈值、不运行 Test 模型推理或 RCA；旧 Fit/Validation 推理源码仍 `UNVERIFIED` |
 | P6-C1 G1 静态可行性 | 完成，`EXECUTION_NO_GO_AS_IS` | `experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/`；Fit-only 三折的静态 GT/窗口上界 4,254，实际 OOS 锚点与共同 Train cohort 未知 |
-| P6-C1 G2 设计锁 | 完成设计；G3 未完成 | `docs/P6_C1_G2_FROZEN_DESIGN.md`、`configs/e2e/gaia_p6_c1_g2_v1.json`；三折 prefix-fit detector、固定 RCA 表示与 transductive 文件名目录限制、共同 Train 队列下限、预测锁和评估规则已固定 |
+| P6-C1 G2 设计锁 | 完成设计；Python 3.8 兼容更正；G3 未完成 | `docs/P6_C1_G2_FROZEN_DESIGN.md`、`configs/e2e/gaia_p6_c1_g2_v1_1.json`、独立更正记录；三折 prefix-fit detector、固定 RCA 表示与 transductive 文件名目录限制、共同 Train 队列下限、预测锁和评估规则已固定 |
 | P6-C0R2/C1 执行/C2 | 未执行 | C1 待 G3 实现与 smoke；C0R2 仍须单独冻结协议；均不能自动执行 |
 
 ## 4. 数据、预处理和输入契约
