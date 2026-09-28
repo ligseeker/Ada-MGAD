@@ -4,7 +4,7 @@
 
 更新时间：2026-09-28（Asia/Shanghai）
 
-**当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计和 P6-C0 系统级触发实验已完成。P6-C0 的 aggregate gate 为 PASS，正式 verdict 仍为 BORDERLINE，尚未运行新 RCA/E2E。P6-C0F 独立更正审计已完成并归档，状态为 `COMPLETE_WITH_DECLARED_LIMITATIONS`。C1 的 G1 静态账本和 G2 设计锁已完成，G2 Python 3.8 更正使用 v1.1 配置。G3 已新增逐折 prefix 物化接口并通过合成编排测试；真实原始数据的逐折拟合、1/24 worker 等价、检测器与 RCA/预测锁接口仍未完成，真实 OOS 锚点与共同 Train cohort 尚不存在，C1 正式执行继续 `NO_GO`。**
+**当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计和 P6-C0 系统级触发实验已完成。P6-C0 的 aggregate gate 为 PASS，正式 verdict 仍为 BORDERLINE，尚未运行新 RCA/E2E。P6-C0F 独立更正审计已完成并归档，状态为 `COMPLETE_WITH_DECLARED_LIMITATIONS`。C1 的 G1 静态账本和 G2 设计锁已完成，G2 Python 3.8 更正使用 v1.1 配置。G3 已新增逐折 prefix 物化与无标签 Generation 窗口数据集，并通过合成编排测试；真实原始数据的逐折拟合、1/24 worker 等价、检测器训练/推理与 RCA/预测锁接口仍未完成，真实 OOS 锚点与共同 Train cohort 尚不存在，C1 正式执行继续 `NO_GO`。**
 
 后续 coding agent 先读本文件、[C1 G2 Python 3.8 更正记录](../experiments/p6/c1_protocol/c1-g2-py38-correction-20260924T0831Z/correction_report.md)、[C1 G2 设计锁](P6_C1_G2_FROZEN_DESIGN.md)、[C1 G1 静态可行性报告](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md)、[C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md)、[C0F 更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) 与 [更正协议](P6_C0F_CORRECTION_PROTOCOL.md)，再读 [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md)、[P6 研究路线](P6_RESEARCH_ROADMAP.md) 和 [C0F 原实施方案](P6_C0F_FAILURE_MECHANISM_AUDIT_PLAN.md)。路线图和原方案的“C0F 尚未执行”段落是 2026-09-18 的历史状态，不是当前状态。
 
@@ -70,7 +70,7 @@ experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/
 | P6-C0F | 原 run 完成；独立更正 run `COMPLETE_WITH_DECLARED_LIMITATIONS` | `experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/`；不训练、不改阈值、不运行 Test 模型推理或 RCA；旧 Fit/Validation 推理源码仍 `UNVERIFIED` |
 | P6-C1 G1 静态可行性 | 完成，`EXECUTION_NO_GO_AS_IS` | `experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/`；Fit-only 三折的静态 GT/窗口上界 4,254，实际 OOS 锚点与共同 Train cohort 未知 |
 | P6-C1 G2 设计锁 | 完成设计；Python 3.8 兼容更正 | `docs/P6_C1_G2_FROZEN_DESIGN.md`、`configs/e2e/gaia_p6_c1_g2_v1_1.json`、独立更正记录；三折 prefix-fit detector、固定 RCA 表示与 transductive 文件名目录限制、共同 Train 队列下限、预测锁和评估规则已固定 |
-| P6-C1 G3 逐折实现 | 部分实现，正式执行仍 NO-GO | [G3 实施状态](P6_C1_G3_IMPLEMENTATION_STATUS.md)；逐折 prefix 物化接口与合成编排测试已完成，真实 raw smoke、worker 等价、检测器、RCA 与预测锁仍待实现 |
+| P6-C1 G3 逐折实现 | 部分实现，正式执行仍 NO-GO | [G3 实施状态](P6_C1_G3_IMPLEMENTATION_STATUS.md)；逐折 prefix 物化、无标签 Generation 窗口数据集与合成编排测试已完成，真实 raw smoke、worker 等价、检测器训练/推理、RCA 与预测锁仍待实现 |
 | P6-C0R2/C1 执行/C2 | 未执行 | C1 待 G3 实现与 smoke；C0R2 仍须单独冻结协议；均不能自动执行 |
 
 ## 4. 数据、预处理和输入契约
