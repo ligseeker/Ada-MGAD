@@ -1,0 +1,30 @@
+{
+  "array_sha256": {
+    "fit": {
+      "logs": "1e3a8dea06b7636f7f447839193500f30cd6a5a5f390c81f3a020f8202ba5e5b",
+      "metric": "bed6559b8596dbf49b2ba17b55deae8fa168c1fb363f3363864646d96146302c",
+      "trace": "587820dfc88911a86b3c4913bd797547ae6719800687d625bcd688c0f0e6c7cd"
+    },
+    "generation": {
+      "logs": "1d08447e7c9bfa8a1f3aa59c5042582562daa7893d7dda26fd63b0bf82409949",
+      "metric": "0d991186232dc2a21294ed619b7d782a829056f7deab988b93431d0e6ffb3839",
+      "trace": "724a2dd40159fd838af57d6b0f332539243696cae5b035bdaba055e8b60e366b"
+    },
+    "selection": {
+      "logs": "1d08447e7c9bfa8a1f3aa59c5042582562daa7893d7dda26fd63b0bf82409949",
+      "metric": "d7ad95251532f680db37286cc462e67426760bb7fddfa373425fcd76d30cb343",
+      "trace": "724a2dd40159fd838af57d6b0f332539243696cae5b035bdaba055e8b60e366b"
+    }
+  },
+  "fit_only_schema": true,
+  "fixture": "synthetic_104_bins_45_metric_slots_17_log_templates_one_trace_edge",
+  "formal_gaia_prefix_tested": false,
+  "schema_version": "p6_c1_g3_raw_adapter_smoke_v1",
+  "source_sha256": "1a4dc85df2c414e3e31161ee586ad2d2fd87a18399d29bdbd4d52f9f102708f4",
+  "start_method": "spawn",
+  "status": "PASS",
+  "workers_compared": [
+    1,
+    24
+  ]
+}

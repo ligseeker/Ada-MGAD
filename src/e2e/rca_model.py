@@ -246,11 +246,14 @@ def fit_conditional_logit(
     l2_lambda: float = L2_LAMBDA,
     max_iter: int = MAX_ITER,
     gradient_tolerance: float = GRADIENT_TOLERANCE,
+    scaler_mean: Optional[np.ndarray] = None,
+    scaler_scale: Optional[np.ndarray] = None,
 ) -> ConditionalLogitFit:
     """Fit frozen event-level Conditional Logit on selected training cases.
 
-    ``StandardScaler`` is fitted strictly on candidate rows from
-    ``train_indices``.  Validation and test rows must only be passed to
+    By default, ``StandardScaler`` is fitted strictly on candidate rows from
+    ``train_indices``. C1 may supply both arrays from its already frozen common
+    Train GT-anchor scaler. Validation and test rows must only be passed to
     :meth:`ConditionalLogitFit.transform`/``scores`` after fitting.
     """
 
@@ -258,8 +261,21 @@ def fit_conditional_logit(
     roots = _as_root_indices(root_indices, len(values))
     train = _indices(train_indices, len(values), "train_indices")
     train_values = values[train]
-    scaler = StandardScaler().fit(train_values.reshape(-1, FEATURE_DIMENSION))
-    matrices = [scaler.transform(row).astype(np.float64) for row in train_values]
+    if (scaler_mean is None) != (scaler_scale is None):
+        raise ValueError("shared scaler mean and scale must be supplied together")
+    if scaler_mean is None:
+        scaler = StandardScaler().fit(train_values.reshape(-1, FEATURE_DIMENSION))
+        mean = np.asarray(scaler.mean_, dtype=np.float64)
+        scale = np.asarray(scaler.scale_, dtype=np.float64)
+        matrices = [scaler.transform(row).astype(np.float64) for row in train_values]
+    else:
+        mean = np.asarray(scaler_mean, dtype=np.float64)
+        scale = np.asarray(scaler_scale, dtype=np.float64)
+        if (mean.shape != (FEATURE_DIMENSION,) or scale.shape != (FEATURE_DIMENSION,)
+                or not np.all(np.isfinite(mean)) or not np.all(np.isfinite(scale))
+                or np.any(scale <= 0)):
+            raise ValueError("shared scaler arrays must be finite 68D and have positive scale")
+        matrices = [((row - mean) / scale).astype(np.float64) for row in train_values]
     train_roots = roots[train]
     initial = np.zeros(FEATURE_DIMENSION, dtype=np.float64)
     initial_loss, _ = _event_loss_gradient(initial, matrices, train_roots, l2_lambda)
@@ -312,8 +328,8 @@ def fit_conditional_logit(
     final_norm = float(np.linalg.norm(final_gradient, ord=np.inf))
     return ConditionalLogitFit(
         weights=polished,
-        scaler_mean=np.asarray(scaler.mean_, dtype=np.float64),
-        scaler_scale=np.asarray(scaler.scale_, dtype=np.float64),
+        scaler_mean=mean.copy(),
+        scaler_scale=scale.copy(),
         train_case_indices=tuple(int(i) for i in train),
         initial_loss=float(initial_loss),
         final_loss=float(final_loss),

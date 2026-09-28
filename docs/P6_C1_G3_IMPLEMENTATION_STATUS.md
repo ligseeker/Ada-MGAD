@@ -1,34 +1,35 @@
 # P6-C1 G3 implementation status
 
-Date: 2026-09-28. Status: **PARTIAL_G3_IMPLEMENTATION; FORMAL_C1_EXECUTION_NO_GO**.
+Updated: 2026-09-29. Status: **G3 CODE, BOUNDED SMOKE AND READ-ONLY PREFLIGHT PASS; FORMAL C1 RUN NOT STARTED**.
 
-The frozen [G2 design](P6_C1_G2_FROZEN_DESIGN.md) and [v1.1 source binding](../configs/e2e/gaia_p6_c1_g2_v1_1.json) remain unchanged. This implementation adds a fold-local Ada-MGAD input materializer in [`c1_fold_preprocessing.py`](../src/e2e/c1_fold_preprocessing.py). It fits Metric, Log and Trace only on the locked fold Fit prefix, then transforms Fit, Selection and Generation separately using the fitted objects. The output has an exclusive new `folds/fold_XX` directory, frozen 48D/32D/8D schema, source and raw-content hashes, Drain3 state, graph, segment arrays, legal prediction-window indices and an output completion manifest. Trace diagnostics remain separate by segment. The source uses the historical raw manifest as an input; it does not modify it. [`c1_fold_detector_data.py`](../src/e2e/c1_fold_detector_data.py) reads only these sealed windows; Generation samples have no label field or label accessor.
+The frozen [G2 design](P6_C1_G2_FROZEN_DESIGN.md) and [v1.1 source binding](../configs/e2e/gaia_p6_c1_g2_v1_1.json) are unchanged. The G3 runner is [`scripts/p6/run_c1.py`](../scripts/p6/run_c1.py). It uses the exact G2 run root and exclusive stage directories. `init` repeats the full read-only input preflight before reserving that root. Every subsequent stage checks the run lock and source snapshot; a failed stage retains `INCOMPLETE.json` and cannot be overwritten.
 
-The raw-content verifier checks all listed bytes before creating a fold directory and again before publishing its completion manifest. Each segment's legal window indices exclude predictions whose availability time equals that half-open segment's right boundary. An interrupted or failed fold retains `INCOMPLETE.json`; the writer refuses to reuse that directory. `validate_c1_fold` checks the completed file hashes, source identities, schema, graph and segment geometry.
+## Implemented sequence
+
+1. [`c1_fold_preprocessing.py`](../src/e2e/c1_fold_preprocessing.py) fits Metric, Log and Trace on each locked fold Fit prefix and separately transforms Fit, Selection and Generation. Its sealed arrays have 48D/32D/8D dimensions and legal segment-local 300-second windows. [`c1_fold_detector_data.py`](../src/e2e/c1_fold_detector_data.py) prevents Generation labels from entering the dataset.
+2. [`c1_fold_supervision.py`](../src/e2e/c1_fold_supervision.py) builds Fit/Selection trigger labels and complete Selection metric GT only. [`c1_fold_detector.py`](../src/e2e/c1_fold_detector.py) uses frozen C0 architecture, Fit-only class weight, AdaBelief, masked BCE plus graph regularization, 30 epochs maximum, patience 8, and Selection event-F1/recall/threshold choice. [`c1_fold_generation.py`](../src/e2e/c1_fold_generation.py) scores Generation without labels and seals fold-unique episode IDs before Train GT matching.
+3. [`c1_oos_matching.py`](../src/e2e/c1_oos_matching.py) performs frozen causal one-to-one matching only after Generation seals, retaining misses, false alarms, boundary events and illegal dual contexts. [`c1_common_cohort.py`](../src/e2e/c1_common_cohort.py) extracts paired GT/detected W300-B15 10×68 Train features and reports the fixed 596/765/767 per-fold floor. A failed floor seals `NO_GO` coverage and blocks RCA fitting.
+4. [`c1_shared_rca.py`](../src/e2e/c1_shared_rca.py) fits one scaler on common Train GT-anchor candidate rows, then B/C Conditional Logit on identical case IDs and root labels. The optional fixed-scaler interface in [`rca_model.py`](../src/e2e/rca_model.py) retains its original default P5 behavior.
+5. [`c1_test_scoring.py`](../src/e2e/c1_test_scoring.py) accepts only the frozen label-free C0 `test_episodes.csv` columns. It emits one B/C scope row per episode plus feature tensors and an availability mask. The scorer hashes but does not parse `test_predictions.csv`, and does not read Test matching or GT. A legal-context ranking failure stays in the later C1 denominator with zero correctness for the missing arm. The runner seals these files under `predictions/` before any Test GT read.
+6. [`c1_evaluation.py`](../src/e2e/c1_evaluation.py) consumes the lock, then Test matching and raw GT. It reports paired AC@1 transitions, AC@3/5/MRR, group sizes and n≥20 macro summaries, 10,000 UTC-onset-day cluster bootstrap replicates, post-lock A oracle diagnostic, and C2 raw-event failure counts. Final diagnosis wall time remains `UNMEASURED` rather than estimated.
 
 ## Evidence and limits
 
-| Item | Status |
+| Check | Current evidence |
 |---|---|
-| Synthetic fold orchestration | PASS: Fit-only calls, separate segment arrays, 48/32/8 shape, legal-window boundary, label-free outputs, hash validation, tamper detection and incomplete-directory retention |
-| Detector input firewall | PASS: 2 isolated tests for explicit Fit labels, Generation without labels, boundary windows and invalid index rejection |
-| Existing V2 preprocessing tests | PASS: 17 tests |
-| Existing C0 trigger protocol tests | PASS: 33 tests |
-| Real GAIA prefix fit and target dimensions | PENDING; the synthetic test replaces expensive raw fit/transform primitives and cannot establish data feasibility |
-| Workers=1 versus workers=24 numerical equivalence | PENDING; no formal parallel use is authorized by these tests |
-| Fold detector training/selection/inference, OOS episode/matching, common Train RCA cohort, shared scaler, label-free Test scorer, prediction lock and evaluator | PENDING |
+| Bounded real-adapter smoke | PASS: [machine record](P6_C1_G3_RAW_SMOKE_20260928.json), 104 synthetic 30-second bins, 45 qualified Metric slots, 17 stable Log templates, one Trace edge; actual fit/transform calls produced identical fitted state, graph, diagnostics and Fit/Selection/Generation arrays with spawn workers 1 and 24. |
+| Full read-only input preflight | PASS on 2026-09-29: `run_c1.py preflight` verified G2 source bindings, the smoke/source digest, all bound raw catalog bytes and the RCA raw-index arrays. It created no formal run root. |
+| C1 interface tests | PASS: 22 isolated/synthetic C1 tests, including detector stage sealing, causal OOS matching, paired feature construction, shared scaler parity, full Test episode scope and denominator-preserving failure, exclusive stage seals and post-lock C1/C2/A evaluation. |
+| Existing adapter/model regression | PASS: eight raw-adapter tests and five P5 RCA-model tests. |
+| Frozen C0 detector regression | PASS: 30 model, label, loader and driver contract tests. |
+| Real GAIA prefix schema and dimensions | PENDING: no formal fold has been materialized. A prefix that cannot supply frozen dimensions must stop as `PREFIX_SCHEMA_NO_GO`. |
+| Formal OOS anchors/common Train cohort | PENDING: G1's 4,254 is a static GT/context upper bound, not observed anchors. The 596/765/767 floors have not been measured. |
+| Test rankings/C1/C2 outcomes | PENDING: no formal detector, RCA fit, Test feature pass, prediction lock or evaluation has run. The existing Test is reused, not independent confirmation. |
 
-Only the G3 fold-input contract and synthetic orchestration have been checked. No real C1 fold data, OOS anchors, common Train cohort, rankings, Test metrics or full run directory were created. The G1 count 4,254 remains a static upper bound.
+The bounded smoke establishes worker equivalence on its synthetic raw catalog. It does not establish that real early GAIA prefixes meet the 45-slot/17-template/Trace requirements. Stage unit tests do not replace a successful formal execution or imply positive C1 effect.
 
-## Next implementation gate
+The old `check_c1_g2_protocol.py` PASS line still says “pending G3” because that checker certifies G2 inputs only. This document and `run_c1.py preflight` carry the subsequent G3 gate; the frozen G2 checker and design record were not rewritten.
 
-Implement a bounded raw-data smoke that actually exercises the three modality fit/transform functions on a new isolated fixture, then verify workers=1 and workers=24 produce identical schema, graph and arrays. If an early Fit prefix cannot produce the frozen dimensions, record `PREFIX_SCHEMA_NO_GO` without padding or changing the fold. After that, implement fold-specific detector Fit → Selection → label-free Generation using the legal window indices; Generation labels may be joined only after episode production for Train matching. The later RCA, prediction-lock and evaluator interfaces remain separate G3 work.
+## Manual formal sequence
 
-The current read-only synthetic check is:
-
-```bash
-cd /home/zhangll24/RCA_project/Ada-MGAD-e2e-v2
-PYTHONDONTWRITEBYTECODE=1 /home/zhangll24/miniconda3/envs/DAG/bin/python -m unittest discover -s tests -p 'test_p6_c1_fold*.py' -v
-```
-
-There is no formal C1 execution command. Do not invoke the fold materializer over the complete raw corpus until the remaining G3 gates pass and a new formal run is explicitly requested.
+Use the [full command handoff](P6_C1_G3_MANUAL_RUN.md). The manual `init` command performs the full raw-content and RCA-index read-only preflight. Run the three fold-input/fold-detector pairs, then cohort. If any fold reports `PREFIX_SCHEMA_NO_GO`, any stage retains `INCOMPLETE.json`, or `train_cohort` seals `NO_GO`, stop and preserve the run. Continue to RCA fit, prediction lock and post-lock evaluation only when the preceding completion manifest is `COMPLETE`.

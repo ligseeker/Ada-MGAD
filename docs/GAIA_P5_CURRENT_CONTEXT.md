@@ -2,9 +2,9 @@
 
 > 本文件是给新的 code-agent CLI 的单一入口。它只保留当前有效的背景、状态、约束和下一步；完整审计与实现细节继续放在现有文档中，不在这里复制。
 
-更新时间：2026-09-28（Asia/Shanghai）
+更新时间：2026-09-29（Asia/Shanghai）
 
-**当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计和 P6-C0 系统级触发实验已完成。P6-C0 的 aggregate gate 为 PASS，正式 verdict 仍为 BORDERLINE，尚未运行新 RCA/E2E。P6-C0F 独立更正审计已完成并归档，状态为 `COMPLETE_WITH_DECLARED_LIMITATIONS`。C1 的 G1 静态账本和 G2 设计锁已完成，G2 Python 3.8 更正使用 v1.1 配置。G3 已新增逐折 prefix 物化与无标签 Generation 窗口数据集，并通过合成编排测试；真实原始数据的逐折拟合、1/24 worker 等价、检测器训练/推理与 RCA/预测锁接口仍未完成，真实 OOS 锚点与共同 Train cohort 尚不存在，C1 正式执行继续 `NO_GO`。**
+**当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计和 P6-C0 系统级触发实验已完成。P6-C0 的 aggregate gate 为 PASS，正式 verdict 仍为 BORDERLINE，尚未运行新 RCA/E2E。P6-C0F 独立更正审计已完成并归档，状态为 `COMPLETE_WITH_DECLARED_LIMITATIONS`。C1 的 G1 静态账本和 G2 设计锁已完成，G2 Python 3.8 更正使用 v1.1 配置。G3 的六类执行接口、阶段封存、合成测试及真实 adapter 的 1/24-worker 合成 raw smoke 已通过；[手动正式运行方案](P6_C1_G3_MANUAL_RUN.md)已就绪。2026-09-29 全量只读输入预检通过；真实 GAIA prefix 可行性、OOS 锚点、共同 Train cohort、预测锁和 C1/C2 结果仍未产生；正式运行尚未开始，不能宣称 C1 已完成。**
 
 后续 coding agent 先读本文件、[C1 G2 Python 3.8 更正记录](../experiments/p6/c1_protocol/c1-g2-py38-correction-20260924T0831Z/correction_report.md)、[C1 G2 设计锁](P6_C1_G2_FROZEN_DESIGN.md)、[C1 G1 静态可行性报告](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md)、[C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md)、[C0F 更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) 与 [更正协议](P6_C0F_CORRECTION_PROTOCOL.md)，再读 [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md)、[P6 研究路线](P6_RESEARCH_ROADMAP.md) 和 [C0F 原实施方案](P6_C0F_FAILURE_MECHANISM_AUDIT_PLAN.md)。路线图和原方案的“C0F 尚未执行”段落是 2026-09-18 的历史状态，不是当前状态。
 
@@ -70,8 +70,8 @@ experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/
 | P6-C0F | 原 run 完成；独立更正 run `COMPLETE_WITH_DECLARED_LIMITATIONS` | `experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/`；不训练、不改阈值、不运行 Test 模型推理或 RCA；旧 Fit/Validation 推理源码仍 `UNVERIFIED` |
 | P6-C1 G1 静态可行性 | 完成，`EXECUTION_NO_GO_AS_IS` | `experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/`；Fit-only 三折的静态 GT/窗口上界 4,254，实际 OOS 锚点与共同 Train cohort 未知 |
 | P6-C1 G2 设计锁 | 完成设计；Python 3.8 兼容更正 | `docs/P6_C1_G2_FROZEN_DESIGN.md`、`configs/e2e/gaia_p6_c1_g2_v1_1.json`、独立更正记录；三折 prefix-fit detector、固定 RCA 表示与 transductive 文件名目录限制、共同 Train 队列下限、预测锁和评估规则已固定 |
-| P6-C1 G3 逐折实现 | 部分实现，正式执行仍 NO-GO | [G3 实施状态](P6_C1_G3_IMPLEMENTATION_STATUS.md)；逐折 prefix 物化、无标签 Generation 窗口数据集与合成编排测试已完成，真实 raw smoke、worker 等价、检测器训练/推理、RCA 与预测锁仍待实现 |
-| P6-C0R2/C1 执行/C2 | 未执行 | C1 待 G3 实现与 smoke；C0R2 仍须单独冻结协议；均不能自动执行 |
+| P6-C1 G3 逐折实现 | 代码与限定 smoke 通过；正式运行未开始 | [G3 实施状态](P6_C1_G3_IMPLEMENTATION_STATUS.md)、[手动运行方案](P6_C1_G3_MANUAL_RUN.md)；六类接口及封存已实现，合成 raw fixture 的 1/24 worker 拟合/数组等价通过；真实 GAIA prefix、模型结果与 Test 仍待手动正式执行验证 |
+| P6-C0R2/C1 执行/C2 | 未执行 | C1 可按 G3 手动方案开启新 run，prefix/schema、共同队列下限等正式门槛仍会 fail-closed；C0R2 仍须单独冻结协议；均不能自动执行 |
 
 ## 4. 数据、预处理和输入契约
 
@@ -216,8 +216,8 @@ Test 既有预测/episode/matching 复核为 `PASS`。
 ## 8. 推荐下一步（不自动执行）
 
 1. C0F 更正已经归档。保留旧 C0F 和更正 run 为独立历史记录；不要将旧 `structural_dominant` 路线建议当作冻结验收规则，也不要将旧 Fit/Validation 推理源码标为已验证。
-2. C1 G1 给出 Fit-only 三折静态上界 4,254；G2 已锁定逐折 prefix-fit detector、固定 RCA 文件名目录的限定证据等级及共同队列规则。G3 已有逐折 prefix 物化代码和合成编排测试，下一步需补真实 raw 小规模 smoke 与 1/24 worker 等价、逐折检测器、OOS episode、同 case RCA 特征、共用 scaler、全 episode label-free 排名与预测锁。不得把 4,254 当作已生成的 OOS 案例。
-3. C1 正式执行与 C2 仍需 G3 通过后的新 run；本设计不自动启动训练、Test 模型推理或 RCA。C2 才报告完整 failure semantics；当前 Test 已被看过，只能作为复用 Test 评价。C0R2 仍是独立条件支线，不根据已看过的 Test 挑选配置。
+2. C1 G1 给出 Fit-only 三折静态上界 4,254；G2 已锁定逐折 prefix-fit detector、固定 RCA 文件名目录的限定证据等级及共同队列规则。G3 接口和限定 smoke 已通过，下一步由用户按[手动运行方案](P6_C1_G3_MANUAL_RUN.md)执行真实原始数据逐折物化、三次检测器训练、共同队列、两臂 RCA、预测锁及锁后评价。任何 prefix schema 或共同队列下限失败均保留 NO-GO，不补救；不得把 4,254 当作已生成的 OOS 案例。
+3. C1 正式执行与 C2 仍需新 run；当前代码不自动启动全量训练、Test 模型推理或 RCA。C2 仅在 C1 预测锁后报告完整 failure semantics；当前 Test 已被看过，只能作为复用 Test 评价。C0R2 仍是独立条件支线，不根据已看过的 Test 挑选配置。
 4. P5 provenance 修订属于独立归档工作，不通过修改本轮实验数值解决；保留原输入/结果和更正记录。
 
 ## 9. 只读快速检查命令
