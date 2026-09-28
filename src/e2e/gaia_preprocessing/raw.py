@@ -1070,8 +1070,19 @@ def transform_trace(trace_fit: TraceFit, trace_dir: Path, split_start_ms: int, s
     return apply_trace_scalers(aggregation.features, services=trace_fit.services, frozen_directed_edges=trace_fit.directed_edges, scales=trace_fit.scalers)
 
 
+def transform_trace_with_diagnostics(trace_fit: TraceFit, trace_dir: Path, split_start_ms: int, split_end_ms: int, *, chunk_rows: int = 100_000, workers: int = 1, start_method: str = "spawn"):
+    """Transform one isolated segment and retain its trace-parent diagnostics."""
+    if not isinstance(trace_fit, TraceFit):
+        raise TypeError("trace_fit must be TraceFit")
+    grid = _grid(split_start_ms, split_end_ms, trace_fit.grid_ms)
+    aggregation = _aggregate_trace_files(trace_dir, trace_fit.services, grid, split_start_ms, split_end_ms, chunk_rows, workers=workers, start_method=start_method)
+    values = apply_trace_scalers(aggregation.features, services=trace_fit.services, frozen_directed_edges=trace_fit.directed_edges, scales=trace_fit.scalers)
+    return values, dict(aggregation.diagnostics)
+
+
 __all__ = [
     "MetricFile", "MetricSlot", "MetricFit", "index_metric_files", "fit_metric", "transform_metric",
     "transform_metric_with_observability",
     "LogFit", "fit_logs", "transform_logs", "TraceFit", "fit_trace", "transform_trace",
+    "transform_trace_with_diagnostics",
 ]
