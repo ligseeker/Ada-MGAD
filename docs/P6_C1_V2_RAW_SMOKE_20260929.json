@@ -1,0 +1,89 @@
+{
+  "checks": {
+    "checkpoint_bytes": 11780761,
+    "fit_windows": 50,
+    "generation_episodes": 3,
+    "generation_label_free_columns": true,
+    "generation_score_columns": [
+      "binary_prediction",
+      "fold",
+      "prediction_available_time",
+      "prediction_timestamp",
+      "sample_index",
+      "split",
+      "system_score",
+      "system_trigger_logit"
+    ],
+    "matching_after_seal": {
+      "complete_gt": 6,
+      "dual_context_legal": 0,
+      "episodes": 3,
+      "false_alarms": 3,
+      "matched": 0,
+      "misses": 6
+    },
+    "scores_written_before_any_gt_join": true,
+    "sealed_stage_files": [
+      "checkpoint.pt",
+      "completion_manifest.json",
+      "generation_episodes.csv",
+      "generation_scores.csv",
+      "selection.json",
+      "training_log.json"
+    ],
+    "selected_epoch": 0,
+    "smoke_manifest_not_formal": true,
+    "supervision_generation_labels_built": false,
+    "threshold": 0.5546083281833062
+  },
+  "formal_gaia_fold_tested": false,
+  "git_head": "c0896bf8def1936bb892043b1180de8470cb0130",
+  "not_a_result": true,
+  "note": "Bounded real-array smoke only: one epoch on a 60-bin Fit slice, short Selection/Generation slices, no Test construction, no formal fold training and no experiment metric.",
+  "protocol_id": "P6-C1-SUPERVISION-OOS-v1",
+  "run_id": "c1-supervision-oos-v1-seed42",
+  "schema_version": "p6_c1_v2_bounded_raw_smoke_v1",
+  "smoke_epochs": 1,
+  "smoke_intervals_ms": {
+    "fit": [
+      1625133600000,
+      1625135400000
+    ],
+    "generation": [
+      1625136300000,
+      1625137200000
+    ],
+    "selection": [
+      1625135400000,
+      1625136300000
+    ]
+  },
+  "smoke_patience": 0,
+  "source_sha256": {
+    "scripts/p6/audit_c1_v2_g1_feasibility.py": "75f0b3137a6337fc394c099809436f7fbd2a8ab4bfe5339d6b24f1a7595b2a5b",
+    "scripts/p6/run_c1_v2.py": "7fbd3b693acbdc9eab475203cbe1854f1584cf2695a40e6ace255c505b55b55c",
+    "src/e2e/ad_data.py": "ee2e3e402c7d392cc4ad94a443e1e138a8477cf83b516a8eb0ecfefc9a03f504",
+    "src/e2e/c1_common_cohort.py": "872848ff63e7e7a0b915423efe604d5eb421cfd109eecf0a1dfcf7b905e2803e",
+    "src/e2e/c1_evaluation.py": "2b17d43ec4ca981b4337beb3b6986372f2046c30b883614164c8c4ad81cccf49",
+    "src/e2e/c1_oos_matching.py": "105dd39c5a9ccc2937c7f6ce187ccc83aacab6bbcb61bae85e680b4eebb6a660",
+    "src/e2e/c1_shared_rca.py": "282d72b4c98c9ddb13f54d71d6aca5e58ea63d51dc6b5e11194f79ec850f4b8c",
+    "src/e2e/c1_test_scoring.py": "9c6e2356741ae7806a283f5bd175fa547e3ef3839a0d6821ac05f530eaeba586",
+    "src/e2e/c1_v2_c2.py": "39967809ffc1022a90513769b3ccaed8440084b33912403b47ecf1df05941a4c",
+    "src/e2e/c1_v2_detector.py": "3d71e2355c0c0d75c7f115513799f2773ddca6da88b19cdd08e7a02617e139b8",
+    "src/e2e/c1_v2_shared_data.py": "7df211acf1851f0ac9914461a43c6a67c249bcab210761535d6f6ef02ee253ee",
+    "src/e2e/event_detection.py": "115819a5e8162f116da109dfbb584b755b12dc508d51dba7449d43b0734d837a",
+    "src/e2e/gaia_rca_adapter.py": "657c2bff29c4a07c85b2ea3e01e030bb9344458c0a8b46805593c81c2f9b17c0",
+    "src/e2e/protocol.py": "5e4ae346db695b1d8059a00df82c22ea3177f66a81a0339f9f9d8318f3a1d86b",
+    "src/e2e/rca_features.py": "3d13755621121586e8b87b663d3b15a81a74353d7921966496d8181baac49be8",
+    "src/e2e/rca_model.py": "d1e7b10ce4e941f3438140bf962533a4a167e766428df7335de8b162e812e1d9",
+    "src/e2e/system_trigger.py": "89cb54355cfebe54147c9788eda0822de659bed7db2f9fba03cc15ebc59102f0",
+    "src/e2e/system_trigger_data.py": "14c6c7986884af9b06ec99c3e5aac024f4a3c92cda02ebbf44bf2e8f731bef2a",
+    "src/e2e/system_trigger_model.py": "dd6fa9e6eaf3cbdb530541b11fc6e92d2bf9ba0f58f187dd0377379f64d38472",
+    "src/model_util.py": "39401ae1bfc326fa776fbac66854662c1fa51613e2ef901c65d697fe20c25faa",
+    "util/GAIA/gaia.ini": "e852b23ef5655c6aa68e2867ca7115aa1c006a0a868c35b7a0705b33462334ce",
+    "util/util.py": "dbd57c0f0eb7303c02f9c6ac20d9b14a3527ef189ce733ffd54ac68db9cf0651"
+  },
+  "status": "PASS",
+  "test_labels_or_gt_read": false,
+  "test_trajectory": "not_constructed"
+}

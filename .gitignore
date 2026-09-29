@@ -146,3 +146,13 @@ experiments/p6/c1_protocol/*
 experiments/p6/c1_protocol/*/*
 !experiments/p6/c1_protocol/*/*.json
 !experiments/p6/c1_protocol/*/*.md
+
+# P6-C1-v2 supervision-OOS run: version sealed records only, never the large
+# arrays, checkpoints or per-fold sliced inputs.
+!experiments/p6/c1_supervision_oos/
+experiments/p6/c1_supervision_oos/**
+!experiments/p6/c1_supervision_oos/**/
+!experiments/p6/c1_supervision_oos/**/*.json
+!experiments/p6/c1_supervision_oos/**/*.md
+!experiments/p6/c1_supervision_oos/**/*.csv
+experiments/p6/c1_supervision_oos/**/g1_static_FIRST_ATTEMPT_*/
