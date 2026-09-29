@@ -1,0 +1,341 @@
+{
+  "schema_version": "p6_c1_v2_supervision_oos_design_lock_v1",
+  "protocol_id": "P6-C1-SUPERVISION-OOS-v1",
+  "status": "DESIGN_LOCKED_G1_STATIC_AUDIT_REQUIRED",
+  "run_id": "c1-supervision-oos-v1-seed42",
+  "output_root": "experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42",
+  "seed": 42,
+  "supersedes": "P6-C1-G2-v1.1 / c1-prefix-oos-v1-seed42 (PREFIX_SCHEMA_NO_GO; preserved, never resumed or reused)",
+  "research_question": "With RCA representation, RCA model, candidate services and Train case cohort held fixed, does replacing the RCA Train anchor (GT onset) with detector-produced OOS detected timestamps change detected-anchor root-service ranking (paired AC@1 of Arm C minus Arm B)?",
+  "evidence_grade": {
+    "grade": "SUPERVISION_OOS_PLUS_DETECTOR_PARAMETER_OOS",
+    "shared_preprocessing": "frozen P5/P6 V2 original-Train label-free preprocessing (Metric schema/scalers, Drain3 vocabulary/scales, Trace graph/scales, 30s grid)",
+    "information_boundary": "shared preprocessing was fitted once on the original 70% Train period with label-free decisions; it may have observed label-free Train telemetry later than a fold Generation interval; it never used Generation labels, root labels, fault labels or Test telemetry",
+    "not_claimed": [
+      "strict prefix-preprocessing-OOS",
+      "full-pipeline forward-OOS",
+      "independent Test confirmation (the frozen C0 Test has been examined before)"
+    ]
+  },
+  "bindings": {
+    "base_config": {
+      "bytes": 5077,
+      "path": "configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+      "role": "shared_preprocessing_and_timeline",
+      "sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35"
+    },
+    "c0_trigger_config": {
+      "bytes": 4061,
+      "path": "configs/e2e/gaia_p6_c0_system_trigger.json",
+      "role": "detector_architecture_training_selection_rules",
+      "sha256": "a2c42beb19f5a234ab74958cf3db32301524f909d5605001bdaeb9c141e3b4f8"
+    },
+    "shared_ad_graph": {
+      "bytes": 528,
+      "path": "data/p5/v3_preprocessing_v2/ad/graph.npy",
+      "role": "detector_static_graph",
+      "sha256": "04cf2a6bdbd4a2137cafe8140794750875c690b210f1d1f8347a14a34804a809"
+    },
+    "shared_ad_manifest": {
+      "bytes": 13766,
+      "path": "artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json",
+      "role": "shared_array_provenance",
+      "sha256": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2"
+    },
+    "shared_frozen_schema": {
+      "bytes": 90054,
+      "path": "artifacts/p5/v3_preprocessing_v2/schema/frozen_preprocessing_schema.json",
+      "role": "preprocessing_identity",
+      "sha256": "cecea203ff6946744d14d256bb3a993c2186a613601dae346d9edaee6b04f95c"
+    },
+    "shared_train_log": {
+      "bytes": 78059648,
+      "path": "data/p5/v3_preprocessing_v2/ad/train/log.npy",
+      "role": "detector_input_slice_source",
+      "sha256": "02af8ad63423cfaebadc336f122c984a0a6b7c718db4674c62a6ddd40f9ff9dc"
+    },
+    "shared_train_metric": {
+      "bytes": 117089408,
+      "path": "data/p5/v3_preprocessing_v2/ad/train/metric.npy",
+      "role": "detector_input_slice_source",
+      "sha256": "8fb92322f56007f59007b102f6eb07b0cad6496b44b4292f63ced0d797956ee0"
+    },
+    "shared_train_timestamps": {
+      "bytes": 488000,
+      "path": "data/p5/v3_preprocessing_v2/ad/train/timestamps.npy",
+      "role": "detector_input_slice_source",
+      "sha256": "ed06402501a887099df16b0353ef4825beda2f24a74d6dae6c38b7d34de91735"
+    },
+    "shared_train_trace": {
+      "bytes": 195148928,
+      "path": "data/p5/v3_preprocessing_v2/ad/train/trace.npy",
+      "role": "detector_input_slice_source",
+      "sha256": "fd49c42223e5dd99420bb5e13432b72c801e6c86e5562620e938599f74d628f2"
+    },
+    "shared_test_timestamps": {
+      "bytes": 209216,
+      "path": "data/p5/v3_preprocessing_v2/ad/test/timestamps.npy",
+      "role": "test_firewall_boundary_check",
+      "sha256": "82116aac4da43d287ea0fb904a5ff7fee937f477182678c7d11ca94bcfcea5ab"
+    },
+    "gt_registry": {
+      "bytes": 2067208,
+      "path": "artifacts/p5/v3/protocol/gt_event_registry.csv",
+      "role": "trigger_supervision_and_train_matching",
+      "sha256": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b"
+    },
+    "rca_index_manifest": {
+      "bytes": 953444,
+      "path": "data/p5/v3/rca_raw_index/index_manifest.json",
+      "role": "rca_feature_source",
+      "sha256": "cd343dfad123e8238be0f9357fddb6bd55625440e96890cba0a2af40b3a88c19"
+    },
+    "c0_test_episodes": {
+      "bytes": 378858,
+      "path": "experiments/p6/system_event_trigger/test_episodes.csv",
+      "role": "test_scoring_source",
+      "sha256": "30bacbeecbee4b9f738fc6330fa9d8df5c1adc08e37fb1ee8476f1b47735399b"
+    },
+    "c0_test_matching": {
+      "bytes": 987765,
+      "path": "experiments/p6/system_event_trigger/test_matching.csv",
+      "role": "evaluator_only",
+      "sha256": "011332f3537ee6f7d044e9da23df1d88f617fb71d3a552354343db6fd91c9c77"
+    },
+    "c0_test_metrics": {
+      "bytes": 14261,
+      "path": "experiments/p6/system_event_trigger/test_metrics.json",
+      "role": "evaluator_only_frozen_stage1_reference",
+      "sha256": "2968632cc4da1b807d976d8bb1c449f9d755cb1c15d2ee43bcd440b74946ce5b"
+    },
+    "c0_test_predictions": {
+      "bytes": 3219195,
+      "path": "experiments/p6/system_event_trigger/test_predictions.csv",
+      "role": "provenance_hash_only_contains_trigger_label",
+      "sha256": "985623e06f5d56db9c2c536b8dd65226967ae1c25f36c9a4924ae9e38d5bafab"
+    },
+    "c1_v1_g2_protocol_v1_1": {
+      "bytes": 8093,
+      "path": "configs/e2e/gaia_p6_c1_g2_v1_1.json",
+      "role": "prior_design_reference_not_reused",
+      "sha256": "a8b0d67f9aa06f4fe01fceaa982a9742145082be88096d73d310f4aa02a791ac"
+    },
+    "c1_v1_run_lock": {
+      "bytes": 3584,
+      "path": "experiments/p6/c1_detector_aligned/c1-prefix-oos-v1-seed42/run_lock.json",
+      "role": "failed_run_non_reuse_evidence",
+      "sha256": "0c5bffea3ae934540fb26674290cc1f2d6dac4da65bf6eb80fff08673b1b9bc9"
+    },
+    "g1_v1_ledger": {
+      "bytes": 25618,
+      "path": "experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/feasibility_ledger.json",
+      "role": "static_upper_bound_reproduction_reference",
+      "sha256": "80718e06a801f4a4cfac085eec999285a162b4e1ebf5afff082f17925a99b3da"
+    }
+  },
+  "folds": [
+    {
+      "fold": 1,
+      "intervals_ms": {
+        "detector_fit": [1625133600000, 1625394960000],
+        "detector_selection": [1625394960000, 1625656320000],
+        "anchor_generation": [1625656320000, 1625917680000]
+      },
+      "static_gt_context_upper_bound": 1192,
+      "minimum_actual_common_cases": 596
+    },
+    {
+      "fold": 2,
+      "intervals_ms": {
+        "detector_fit": [1625133600000, 1625656320000],
+        "detector_selection": [1625656320000, 1625917680000],
+        "anchor_generation": [1625917680000, 1626179040000]
+      },
+      "static_gt_context_upper_bound": 1529,
+      "minimum_actual_common_cases": 765
+    },
+    {
+      "fold": 3,
+      "intervals_ms": {
+        "detector_fit": [1625133600000, 1625917680000],
+        "detector_selection": [1625917680000, 1626179040000],
+        "anchor_generation": [1626179040000, 1626440400000]
+      },
+      "static_gt_context_upper_bound": 1533,
+      "minimum_actual_common_cases": 767
+    }
+  ],
+  "fold_rules": {
+    "generation_disjoint": "generation intervals do not overlap and every case_id belongs to at most one generation fold",
+    "floors": "ceil(static_gt_context_upper_bound / 2) fixed before execution; a missed floor is NO-GO with no rescue, threshold change, fold change or added fold",
+    "segment_ownership": "a detector window belongs to the segment that owns its prediction_available_time; its 300s input history must lie wholly inside that segment",
+    "detector_windows_per_segment": "legal windows are sample indices [0, time_bins - window_bins); the window whose prediction_available_time equals the segment end is not scored in either segment (frozen G3 convention)"
+  },
+  "detector": {
+    "source": "p6_c0_frozen_architecture_and_training",
+    "architecture": "random-init multimodal encoder + dynamic graph learner + permutation-invariant service pooling (mean/max/std) + 48->32->1 system head",
+    "loads_any_checkpoint": false,
+    "per_fold_random_initialization": true,
+    "forbidden_modules": [
+      "node anomaly head",
+      "service ranking head",
+      "root label",
+      "fault label",
+      "label-conditioned reconstruction"
+    ],
+    "grid_seconds": 30,
+    "history_seconds": 300,
+    "window_bins": 10,
+    "checkpoint_selection": "selection_event_f1_then_recall_then_threshold",
+    "threshold_selection": "selection_exact_unique_score_sweep",
+    "matching_tolerance_seconds": 60,
+    "matching_semantics": "causal_max_cardinality_minimum_delay",
+    "generation_inference": "label_free_then_seal_then_train_only_causal_matching",
+    "frozen_values_are_read_from": "bindings.c0_trigger_config",
+    "expected_frozen_values": {
+      "max_epochs": 30,
+      "patience": 8,
+      "batch_size": 32,
+      "num_workers": 2,
+      "optimizer": "AdaBelief",
+      "learning_rate": 0.001,
+      "weight_decay": 0.0005,
+      "scheduler": "StepLR",
+      "scheduler_step": 10,
+      "scheduler_gamma": 0.5,
+      "grad_clip_norm": 10.0,
+      "loss": "masked_BCEWithLogitsLoss",
+      "pos_weight": "fit_negative_bins / fit_positive_bins",
+      "graph_sparse_weight": 0.001,
+      "head_hidden": 32
+    }
+  },
+  "trigger_label": {
+    "positive": "0 <= prediction_available_time - gt_start_ms <= 60000",
+    "ignore": "gt_start_ms + 60000 < prediction_available_time < gt_end_ms and not positive",
+    "negative": "neither positive nor ignore",
+    "long_event_ignore": true,
+    "reintroduced_classes": [],
+    "generation_labels_built": false
+  },
+  "cohort": {
+    "candidates": "legal paired matched Generation cases with unique case_id and unique matched prediction",
+    "requirements": [
+      "GT onset",
+      "OOS detected t_hat",
+      "root label",
+      "10 canonical candidates",
+      "legal GT W300 context",
+      "legal DET W300 context",
+      "finite GT feature tensor",
+      "finite DET feature tensor"
+    ],
+    "exclusion_ledger_fields": [
+      "unmatched",
+      "boundary",
+      "gt_context_illegal",
+      "det_context_illegal",
+      "feature_failure",
+      "duplicate",
+      "candidate_mismatch"
+    ],
+    "never_selected_by_model_correctness_or_test_labels": true,
+    "identity_shared_by_arms": ["A", "B", "C"]
+  },
+  "rca": {
+    "source_commit": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
+    "representation": "GAIA E2E adapter Z2, window 300s, bin 15s, 40 bins, 10 candidates, 68D",
+    "canonical_ada_rca_reference": "W600-B15 80 bins (not used in this round)",
+    "candidates": 10,
+    "candidate_order": "frozen canonical GAIA service order",
+    "model": "conditional_logit",
+    "l2_lambda": 1.0,
+    "max_iter": 1000,
+    "gradient_tolerance": 1e-8,
+    "case_weight": "unit",
+    "shared_scaler": "one StandardScaler fitted on GT-anchor candidate rows of the common Train cohort; identical for A/B/C",
+    "arms": {
+      "A": "GT Train -> GT Test (post-lock oracle diagnostic only, B weights)",
+      "B": "GT Train -> detected Test",
+      "C": "OOS detected Train -> detected Test"
+    },
+    "invariants_between_b_and_c": [
+      "case_ids", "roots", "candidates", "candidate order", "scaler",
+      "lambda", "optimizer", "tolerance", "initialization", "case weights"
+    ],
+    "hyperparameter_search": false
+  },
+  "prediction_lock": {
+    "before_test_matching_or_root_label_join": true,
+    "scope": "every frozen C0 Test detected episode, including later false alarms",
+    "label_free_columns_only": ["prediction_id", "split", "t_hat", "episode_end_time", "positive_bins", "system_score", "threshold"],
+    "hash_only_inputs": ["c0_test_predictions (contains trigger_label)"],
+    "missing_ranking": "zero correctness, stays in the denominator",
+    "no_fallback": true,
+    "immutable_after_lock": true,
+    "files": ["scope_rankings.csv", "feature_inputs.npy", "feature_valid.npy", "prediction_lock.json", "completion_manifest.json"]
+  },
+  "evaluation": {
+    "primary": "paired_AC_at_1_C_minus_B_on_same_locked_legal_matched_cohort",
+    "paired_transitions": ["both_correct", "b_only_correct", "c_only_correct", "both_incorrect"],
+    "secondary": ["AC_at_3", "AC_at_5", "MRR", "root_macro", "fault_macro"],
+    "macro_min_group_n": 20,
+    "small_group_rule": "n=0 undefined and listed; 1<=n<20 descriptive only; n>=20 in the prespecified macro",
+    "bootstrap": {
+      "cluster": "UTC onset day",
+      "replicates": 10000,
+      "seed": 42,
+      "kind": "descriptive_percentile_interval_on_reused_test"
+    },
+    "performance_gate": "none; C>B, C~B and C<B are all accepted validity outcomes",
+    "test_reuse": "disclose"
+  },
+  "c2": {
+    "layer_1": "frozen P6-C0 Stage-1 event metrics (TP/FP/FN, P/R/F1, mean/median/P95 delay) quoted, never re-optimized",
+    "layer_2": "matched legal RCA for A/B/C on the same locked cohort",
+    "layer_3": "full diagnosis P/R/F1@1,3,5 for B and C counting stage-1 misses, false alarms, invalid context, missing and wrong rankings",
+    "failure_ledger_categories": [
+      "EVENT_MISSED",
+      "EVENT_FALSE_ALARM",
+      "RCA_CONTEXT_INVALID",
+      "RCA_RANKING_MISSING",
+      "ROOT_OUTSIDE_TOP1",
+      "ROOT_OUTSIDE_TOP3",
+      "ROOT_OUTSIDE_TOP5",
+      "SUCCESS_TOP1"
+    ],
+    "stratification": ["duration", "onset multiplicity", "fault", "root service"],
+    "stratification_use": "interpretation only, never post hoc model selection",
+    "latency_definitions": {
+      "detection_latency": "t_det - GT onset",
+      "rca_data_ready_latency": "(t_det + 300s) - GT onset",
+      "final_diagnosis_compute_latency": "UNMEASURED"
+    },
+    "runs_after_c1_regardless_of_sign": true
+  },
+  "resource_budget": {
+    "detector_fits": 3,
+    "max_epochs_per_fold": 30,
+    "detector_loader_workers": 2,
+    "torch_threads": 8,
+    "threshold_workers": 8,
+    "rca_fits": 2,
+    "fold_slicing_passes": 3,
+    "hyperparameter_search": false,
+    "formal_run_repair": "new_protocol_version_and_new_run_id"
+  },
+  "stop_conditions": [
+    "input or hash mismatch",
+    "split violation",
+    "Generation label leakage",
+    "Test accessed before prediction lock",
+    "fold common cohort below floor",
+    "feature non-finite",
+    "case identity mismatch",
+    "candidate order mismatch",
+    "shared scaler mismatch",
+    "RCA training failure",
+    "prediction lock failure"
+  ],
+  "test_policy": "read frozen C0 test_episodes only; never rerun C0 Test inference, never reselect its threshold, keep TP=4198 FP=16 FN=1589 P=0.9962 R=0.7254 F1=0.8395 as the frozen Stage-1 result"
+}
