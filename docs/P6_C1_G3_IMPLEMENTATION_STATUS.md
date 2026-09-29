@@ -1,6 +1,6 @@
 # P6-C1 G3 implementation status
 
-Updated: 2026-09-29. Status: **G3 CODE, BOUNDED SMOKE AND READ-ONLY PREFLIGHT PASS; FORMAL C1 RUN NOT STARTED**.
+Updated: 2026-09-29. Status: **FORMAL FOLD 1 `PREFIX_SCHEMA_NO_GO`; FROZEN C1 RUN STOPPED**. See the [fold 1 disposition](P6_C1_G3_FOLD1_PREFIX_SCHEMA_NO_GO_20260929.md).
 
 The frozen [G2 design](P6_C1_G2_FROZEN_DESIGN.md) and [v1.1 source binding](../configs/e2e/gaia_p6_c1_g2_v1_1.json) are unchanged. The G3 runner is [`scripts/p6/run_c1.py`](../scripts/p6/run_c1.py). It uses the exact G2 run root and exclusive stage directories. `init` repeats the full read-only input preflight before reserving that root. Every subsequent stage checks the run lock and source snapshot; a failed stage retains `INCOMPLETE.json` and cannot be overwritten.
 
@@ -22,7 +22,7 @@ The frozen [G2 design](P6_C1_G2_FROZEN_DESIGN.md) and [v1.1 source binding](../c
 | C1 interface tests | PASS: 22 isolated/synthetic C1 tests, including detector stage sealing, causal OOS matching, paired feature construction, shared scaler parity, full Test episode scope and denominator-preserving failure, exclusive stage seals and post-lock C1/C2/A evaluation. |
 | Existing adapter/model regression | PASS: eight raw-adapter tests and five P5 RCA-model tests. |
 | Frozen C0 detector regression | PASS: 30 model, label, loader and driver contract tests. |
-| Real GAIA prefix schema and dimensions | PENDING: no formal fold has been materialized. A prefix that cannot supply frozen dimensions must stop as `PREFIX_SCHEMA_NO_GO`. |
+| Real GAIA prefix schema and dimensions | NO-GO: formal fold 1 Fit retained 27 qualified real Metric slots against the frozen 45-slot budget. Its `INCOMPLETE.json` and `failure.json` are preserved; no fold was completed. |
 | Formal OOS anchors/common Train cohort | PENDING: G1's 4,254 is a static GT/context upper bound, not observed anchors. The 596/765/767 floors have not been measured. |
 | Test rankings/C1/C2 outcomes | PENDING: no formal detector, RCA fit, Test feature pass, prediction lock or evaluation has run. The existing Test is reused, not independent confirmation. |
 
@@ -32,4 +32,4 @@ The old `check_c1_g2_protocol.py` PASS line still says “pending G3” because 
 
 ## Manual formal sequence
 
-Use the [full command handoff](P6_C1_G3_MANUAL_RUN.md). The manual `init` command performs the full raw-content and RCA-index read-only preflight. Run the three fold-input/fold-detector pairs, then cohort. If any fold reports `PREFIX_SCHEMA_NO_GO`, any stage retains `INCOMPLETE.json`, or `train_cohort` seals `NO_GO`, stop and preserve the run. Continue to RCA fit, prediction lock and post-lock evaluation only when the preceding completion manifest is `COMPLETE`.
+The [original manual command handoff](P6_C1_G3_MANUAL_RUN.md) records the planned sequence. `init` and fold 1 `fold-input` were attempted; fold 1 failed its frozen Metric schema gate. No further command from that handoff is valid for this run ID. Preserve the existing run and use the [fold 1 disposition](P6_C1_G3_FOLD1_PREFIX_SCHEMA_NO_GO_20260929.md) for the next research decision.

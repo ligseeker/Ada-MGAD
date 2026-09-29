@@ -1,6 +1,8 @@
 # P6-C1 G3 manual formal run handoff
 
-Status on 2026-09-29: code, bounded smoke and full read-only input preflight pass; **no formal C1 stage has run**. The commands below use the frozen G2-v1.1 run ID `c1-prefix-oos-v1-seed42`. Run them in order with the DAG interpreter. Each full raw processing, detector training, RCA training, Test scoring and evaluation command is for the user to execute manually. Do not substitute P5 or C0 `all` commands.
+> **Historical command handoff; stop for this run ID.** On 2026-09-29, fold 1 failed the frozen Metric schema gate with 27 qualified real slots against 45 required. Preserve `c1-prefix-oos-v1-seed42`; do not execute the remaining commands below. See the [fold 1 disposition](P6_C1_G3_FOLD1_PREFIX_SCHEMA_NO_GO_20260929.md).
+
+Original handoff status before the 2026-09-29 formal attempt: code, bounded smoke and full read-only input preflight passed; **no formal C1 stage had run at that time**. The commands below use the frozen G2-v1.1 run ID `c1-prefix-oos-v1-seed42`. They were written for ordered execution with the DAG interpreter before the fold 1 schema result was known. The stop notice above supersedes those commands for this run ID.
 
 ## 1. Reserve the new run after full read-only preflight
 

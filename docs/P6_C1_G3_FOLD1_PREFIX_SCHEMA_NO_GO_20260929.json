@@ -1,0 +1,30 @@
+{
+  "schema_version": "p6_c1_g3_failed_run_disposition_v1",
+  "status": "PREFIX_SCHEMA_NO_GO",
+  "classification_basis": "frozen G2-v1.1 prefix schema rule; original failure.json status is INCOMPLETE",
+  "run_id": "c1-prefix-oos-v1-seed42",
+  "run_git_head": "313c2d8a0db283e2fde1e87cbf65fd89309b1a79",
+  "fold": 1,
+  "metric_qualified_real_slots_after_quality_and_correlation": 27,
+  "metric_required_real_slots": 45,
+  "completed_folds": 0,
+  "detector_training_started": false,
+  "rca_training_started": false,
+  "test_prediction_lock_created": false,
+  "test_evaluation_started": false,
+  "run_artifacts_preserved": true,
+  "evidence": {
+    "run_lock": {
+      "path": "experiments/p6/c1_detector_aligned/c1-prefix-oos-v1-seed42/run_lock.json",
+      "sha256": "0c5bffea3ae934540fb26674290cc1f2d6dac4da65bf6eb80fff08673b1b9bc9"
+    },
+    "fold_failure": {
+      "path": "experiments/p6/c1_detector_aligned/c1-prefix-oos-v1-seed42/folds/fold_01/failure.json",
+      "sha256": "7df74cb096c0387ac40563a89c692dda8b0134e230a93483bac81df778a47d68"
+    },
+    "fold_incomplete": {
+      "path": "experiments/p6/c1_detector_aligned/c1-prefix-oos-v1-seed42/folds/fold_01/INCOMPLETE.json",
+      "sha256": "b3fc5bb7ce86392fc5037cb3a9c698f00d83ac98cea035bca5ead4b9b530b4d2"
+    }
+  }
+}
