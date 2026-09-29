@@ -1,0 +1,36 @@
+{
+  "failed_run_disposition_sha256": "8f6ded9a06eb26e988981d9dbd5bab8b351541caea12dc25854cdeb23ae94744",
+  "files": {
+    "candidate_ledger.csv": {
+      "bytes": 729152,
+      "sha256": "0b25bf30626055af55d6b35ab3fe9f8ff3a375b9023b9ade6bcc8f592923edf5"
+    },
+    "summary.json": {
+      "bytes": 2334,
+      "sha256": "f951ebf8419d6499dfe3864e04b4c7f3ab04f258eb3c3d40a3f2ecc43623ae1a"
+    }
+  },
+  "g2_protocol_sha256": "a8b0d67f9aa06f4fe01fceaa982a9742145082be88096d73d310f4aa02a791ac",
+  "raw_content": {
+    "file_count": 6661,
+    "manifest_sha256": "03bdefc1ad817802a9f015a5cc07c71f5e8d625c66c5d5e9fbff31d0d5671718",
+    "records_sha256": "ee1ce9d50bf4002636223b31045e86c3d7000736700201ff655bb05a74776052",
+    "total_bytes": 31583130281
+  },
+  "run_id": "c1-fold1-metric-audit-v1-20260929",
+  "schema_version": "p6_c1_fold1_metric_audit_completion_v1",
+  "source_git_head": "f6d87f98f5969a8090854262d9066bb5c73c8744",
+  "source_sha256": {
+    "configs/e2e/gaia_p5_v3_preprocessing_v2.json": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+    "configs/e2e/gaia_p5_v3_preprocessing_v2.policy.json": "8ab40f77d5ae924678de3f3ea8d92c6eb3b1e425c876177a5831b3665ddd651f",
+    "configs/e2e/gaia_p6_c1_g2_v1_1.json": "a8b0d67f9aa06f4fe01fceaa982a9742145082be88096d73d310f4aa02a791ac",
+    "docs/P6_C1_G3_FOLD1_PREFIX_SCHEMA_NO_GO_20260929.json": "8f6ded9a06eb26e988981d9dbd5bab8b351541caea12dc25854cdeb23ae94744",
+    "scripts/p6/audit_c1_fold1_metric.py": "0944041d342f3d90fddd78a5153ff88bb31977453b05733f4823af8fc9b95423",
+    "src/e2e/c1_fold_preprocessing.py": "c66ffdb09bd4ce890ee5720f9bb91ebe2691f4fc0a6eedbcb1d88c72a9d59438",
+    "src/e2e/gaia_preprocessing/metric.py": "cc8b0da3492bbfccf69c7287cc60646f2be788a81dc957722ce041460d8b22ef",
+    "src/e2e/gaia_preprocessing/raw.py": "fb8092c52a7ce4966361c23ef3c05d453ecbc362053446f99e2d1fdf4c637387",
+    "src/e2e/parallel.py": "9230cce0405d9e459ee38c03c0270c27985a9007ab438a4c6a3933e1e85a35aa"
+  },
+  "status": "COMPLETE",
+  "workers": 24
+}

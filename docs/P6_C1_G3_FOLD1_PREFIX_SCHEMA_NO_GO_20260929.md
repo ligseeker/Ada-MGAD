@@ -28,3 +28,7 @@ The frozen [G2 design](P6_C1_G2_FROZEN_DESIGN.md) explicitly says that an early 
 **Decision:** stop this run and preserve its exact bytes. Do not run folds 2/3, `cohort`, `fit-rca`, `lock-test`, or `evaluate` under this run ID. The synthetic 45-slot smoke and read-only raw-content preflight remain valid for their narrower claims; neither established real fold 1 schema feasibility. Any revised dimension, feature policy, fold geometry, or rescue method requires a separately frozen protocol and new run ID before data processing. The currently reused Test cannot serve as independent confirmation.
 
 The next bounded study is the [independent Fit-prefix candidate audit](P6_C1_FOLD1_METRIC_PREFIX_AUDIT_PLAN_20260929.md). Its full raw scan remains a manual command and writes to a new directory outside this failed run.
+
+## Subsequent diagnostic, kept separate from this failure record
+
+On 2026-09-29 the user ran that independent audit, and its sealed [result](P6_C1_FOLD1_METRIC_PREFIX_AUDIT_RESULT_20260929.md) reproduced 27 after 45 quality passes and 18 correlation rejects. This later evidence does not alter the original run files or its `PREFIX_SCHEMA_NO_GO` disposition. The preceding paragraph records the next step as it stood when the failure was archived.

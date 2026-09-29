@@ -1,0 +1,69 @@
+{
+  "candidate_tasks": 477,
+  "catalog_indexed_metric_files": 5724,
+  "catalog_metric_csv_files": 6640,
+  "catalog_source_groups": 474,
+  "correlation_reject": 18,
+  "fit_interval_ms": [
+    1625133600000,
+    1625394960000
+  ],
+  "grid_ms": 30000,
+  "gt_labels_parsed": false,
+  "parallel": {
+    "effective_workers": 24,
+    "max_in_flight": 48,
+    "requested_workers": 24,
+    "result_order": "submitted task order",
+    "start_method": "spawn",
+    "task_count": 477,
+    "worker_native_threads": 1
+  },
+  "post_correlation_by_scope": {
+    "global": 27
+  },
+  "post_correlation_real_slots": 27,
+  "quality_pass": 45,
+  "quality_pass_by_scope": {
+    "global": 45
+  },
+  "quality_rejections": {
+    "coverage": 384,
+    "dynamic_zero": 20,
+    "unique": 28
+  },
+  "reproduces_original_27": true,
+  "required_real_slots": 45,
+  "schema_version": "p6_c1_fold1_metric_candidate_audit_v1",
+  "scope_ineligible_source_groups": 0,
+  "selection_or_test_values_parsed": false,
+  "surviving_slot_names": [
+    "global::docker_diskio_summary_wait_time::value",
+    "global::docker_memory_usage_total::value",
+    "global::docker_diskio_read_wait_time::value",
+    "global::docker_memory_stats_total_active_anon::value",
+    "global::docker_diskio_summary_service_time::value",
+    "global::docker_cpu_user_ticks::value",
+    "global::docker_cpu_system_ticks::value",
+    "global::docker_cpu_core_X_ticks::max",
+    "global::docker_memory_stats_inactive_anon::value",
+    "global::docker_memory_stats_inactive_file::value",
+    "global::docker_cpu_core_X_ticks::mean",
+    "global::docker_cpu_kernel_ticks::value",
+    "global::docker_memory_stats_dirty::value",
+    "global::docker_network_inbound_bytes::value",
+    "global::docker_network_outbound_bytes::value",
+    "global::docker_memory_stats_pgpgin::value",
+    "global::docker_network_outbound_packets::value",
+    "global::docker_network_in_bytes::value",
+    "global::docker_network_out_bytes::value",
+    "global::docker_cpu_core_X_pct::max",
+    "global::docker_memory_usage_pct::value",
+    "global::docker_cpu_total_norm_pct::value",
+    "global::docker_cpu_core_X_norm_pct::max",
+    "global::docker_cpu_core_X_norm_pct::mean",
+    "global::docker_network_out_packets::value",
+    "global::docker_cpu_kernel_pct::value",
+    "global::docker_cpu_kernel_norm_pct::value"
+  ]
+}
