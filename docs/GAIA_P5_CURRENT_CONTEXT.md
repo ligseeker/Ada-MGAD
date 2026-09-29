@@ -216,7 +216,7 @@ Test 既有预测/episode/matching 复核为 `PASS`。
 ## 8. 推荐下一步（不自动执行）
 
 1. C0F 更正已经归档。保留旧 C0F 和更正 run 为独立历史记录；不要将旧 `structural_dominant` 路线建议当作冻结验收规则，也不要将旧 Fit/Validation 推理源码标为已验证。
-2. C1 G1 给出 Fit-only 三折静态上界 4,254；G2 已锁定逐折 prefix-fit detector、固定 RCA 文件名目录的限定证据等级及共同队列规则。G3 接口和限定 smoke 已通过，但首次正式 fold 1 Fit 命中 `PREFIX_SCHEMA_NO_GO`：27 个合格 Metric base slots，低于冻结的 45 个。保留原 run，不执行后续折、RCA 或 Test；不得把 4,254 当作已生成的 OOS 案例。下一步是审计这一 Train-only prefix 可行性发现，并决定是否单独设计和冻结新协议。
+2. C1 G1 给出 Fit-only 三折静态上界 4,254；G2 已锁定逐折 prefix-fit detector、固定 RCA 文件名目录的限定证据等级及共同队列规则。G3 接口和限定 smoke 已通过，但首次正式 fold 1 Fit 命中 `PREFIX_SCHEMA_NO_GO`：27 个合格 Metric base slots，低于冻结的 45 个。保留原 run，不执行后续折、RCA 或 Test；不得把 4,254 当作已生成的 OOS 案例。下一步按[fold 1 Metric 候选审计计划](P6_C1_FOLD1_METRIC_PREFIX_AUDIT_PLAN_20260929.md)由用户手动运行独立诊断，核对质量筛选与相关性去重明细，再决定是否单独设计和冻结新协议。
 3. C1 的当前冻结 run 已在 fold 1 停止；C2 未执行。任何新 C1 正式执行均需新协议与新 run ID；当前代码不自动启动全量训练、Test 模型推理或 RCA。C2 仅在 C1 预测锁后报告完整 failure semantics；当前 Test 已被看过，只能作为复用 Test 评价。C0R2 仍是独立条件支线，不根据已看过的 Test 挑选配置。
 4. P5 provenance 修订属于独立归档工作，不通过修改本轮实验数值解决；保留原输入/结果和更正记录。
 
