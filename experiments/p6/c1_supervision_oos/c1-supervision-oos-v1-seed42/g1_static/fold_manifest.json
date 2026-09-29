@@ -1,0 +1,397 @@
+{
+  "case_in_at_most_one_generation_fold": true,
+  "folds": [
+    {
+      "complete_gt": {
+        "fit": 1763,
+        "generation": 1195,
+        "selection": 1414
+      },
+      "fit_complete_gt_fault_types": {
+        "access_permission_denied": 0,
+        "cpu_anomalies": 0,
+        "file_moving": 5,
+        "login_failure": 1699,
+        "memory_anomalies": 59,
+        "normal_memory_freed": 0
+      },
+      "fit_complete_gt_services": {
+        "dbservice1": 7,
+        "dbservice2": 5,
+        "logservice1": 6,
+        "logservice2": 8,
+        "mobservice1": 883,
+        "mobservice2": 829,
+        "redisservice1": 4,
+        "redisservice2": 7,
+        "webservice1": 7,
+        "webservice2": 7
+      },
+      "fold": 1,
+      "generation_context_safe_for_any_0_to_60s_detection_delay": 1192,
+      "generation_eligible_fault_types": {
+        "access_permission_denied": 0,
+        "cpu_anomalies": 0,
+        "file_moving": 5,
+        "login_failure": 1118,
+        "memory_anomalies": 66,
+        "normal_memory_freed": 3
+      },
+      "generation_eligible_services": {
+        "dbservice1": 7,
+        "dbservice2": 5,
+        "logservice1": 6,
+        "logservice2": 6,
+        "mobservice1": 591,
+        "mobservice2": 542,
+        "redisservice1": 5,
+        "redisservice2": 9,
+        "webservice1": 11,
+        "webservice2": 10
+      },
+      "generation_exclusions": {
+        "gt_rca_context_crosses_generation_block": 3,
+        "no_existing_p5_gt_feature": 0
+      },
+      "minimum_actual_common_cases": 596,
+      "segments": {
+        "fit": {
+          "detector_input_fields": [
+            "metric",
+            "log",
+            "trace"
+          ],
+          "finite": true,
+          "first_prediction_available_ms": 1625133900000,
+          "grid_ms": 30000,
+          "history_ms": 300000,
+          "interval_ms": [
+            1625133600000,
+            1625394960000
+          ],
+          "iso_utc": [
+            "2021-07-01T10:00:00+00:00",
+            "2021-07-04T10:36:00+00:00"
+          ],
+          "label_fields_present": [],
+          "last_prediction_available_ms": 1625394930000,
+          "legal_windows": 8702,
+          "time_bins": 8712,
+          "window_bins": 10
+        },
+        "generation": {
+          "detector_input_fields": [
+            "metric",
+            "log",
+            "trace"
+          ],
+          "finite": true,
+          "first_prediction_available_ms": 1625656620000,
+          "grid_ms": 30000,
+          "history_ms": 300000,
+          "interval_ms": [
+            1625656320000,
+            1625917680000
+          ],
+          "iso_utc": [
+            "2021-07-07T11:12:00+00:00",
+            "2021-07-10T11:48:00+00:00"
+          ],
+          "label_fields_present": [],
+          "last_prediction_available_ms": 1625917650000,
+          "legal_windows": 8702,
+          "time_bins": 8712,
+          "window_bins": 10
+        },
+        "selection": {
+          "detector_input_fields": [
+            "metric",
+            "log",
+            "trace"
+          ],
+          "finite": true,
+          "first_prediction_available_ms": 1625395260000,
+          "grid_ms": 30000,
+          "history_ms": 300000,
+          "interval_ms": [
+            1625394960000,
+            1625656320000
+          ],
+          "iso_utc": [
+            "2021-07-04T10:36:00+00:00",
+            "2021-07-07T11:12:00+00:00"
+          ],
+          "label_fields_present": [],
+          "last_prediction_available_ms": 1625656290000,
+          "legal_windows": 8702,
+          "time_bins": 8712,
+          "window_bins": 10
+        }
+      },
+      "static_gt_context_upper_bound": 1192
+    },
+    {
+      "complete_gt": {
+        "fit": 3177,
+        "generation": 1534,
+        "selection": 1195
+      },
+      "fit_complete_gt_fault_types": {
+        "access_permission_denied": 0,
+        "cpu_anomalies": 0,
+        "file_moving": 9,
+        "login_failure": 3051,
+        "memory_anomalies": 115,
+        "normal_memory_freed": 2
+      },
+      "fit_complete_gt_services": {
+        "dbservice1": 13,
+        "dbservice2": 13,
+        "logservice1": 14,
+        "logservice2": 20,
+        "mobservice1": 1537,
+        "mobservice2": 1534,
+        "redisservice1": 9,
+        "redisservice2": 10,
+        "webservice1": 13,
+        "webservice2": 14
+      },
+      "fold": 2,
+      "generation_context_safe_for_any_0_to_60s_detection_delay": 1528,
+      "generation_eligible_fault_types": {
+        "access_permission_denied": 1,
+        "cpu_anomalies": 0,
+        "file_moving": 2,
+        "login_failure": 1448,
+        "memory_anomalies": 76,
+        "normal_memory_freed": 2
+      },
+      "generation_eligible_services": {
+        "dbservice1": 6,
+        "dbservice2": 10,
+        "logservice1": 12,
+        "logservice2": 4,
+        "mobservice1": 699,
+        "mobservice2": 768,
+        "redisservice1": 5,
+        "redisservice2": 8,
+        "webservice1": 7,
+        "webservice2": 10
+      },
+      "generation_exclusions": {
+        "gt_rca_context_crosses_generation_block": 5,
+        "no_existing_p5_gt_feature": 0
+      },
+      "minimum_actual_common_cases": 765,
+      "segments": {
+        "fit": {
+          "detector_input_fields": [
+            "metric",
+            "log",
+            "trace"
+          ],
+          "finite": true,
+          "first_prediction_available_ms": 1625133900000,
+          "grid_ms": 30000,
+          "history_ms": 300000,
+          "interval_ms": [
+            1625133600000,
+            1625656320000
+          ],
+          "iso_utc": [
+            "2021-07-01T10:00:00+00:00",
+            "2021-07-07T11:12:00+00:00"
+          ],
+          "label_fields_present": [],
+          "last_prediction_available_ms": 1625656290000,
+          "legal_windows": 17414,
+          "time_bins": 17424,
+          "window_bins": 10
+        },
+        "generation": {
+          "detector_input_fields": [
+            "metric",
+            "log",
+            "trace"
+          ],
+          "finite": true,
+          "first_prediction_available_ms": 1625917980000,
+          "grid_ms": 30000,
+          "history_ms": 300000,
+          "interval_ms": [
+            1625917680000,
+            1626179040000
+          ],
+          "iso_utc": [
+            "2021-07-10T11:48:00+00:00",
+            "2021-07-13T12:24:00+00:00"
+          ],
+          "label_fields_present": [],
+          "last_prediction_available_ms": 1626179010000,
+          "legal_windows": 8702,
+          "time_bins": 8712,
+          "window_bins": 10
+        },
+        "selection": {
+          "detector_input_fields": [
+            "metric",
+            "log",
+            "trace"
+          ],
+          "finite": true,
+          "first_prediction_available_ms": 1625656620000,
+          "grid_ms": 30000,
+          "history_ms": 300000,
+          "interval_ms": [
+            1625656320000,
+            1625917680000
+          ],
+          "iso_utc": [
+            "2021-07-07T11:12:00+00:00",
+            "2021-07-10T11:48:00+00:00"
+          ],
+          "label_fields_present": [],
+          "last_prediction_available_ms": 1625917650000,
+          "legal_windows": 8702,
+          "time_bins": 8712,
+          "window_bins": 10
+        }
+      },
+      "static_gt_context_upper_bound": 1529
+    },
+    {
+      "complete_gt": {
+        "fit": 4372,
+        "generation": 1536,
+        "selection": 1534
+      },
+      "fit_complete_gt_fault_types": {
+        "access_permission_denied": 0,
+        "cpu_anomalies": 0,
+        "file_moving": 14,
+        "login_failure": 4172,
+        "memory_anomalies": 181,
+        "normal_memory_freed": 5
+      },
+      "fit_complete_gt_services": {
+        "dbservice1": 20,
+        "dbservice2": 18,
+        "logservice1": 20,
+        "logservice2": 26,
+        "mobservice1": 2129,
+        "mobservice2": 2078,
+        "redisservice1": 14,
+        "redisservice2": 19,
+        "webservice1": 24,
+        "webservice2": 24
+      },
+      "fold": 3,
+      "generation_context_safe_for_any_0_to_60s_detection_delay": 1532,
+      "generation_eligible_fault_types": {
+        "access_permission_denied": 4,
+        "cpu_anomalies": 0,
+        "file_moving": 3,
+        "login_failure": 1453,
+        "memory_anomalies": 70,
+        "normal_memory_freed": 3
+      },
+      "generation_eligible_services": {
+        "dbservice1": 12,
+        "dbservice2": 13,
+        "logservice1": 7,
+        "logservice2": 6,
+        "mobservice1": 732,
+        "mobservice2": 737,
+        "redisservice1": 5,
+        "redisservice2": 5,
+        "webservice1": 8,
+        "webservice2": 8
+      },
+      "generation_exclusions": {
+        "gt_rca_context_crosses_generation_block": 3,
+        "no_existing_p5_gt_feature": 0
+      },
+      "minimum_actual_common_cases": 767,
+      "segments": {
+        "fit": {
+          "detector_input_fields": [
+            "metric",
+            "log",
+            "trace"
+          ],
+          "finite": true,
+          "first_prediction_available_ms": 1625133900000,
+          "grid_ms": 30000,
+          "history_ms": 300000,
+          "interval_ms": [
+            1625133600000,
+            1625917680000
+          ],
+          "iso_utc": [
+            "2021-07-01T10:00:00+00:00",
+            "2021-07-10T11:48:00+00:00"
+          ],
+          "label_fields_present": [],
+          "last_prediction_available_ms": 1625917650000,
+          "legal_windows": 26126,
+          "time_bins": 26136,
+          "window_bins": 10
+        },
+        "generation": {
+          "detector_input_fields": [
+            "metric",
+            "log",
+            "trace"
+          ],
+          "finite": true,
+          "first_prediction_available_ms": 1626179340000,
+          "grid_ms": 30000,
+          "history_ms": 300000,
+          "interval_ms": [
+            1626179040000,
+            1626440400000
+          ],
+          "iso_utc": [
+            "2021-07-13T12:24:00+00:00",
+            "2021-07-16T13:00:00+00:00"
+          ],
+          "label_fields_present": [],
+          "last_prediction_available_ms": 1626440370000,
+          "legal_windows": 8702,
+          "time_bins": 8712,
+          "window_bins": 10
+        },
+        "selection": {
+          "detector_input_fields": [
+            "metric",
+            "log",
+            "trace"
+          ],
+          "finite": true,
+          "first_prediction_available_ms": 1625917980000,
+          "grid_ms": 30000,
+          "history_ms": 300000,
+          "interval_ms": [
+            1625917680000,
+            1626179040000
+          ],
+          "iso_utc": [
+            "2021-07-10T11:48:00+00:00",
+            "2021-07-13T12:24:00+00:00"
+          ],
+          "label_fields_present": [],
+          "last_prediction_available_ms": 1626179010000,
+          "legal_windows": 8702,
+          "time_bins": 8712,
+          "window_bins": 10
+        }
+      },
+      "static_gt_context_upper_bound": 1533
+    }
+  ],
+  "generation_intervals_disjoint": true,
+  "protocol_id": "P6-C1-SUPERVISION-OOS-v1",
+  "run_id": "c1-supervision-oos-v1-seed42",
+  "schema_version": "p6_c1_v2_g1_fold_manifest_v1",
+  "seed": 42
+}

@@ -1,0 +1,43 @@
+{
+  "floors_prespecified_before_execution": true,
+  "interpretation": "Static GT/context upper bounds and floors, not observed OOS anchors. No detector score, episode or Test label was read.",
+  "per_fold": [
+    {
+      "fold": 1,
+      "generation_context_safe_for_any_0_to_60s_detection_delay": 1192,
+      "generation_exclusions": {
+        "gt_rca_context_crosses_generation_block": 3,
+        "no_existing_p5_gt_feature": 0
+      },
+      "locked_static_gt_context_upper_bound": 1192,
+      "minimum_actual_common_cases": 596,
+      "static_gt_context_upper_bound_reproduced": 1192
+    },
+    {
+      "fold": 2,
+      "generation_context_safe_for_any_0_to_60s_detection_delay": 1528,
+      "generation_exclusions": {
+        "gt_rca_context_crosses_generation_block": 5,
+        "no_existing_p5_gt_feature": 0
+      },
+      "locked_static_gt_context_upper_bound": 1529,
+      "minimum_actual_common_cases": 765,
+      "static_gt_context_upper_bound_reproduced": 1529
+    },
+    {
+      "fold": 3,
+      "generation_context_safe_for_any_0_to_60s_detection_delay": 1532,
+      "generation_exclusions": {
+        "gt_rca_context_crosses_generation_block": 3,
+        "no_existing_p5_gt_feature": 0
+      },
+      "locked_static_gt_context_upper_bound": 1533,
+      "minimum_actual_common_cases": 767,
+      "static_gt_context_upper_bound_reproduced": 1533
+    }
+  ],
+  "pre_test_gt_registry_rows": 10345,
+  "protocol_id": "P6-C1-SUPERVISION-OOS-v1",
+  "schema_version": "p6_c1_v2_g1_static_population_v1",
+  "static_upper_bound_sum": 4254
+}

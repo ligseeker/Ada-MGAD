@@ -1,0 +1,227 @@
+{
+  "arrays": {
+    "graph": {
+      "bytes": 528,
+      "dtype": "float32",
+      "matches_schema_edges": true,
+      "path": "data/p5/v3_preprocessing_v2/ad/graph.npy",
+      "sha256": "04cf2a6bdbd4a2137cafe8140794750875c690b210f1d1f8347a14a34804a809",
+      "shape": [
+        10,
+        10
+      ]
+    },
+    "log": {
+      "bytes": 78059648,
+      "dtype": "float32",
+      "path": "data/p5/v3_preprocessing_v2/ad/train/log.npy",
+      "sha256": "02af8ad63423cfaebadc336f122c984a0a6b7c718db4674c62a6ddd40f9ff9dc",
+      "shape": [
+        60984,
+        10,
+        32
+      ]
+    },
+    "metric": {
+      "bytes": 117089408,
+      "dtype": "float32",
+      "path": "data/p5/v3_preprocessing_v2/ad/train/metric.npy",
+      "sha256": "8fb92322f56007f59007b102f6eb07b0cad6496b44b4292f63ced0d797956ee0",
+      "shape": [
+        60984,
+        10,
+        48
+      ]
+    },
+    "test_timestamps": {
+      "bytes": 209216,
+      "dtype": "int64",
+      "path": "data/p5/v3_preprocessing_v2/ad/test/timestamps.npy",
+      "sha256": "82116aac4da43d287ea0fb904a5ff7fee937f477182678c7d11ca94bcfcea5ab",
+      "shape": [
+        26136
+      ]
+    },
+    "trace": {
+      "bytes": 195148928,
+      "dtype": "float32",
+      "path": "data/p5/v3_preprocessing_v2/ad/train/trace.npy",
+      "sha256": "fd49c42223e5dd99420bb5e13432b72c801e6c86e5562620e938599f74d628f2",
+      "shape": [
+        60984,
+        10,
+        10,
+        8
+      ]
+    },
+    "train_timestamps": {
+      "bytes": 488000,
+      "dtype": "int64",
+      "path": "data/p5/v3_preprocessing_v2/ad/train/timestamps.npy",
+      "sha256": "ed06402501a887099df16b0353ef4825beda2f24a74d6dae6c38b7d34de91735",
+      "shape": [
+        60984
+      ]
+    }
+  },
+  "bound_inputs": {
+    "base_config": {
+      "bytes": 5077,
+      "path": "configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+      "sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35"
+    },
+    "c0_test_episodes": {
+      "bytes": 378858,
+      "path": "experiments/p6/system_event_trigger/test_episodes.csv",
+      "sha256": "30bacbeecbee4b9f738fc6330fa9d8df5c1adc08e37fb1ee8476f1b47735399b"
+    },
+    "c0_test_matching": {
+      "bytes": 987765,
+      "path": "experiments/p6/system_event_trigger/test_matching.csv",
+      "sha256": "011332f3537ee6f7d044e9da23df1d88f617fb71d3a552354343db6fd91c9c77"
+    },
+    "c0_test_metrics": {
+      "bytes": 14261,
+      "path": "experiments/p6/system_event_trigger/test_metrics.json",
+      "sha256": "2968632cc4da1b807d976d8bb1c449f9d755cb1c15d2ee43bcd440b74946ce5b"
+    },
+    "c0_test_predictions": {
+      "bytes": 3219195,
+      "path": "experiments/p6/system_event_trigger/test_predictions.csv",
+      "sha256": "985623e06f5d56db9c2c536b8dd65226967ae1c25f36c9a4924ae9e38d5bafab"
+    },
+    "c0_trigger_config": {
+      "bytes": 4061,
+      "path": "configs/e2e/gaia_p6_c0_system_trigger.json",
+      "sha256": "a2c42beb19f5a234ab74958cf3db32301524f909d5605001bdaeb9c141e3b4f8"
+    },
+    "c1_v1_g2_protocol_v1_1": {
+      "bytes": 8093,
+      "path": "configs/e2e/gaia_p6_c1_g2_v1_1.json",
+      "sha256": "a8b0d67f9aa06f4fe01fceaa982a9742145082be88096d73d310f4aa02a791ac"
+    },
+    "c1_v1_run_lock": {
+      "bytes": 3584,
+      "path": "experiments/p6/c1_detector_aligned/c1-prefix-oos-v1-seed42/run_lock.json",
+      "sha256": "0c5bffea3ae934540fb26674290cc1f2d6dac4da65bf6eb80fff08673b1b9bc9"
+    },
+    "g1_v1_ledger": {
+      "bytes": 25618,
+      "path": "experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/feasibility_ledger.json",
+      "sha256": "80718e06a801f4a4cfac085eec999285a162b4e1ebf5afff082f17925a99b3da"
+    },
+    "gt_registry": {
+      "bytes": 2067208,
+      "path": "artifacts/p5/v3/protocol/gt_event_registry.csv",
+      "sha256": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b"
+    },
+    "rca_index_manifest": {
+      "bytes": 953444,
+      "path": "data/p5/v3/rca_raw_index/index_manifest.json",
+      "sha256": "cd343dfad123e8238be0f9357fddb6bd55625440e96890cba0a2af40b3a88c19"
+    },
+    "shared_ad_graph": {
+      "bytes": 528,
+      "path": "data/p5/v3_preprocessing_v2/ad/graph.npy",
+      "sha256": "04cf2a6bdbd4a2137cafe8140794750875c690b210f1d1f8347a14a34804a809"
+    },
+    "shared_ad_manifest": {
+      "bytes": 13766,
+      "path": "artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json",
+      "sha256": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2"
+    },
+    "shared_frozen_schema": {
+      "bytes": 90054,
+      "path": "artifacts/p5/v3_preprocessing_v2/schema/frozen_preprocessing_schema.json",
+      "sha256": "cecea203ff6946744d14d256bb3a993c2186a613601dae346d9edaee6b04f95c"
+    },
+    "shared_test_timestamps": {
+      "bytes": 209216,
+      "path": "data/p5/v3_preprocessing_v2/ad/test/timestamps.npy",
+      "sha256": "82116aac4da43d287ea0fb904a5ff7fee937f477182678c7d11ca94bcfcea5ab"
+    },
+    "shared_train_log": {
+      "bytes": 78059648,
+      "path": "data/p5/v3_preprocessing_v2/ad/train/log.npy",
+      "sha256": "02af8ad63423cfaebadc336f122c984a0a6b7c718db4674c62a6ddd40f9ff9dc"
+    },
+    "shared_train_metric": {
+      "bytes": 117089408,
+      "path": "data/p5/v3_preprocessing_v2/ad/train/metric.npy",
+      "sha256": "8fb92322f56007f59007b102f6eb07b0cad6496b44b4292f63ced0d797956ee0"
+    },
+    "shared_train_timestamps": {
+      "bytes": 488000,
+      "path": "data/p5/v3_preprocessing_v2/ad/train/timestamps.npy",
+      "sha256": "ed06402501a887099df16b0353ef4825beda2f24a74d6dae6c38b7d34de91735"
+    },
+    "shared_train_trace": {
+      "bytes": 195148928,
+      "path": "data/p5/v3_preprocessing_v2/ad/train/trace.npy",
+      "sha256": "fd49c42223e5dd99420bb5e13432b72c801e6c86e5562620e938599f74d628f2"
+    }
+  },
+  "config": {
+    "bytes": 14784,
+    "path": "configs/e2e/gaia_p6_c1_v2_supervision_oos.json",
+    "sha256": "4e4529db1049fa5c04e658193b6b4e91eef0d9ad9e5d0efcd785dc776c475874"
+  },
+  "detector_batch_fields": [
+    "metric",
+    "log",
+    "trace"
+  ],
+  "dimensions": {
+    "log": 32,
+    "metric": 48,
+    "trace": 8
+  },
+  "generated_at_utc": "2026-09-29T09:47:40.259255+00:00",
+  "git_head": "c0896bf8def1936bb892043b1180de8470cb0130",
+  "gt_or_root_fields_in_detector_input": false,
+  "node_label_arrays_bound": false,
+  "protocol_id": "P6-C1-SUPERVISION-OOS-v1",
+  "reference_inputs": {
+    "p5_gt_feature_bundle": {
+      "path": "data/p5/v3/rca_features_gt/z2_features.npy",
+      "shape": [
+        16124,
+        10,
+        68
+      ]
+    },
+    "p5_gt_feature_case_ids": {
+      "bytes": 2064000,
+      "path": "data/p5/v3/rca_features_gt/case_ids.npy",
+      "sha256": "5017240696980d290fd379dcdd14c1ec13baa7460c6a45dd8d5cf6a83f814a54"
+    }
+  },
+  "run_id": "c1-supervision-oos-v1-seed42",
+  "schema_version": "p6_c1_v2_g1_input_manifest_v1",
+  "services": [
+    "dbservice1",
+    "dbservice2",
+    "logservice1",
+    "logservice2",
+    "mobservice1",
+    "mobservice2",
+    "redisservice1",
+    "redisservice2",
+    "webservice1",
+    "webservice2"
+  ],
+  "test_timeline": {
+    "end_ms": 1627747200000,
+    "first_ms": 1626963120000,
+    "grid_ms": 30000,
+    "last_bin_start_ms": 1627747170000,
+    "time_bins": 26136
+  },
+  "train_timeline": {
+    "end_ms": 1626963120000,
+    "first_ms": 1625133600000,
+    "grid_ms": 30000,
+    "last_bin_start_ms": 1626963090000,
+    "time_bins": 60984
+  }
+}
