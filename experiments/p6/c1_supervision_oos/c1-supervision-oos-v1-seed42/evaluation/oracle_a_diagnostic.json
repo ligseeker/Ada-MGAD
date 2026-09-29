@@ -1,0 +1,12 @@
+{
+  "AC@1": 0.9337622111031689,
+  "AC@3": 0.9966642840123898,
+  "AC@5": 0.9985704074338814,
+  "MRR": 0.965223175283933,
+  "complete": 4197,
+  "diagnostic_only": true,
+  "illegal_gt_context": 0,
+  "n_same_as_bc": 4197,
+  "ranking_failure": 0,
+  "uses_b_weights": true
+}
