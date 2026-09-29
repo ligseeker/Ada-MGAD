@@ -1,0 +1,22 @@
+{
+  "detected_episodes": 4214,
+  "diagnosis_at_1_all_raw_gt": 0.5036281962681409,
+  "diagnosis_at_1_all_raw_gt_denominator": 5788,
+  "diagnosis_at_1_all_raw_gt_numerator": 2915,
+  "false_alarms": 16,
+  "final_diagnosis_wall_time": null,
+  "final_diagnosis_wall_time_status": "UNMEASURED",
+  "matched": 4198,
+  "matched_diagnosis": {
+    "correct": 2915,
+    "illegal_context": 1,
+    "ranking_failure": 0,
+    "wrong_rank": 1282
+  },
+  "misses": 1589,
+  "onset_to_detector_seconds_mean": 23.773935683658888,
+  "onset_to_rca_data_ready_seconds_mean": 323.7757993805099,
+  "raw_gt_complete": 5787,
+  "raw_gt_cross_boundary": 1,
+  "raw_gt_total_intersecting_test": 5788
+}
