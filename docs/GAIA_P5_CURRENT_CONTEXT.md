@@ -4,9 +4,11 @@
 
 更新时间：2026-09-29（Asia/Shanghai）
 
-**当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计和 P6-C0 系统级触发实验已完成。P6-C0 的 aggregate gate 为 PASS，正式 verdict 仍为 BORDERLINE，尚未运行新 RCA/E2E。P6-C0F 独立更正审计已完成并归档，状态为 `COMPLETE_WITH_DECLARED_LIMITATIONS`。C1 的 G1 静态账本和 G2 设计锁已完成，G2 Python 3.8 更正使用 v1.1 配置。G3 的六类执行接口、阶段封存、合成测试及真实 adapter 的 1/24-worker 合成 raw smoke 已通过；[原手动正式运行方案](P6_C1_G3_MANUAL_RUN.md)已因真实 prefix 门槛失败而停用。2026-09-29 全量只读输入预检通过后，正式 fold 1 Fit 因真实 Metric 合格槽位仅 27 个、低于冻结的 45 个预算而停止；本 run 为 `PREFIX_SCHEMA_NO_GO`，详见[失败归档](P6_C1_G3_FOLD1_PREFIX_SCHEMA_NO_GO_20260929.md)。随后的[独立 Metric 审计](P6_C1_FOLD1_METRIC_PREFIX_AUDIT_RESULT_20260929.md)已完成封存：477 个候选中 45 个通过质量门槛，18 个相关性去重，剩余 27 个；384 个 host 候选在首个目标上的 Fit 覆盖率为零。没有完成任何 fold，也没有 OOS 锚点、共同 Train cohort、预测锁或 C1/C2 结果；不得继续执行此 run。**
+**当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计、P6-C0 系统级触发和 C0F 更正审计已完成。P6-C1-v2（`P6-C1-SUPERVISION-OOS-v1`，run `c1-supervision-oos-v1-seed42`）已完整执行并归档：三折 detector、OOS matching、共同 Train cohort 3,225 case、共享 scaler 的 B/C RCA 臂、label-free Test 预测锁和 C1/C2 评估全部完成，主结果 `Delta AC@1 = AC@1(C) - AC@1(B) = +0.19657`（95% descriptive interval [0.17041, 0.22467]），outcome 为 `ANCHOR_ALIGNMENT_SUPPORTED`；详见 [C1-v2/C2 结果](P6_C1_V2_AND_C2_RESULTS.md)。旧的 strict prefix C1 run `c1-prefix-oos-v1-seed42` 仍为 `PREFIX_SCHEMA_NO_GO`，其失败记录保留且不得复用。**
 
-后续 coding agent 先读本文件、[C1 G2 Python 3.8 更正记录](../experiments/p6/c1_protocol/c1-g2-py38-correction-20260924T0831Z/correction_report.md)、[C1 G2 设计锁](P6_C1_G2_FROZEN_DESIGN.md)、[C1 G1 静态可行性报告](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md)、[C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md)、[C0F 更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) 与 [更正协议](P6_C0F_CORRECTION_PROTOCOL.md)，再读 [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md)、[P6 研究路线](P6_RESEARCH_ROADMAP.md) 和 [C0F 原实施方案](P6_C0F_FAILURE_MECHANISM_AUDIT_PLAN.md)。路线图和原方案的“C0F 尚未执行”段落是 2026-09-18 的历史状态，不是当前状态。
+**历史（已停用的 strict-prefix C1，保留且不得复用）：P6-C0 的 aggregate gate 为 PASS，正式 verdict 仍为 BORDERLINE，尚未运行新 RCA/E2E。P6-C0F 独立更正审计已完成并归档，状态为 `COMPLETE_WITH_DECLARED_LIMITATIONS`。C1 的 G1 静态账本和 G2 设计锁已完成，G2 Python 3.8 更正使用 v1.1 配置。G3 的六类执行接口、阶段封存、合成测试及真实 adapter 的 1/24-worker 合成 raw smoke 已通过；[原手动正式运行方案](P6_C1_G3_MANUAL_RUN.md)已因真实 prefix 门槛失败而停用。2026-09-29 全量只读输入预检通过后，正式 fold 1 Fit 因真实 Metric 合格槽位仅 27 个、低于冻结的 45 个预算而停止；本 run 为 `PREFIX_SCHEMA_NO_GO`，详见[失败归档](P6_C1_G3_FOLD1_PREFIX_SCHEMA_NO_GO_20260929.md)。随后的[独立 Metric 审计](P6_C1_FOLD1_METRIC_PREFIX_AUDIT_RESULT_20260929.md)已完成封存：477 个候选中 45 个通过质量门槛，18 个相关性去重，剩余 27 个；384 个 host 候选在首个目标上的 Fit 覆盖率为零。没有完成任何 fold，也没有 OOS 锚点、共同 Train cohort、预测锁或 C1/C2 结果；不得继续执行此 run。**
+
+后续 coding agent 先读本文件、[C1-v2 协议](P6_C1_V2_SUPERVISION_OOS_PROTOCOL.md) 与 [C1-v2/C2 结果](P6_C1_V2_AND_C2_RESULTS.md)、[C1 G2 Python 3.8 更正记录](../experiments/p6/c1_protocol/c1-g2-py38-correction-20260924T0831Z/correction_report.md)、[C1 G2 设计锁](P6_C1_G2_FROZEN_DESIGN.md)、[C1 G1 静态可行性报告](../experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/final_report.md)、[C0F 归档说明](P6_C0F_CORRECTION_ARCHIVE.md)、[C0F 更正报告](../experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/final_report.md) 与 [更正协议](P6_C0F_CORRECTION_PROTOCOL.md)，再读 [后续实验方案](P6_NEXT_EXPERIMENT_PLAN.md)、[P6 研究路线](P6_RESEARCH_ROADMAP.md) 和 [C0F 原实施方案](P6_C0F_FAILURE_MECHANISM_AUDIT_PLAN.md)。路线图和原方案的“C0F 尚未执行”段落是 2026-09-18 的历史状态，不是当前状态。
 
 ## 1. 项目身份与研究边界
 
@@ -72,7 +74,8 @@ experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/
 | P6-C1 G2 设计锁 | 完成设计；Python 3.8 兼容更正 | `docs/P6_C1_G2_FROZEN_DESIGN.md`、`configs/e2e/gaia_p6_c1_g2_v1_1.json`、独立更正记录；三折 prefix-fit detector、固定 RCA 表示与 transductive 文件名目录限制、共同 Train 队列下限、预测锁和评估规则已固定 |
 | P6-C1 G3 逐折实现与首次正式尝试 | `PREFIX_SCHEMA_NO_GO`，停止 | [失败归档](P6_C1_G3_FOLD1_PREFIX_SCHEMA_NO_GO_20260929.md)；代码、合成 smoke 与只读输入预检通过，但真实 fold 1 Fit 仅有 27/45 个合格 Metric base slots。失败目录保留 `INCOMPLETE`；无完成 fold、模型结果或 Test 评价 |
 | P6-C1 fold 1 Metric 候选审计 | `COMPLETE`，仅诊断 | [结果与后续方案](P6_C1_FOLD1_METRIC_PREFIX_AUDIT_RESULT_20260929.md)；封存产物重现 27/45：质量通过 45、相关性排除 18；不改变原 C1 verdict，也不是模型效果结果 |
-| P6-C0R2/C1/C2 后续 | C1 当前冻结 run 停止；C0R2/C2 未执行 | 不复用 C1 失败 run，也不继续原手动命令。若仍研究 C1，先冻结独立的新协议和 run ID；推荐把既有 Train 范围预处理限定为监督 OOS 研究，明确跨 fold 的预处理信息边界。若坚持前缀拟合输入，需先独立验证新折的 Train-only schema 可行性。C0R2 仍须单独冻结协议 |
+| P6-C1-v2 supervision-OOS + P6-C2 | 完成，`ANCHOR_ALIGNMENT_SUPPORTED` | `experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/`；证据等级为 supervision-OOS，不是 prefix-preprocessing-OOS；共同 Train cohort 3,225（935/1168/1122 ≥ 596/765/767）；Test 预测锁 4,214 episode（4,213 legal，0 ranking failure）；主结果 `Delta AC@1 = +0.19657`（[0.17041, 0.22467]）；C2 full diagnosis F1@1 B 0.4180 / C 0.5829；见 [结果归档](P6_C1_V2_AND_C2_RESULTS.md) |
+| P6-C0R2 后续 | 未执行，仍是独立支线 | 不再由本轮自动启动；如需进行必须先单独冻结协议，不得用已看过的 Test 选配置 |
 
 ## 4. 数据、预处理和输入契约
 
@@ -216,10 +219,12 @@ Test 既有预测/episode/matching 复核为 `PASS`。
 
 ## 8. 推荐下一步（不自动执行）
 
-1. C0F 更正已经归档。保留旧 C0F 和更正 run 为独立历史记录；不要将旧 `structural_dominant` 路线建议当作冻结验收规则，也不要将旧 Fit/Validation 推理源码标为已验证。
-2. C1 G1 给出 Fit-only 三折静态上界 4,254；G2 已锁定逐折 prefix-fit detector、固定 RCA 文件名目录的限定证据等级及共同队列规则。G3 接口和限定 smoke 已通过，但首次正式 fold 1 Fit 命中 `PREFIX_SCHEMA_NO_GO`：27 个合格 Metric base slots，低于冻结的 45 个。独立[fold 1 Metric 审计](P6_C1_FOLD1_METRIC_PREFIX_AUDIT_RESULT_20260929.md)已封存并复现该数值：384 个 host 候选在首个目标上覆盖率为零，45 个 global 候选通过质量门槛后又有 18 个被相关性去重。保留原 run，不执行后续折、RCA 或 Test；不得把 4,254 当作已生成的 OOS 案例。下一步是独立设计与冻结新的 C1 证据等级/协议及 run ID；不能将本次诊断当作降低旧门槛的依据。
-3. C1 的当前冻结 run 已在 fold 1 停止；C2 未执行。任何新 C1 正式执行均需新协议与新 run ID；当前代码不自动启动全量训练、Test 模型推理或 RCA。C2 仅在 C1 预测锁后报告完整 failure semantics；当前 Test 已被看过，只能作为复用 Test 评价。C0R2 仍是独立条件支线，不根据已看过的 Test 挑选配置。
-4. P5 provenance 修订属于独立归档工作，不通过修改本轮实验数值解决；保留原输入/结果和更正记录。
+1. **P6-C1-v2 + P6-C2 已完成并归档，项目默认进入 Scientific Freeze**：不再自动设计新的模型实验；下一步是论文/表格、failure analysis 和 thesis Chapter 5 写作，见 [结果归档](P6_C1_V2_AND_C2_RESULTS.md)。C1 outcome 为 `ANCHOR_ALIGNMENT_SUPPORTED`，C2 同时报告了 B/C 的完整 E2E 与 failure ledger；不要因为 C 更好而回头调 Stage-1 或改 Test 口径。
+2. C0F 更正、旧 C0F run 与原 strict-prefix C1 失败 run 继续作为独立历史记录保留；不得复用 `c1-prefix-oos-v1-seed42`，也不得把其失败当作降低任何门槛的依据。
+3. C1-v2 的证据等级是 supervision-OOS（共享预处理来自原 Train 的 label-free 拟合），不是 prefix-preprocessing-OOS；若未来要主张严格 forward-OOS，需要另行冻结协议，且必须先通过独立的前缀 schema 可行性审计。
+4. 已知未解决项只作为 limitation 记录，不作为新的自动实验：多 onset 事件上 C 反而低于 B（onset 2/3 分组）、memory 分组 AC@3/5 回退、C0 Stage-1 长时/内存事件召回低、Test 已被多次复用。
+5. C0R2 仍是独立条件支线，不根据已看过的 Test 挑选配置；如要开展需单独冻结协议。
+6. P5 provenance 修订属于独立归档工作，不通过修改本轮实验数值解决；保留原输入/结果和更正记录。
 
 ## 9. 只读快速检查命令
 
@@ -234,3 +239,11 @@ sed -n '1,80p' "$RUN/final_report.md"
 上述命令只检查 P5 baseline。P6-C0 可只读检查 `experiments/p6/system_event_trigger/test_metrics.json`、`validation_selection.json` 和 `manifest.json`。C0F 更正可只读检查 `experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/{completion_manifest.json,decision.json,correction_summary.json,final_report.md}`。
 
 P5 的入口和 worker 建议见 [`GAIA_V3_IMPLEMENTATION.md`](GAIA_V3_IMPLEMENTATION.md)；不要复用该 baseline 目录运行新实验。C0F 更正执行命令已记录在新 run 的 `completion_manifest.json:commands`；不得把 C0 的 audit/train/evaluate 命令充当 C0F 命令。
+
+P6-C1-v2 run 的只读检查（不改动任何产物）：
+
+```bash
+RUN=experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42
+python -c "import json;print(json.load(open('$RUN/evaluation/c1_results.json'))['primary'])"
+ls $RUN/{folds,train_cohort,rca,predictions,evaluation}
+```
