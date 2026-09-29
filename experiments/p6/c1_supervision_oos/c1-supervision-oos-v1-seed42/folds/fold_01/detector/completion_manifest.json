@@ -1,0 +1,90 @@
+{
+  "checkpoint_loaded": false,
+  "created_utc": "2026-09-29T10:35:51.631616+00:00",
+  "environment": {
+    "dataloader_workers": 2,
+    "device": "cpu",
+    "epochs": 30,
+    "patience": 8,
+    "python": "3.8.20",
+    "torch": "1.12.0",
+    "torch_threads": 8
+  },
+  "files": {
+    "checkpoint.pt": {
+      "bytes": 11780761,
+      "sha256": "32bc5718f05aa736bb9d0f38024448ad52506e9bb0f9c2f9535b3cf2dc5225e2"
+    },
+    "generation_episodes.csv": {
+      "bytes": 106723,
+      "sha256": "856797f52561e1fdc0a9a0e5ab00885ad5a0267d5ccf58f0d943e2bfde31f664"
+    },
+    "generation_scores.csv": {
+      "bytes": 750379,
+      "sha256": "6e6a1343939cfbe52c5ea0cf33aa8c7d44cd656c9e5e8641a4fc1f01f0ecb9bc"
+    },
+    "selection.json": {
+      "bytes": 773,
+      "sha256": "e96b42fda9f874a04866e984d36f9b32feb24cfabb9d0baf9dda72285fa85f45"
+    },
+    "training_log.json": {
+      "bytes": 19221,
+      "sha256": "64dd055eb00531ae43fcead33e103fc1ec55fb6f364518eaec53daae4829a026"
+    }
+  },
+  "fold": 1,
+  "fold_manifest_sha256": "e5ee5d1ee7f825b18e7ef69f4764182284547d3940c77771855a40468c9b3d3c",
+  "generation_episodes": 953,
+  "generation_label_free": true,
+  "generation_labels_built": false,
+  "generation_scores": 8702,
+  "per_fold_random_initialization": true,
+  "protocol_id": "P6-C1-SUPERVISION-OOS-v1",
+  "run_id": "c1-supervision-oos-v1-seed42",
+  "schema_version": "p6_c1_v2_fold_detector_v1",
+  "selected_epoch": 9,
+  "selection_metrics": {
+    "detection_delay": {
+      "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+      "matched_delay_count": 1089,
+      "mean_seconds": 24.441716253443523,
+      "median_seconds": 24.637,
+      "p90_seconds": 37.4548,
+      "p95_seconds": 39.068400000000004
+    },
+    "event_f1": 0.8636003172085647,
+    "event_precision": 0.9828519855595668,
+    "event_recall": 0.7701555869872702,
+    "false_negative_events": 325,
+    "false_positive_events": 19,
+    "ground_truth_event_count": 1414,
+    "predicted_episode_count": 1108,
+    "true_positive_events": 1089
+  },
+  "source_sha256": {
+    "scripts/p6/audit_c1_v2_g1_feasibility.py": "75f0b3137a6337fc394c099809436f7fbd2a8ab4bfe5339d6b24f1a7595b2a5b",
+    "scripts/p6/run_c1_v2.py": "7fbd3b693acbdc9eab475203cbe1854f1584cf2695a40e6ace255c505b55b55c",
+    "src/e2e/ad_data.py": "ee2e3e402c7d392cc4ad94a443e1e138a8477cf83b516a8eb0ecfefc9a03f504",
+    "src/e2e/c1_common_cohort.py": "872848ff63e7e7a0b915423efe604d5eb421cfd109eecf0a1dfcf7b905e2803e",
+    "src/e2e/c1_evaluation.py": "2b17d43ec4ca981b4337beb3b6986372f2046c30b883614164c8c4ad81cccf49",
+    "src/e2e/c1_oos_matching.py": "105dd39c5a9ccc2937c7f6ce187ccc83aacab6bbcb61bae85e680b4eebb6a660",
+    "src/e2e/c1_shared_rca.py": "282d72b4c98c9ddb13f54d71d6aca5e58ea63d51dc6b5e11194f79ec850f4b8c",
+    "src/e2e/c1_test_scoring.py": "9c6e2356741ae7806a283f5bd175fa547e3ef3839a0d6821ac05f530eaeba586",
+    "src/e2e/c1_v2_c2.py": "39967809ffc1022a90513769b3ccaed8440084b33912403b47ecf1df05941a4c",
+    "src/e2e/c1_v2_detector.py": "3d71e2355c0c0d75c7f115513799f2773ddca6da88b19cdd08e7a02617e139b8",
+    "src/e2e/c1_v2_shared_data.py": "7df211acf1851f0ac9914461a43c6a67c249bcab210761535d6f6ef02ee253ee",
+    "src/e2e/event_detection.py": "115819a5e8162f116da109dfbb584b755b12dc508d51dba7449d43b0734d837a",
+    "src/e2e/gaia_rca_adapter.py": "657c2bff29c4a07c85b2ea3e01e030bb9344458c0a8b46805593c81c2f9b17c0",
+    "src/e2e/protocol.py": "5e4ae346db695b1d8059a00df82c22ea3177f66a81a0339f9f9d8318f3a1d86b",
+    "src/e2e/rca_features.py": "3d13755621121586e8b87b663d3b15a81a74353d7921966496d8181baac49be8",
+    "src/e2e/rca_model.py": "d1e7b10ce4e941f3438140bf962533a4a167e766428df7335de8b162e812e1d9",
+    "src/e2e/system_trigger.py": "89cb54355cfebe54147c9788eda0822de659bed7db2f9fba03cc15ebc59102f0",
+    "src/e2e/system_trigger_data.py": "14c6c7986884af9b06ec99c3e5aac024f4a3c92cda02ebbf44bf2e8f731bef2a",
+    "src/e2e/system_trigger_model.py": "dd6fa9e6eaf3cbdb530541b11fc6e92d2bf9ba0f58f187dd0377379f64d38472",
+    "src/model_util.py": "39401ae1bfc326fa776fbac66854662c1fa51613e2ef901c65d697fe20c25faa",
+    "util/GAIA/gaia.ini": "e852b23ef5655c6aa68e2867ca7115aa1c006a0a868c35b7a0705b33462334ce",
+    "util/util.py": "dbd57c0f0eb7303c02f9c6ac20d9b14a3527ef189ce733ffd54ac68db9cf0651"
+  },
+  "status": "COMPLETE",
+  "threshold": 0.9967268774712293
+}

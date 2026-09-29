@@ -1,0 +1,8 @@
+fold,split,prediction_id,t_hat,episode_end_time,positive_bins,system_score,threshold,match_status,case_id,source_index,gt_service,fault_type,gt_start_ms,gt_end_ms,detection_delay_seconds,absolute_onset_error_seconds,gt_context_legal,detected_context_legal,context_legal,exclusion_reason
+1,generation,fold_01-generation-pred-000952,1625917650000.0,1625917680000.0,1.0,0.9983745555301348,0.9967268774712292,matched,gaia-v3-04550,4550.0,mobservice2,login_failure,1625917616339.0,1625917627339.0,33.661,33.661,False,False,False,gt_context_outside_generation
+2,generation,fold_02-generation-pred-000000,1625917980000.0,1625918010000.0,1.0,0.9982657367070616,0.982232271781075,matched,gaia-v3-04758,4758.0,mobservice1,login_failure,1625917950781.0,1625917961781.0,29.219,29.219,False,True,False,gt_context_outside_generation
+2,generation,fold_02-generation-pred-001170,1626178770000.0,1626178800000.0,1.0,0.998357839522602,0.982232271781075,matched,gaia-v3-06137,6137.0,mobservice2,login_failure,1626178729160.0,1626178740160.0,40.84,40.84,True,False,False,detected_context_outside_generation
+2,generation,fold_02-generation-pred-001171,1626178830000.0,1626178860000.0,1.0,0.9984156988484136,0.982232271781075,matched,gaia-v3-06398,6398.0,mobservice1,login_failure,1626178819256.0,1626178830256.0,10.744,10.744,False,False,False,gt_context_outside_generation
+2,,,,,,,,,gaia-v3-06443,,,,,,,,,,,gt_event_crosses_generation_boundary
+3,generation,fold_03-generation-pred-001123,1626440160000.0,1626440190000.0,1.0,0.9973948305837184,0.9965513471389622,matched,gaia-v3-07742,7742.0,mobservice2,login_failure,1626440148030.0,1626440159030.0,11.97,11.97,False,False,False,gt_context_outside_generation
+3,,,,,,,,,gaia-v3-06443,,,,,,,,,,,gt_event_crosses_generation_boundary

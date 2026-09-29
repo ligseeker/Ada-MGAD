@@ -1,0 +1,114 @@
+{
+  "bound_inputs": {
+    "base_config": {
+      "path": "configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+      "sha256": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35"
+    },
+    "c0_test_episodes": {
+      "path": "experiments/p6/system_event_trigger/test_episodes.csv",
+      "sha256": "30bacbeecbee4b9f738fc6330fa9d8df5c1adc08e37fb1ee8476f1b47735399b"
+    },
+    "c0_test_matching": {
+      "path": "experiments/p6/system_event_trigger/test_matching.csv",
+      "sha256": "011332f3537ee6f7d044e9da23df1d88f617fb71d3a552354343db6fd91c9c77"
+    },
+    "c0_test_metrics": {
+      "path": "experiments/p6/system_event_trigger/test_metrics.json",
+      "sha256": "2968632cc4da1b807d976d8bb1c449f9d755cb1c15d2ee43bcd440b74946ce5b"
+    },
+    "c0_test_predictions": {
+      "path": "experiments/p6/system_event_trigger/test_predictions.csv",
+      "sha256": "985623e06f5d56db9c2c536b8dd65226967ae1c25f36c9a4924ae9e38d5bafab"
+    },
+    "c0_trigger_config": {
+      "path": "configs/e2e/gaia_p6_c0_system_trigger.json",
+      "sha256": "a2c42beb19f5a234ab74958cf3db32301524f909d5605001bdaeb9c141e3b4f8"
+    },
+    "c1_v1_g2_protocol_v1_1": {
+      "path": "configs/e2e/gaia_p6_c1_g2_v1_1.json",
+      "sha256": "a8b0d67f9aa06f4fe01fceaa982a9742145082be88096d73d310f4aa02a791ac"
+    },
+    "c1_v1_run_lock": {
+      "path": "experiments/p6/c1_detector_aligned/c1-prefix-oos-v1-seed42/run_lock.json",
+      "sha256": "0c5bffea3ae934540fb26674290cc1f2d6dac4da65bf6eb80fff08673b1b9bc9"
+    },
+    "g1_v1_ledger": {
+      "path": "experiments/p6/c1_feasibility/c1-g1-20260923T105441Z/feasibility_ledger.json",
+      "sha256": "80718e06a801f4a4cfac085eec999285a162b4e1ebf5afff082f17925a99b3da"
+    },
+    "gt_registry": {
+      "path": "artifacts/p5/v3/protocol/gt_event_registry.csv",
+      "sha256": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b"
+    },
+    "rca_index_manifest": {
+      "path": "data/p5/v3/rca_raw_index/index_manifest.json",
+      "sha256": "cd343dfad123e8238be0f9357fddb6bd55625440e96890cba0a2af40b3a88c19"
+    },
+    "shared_ad_graph": {
+      "path": "data/p5/v3_preprocessing_v2/ad/graph.npy",
+      "sha256": "04cf2a6bdbd4a2137cafe8140794750875c690b210f1d1f8347a14a34804a809"
+    },
+    "shared_ad_manifest": {
+      "path": "artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json",
+      "sha256": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2"
+    },
+    "shared_frozen_schema": {
+      "path": "artifacts/p5/v3_preprocessing_v2/schema/frozen_preprocessing_schema.json",
+      "sha256": "cecea203ff6946744d14d256bb3a993c2186a613601dae346d9edaee6b04f95c"
+    },
+    "shared_test_timestamps": {
+      "path": "data/p5/v3_preprocessing_v2/ad/test/timestamps.npy",
+      "sha256": "82116aac4da43d287ea0fb904a5ff7fee937f477182678c7d11ca94bcfcea5ab"
+    },
+    "shared_train_log": {
+      "path": "data/p5/v3_preprocessing_v2/ad/train/log.npy",
+      "sha256": "02af8ad63423cfaebadc336f122c984a0a6b7c718db4674c62a6ddd40f9ff9dc"
+    },
+    "shared_train_metric": {
+      "path": "data/p5/v3_preprocessing_v2/ad/train/metric.npy",
+      "sha256": "8fb92322f56007f59007b102f6eb07b0cad6496b44b4292f63ced0d797956ee0"
+    },
+    "shared_train_timestamps": {
+      "path": "data/p5/v3_preprocessing_v2/ad/train/timestamps.npy",
+      "sha256": "ed06402501a887099df16b0353ef4825beda2f24a74d6dae6c38b7d34de91735"
+    },
+    "shared_train_trace": {
+      "path": "data/p5/v3_preprocessing_v2/ad/train/trace.npy",
+      "sha256": "fd49c42223e5dd99420bb5e13432b72c801e6c86e5562620e938599f74d628f2"
+    }
+  },
+  "device": "cpu",
+  "g1_completion_manifest_sha256": "935abdc91db5fa1ddba7cb26455508433dace34c11ffa92087243f2ee7afab23",
+  "g1_source_sha256": "75f0b3137a6337fc394c099809436f7fbd2a8ab4bfe5339d6b24f1a7595b2a5b",
+  "git_head": "ad133dd9e9248bf72ce7e3f3a464ec614049569d",
+  "protocol_id": "P6-C1-SUPERVISION-OOS-v1",
+  "protocol_sha256": "4e4529db1049fa5c04e658193b6b4e91eef0d9ad9e5d0efcd785dc776c475874",
+  "run_id": "c1-supervision-oos-v1-seed42",
+  "schema_version": "p6_c1_v2_run_lock_v1",
+  "seed": 42,
+  "source_sha256": {
+    "scripts/p6/audit_c1_v2_g1_feasibility.py": "75f0b3137a6337fc394c099809436f7fbd2a8ab4bfe5339d6b24f1a7595b2a5b",
+    "scripts/p6/run_c1_v2.py": "7fbd3b693acbdc9eab475203cbe1854f1584cf2695a40e6ace255c505b55b55c",
+    "src/e2e/ad_data.py": "ee2e3e402c7d392cc4ad94a443e1e138a8477cf83b516a8eb0ecfefc9a03f504",
+    "src/e2e/c1_common_cohort.py": "872848ff63e7e7a0b915423efe604d5eb421cfd109eecf0a1dfcf7b905e2803e",
+    "src/e2e/c1_evaluation.py": "2b17d43ec4ca981b4337beb3b6986372f2046c30b883614164c8c4ad81cccf49",
+    "src/e2e/c1_oos_matching.py": "105dd39c5a9ccc2937c7f6ce187ccc83aacab6bbcb61bae85e680b4eebb6a660",
+    "src/e2e/c1_shared_rca.py": "282d72b4c98c9ddb13f54d71d6aca5e58ea63d51dc6b5e11194f79ec850f4b8c",
+    "src/e2e/c1_test_scoring.py": "9c6e2356741ae7806a283f5bd175fa547e3ef3839a0d6821ac05f530eaeba586",
+    "src/e2e/c1_v2_c2.py": "39967809ffc1022a90513769b3ccaed8440084b33912403b47ecf1df05941a4c",
+    "src/e2e/c1_v2_detector.py": "3d71e2355c0c0d75c7f115513799f2773ddca6da88b19cdd08e7a02617e139b8",
+    "src/e2e/c1_v2_shared_data.py": "7df211acf1851f0ac9914461a43c6a67c249bcab210761535d6f6ef02ee253ee",
+    "src/e2e/event_detection.py": "115819a5e8162f116da109dfbb584b755b12dc508d51dba7449d43b0734d837a",
+    "src/e2e/gaia_rca_adapter.py": "657c2bff29c4a07c85b2ea3e01e030bb9344458c0a8b46805593c81c2f9b17c0",
+    "src/e2e/protocol.py": "5e4ae346db695b1d8059a00df82c22ea3177f66a81a0339f9f9d8318f3a1d86b",
+    "src/e2e/rca_features.py": "3d13755621121586e8b87b663d3b15a81a74353d7921966496d8181baac49be8",
+    "src/e2e/rca_model.py": "d1e7b10ce4e941f3438140bf962533a4a167e766428df7335de8b162e812e1d9",
+    "src/e2e/system_trigger.py": "89cb54355cfebe54147c9788eda0822de659bed7db2f9fba03cc15ebc59102f0",
+    "src/e2e/system_trigger_data.py": "14c6c7986884af9b06ec99c3e5aac024f4a3c92cda02ebbf44bf2e8f731bef2a",
+    "src/e2e/system_trigger_model.py": "dd6fa9e6eaf3cbdb530541b11fc6e92d2bf9ba0f58f187dd0377379f64d38472",
+    "src/model_util.py": "39401ae1bfc326fa776fbac66854662c1fa51613e2ef901c65d697fe20c25faa",
+    "util/GAIA/gaia.ini": "e852b23ef5655c6aa68e2867ca7115aa1c006a0a868c35b7a0705b33462334ce",
+    "util/util.py": "dbd57c0f0eb7303c02f9c6ac20d9b14a3527ef189ce733ffd54ac68db9cf0651"
+  },
+  "status": "RUN_RESERVED"
+}

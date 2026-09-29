@@ -1,0 +1,25 @@
+{
+  "selected_epoch": 2,
+  "selection_gt_events": 1534,
+  "selection_metrics": {
+    "detection_delay": {
+      "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+      "matched_delay_count": 1169,
+      "mean_seconds": 24.464128314798973,
+      "median_seconds": 24.547,
+      "p90_seconds": 37.236,
+      "p95_seconds": 39.3166
+    },
+    "event_f1": 0.8646449704142012,
+    "event_precision": 0.9991452991452991,
+    "event_recall": 0.7620599739243807,
+    "false_negative_events": 365,
+    "false_positive_events": 1,
+    "ground_truth_event_count": 1534,
+    "predicted_episode_count": 1170,
+    "true_positive_events": 1169
+  },
+  "test_used": false,
+  "threshold": 0.9965513471389622,
+  "tie_break": "event_f1_then_recall_then_threshold"
+}

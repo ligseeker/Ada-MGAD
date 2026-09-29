@@ -1,0 +1,90 @@
+{
+  "checkpoint_loaded": false,
+  "created_utc": "2026-09-29T11:10:43.777589+00:00",
+  "environment": {
+    "dataloader_workers": 2,
+    "device": "cpu",
+    "epochs": 30,
+    "patience": 8,
+    "python": "3.8.20",
+    "torch": "1.12.0",
+    "torch_threads": 8
+  },
+  "files": {
+    "checkpoint.pt": {
+      "bytes": 11780761,
+      "sha256": "619cae95024e7580f6fe898e99989a596c32c837c91c0cb78c6a438766bdde9a"
+    },
+    "generation_episodes.csv": {
+      "bytes": 130039,
+      "sha256": "237fa6eb7af28143ba38568ab9c19f5ee2cfb23c2fed25de2d680fd11ee7383a"
+    },
+    "generation_scores.csv": {
+      "bytes": 753899,
+      "sha256": "7abb1f0398658ada10897f17b4f271ff084f6b1daf1e9c1adeddfb667eb3b02f"
+    },
+    "selection.json": {
+      "bytes": 741,
+      "sha256": "3449a63b37f5184f9fbd86888843d6e9d8605c3b0b6502635528ff139fd3db3f"
+    },
+    "training_log.json": {
+      "bytes": 12434,
+      "sha256": "9cb70fe0d388f2f964a539d9c9d21608b6aa8c710a5b097f0f71fbf27162458b"
+    }
+  },
+  "fold": 2,
+  "fold_manifest_sha256": "51006c83a351a1794832be0f82fcee35bceeec0a2a1382df1c61b9e2dc7f252c",
+  "generation_episodes": 1172,
+  "generation_label_free": true,
+  "generation_labels_built": false,
+  "generation_scores": 8702,
+  "per_fold_random_initialization": true,
+  "protocol_id": "P6-C1-SUPERVISION-OOS-v1",
+  "run_id": "c1-supervision-oos-v1-seed42",
+  "schema_version": "p6_c1_v2_fold_detector_v1",
+  "selected_epoch": 2,
+  "selection_metrics": {
+    "detection_delay": {
+      "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+      "matched_delay_count": 948,
+      "mean_seconds": 25.092344936708862,
+      "median_seconds": 25.7405,
+      "p90_seconds": 37.4285,
+      "p95_seconds": 39.079
+    },
+    "event_f1": 0.8847410172655156,
+    "event_precision": 1.0,
+    "event_recall": 0.793305439330544,
+    "false_negative_events": 247,
+    "false_positive_events": 0,
+    "ground_truth_event_count": 1195,
+    "predicted_episode_count": 948,
+    "true_positive_events": 948
+  },
+  "source_sha256": {
+    "scripts/p6/audit_c1_v2_g1_feasibility.py": "75f0b3137a6337fc394c099809436f7fbd2a8ab4bfe5339d6b24f1a7595b2a5b",
+    "scripts/p6/run_c1_v2.py": "7fbd3b693acbdc9eab475203cbe1854f1584cf2695a40e6ace255c505b55b55c",
+    "src/e2e/ad_data.py": "ee2e3e402c7d392cc4ad94a443e1e138a8477cf83b516a8eb0ecfefc9a03f504",
+    "src/e2e/c1_common_cohort.py": "872848ff63e7e7a0b915423efe604d5eb421cfd109eecf0a1dfcf7b905e2803e",
+    "src/e2e/c1_evaluation.py": "2b17d43ec4ca981b4337beb3b6986372f2046c30b883614164c8c4ad81cccf49",
+    "src/e2e/c1_oos_matching.py": "105dd39c5a9ccc2937c7f6ce187ccc83aacab6bbcb61bae85e680b4eebb6a660",
+    "src/e2e/c1_shared_rca.py": "282d72b4c98c9ddb13f54d71d6aca5e58ea63d51dc6b5e11194f79ec850f4b8c",
+    "src/e2e/c1_test_scoring.py": "9c6e2356741ae7806a283f5bd175fa547e3ef3839a0d6821ac05f530eaeba586",
+    "src/e2e/c1_v2_c2.py": "39967809ffc1022a90513769b3ccaed8440084b33912403b47ecf1df05941a4c",
+    "src/e2e/c1_v2_detector.py": "3d71e2355c0c0d75c7f115513799f2773ddca6da88b19cdd08e7a02617e139b8",
+    "src/e2e/c1_v2_shared_data.py": "7df211acf1851f0ac9914461a43c6a67c249bcab210761535d6f6ef02ee253ee",
+    "src/e2e/event_detection.py": "115819a5e8162f116da109dfbb584b755b12dc508d51dba7449d43b0734d837a",
+    "src/e2e/gaia_rca_adapter.py": "657c2bff29c4a07c85b2ea3e01e030bb9344458c0a8b46805593c81c2f9b17c0",
+    "src/e2e/protocol.py": "5e4ae346db695b1d8059a00df82c22ea3177f66a81a0339f9f9d8318f3a1d86b",
+    "src/e2e/rca_features.py": "3d13755621121586e8b87b663d3b15a81a74353d7921966496d8181baac49be8",
+    "src/e2e/rca_model.py": "d1e7b10ce4e941f3438140bf962533a4a167e766428df7335de8b162e812e1d9",
+    "src/e2e/system_trigger.py": "89cb54355cfebe54147c9788eda0822de659bed7db2f9fba03cc15ebc59102f0",
+    "src/e2e/system_trigger_data.py": "14c6c7986884af9b06ec99c3e5aac024f4a3c92cda02ebbf44bf2e8f731bef2a",
+    "src/e2e/system_trigger_model.py": "dd6fa9e6eaf3cbdb530541b11fc6e92d2bf9ba0f58f187dd0377379f64d38472",
+    "src/model_util.py": "39401ae1bfc326fa776fbac66854662c1fa51613e2ef901c65d697fe20c25faa",
+    "util/GAIA/gaia.ini": "e852b23ef5655c6aa68e2867ca7115aa1c006a0a868c35b7a0705b33462334ce",
+    "util/util.py": "dbd57c0f0eb7303c02f9c6ac20d9b14a3527ef189ce733ffd54ac68db9cf0651"
+  },
+  "status": "COMPLETE",
+  "threshold": 0.982232271781075
+}

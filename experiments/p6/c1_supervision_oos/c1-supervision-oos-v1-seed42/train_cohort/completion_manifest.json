@@ -1,0 +1,111 @@
+{
+  "details": {
+    "case_selection_uses_ranking_correctness": false,
+    "common_case_coverage": {
+      "1": 935,
+      "2": 1168,
+      "3": 1122
+    },
+    "floors_pass": true,
+    "fold_oos": [
+      {
+        "complete_gt": 1195,
+        "cross_boundary_gt": 0,
+        "dual_context_legal": 935,
+        "episodes": 953,
+        "false_alarms": 17,
+        "fold": 1,
+        "matched": 936,
+        "matched_context_illegal": 1,
+        "misses": 259
+      },
+      {
+        "complete_gt": 1534,
+        "cross_boundary_gt": 1,
+        "dual_context_legal": 1168,
+        "episodes": 1172,
+        "false_alarms": 1,
+        "fold": 2,
+        "matched": 1171,
+        "matched_context_illegal": 3,
+        "misses": 363
+      },
+      {
+        "complete_gt": 1536,
+        "cross_boundary_gt": 1,
+        "dual_context_legal": 1122,
+        "episodes": 1124,
+        "false_alarms": 1,
+        "fold": 3,
+        "matched": 1123,
+        "matched_context_illegal": 1,
+        "misses": 413
+      }
+    ],
+    "required_minimum": {
+      "1": 596,
+      "2": 765,
+      "3": 767
+    }
+  },
+  "files": {
+    "cases.csv": {
+      "bytes": 325878,
+      "sha256": "83ee698981272bfb1f89d1c2d9b1c2c622b63c419a08c251abde2bf7965821dd"
+    },
+    "detected_features.npy": {
+      "bytes": 8772128,
+      "sha256": "b1c043b3ba1480b24a40ddb10646e4f9c7f8cd669de61498be03b7c124f6b4ed"
+    },
+    "exclusions.csv": {
+      "bytes": 1760,
+      "sha256": "3f5dc5665be94d84e76d3e1e3f84756ae4fdd00e2f42dc96eed7ac3de3941cd6"
+    },
+    "gt_features.npy": {
+      "bytes": 8772128,
+      "sha256": "fdfbdb12eb862bbfa3b93ea6d6e69c503e89b7fec0075577885a3ee7cda9ec68"
+    },
+    "matching.csv": {
+      "bytes": 811460,
+      "sha256": "5c3aa3085f03c2061af4e89e06f6a2f138e0bf69395e2deba438a61a643d8db4"
+    },
+    "root_indices.npy": {
+      "bytes": 25928,
+      "sha256": "c764da9739c7b80a38ba377462eae489ec43984c53c1034da33feb06a5d2283f"
+    }
+  },
+  "inputs": {
+    "fold_01_detector": "77f0e0bc4f07aad21799db077c09c3d657dc5c2c106d24460257742c33df5220",
+    "fold_02_detector": "1ac2392e356f0da8e56fd1c944fbc86f5492d882424d942eeb12523f81a4642b",
+    "fold_03_detector": "1e94bc29015731fe875de21506a2ad16589ef7a5dce77bf00d3fb16d66c15d56",
+    "rca_index_manifest": "cd343dfad123e8238be0f9357fddb6bd55625440e96890cba0a2af40b3a88c19"
+  },
+  "run_lock_sha256": "0b5a2b649c31305eec88d631f2d57ef2a45a7d4d643d861478b3a11d620c9c56",
+  "schema_version": "p6_c1_v2_stage_manifest_v1",
+  "source_sha256": {
+    "scripts/p6/audit_c1_v2_g1_feasibility.py": "75f0b3137a6337fc394c099809436f7fbd2a8ab4bfe5339d6b24f1a7595b2a5b",
+    "scripts/p6/run_c1_v2.py": "7fbd3b693acbdc9eab475203cbe1854f1584cf2695a40e6ace255c505b55b55c",
+    "src/e2e/ad_data.py": "ee2e3e402c7d392cc4ad94a443e1e138a8477cf83b516a8eb0ecfefc9a03f504",
+    "src/e2e/c1_common_cohort.py": "872848ff63e7e7a0b915423efe604d5eb421cfd109eecf0a1dfcf7b905e2803e",
+    "src/e2e/c1_evaluation.py": "2b17d43ec4ca981b4337beb3b6986372f2046c30b883614164c8c4ad81cccf49",
+    "src/e2e/c1_oos_matching.py": "105dd39c5a9ccc2937c7f6ce187ccc83aacab6bbcb61bae85e680b4eebb6a660",
+    "src/e2e/c1_shared_rca.py": "282d72b4c98c9ddb13f54d71d6aca5e58ea63d51dc6b5e11194f79ec850f4b8c",
+    "src/e2e/c1_test_scoring.py": "9c6e2356741ae7806a283f5bd175fa547e3ef3839a0d6821ac05f530eaeba586",
+    "src/e2e/c1_v2_c2.py": "39967809ffc1022a90513769b3ccaed8440084b33912403b47ecf1df05941a4c",
+    "src/e2e/c1_v2_detector.py": "3d71e2355c0c0d75c7f115513799f2773ddca6da88b19cdd08e7a02617e139b8",
+    "src/e2e/c1_v2_shared_data.py": "7df211acf1851f0ac9914461a43c6a67c249bcab210761535d6f6ef02ee253ee",
+    "src/e2e/event_detection.py": "115819a5e8162f116da109dfbb584b755b12dc508d51dba7449d43b0734d837a",
+    "src/e2e/gaia_rca_adapter.py": "657c2bff29c4a07c85b2ea3e01e030bb9344458c0a8b46805593c81c2f9b17c0",
+    "src/e2e/protocol.py": "5e4ae346db695b1d8059a00df82c22ea3177f66a81a0339f9f9d8318f3a1d86b",
+    "src/e2e/rca_features.py": "3d13755621121586e8b87b663d3b15a81a74353d7921966496d8181baac49be8",
+    "src/e2e/rca_model.py": "d1e7b10ce4e941f3438140bf962533a4a167e766428df7335de8b162e812e1d9",
+    "src/e2e/system_trigger.py": "89cb54355cfebe54147c9788eda0822de659bed7db2f9fba03cc15ebc59102f0",
+    "src/e2e/system_trigger_data.py": "14c6c7986884af9b06ec99c3e5aac024f4a3c92cda02ebbf44bf2e8f731bef2a",
+    "src/e2e/system_trigger_model.py": "dd6fa9e6eaf3cbdb530541b11fc6e92d2bf9ba0f58f187dd0377379f64d38472",
+    "src/model_util.py": "39401ae1bfc326fa776fbac66854662c1fa51613e2ef901c65d697fe20c25faa",
+    "util/GAIA/gaia.ini": "e852b23ef5655c6aa68e2867ca7115aa1c006a0a868c35b7a0705b33462334ce",
+    "util/util.py": "dbd57c0f0eb7303c02f9c6ac20d9b14a3527ef189ce733ffd54ac68db9cf0651"
+  },
+  "stage": "train_cohort",
+  "status": "COMPLETE"
+}
