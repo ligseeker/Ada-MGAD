@@ -110,7 +110,7 @@ REQUIRED_TRIGGER_CONFIG = {
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("audit", "train", "evaluate", "all", "smoke"))
+    parser.add_argument("action", choices=("audit", "train", "develop", "evaluate", "all", "smoke"))
     parser.add_argument("--config", default=DEFAULT_TRIGGER_CONFIG)
     parser.add_argument("--base-config", default=DEFAULT_BASE_CONFIG)
     parser.add_argument("--output-dir", default=None)
@@ -153,6 +153,10 @@ def resolve_trigger_config(path: Path) -> Mapping[str, object]:
             raise ValueError("trigger config is missing {}".format(key))
     if data["threshold"]["objective"] != "validation_event_f1":
         raise ValueError("P6-C0 pre-registers a Validation event-F1 threshold objective")
+    weighted = bool(data["training"].get("long_onset_weighting", False))
+    if weighted and (data.get("protocol_id") != "P6-C0-LONG-ONSET-WEIGHT-V1" or
+                     data["training"].get("weight_formula") != "sqrt_short_over_long_preserve_positive_mass"):
+        raise ValueError("long-onset weighting requires the frozen v1 protocol and formula")
     if str(data["evaluation"]["prediction_time"]) != "t_hat = prediction_available_time = target_bin_end":
         raise ValueError("P6-C0 must reuse the frozen prediction-available-time anchor")
     gate = data["evaluation"].get("gate", {})
@@ -557,6 +561,51 @@ def move_to_device(batch: Mapping[str, torch.Tensor], device: torch.device) -> M
     return moved
 
 
+def fit_long_onset_weights(state: ProtocolState, fit_dataset: TriggerWindowDataset,
+                           expected_counts=None):
+    """Fit-only relative positive-bin weights; total positive mass stays fixed."""
+
+    if fit_dataset.split != "fit":
+        raise ValueError("long-onset weights must use Detector-Fit windows")
+    labels = fit_dataset.labels_at()
+    times = fit_dataset.prediction_times()
+    long_onset = np.zeros(len(fit_dataset), dtype=bool)
+    fit_events = state.gt_events("fit")
+    long_events = fit_events.loc[(fit_events["end_ms"] - fit_events["start_ms"]) > 300000]
+    for start in long_events["start_ms"].astype("int64"):
+        left = int(np.searchsorted(times, start, side="left"))
+        right = int(np.searchsorted(times, start + 60000, side="right"))
+        long_onset[left:right] = True
+    long_onset &= labels == TRIGGER_POSITIVE
+    long_count = int(long_onset.sum())
+    positive_count = int((labels == TRIGGER_POSITIVE).sum())
+    short_count = positive_count - long_count
+    counts = {"fit_events": int(len(fit_events)), "long_events_gt300s": int(len(long_events)),
+              "positive_bins": positive_count, "long_positive_bins": long_count}
+    if expected_counts is not None and counts != expected_counts:
+        raise ValueError("Fit long-onset weight population drift")
+    if long_count <= 0 or short_count <= 0:
+        raise ValueError("both positive-bin groups are required")
+    ratio = float(np.sqrt(short_count / long_count))
+    normalization = float(positive_count / (short_count + ratio * long_count))
+    sample_weights = np.ones(len(fit_dataset), dtype=np.float32)
+    sample_weights[labels == TRIGGER_POSITIVE] = normalization
+    sample_weights[long_onset] = normalization * ratio
+    weighted_positive_mass = float(sample_weights[labels == TRIGGER_POSITIVE].sum(dtype=np.float64))
+    if abs(weighted_positive_mass - positive_count) > 0.001:
+        raise ValueError("long-onset positive mass is not preserved")
+    lookup = np.ones(int(fit_dataset.sample_indices.max()) + 1, dtype=np.float32)
+    lookup[fit_dataset.sample_indices] = sample_weights
+    return lookup, {
+        **counts,
+        "other_positive_bins": short_count, "long_raw_ratio": ratio,
+        "mass_normalization": normalization,
+        "long_positive_weight": float(normalization * ratio),
+        "other_positive_weight": normalization,
+        "weighted_positive_mass": weighted_positive_mass,
+    }
+
+
 @torch.no_grad()
 def infer_trigger_logits(model, loader, device) -> Tuple[np.ndarray, np.ndarray]:
     model.eval()
@@ -670,6 +719,13 @@ def run_training(state: ProtocolState, output_dir: Path, model_args, training, m
 
     fit_dataset = state.build_dataset("fit")
     validation_dataset = state.build_dataset("validation")
+    long_weight_stats = None
+    long_weight_lookup = None
+    if training.get("long_onset_weighting", False):
+        values, long_weight_stats = fit_long_onset_weights(
+            state, fit_dataset, training.get("expected_long_onset_counts")
+        )
+        long_weight_lookup = torch.as_tensor(values, dtype=torch.float32, device=device)
     fit_loader = build_trigger_loader(
         fit_dataset, batch_size=int(training["batch_size"]), num_workers=int(training["num_workers"])
     )
@@ -726,7 +782,11 @@ def run_training(state: ProtocolState, output_dir: Path, model_args, training, m
             if float(loss_mask.sum()) <= 0:
                 continue
             loss_vector = criterion(logits, loss_target)
-            bce = (loss_vector * loss_mask).sum() / loss_mask.sum()
+            if long_weight_lookup is None:
+                bce = (loss_vector * loss_mask).sum() / loss_mask.sum()
+            else:
+                sample_weight = long_weight_lookup[batch["sample_index"].long()]
+                bce = (loss_vector * loss_mask * sample_weight).sum() / loss_mask.sum()
             loss = bce + graph_reg
             if not torch.isfinite(loss):
                 raise FloatingPointError("non-finite P6-C0 loss at epoch {}".format(epoch))
@@ -815,6 +875,7 @@ def run_training(state: ProtocolState, output_dir: Path, model_args, training, m
         "checkpoint_tie_break": "event_f1, then recall, then threshold",
         "threshold_tie_break": "highest threshold among equal Validation event F1",
         "test_used_for_selection": False,
+        "long_onset_weight_stats": long_weight_stats,
         "history": history,
         "data_manifest": {"path": str(manifest_path.resolve()), "sha256": manifest_sha},
     }
@@ -828,6 +889,26 @@ def run_training(state: ProtocolState, output_dir: Path, model_args, training, m
         "history": history,
         "stop_reason": stop_reason,
     }))
+    if training.get("development_capture_validation", False):
+        model.load_state_dict(best["state"])
+        validation_output = score_dataset(
+            model, validation_dataset, int(training["batch_size"]), int(training["num_workers"]),
+            device, "validation",
+        )
+        validation_frame = system_score_frame(
+            "validation", validation_output["prediction_available_time"], validation_output["system_score"]
+        )
+        episodes, matching, replay = evaluate_system_threshold(
+            validation_frame, validation_gt, float(best["threshold"]),
+            grid_seconds=state.grid_seconds, tolerance_seconds=state.tolerance_seconds,
+        )
+        if any(not _close(replay[key], best["metrics"][key]) for key in
+               ("true_positive_events", "false_positive_events", "false_negative_events", "event_f1")):
+            raise ValueError("Validation output does not replay the selected checkpoint")
+        write_predictions(output_dir / "validation_predictions.csv", validation_dataset,
+                          validation_output, float(best["threshold"]))
+        episodes.to_csv(output_dir / "validation_episodes.csv", index=False, lineterminator="\n")
+        matching.to_csv(output_dir / "validation_matching.csv", index=False, lineterminator="\n")
     return selection_record
 
 
@@ -1044,7 +1125,9 @@ def smoke(trigger_config, base_config, root: Path) -> Mapping[str, object]:
         {"case_id": "smoke-{:03d}".format(bin_index), "source_index": bin_index,
          "service": GAIA_SERVICES[bin_index % len(GAIA_SERVICES)], "fault_type": "login_failure",
          "start_ms": int(origin + bin_index * grid_ms),
-         "end_ms": int(origin + bin_index * grid_ms + 60_000),
+         "end_ms": int(origin + bin_index * grid_ms + (600_000 if
+                       trigger_config["training"].get("long_onset_weighting") and bin_index == 50
+                       else 60_000)),
          "detector_domain": True}
         for bin_index in (50, 120, 150, 250, 350, 360)
     ])
@@ -1061,6 +1144,7 @@ def smoke(trigger_config, base_config, root: Path) -> Mapping[str, object]:
     smoke_trigger = json.loads(json.dumps(trigger_config))
     smoke_trigger["training"]["max_epochs"] = 1
     smoke_trigger["training"]["patience"] = 0
+    smoke_trigger["training"].pop("expected_long_onset_counts", None)
 
     state = ProtocolState(smoke_base, smoke_trigger, data_root, registry_path)
     if not all(len(state.gt_events(split)) > 0 for split in SPLIT_NAMES):
@@ -1147,6 +1231,8 @@ def main():
     registry_path = Path(args.registry).resolve() if args.registry else None
     output_dir = (PROJECT_ROOT / (args.output_dir or trigger_config["output_root"])).resolve()
     guard_output_root(output_dir, base_config)
+    if args.action == "develop" and output_dir.exists():
+        raise FileExistsError("development run directory already exists")
     setup_logging(output_dir)
 
     manifest_path = artifact_root / "ad_data_manifest.json"
@@ -1176,7 +1262,7 @@ def main():
     logging.info("P6-C0 %s starting; output=%s", args.action, output_dir)
 
     result: Mapping[str, object] = {"action": args.action, "output_dir": str(output_dir)}
-    if args.action in ("audit", "all"):
+    if args.action in ("audit", "develop", "all"):
         audit = run_audit(state, output_dir, provenance)
         result["audit"] = {
             "structural_checks": audit["structural_checks"],
@@ -1191,7 +1277,7 @@ def main():
             }), sort_keys=True))
             sys.exit(2)
         logging.info("P6-C0 split audit PASSED: %s", audit["structural_checks"]["checks"])
-    if args.action in ("train", "all"):
+    if args.action in ("train", "develop", "all"):
         model_args = build_model_args(
             trigger_config, base_config, manifest, int(trigger_config["seed"]), bool(args.gpu)
         )
@@ -1205,6 +1291,19 @@ def main():
             "checkpoint": selection["checkpoint"],
             "metrics": selection["selected_validation_metrics"],
         }
+        if args.action == "develop":
+            files = ("split_audit.json", "split_manifest.json", "validation_selection.json",
+                     "training_log.json", "validation_predictions.csv", "validation_episodes.csv",
+                     "validation_matching.csv", "checkpoint/best_validation_event_f1.pt")
+            write_json(output_dir / "development_manifest.json", {
+                "schema_version": "p6_c0_long_weight_development_v1",
+                "status": "COMPLETE_DEVELOPMENT_ONLY", "test_inference_run": False,
+                "execution_commit": git_head(),
+                "config_sha256": sha256_file(trigger_config_path),
+                "base_config_sha256": sha256_file(base_config_path),
+                "source_artifacts": provenance["source_artifacts"],
+                "files": {name: sha256_file(output_dir / name) for name in files},
+            })
     if args.action in ("evaluate", "all"):
         model_args = build_model_args(
             trigger_config, base_config, manifest, int(trigger_config["seed"]), bool(args.gpu)
