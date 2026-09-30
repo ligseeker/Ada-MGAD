@@ -1,0 +1,210 @@
+{
+  "folds": {
+    "f12_to_f3": {
+      "baseline": {
+        "AC@1": 0.7700534759358288,
+        "AC@3": 0.9955436720142602,
+        "AC@5": 1.0,
+        "MRR": 0.883615567439097,
+        "correct_at_1": 864,
+        "n": 1122
+      },
+      "candidates": {
+        "logistic_difference": {
+          "all": {
+            "AC@1": 0.7557932263814616,
+            "AC@3": 0.9964349376114082,
+            "AC@5": 1.0,
+            "MRR": 0.8767082590612002,
+            "correct_at_1": 848,
+            "n": 1122
+          },
+          "delta_correct_at_1": -16,
+          "fixed_errors": 91,
+          "mob_only": {
+            "AC@1": 0.7598566308243727,
+            "AC@3": 0.9991039426523297,
+            "AC@5": 1.0,
+            "MRR": 0.8795549581839903,
+            "correct_at_1": 848,
+            "n": 1116
+          },
+          "new_errors": 107
+        },
+        "xgb_difference": {
+          "all": {
+            "AC@1": 0.750445632798574,
+            "AC@3": 0.9955436720142602,
+            "AC@5": 1.0,
+            "MRR": 0.8738116458704694,
+            "correct_at_1": 842,
+            "n": 1122
+          },
+          "delta_correct_at_1": -22,
+          "fixed_errors": 68,
+          "mob_only": {
+            "AC@1": 0.7544802867383512,
+            "AC@3": 0.9982078853046595,
+            "AC@5": 1.0,
+            "MRR": 0.876642771804062,
+            "correct_at_1": 842,
+            "n": 1116
+          },
+          "new_errors": 90
+        },
+        "xgb_difference_sum": {
+          "all": {
+            "AC@1": 0.7531194295900179,
+            "AC@3": 0.9964349376114082,
+            "AC@5": 1.0,
+            "MRR": 0.875222816399287,
+            "correct_at_1": 845,
+            "n": 1122
+          },
+          "delta_correct_at_1": -19,
+          "fixed_errors": 72,
+          "mob_only": {
+            "AC@1": 0.757168458781362,
+            "AC@3": 0.9991039426523297,
+            "AC@5": 1.0,
+            "MRR": 0.8780615292712066,
+            "correct_at_1": 845,
+            "n": 1116
+          },
+          "new_errors": 91
+        },
+        "xgb_full": {
+          "all": {
+            "AC@1": 0.7664884135472371,
+            "AC@3": 0.9964349376114082,
+            "AC@5": 1.0,
+            "MRR": 0.8817587641117053,
+            "correct_at_1": 860,
+            "n": 1122
+          },
+          "delta_correct_at_1": -4,
+          "fixed_errors": 74,
+          "mob_only": {
+            "AC@1": 0.7706093189964157,
+            "AC@3": 0.9991039426523297,
+            "AC@5": 1.0,
+            "MRR": 0.8846326164874552,
+            "correct_at_1": 860,
+            "n": 1116
+          },
+          "new_errors": 78
+        }
+      },
+      "eval_n": 1122,
+      "train_n": 2088
+    },
+    "f1_to_f2": {
+      "baseline": {
+        "AC@1": 0.7226027397260274,
+        "AC@3": 0.9914383561643836,
+        "AC@5": 0.9991438356164384,
+        "MRR": 0.8557444553163731,
+        "correct_at_1": 844,
+        "n": 1168
+      },
+      "candidates": {
+        "logistic_difference": {
+          "all": {
+            "AC@1": 0.7217465753424658,
+            "AC@3": 0.9871575342465754,
+            "AC@5": 1.0,
+            "MRR": 0.854523401826484,
+            "correct_at_1": 843,
+            "n": 1168
+          },
+          "delta_correct_at_1": -1,
+          "fixed_errors": 123,
+          "mob_only": {
+            "AC@1": 0.7233676975945017,
+            "AC@3": 0.9871134020618557,
+            "AC@5": 1.0,
+            "MRR": 0.855598510882016,
+            "correct_at_1": 842,
+            "n": 1164
+          },
+          "new_errors": 124
+        },
+        "xgb_difference": {
+          "all": {
+            "AC@1": 0.7208904109589042,
+            "AC@3": 0.9811643835616438,
+            "AC@5": 1.0,
+            "MRR": 0.8527397260273972,
+            "correct_at_1": 842,
+            "n": 1168
+          },
+          "delta_correct_at_1": -2,
+          "fixed_errors": 115,
+          "mob_only": {
+            "AC@1": 0.7225085910652921,
+            "AC@3": 0.9810996563573883,
+            "AC@5": 1.0,
+            "MRR": 0.8538087056128293,
+            "correct_at_1": 841,
+            "n": 1164
+          },
+          "new_errors": 117
+        },
+        "xgb_difference_sum": {
+          "all": {
+            "AC@1": 0.7148972602739726,
+            "AC@3": 0.9794520547945206,
+            "AC@5": 1.0,
+            "MRR": 0.8493150684931506,
+            "correct_at_1": 835,
+            "n": 1168
+          },
+          "delta_correct_at_1": -9,
+          "fixed_errors": 102,
+          "mob_only": {
+            "AC@1": 0.7164948453608248,
+            "AC@3": 0.979381443298969,
+            "AC@5": 1.0,
+            "MRR": 0.8503722794959908,
+            "correct_at_1": 834,
+            "n": 1164
+          },
+          "new_errors": 111
+        },
+        "xgb_full": {
+          "all": {
+            "AC@1": 0.7191780821917808,
+            "AC@3": 0.988013698630137,
+            "AC@5": 0.9991438356164384,
+            "MRR": 0.8533186562296151,
+            "correct_at_1": 840,
+            "n": 1168
+          },
+          "delta_correct_at_1": -4,
+          "fixed_errors": 111,
+          "mob_only": {
+            "AC@1": 0.7207903780068728,
+            "AC@3": 0.9879725085910653,
+            "AC@5": 0.9991408934707904,
+            "MRR": 0.8543896252659139,
+            "correct_at_1": 839,
+            "n": 1164
+          },
+          "new_errors": 115
+        }
+      },
+      "eval_n": 1168,
+      "train_n": 924
+    }
+  },
+  "input_sha256": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_xgb_forward_dev/c1-xgb-forward-v1/rankings.csv": "9506cbbc12c76a92fa1266c8cb690831f380d5bd5830e3d1909cf30f98b52eda",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/cases.csv": "83ee698981272bfb1f89d1c2d9b1c2c622b63c419a08c251abde2bf7965821dd",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/detected_features.npy": "b1c043b3ba1480b24a40ddb10646e4f9c7f8cd669de61498be03b7c124f6b4ed",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/root_indices.npy": "c764da9739c7b80a38ba377462eae489ec43984c53c1034da33feb06a5d2283f"
+  },
+  "notes": "Post hoc Train development; shared preprocessing schema; Test already reused by predecessor.",
+  "source_sha256": "7a41d3bce17e18504eabb2c2bbb829d15e79ebc85a063afa9fd4cac3ccfc2903",
+  "status": "TRAIN_ONLY_FORWARD_DEVELOPMENT",
+  "test_read": false
+}

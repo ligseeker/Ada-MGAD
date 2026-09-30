@@ -2,16 +2,34 @@
 
 > 本文件是给新的 code-agent CLI 的单一入口。它只保留当前有效的背景、状态、约束和下一步；完整审计与实现细节继续放在现有文档中，不在这里复制。
 
-更新时间：2026-09-30（Asia/Shanghai；本独立 XGB 工作树）
+更新时间：2026-10-01（Asia/Shanghai；本独立锚点回溯工作树）
 
-**本工作树增量：** 用户另行授权的 68D + XGBRanker RCA 单变量探索已在
+**2026-10-01 本独立锚点回溯工作树最新增量：** 用户继续授权以提高
+两阶段 RCA AC@1，并在 `experiment/p6-mob-pair` 建立独立工作树。
+fold 1 Train OOS 延迟中位数固定为 `25.621s`，将 RCA 68D 特征的
+Train/Test 窗口中心统一设为 `t_detected−25.621s`，XGBRanker、检测器、
+候选、matching 和分母不变。Train 时间前推 fold 2/3 AC@1 为
+`0.8938/0.8975`（原 XGB `0.7226/0.7701`）。单次已复用 Test 的同一
+4,197 个 legal matched case 上，AC@1 为 `3735/4197=0.8899`，
+原 XGB 为 `3093/4197=0.7370`；完整 E2E F1@1 为 `0.7469`。
+Test 预测锁含 4,214 episode、4,213 legal ranking、1 invalid context，
+无 ranking failure。原评价入口因 matching CSV 的 NA 解析错误在写结果
+前失败；独立更正评价只读原预测锁并完成精确 baseline replay 和独立
+计数复算。详见[结果](P6_C1_ANCHOR_BACKDATE_RESULTS.md)与
+[计划](P6_C1_ANCHOR_BACKDATE_DEV_AND_TEST_PLAN.md)。证据等级是多次
+复用 Test 的探索性结果；改善主要来自 mobservice1/2 的 login_failure，
+非主服务与 memory 故障仍弱。当前不再在同一 Test 调参；完整 E2E
+Recall@1 仍受 Stage-1 recall `0.7254` 限制。
+
+**前一独立 XGB 工作树增量：** 用户另行授权的 68D + XGBRanker RCA 单变量探索已在
 `experiment/p6-z2-xgb` 完成，冻结执行源码 `e08f3a0`，独立 run
 `experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/`。同一 4,197
 个 legal matched Test case 上，XGB 对原 C1-v2 Arm C Conditional Logit 的
 配对 AC@1 为 `+0.04241`；完整 E2E F1@1 为 `0.6185` 对 `0.5829`。
 这是已复用 Test 的**探索性**对照，不能升格为独立确认，也不覆盖下面
 原 C1-v2/C2 的正式结论；见[新协议](P6_C1_Z2_XGB_PROTOCOL_V1.md)与
-[结果](P6_C1_Z2_XGB_RESULTS.md)。本工作树无下一轮 Test 调参计划。
+[结果](P6_C1_Z2_XGB_RESULTS.md)。其后用户另行授权的固定锚点回溯
+研究见本文件顶部；该独立分支不再用同一 Test 继续调参。
 
 **后续两阶段开发检验（2026-09-30）：** 独立 C0R2 工作树仅在
 Fit/Validation 诊断固定检测分数的再触发语义，Validation recall
@@ -94,6 +112,7 @@ experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/
 | P6-C1 fold 1 Metric 候选审计 | `COMPLETE`，仅诊断 | [结果与后续方案](P6_C1_FOLD1_METRIC_PREFIX_AUDIT_RESULT_20260929.md)；封存产物重现 27/45：质量通过 45、相关性排除 18；不改变原 C1 verdict，也不是模型效果结果 |
 | P6-C1-v2 supervision-OOS + P6-C2 | 完成，`ANCHOR_ALIGNMENT_SUPPORTED` | `experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/`；证据等级为 supervision-OOS，不是 prefix-preprocessing-OOS；共同 Train cohort 3,225（935/1168/1122 ≥ 596/765/767）；Test 预测锁 4,214 episode（4,213 legal，0 ranking failure）；主结果 `Delta AC@1 = +0.19657`（[0.17041, 0.22467]）；C2 full diagnosis F1@1 B 0.4180 / C 0.5829；见 [结果归档](P6_C1_V2_AND_C2_RESULTS.md) |
 | P6-C1 68D + XGBRanker 独立探索 | 完成，reused-Test descriptive | 新工作树 `experiment/p6-z2-xgb`，冻结 commit `e08f3a0`，独立 run `experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/`；原 C1 Arm C 对 XGB 的 paired AC@1 0.6945→0.7370（+0.04241），full E2E F1@1 0.5829→0.6185；无 Test 调参，见[结果](P6_C1_Z2_XGB_RESULTS.md) |
+| P6-C1 固定锚点回溯 + 原 XGB | 完成，reused-Test exploratory | 本独立工作树；fold 1 Train OOS delay median 固定回溯 25.621s，fold 2/3 前推 AC@1 `0.8938/0.8975`；Test 同一 4,197 legal matched case AC@1 `0.7370→0.8899`，full E2E F1@1 `0.6185→0.7469`；更正评价只读原预测锁，见[结果](P6_C1_ANCHOR_BACKDATE_RESULTS.md) |
 | P6-C0R2 后续 | 未执行，仍是独立支线 | 不再由本轮自动启动；如需进行必须先单独冻结协议，不得用已看过的 Test 选配置 |
 
 ## 4. 数据、预处理和输入契约
@@ -238,13 +257,13 @@ Test 既有预测/episode/matching 复核为 `PASS`。
 
 ## 8. 推荐下一步（不自动执行）
 
-1. **P6-C1-v2 + P6-C2 已完成并归档，项目默认进入 Scientific Freeze**：不再自动设计新的模型实验；下一步是论文/表格、failure analysis 和 thesis Chapter 5 写作，见 [结果归档](P6_C1_V2_AND_C2_RESULTS.md)。C1 outcome 为 `ANCHOR_ALIGNMENT_SUPPORTED`，C2 同时报告了 B/C 的完整 E2E 与 failure ledger；不要因为 C 更好而回头调 Stage-1 或改 Test 口径。
+1. **本分支固定锚点回溯研究已完成，建议停止在同一 Test 继续优化。** Matched-case RCA AC@1 已达 `0.8899`，完整 E2E F1@1 为 `0.7469`；改善集中在高频 mobservice1/2 的 login_failure。Stage-1 仍漏报 1,589 个事件；下一步应整理论文结果，并在独立新数据确认固定方案。P6-C1-v2/P6-C2 的正式结论和旧 Test 复用限制保持原样，见 [原结果](P6_C1_V2_AND_C2_RESULTS.md) 与 [本分支结果](P6_C1_ANCHOR_BACKDATE_RESULTS.md)。
 2. C0F 更正、旧 C0F run 与原 strict-prefix C1 失败 run 继续作为独立历史记录保留；不得复用 `c1-prefix-oos-v1-seed42`，也不得把其失败当作降低任何门槛的依据。
 3. C1-v2 的证据等级是 supervision-OOS（共享预处理来自原 Train 的 label-free 拟合），不是 prefix-preprocessing-OOS；若未来要主张严格 forward-OOS，需要另行冻结协议，且必须先通过独立的前缀 schema 可行性审计。
 4. 已知未解决项只作为 limitation 记录，不作为新的自动实验：多 onset 事件上 C 反而低于 B（onset 2/3 分组）、memory 分组 AC@3/5 回退、C0 Stage-1 长时/内存事件召回低、Test 已被多次复用。
 5. C0R2 仍是独立条件支线，不根据已看过的 Test 挑选配置；如要开展需单独冻结协议。
-6. 用户另行授权的 XGB scorer 探索已在独立工作树执行并封存；这是对默认 Scientific Freeze 的一次明确例外。该轮完成后不继续用同一 Test 选择参数或堆模块；若需证明泛化优势，只能另行预先冻结 Train-only 时间验证或使用新的独立数据。
-6. P5 provenance 修订属于独立归档工作，不通过修改本轮实验数值解决；保留原输入/结果和更正记录。
+6. 用户另行授权的 XGB scorer 和固定 Train-delay RCA anchor 回溯已分别在独立工作树完成。回溯 Test 结果达到本轮 matched-case AC@1 超过 0.8 的目标；不继续在同一 Test 选择 offset、特征或模型。若需证明泛化优势，只能在独立数据上固定方案后验证。
+7. P5 provenance 修订属于独立归档工作，不通过修改本轮实验数值解决；保留原输入/结果和更正记录。
 
 ## 9. 只读快速检查命令
 

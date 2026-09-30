@@ -1,0 +1,126 @@
+{
+  "folds": {
+    "f12_to_f3": {
+      "baseline": {
+        "AC@1": 0.7700534759358288,
+        "AC@3": 0.9955436720142602,
+        "AC@5": 1.0,
+        "MRR": 0.883615567439097,
+        "correct_at_1": 864,
+        "n": 1122
+      },
+      "eval_n": 1122,
+      "train_n": 2103,
+      "variants": {
+        "detected_only": {
+          "all": {
+            "AC@1": 0.7700534759358288,
+            "AC@3": 0.9955436720142602,
+            "AC@5": 1.0,
+            "MRR": 0.883615567439097,
+            "correct_at_1": 864,
+            "n": 1122
+          },
+          "fixed_errors": 0,
+          "new_errors": 0
+        },
+        "detected_plus_gt": {
+          "all": {
+            "AC@1": 0.7415329768270945,
+            "AC@3": 0.9991087344028521,
+            "AC@5": 0.9991087344028521,
+            "MRR": 0.8695781342840166,
+            "correct_at_1": 832,
+            "n": 1122
+          },
+          "fixed_errors": 75,
+          "new_errors": 107
+        },
+        "gt_only": {
+          "all": {
+            "AC@1": 0.4037433155080214,
+            "AC@3": 0.7896613190730838,
+            "AC@5": 0.9946524064171123,
+            "MRR": 0.626865291571174,
+            "correct_at_1": 453,
+            "n": 1122
+          },
+          "fixed_errors": 113,
+          "new_errors": 524
+        }
+      }
+    },
+    "f1_to_f2": {
+      "baseline": {
+        "AC@1": 0.7226027397260274,
+        "AC@3": 0.9914383561643836,
+        "AC@5": 0.9991438356164384,
+        "MRR": 0.8557444553163731,
+        "correct_at_1": 844,
+        "n": 1168
+      },
+      "eval_n": 1168,
+      "train_n": 935,
+      "variants": {
+        "detected_only": {
+          "all": {
+            "AC@1": 0.7226027397260274,
+            "AC@3": 0.9914383561643836,
+            "AC@5": 0.9991438356164384,
+            "MRR": 0.8557444553163731,
+            "correct_at_1": 844,
+            "n": 1168
+          },
+          "fixed_errors": 0,
+          "new_errors": 0
+        },
+        "detected_plus_gt": {
+          "all": {
+            "AC@1": 0.7414383561643836,
+            "AC@3": 0.9940068493150684,
+            "AC@5": 0.9991438356164384,
+            "MRR": 0.8661529680365296,
+            "correct_at_1": 866,
+            "n": 1168
+          },
+          "fixed_errors": 155,
+          "new_errors": 133
+        },
+        "gt_only": {
+          "all": {
+            "AC@1": 0.401541095890411,
+            "AC@3": 0.7902397260273972,
+            "AC@5": 0.9940068493150684,
+            "MRR": 0.6232601516634051,
+            "correct_at_1": 469,
+            "n": 1168
+          },
+          "fixed_errors": 170,
+          "new_errors": 545
+        }
+      }
+    }
+  },
+  "input_sha256": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_xgb_forward_dev/c1-xgb-forward-v1/rankings.csv": "9506cbbc12c76a92fa1266c8cb690831f380d5bd5830e3d1909cf30f98b52eda",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/cases.csv": "83ee698981272bfb1f89d1c2d9b1c2c622b63c419a08c251abde2bf7965821dd",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/detected_features.npy": "b1c043b3ba1480b24a40ddb10646e4f9c7f8cd669de61498be03b7c124f6b4ed",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/gt_features.npy": "fdfbdb12eb862bbfa3b93ea6d6e69c503e89b7fec0075577885a3ee7cda9ec68",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/root_indices.npy": "c764da9739c7b80a38ba377462eae489ec43984c53c1034da33feb06a5d2283f"
+  },
+  "model_parameters": {
+    "colsample_bytree": 1.0,
+    "learning_rate": 0.05,
+    "max_depth": 3,
+    "n_estimators": 200,
+    "n_jobs": 1,
+    "objective": "rank:pairwise",
+    "random_state": 20260826,
+    "reg_lambda": 1.0,
+    "subsample": 1.0,
+    "tree_method": "hist"
+  },
+  "source_sha256": "e8cad7d93fbd7b959cb7d957dd03db4c1aaea2986fb1af3088993e96271db5cf",
+  "status": "TRAIN_ONLY_FORWARD_DEVELOPMENT",
+  "test_read": false
+}
