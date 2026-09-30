@@ -1,0 +1,16 @@
+2026-10-01 06:21:24,535 INFO P6-C0 develop starting; output=/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/weighted-v1-seed42
+2026-10-01 06:21:24,710 INFO P6-C0 split audit PASSED: [{'name': 'fit_has_gt_events', 'ok': True, 'detail': 7443}, {'name': 'fit_has_positive_labels', 'ok': True, 'detail': 12897}, {'name': 'validation_has_gt_events', 'ok': True, 'detail': 2901}, {'name': 'validation_has_positive_labels', 'ok': True, 'detail': 4887}, {'name': 'test_has_gt_events', 'ok': True, 'detail': 5787}, {'name': 'test_has_positive_labels', 'ok': True, 'detail': 9682}, {'name': 'dominant_fault_type_login_failure_present_in_fit', 'ok': True, 'detail': {'test_share': 0.9583549334715742, 'fit_events': 7081}}, {'name': 'dominant_service_mobservice1_present_in_fit', 'ok': True, 'detail': {'test_share': 0.48367029548989116, 'fit_events': 3564}}, {'name': 'dominant_service_mobservice2_present_in_fit', 'ok': True, 'detail': {'test_share': 0.4815966822187662, 'fit_events': 3587}}, {'name': 'test_population_matches_frozen_p5', 'ok': True, 'detail': {'p6_c0_test_windows': 26127, 'frozen_p5_test_windows': 26127}}, {'name': 'test_window_identity_matches_frozen_p5', 'ok': True, 'detail': 'sample index 0..N-1 of the frozen Test array, unchanged'}]
+2026-10-01 06:21:27,714 INFO P6-C0 system trigger: 2903354 parameters
+2026-10-01 06:21:27,882 INFO Fit labels: positive=12897 ignore=4682 negative=25971 pos_weight=2.013724
+2026-10-01 06:23:46,511 INFO epoch 0: train_loss=0.962828 val_threshold=0.552036 val P=0.3251 R=0.1868 F1=0.2373
+2026-10-01 06:26:18,187 INFO epoch 1: train_loss=0.747308 val_threshold=0.993627 val P=0.9918 R=0.7122 F1=0.8291
+2026-10-01 06:28:53,263 INFO epoch 2: train_loss=0.570582 val_threshold=0.996270 val P=0.9896 R=0.7215 F1=0.8345
+2026-10-01 06:31:23,693 INFO epoch 3: train_loss=0.557827 val_threshold=0.998844 val P=0.9962 R=0.7256 F1=0.8396
+2026-10-01 06:33:53,523 INFO epoch 4: train_loss=0.551471 val_threshold=0.996671 val P=0.9841 R=0.7063 F1=0.8224
+2026-10-01 06:36:35,239 INFO epoch 5: train_loss=0.542877 val_threshold=0.999585 val P=0.9619 R=0.7215 F1=0.8245
+2026-10-01 06:39:17,599 INFO epoch 6: train_loss=0.540229 val_threshold=0.999237 val P=0.9789 R=0.7049 F1=0.8196
+2026-10-01 06:41:47,166 INFO epoch 7: train_loss=0.539738 val_threshold=0.999122 val P=0.9889 R=0.7039 F1=0.8224
+2026-10-01 06:44:17,665 INFO epoch 8: train_loss=0.537285 val_threshold=0.999227 val P=0.9845 R=0.6991 F1=0.8176
+2026-10-01 06:46:48,521 INFO epoch 9: train_loss=0.536074 val_threshold=0.999669 val P=0.9760 R=0.7011 F1=0.8160
+2026-10-01 06:49:23,372 INFO epoch 10: train_loss=0.533210 val_threshold=0.999489 val P=0.9874 R=0.7004 F1=0.8195
+2026-10-01 06:51:57,982 INFO epoch 11: train_loss=0.499916 val_threshold=0.999432 val P=0.9922 R=0.6977 F1=0.8193
