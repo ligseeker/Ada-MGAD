@@ -1,0 +1,19 @@
+{
+  "array_file": "f1_to_f2_cl.npz",
+  "array_sha256": "410d74dfe36cedae77929ef2725228bfa96c8e568e4973951ede53f7a270f002",
+  "candidate_count": 10,
+  "converged": true,
+  "feature_dimension": 68,
+  "final_loss": 510.56466244824225,
+  "gradient_norm": 3.674838211509268e-12,
+  "gradient_tolerance": 1e-08,
+  "initial_loss": 2152.91706194947,
+  "iterations": 284,
+  "lambda": 1.0,
+  "max_iter": 1000,
+  "message": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH; Newton polish gradient_inf=3.675e-12",
+  "optimizer": "scipy.optimize.minimize:L-BFGS-B with deterministic Newton polish",
+  "schema_version": "p5_i1_conditional_logit_state_v1",
+  "source_commit": "a2c620922e7c0ab3615d34654d4a3690d1b22c8e",
+  "standard_scaler_fit": "Train candidate rows only"
+}
