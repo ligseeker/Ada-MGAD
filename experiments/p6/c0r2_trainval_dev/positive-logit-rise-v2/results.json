@@ -1,0 +1,138 @@
+{
+  "candidate": "positive run start plus strict within-run logit rise; fixed C0 threshold",
+  "historical_fit_validation_score_source": "UNVERIFIED",
+  "schema_version": "p6_c0r2_trainval_dev_v1",
+  "source_commit": "72c18691a57d1f322a94861bdb8e157754595e4f",
+  "source_sha256": {
+    "docs/P6_C0R2_TRAINVAL_DEV_PROTOCOL.md": "2fe4b8966ef6450b447b9c124c97386f35151d12607f6fb96f843c0851b6bedf",
+    "scripts/p6/audit_c0r2_trainval_dev.py": "7a35a5db7b1fb6e84eb66332af7bc05aa51d1e41d2ca64777b614f78eed5f719",
+    "src/e2e/event_detection.py": "115819a5e8162f116da109dfbb584b755b12dc508d51dba7449d43b0734d837a"
+  },
+  "split_results": {
+    "fit": {
+      "baseline": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 5626,
+          "mean_seconds": 24.496927301813013,
+          "median_seconds": 24.65,
+          "p90_seconds": 37.4255,
+          "p95_seconds": 39.2465
+        },
+        "event_f1": 0.8580797681689927,
+        "event_precision": 0.9922398589065256,
+        "event_recall": 0.7558780061803037,
+        "false_negative_events": 1817,
+        "false_positive_events": 44,
+        "ground_truth_event_count": 7443,
+        "predicted_episode_count": 5670,
+        "true_positive_events": 5626
+      },
+      "baseline_exact_pair_replay": "PASS",
+      "candidate": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 6009,
+          "mean_seconds": 24.512965551672487,
+          "median_seconds": 24.575,
+          "p90_seconds": 37.317,
+          "p95_seconds": 39.1986
+        },
+        "event_f1": 0.8881170558675731,
+        "event_precision": 0.9868615536212842,
+        "event_recall": 0.807335751713019,
+        "false_negative_events": 1434,
+        "false_positive_events": 80,
+        "ground_truth_event_count": 7443,
+        "predicted_episode_count": 6089,
+        "true_positive_events": 6009
+      },
+      "emission": {
+        "baseline_episodes": 5670,
+        "candidate_episodes": 6089,
+        "matched_by_trigger_kind": {
+          "positive_logit_rise": 383,
+          "run_start": 5626
+        },
+        "positive_logit_rises": 419
+      },
+      "observed_matching_sha256": "3c3b5239515e4c9cb55aebed87d4aad3c5df125c982cdbf5b1071fabf79a98ba",
+      "paired_case_change": {
+        "gained": 383,
+        "gained_fault_counts": {
+          "access_permission_denied": 1,
+          "login_failure": 381,
+          "memory_anomalies": 1
+        },
+        "lost": 0,
+        "lost_fault_counts": {}
+      },
+      "score_sha256": "140c58508263cd5c5fca280cac284c6d3e52798275eb40b36c8921f9a797687b",
+      "split": "fit"
+    },
+    "validation": {
+      "baseline": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2124,
+          "mean_seconds": 23.942804143126178,
+          "median_seconds": 23.995,
+          "p90_seconds": 37.0805,
+          "p95_seconds": 39.17674999999999
+        },
+        "event_f1": 0.8431917427550616,
+        "event_precision": 0.9939167056621432,
+        "event_recall": 0.7321613236814891,
+        "false_negative_events": 777,
+        "false_positive_events": 13,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2137,
+        "true_positive_events": 2124
+      },
+      "baseline_exact_pair_replay": "PASS",
+      "candidate": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2244,
+          "mean_seconds": 23.92527228163993,
+          "median_seconds": 23.813000000000002,
+          "p90_seconds": 37.0276,
+          "p95_seconds": 39.0832
+        },
+        "event_f1": 0.8697674418604651,
+        "event_precision": 0.9933598937583001,
+        "event_recall": 0.7735263702171665,
+        "false_negative_events": 657,
+        "false_positive_events": 15,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2259,
+        "true_positive_events": 2244
+      },
+      "emission": {
+        "baseline_episodes": 2137,
+        "candidate_episodes": 2259,
+        "matched_by_trigger_kind": {
+          "positive_logit_rise": 120,
+          "run_start": 2124
+        },
+        "positive_logit_rises": 122
+      },
+      "observed_matching_sha256": "8fff3e6b303a0ce11b60bcd0ae22cd84389c168d1e9d3cf647c4f36bfe1ada10",
+      "paired_case_change": {
+        "gained": 120,
+        "gained_fault_counts": {
+          "login_failure": 119,
+          "memory_anomalies": 1
+        },
+        "lost": 0,
+        "lost_fault_counts": {}
+      },
+      "score_sha256": "5b5e592636753ada3615ff4c373ef739660dcc5196908a78bceb9eb85892ce2f",
+      "split": "validation"
+    }
+  },
+  "status": "COMPLETE_DEVELOPMENT_ONLY",
+  "test_read": false,
+  "test_selection": false,
+  "validation_inspected_before_protocol_freeze": true
+}

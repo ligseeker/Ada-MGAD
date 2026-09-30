@@ -2,7 +2,14 @@
 
 > 本文件是给新的 code-agent CLI 的单一入口。它只保留当前有效的背景、状态、约束和下一步；完整审计与实现细节继续放在现有文档中，不在这里复制。
 
-更新时间：2026-09-29（Asia/Shanghai）
+更新时间：2026-09-30（Asia/Shanghai；本独立 C0R2 开发工作树）
+
+**本工作树增量：** 用户授权的检测阶段 Fit/Validation 研究已归档为
+`COMPLETE_DEVELOPMENT_ONLY`，见[协议](P6_C0R2_TRAINVAL_DEV_PROTOCOL.md)
+与[结果](P6_C0R2_TRAINVAL_DEV_RESULT.md)。固定 C0 分数/阈值，仅在
+同一连续高分段内 logit 严格上升时增加触发，Validation 事件召回
+`0.7322→0.7735`、FP `13→15`。这是后验开发集敏感性，不是新的
+Test 或正式检测器结果；原 C0 的 `BORDERLINE` verdict 不变。
 
 **当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计、P6-C0 系统级触发和 C0F 更正审计已完成。P6-C1-v2（`P6-C1-SUPERVISION-OOS-v1`，run `c1-supervision-oos-v1-seed42`）已完整执行并归档：三折 detector、OOS matching、共同 Train cohort 3,225 case、共享 scaler 的 B/C RCA 臂、label-free Test 预测锁和 C1/C2 评估全部完成，主结果 `Delta AC@1 = AC@1(C) - AC@1(B) = +0.19657`（95% descriptive interval [0.17041, 0.22467]），outcome 为 `ANCHOR_ALIGNMENT_SUPPORTED`；详见 [C1-v2/C2 结果](P6_C1_V2_AND_C2_RESULTS.md)。旧的 strict prefix C1 run `c1-prefix-oos-v1-seed42` 仍为 `PREFIX_SCHEMA_NO_GO`，其失败记录保留且不得复用。**
 
