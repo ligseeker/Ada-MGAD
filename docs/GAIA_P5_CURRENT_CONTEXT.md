@@ -11,6 +11,13 @@
 `0.7322→0.7735`、FP `13→15`。这是后验开发集敏感性，不是新的
 Test 或正式检测器结果；原 C0 的 `BORDERLINE` verdict 不变。
 
+**后续 C0R3 开发检验：** [同告警预算对照](P6_C0R3_EQUAL_ALERT_CONTROL_RESULT.md)
+已完成；64 个随机位置对照显示 C0R2 logit 上升方案虽然 F1 略高，
+但干净事件召回与原 decoder 及全部对照完全相同，预设门槛 `NO-GO`。
+干净 memory 起点后 60 秒达到原阈值者仅 Fit 2/136、Validation 0/31。
+这不是新 Test，也不能证明原始遥测无信号。下一步以单变量训练假设
+研究 memory 起点，停止继续调整同一再触发规则。
+
 **当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计、P6-C0 系统级触发和 C0F 更正审计已完成。P6-C1-v2（`P6-C1-SUPERVISION-OOS-v1`，run `c1-supervision-oos-v1-seed42`）已完整执行并归档：三折 detector、OOS matching、共同 Train cohort 3,225 case、共享 scaler 的 B/C RCA 臂、label-free Test 预测锁和 C1/C2 评估全部完成，主结果 `Delta AC@1 = AC@1(C) - AC@1(B) = +0.19657`（95% descriptive interval [0.17041, 0.22467]），outcome 为 `ANCHOR_ALIGNMENT_SUPPORTED`；详见 [C1-v2/C2 结果](P6_C1_V2_AND_C2_RESULTS.md)。旧的 strict prefix C1 run `c1-prefix-oos-v1-seed42` 仍为 `PREFIX_SCHEMA_NO_GO`，其失败记录保留且不得复用。**
 
 **历史（已停用的 strict-prefix C1，保留且不得复用）：P6-C0 的 aggregate gate 为 PASS，正式 verdict 仍为 BORDERLINE，尚未运行新 RCA/E2E。P6-C0F 独立更正审计已完成并归档，状态为 `COMPLETE_WITH_DECLARED_LIMITATIONS`。C1 的 G1 静态账本和 G2 设计锁已完成，G2 Python 3.8 更正使用 v1.1 配置。G3 的六类执行接口、阶段封存、合成测试及真实 adapter 的 1/24-worker 合成 raw smoke 已通过；[原手动正式运行方案](P6_C1_G3_MANUAL_RUN.md)已因真实 prefix 门槛失败而停用。2026-09-29 全量只读输入预检通过后，正式 fold 1 Fit 因真实 Metric 合格槽位仅 27 个、低于冻结的 45 个预算而停止；本 run 为 `PREFIX_SCHEMA_NO_GO`，详见[失败归档](P6_C1_G3_FOLD1_PREFIX_SCHEMA_NO_GO_20260929.md)。随后的[独立 Metric 审计](P6_C1_FOLD1_METRIC_PREFIX_AUDIT_RESULT_20260929.md)已完成封存：477 个候选中 45 个通过质量门槛，18 个相关性去重，剩余 27 个；384 个 host 候选在首个目标上的 Fit 覆盖率为零。没有完成任何 fold，也没有 OOS 锚点、共同 Train cohort、预测锁或 C1/C2 结果；不得继续执行此 run。**
