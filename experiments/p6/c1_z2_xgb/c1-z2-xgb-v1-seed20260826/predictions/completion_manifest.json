@@ -1,0 +1,15 @@
+{
+  "details": {
+    "all_episodes": 4214,
+    "legal_ranked": 4213,
+    "test_gt_or_matching_read": false
+  },
+  "files": {
+    "prediction_lock.json": "28df471cd730177585385ee3a640dc462c63c5e7e30aaf7f2f41dc3e3d96e114",
+    "scope_rankings.csv": "57c28dab60f49ce94c029125fb3ec08c1bd135651f9388187588dbbfccb0c740"
+  },
+  "run_lock_sha256": "03521e5570b926455cb0d26d90ef1dab84bfd9dd2131aff7a5bb3b28a776c5ab",
+  "schema_version": "p6_c1_xgb_stage_manifest_v1",
+  "stage": "predictions",
+  "status": "COMPLETE"
+}

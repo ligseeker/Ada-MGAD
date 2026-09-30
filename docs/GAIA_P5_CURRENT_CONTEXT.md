@@ -2,7 +2,16 @@
 
 > 本文件是给新的 code-agent CLI 的单一入口。它只保留当前有效的背景、状态、约束和下一步；完整审计与实现细节继续放在现有文档中，不在这里复制。
 
-更新时间：2026-09-29（Asia/Shanghai）
+更新时间：2026-09-30（Asia/Shanghai；本独立 XGB 工作树）
+
+**本工作树增量：** 用户另行授权的 68D + XGBRanker RCA 单变量探索已在
+`experiment/p6-z2-xgb` 完成，冻结执行源码 `e08f3a0`，独立 run
+`experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/`。同一 4,197
+个 legal matched Test case 上，XGB 对原 C1-v2 Arm C Conditional Logit 的
+配对 AC@1 为 `+0.04241`；完整 E2E F1@1 为 `0.6185` 对 `0.5829`。
+这是已复用 Test 的**探索性**对照，不能升格为独立确认，也不覆盖下面
+原 C1-v2/C2 的正式结论；见[新协议](P6_C1_Z2_XGB_PROTOCOL_V1.md)与
+[结果](P6_C1_Z2_XGB_RESULTS.md)。本工作树无下一轮 Test 调参计划。
 
 **当前进度：P5 完整 E2E baseline 已完成；P6-A/B0 审计、P6-C0 系统级触发和 C0F 更正审计已完成。P6-C1-v2（`P6-C1-SUPERVISION-OOS-v1`，run `c1-supervision-oos-v1-seed42`）已完整执行并归档：三折 detector、OOS matching、共同 Train cohort 3,225 case、共享 scaler 的 B/C RCA 臂、label-free Test 预测锁和 C1/C2 评估全部完成，主结果 `Delta AC@1 = AC@1(C) - AC@1(B) = +0.19657`（95% descriptive interval [0.17041, 0.22467]），outcome 为 `ANCHOR_ALIGNMENT_SUPPORTED`；详见 [C1-v2/C2 结果](P6_C1_V2_AND_C2_RESULTS.md)。旧的 strict prefix C1 run `c1-prefix-oos-v1-seed42` 仍为 `PREFIX_SCHEMA_NO_GO`，其失败记录保留且不得复用。**
 
@@ -14,6 +23,7 @@
 
 - 工作目录：`/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2`
 - 当前分支：`e2e-v2`
+- 独立 XGB 探索工作树：`/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-xgb`，分支 `experiment/p6-z2-xgb`；其新增源码和产物只属于此分支，不回写原 run。
 - C0F 更正执行时的 base HEAD 是 `d518c17f4a76ddb30e9bfaeb33fecc982fad3f21`；归档 commit 是 `eac0f44677ba1baba6b2ecac2e7b8e0e606856bd`。更正 run 的实际执行源码由 `source_snapshot.json` 绑定，source digest 为 `afbcf349692e2746ab99e961b15bb3bf129b8205c3ca9d62ee6e3f3d7716b720`，不能把 base HEAD 误写为完整执行源码。P5 执行 commit 为 `7dea779fc5196218a43d86a9777b591d290f047b`，P6-C0 修正版执行 commit 为 `cedc4a2bd7492933a8295067c8075e631cbf3df9`。后续会话仍需现场核对 HEAD、工作树和哈希。
 - 任务：在 GAIA/MicroSS 上运行 Ada-MGAD 多模态异常检测，并通过冻结的 Ada-RCA 适配器完成两阶段事件检测与故障服务定位。
 - Ada-MGAD 和 Ada-RCA 的核心模型、损失和 68D Z2 表示不在本轮重新设计；本仓库主要负责 GAIA 适配、预处理、事件协议、编排、指标和 provenance。
@@ -75,6 +85,7 @@ experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/
 | P6-C1 G3 逐折实现与首次正式尝试 | `PREFIX_SCHEMA_NO_GO`，停止 | [失败归档](P6_C1_G3_FOLD1_PREFIX_SCHEMA_NO_GO_20260929.md)；代码、合成 smoke 与只读输入预检通过，但真实 fold 1 Fit 仅有 27/45 个合格 Metric base slots。失败目录保留 `INCOMPLETE`；无完成 fold、模型结果或 Test 评价 |
 | P6-C1 fold 1 Metric 候选审计 | `COMPLETE`，仅诊断 | [结果与后续方案](P6_C1_FOLD1_METRIC_PREFIX_AUDIT_RESULT_20260929.md)；封存产物重现 27/45：质量通过 45、相关性排除 18；不改变原 C1 verdict，也不是模型效果结果 |
 | P6-C1-v2 supervision-OOS + P6-C2 | 完成，`ANCHOR_ALIGNMENT_SUPPORTED` | `experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/`；证据等级为 supervision-OOS，不是 prefix-preprocessing-OOS；共同 Train cohort 3,225（935/1168/1122 ≥ 596/765/767）；Test 预测锁 4,214 episode（4,213 legal，0 ranking failure）；主结果 `Delta AC@1 = +0.19657`（[0.17041, 0.22467]）；C2 full diagnosis F1@1 B 0.4180 / C 0.5829；见 [结果归档](P6_C1_V2_AND_C2_RESULTS.md) |
+| P6-C1 68D + XGBRanker 独立探索 | 完成，reused-Test descriptive | 新工作树 `experiment/p6-z2-xgb`，冻结 commit `e08f3a0`，独立 run `experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/`；原 C1 Arm C 对 XGB 的 paired AC@1 0.6945→0.7370（+0.04241），full E2E F1@1 0.5829→0.6185；无 Test 调参，见[结果](P6_C1_Z2_XGB_RESULTS.md) |
 | P6-C0R2 后续 | 未执行，仍是独立支线 | 不再由本轮自动启动；如需进行必须先单独冻结协议，不得用已看过的 Test 选配置 |
 
 ## 4. 数据、预处理和输入契约
@@ -224,6 +235,7 @@ Test 既有预测/episode/matching 复核为 `PASS`。
 3. C1-v2 的证据等级是 supervision-OOS（共享预处理来自原 Train 的 label-free 拟合），不是 prefix-preprocessing-OOS；若未来要主张严格 forward-OOS，需要另行冻结协议，且必须先通过独立的前缀 schema 可行性审计。
 4. 已知未解决项只作为 limitation 记录，不作为新的自动实验：多 onset 事件上 C 反而低于 B（onset 2/3 分组）、memory 分组 AC@3/5 回退、C0 Stage-1 长时/内存事件召回低、Test 已被多次复用。
 5. C0R2 仍是独立条件支线，不根据已看过的 Test 挑选配置；如要开展需单独冻结协议。
+6. 用户另行授权的 XGB scorer 探索已在独立工作树执行并封存；这是对默认 Scientific Freeze 的一次明确例外。该轮完成后不继续用同一 Test 选择参数或堆模块；若需证明泛化优势，只能另行预先冻结 Train-only 时间验证或使用新的独立数据。
 6. P5 provenance 修订属于独立归档工作，不通过修改本轮实验数值解决；保留原输入/结果和更正记录。
 
 ## 9. 只读快速检查命令

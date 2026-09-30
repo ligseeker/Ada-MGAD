@@ -1,0 +1,17 @@
+{
+  "details": {
+    "independent_test_confirmation": false,
+    "paired_matched_legal": 4197,
+    "xgb_minus_cl_ac_at_1": 0.0424112461281868
+  },
+  "files": {
+    "c1_paired_results.json": "1601223246380736d98fbdd96bafbe87b7a41e8786874870647ead037c38052e",
+    "c2_failure_ledger.csv": "7c0feb0a15e124e1ecc8d58ac06661cc7c1bc1279c0873530e42524bfe74f702",
+    "c2_full_diagnosis.json": "ed31ee5dc67605d122bf2d9eaf98bafe8ee01a8a3254ba1f3fb59d1c9583720d",
+    "evaluation_provenance.json": "34e7c7b7f73e62c6e8eb32f7ee78aebe4c6cab663082c4ae6551dbb46b1f45b3"
+  },
+  "run_lock_sha256": "03521e5570b926455cb0d26d90ef1dab84bfd9dd2131aff7a5bb3b28a776c5ab",
+  "schema_version": "p6_c1_xgb_stage_manifest_v1",
+  "stage": "evaluation",
+  "status": "COMPLETE"
+}

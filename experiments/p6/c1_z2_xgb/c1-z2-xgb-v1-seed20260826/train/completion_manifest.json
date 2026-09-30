@@ -1,0 +1,14 @@
+{
+  "details": {
+    "group_size": 10,
+    "train_cases": 3225
+  },
+  "files": {
+    "model_state.ubj": "55a264a0aeedb47d5d5d3cc34090c2ce294419a6006d63b44e86436d063c52ee",
+    "train_summary.json": "8549effccd537fed7b8d41291f25ec98f45f2bfb3548660553e6f45778ee6725"
+  },
+  "run_lock_sha256": "03521e5570b926455cb0d26d90ef1dab84bfd9dd2131aff7a5bb3b28a776c5ab",
+  "schema_version": "p6_c1_xgb_stage_manifest_v1",
+  "stage": "train",
+  "status": "COMPLETE"
+}

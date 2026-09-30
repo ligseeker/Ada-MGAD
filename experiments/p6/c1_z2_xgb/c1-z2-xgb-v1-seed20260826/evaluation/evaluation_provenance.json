@@ -1,0 +1,15 @@
+{
+  "baseline_replay_gate": "PASS",
+  "evaluator_slot_b": "original C1-v2 Arm C Conditional Logit",
+  "evaluator_slot_c": "new 68D XGBRanker",
+  "evidence_grade": "reused_Test_exploratory_descriptive",
+  "independent_test_confirmation": false,
+  "prediction_lock_sha256": "28df471cd730177585385ee3a640dc462c63c5e7e30aaf7f2f41dc3e3d96e114",
+  "test_gt_inputs_sha256": {
+    "artifacts/p5/v3/protocol/gt_event_registry.csv": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+    "configs/e2e/gaia_p5_v3_preprocessing_v2.json": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+    "experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/evaluation/c1_results.json": "d94b67c6631229c8994b491156d616a29062537fda6955bb9a44908609786b6c",
+    "experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/evaluation/c2_full_diagnosis.json": "3b6635e497916cc0be7ba06f466772d1d884544d5819fa519714e3b1e2157beb",
+    "experiments/p6/system_event_trigger/test_matching.csv": "011332f3537ee6f7d044e9da23df1d88f617fb71d3a552354343db6fd91c9c77"
+  }
+}

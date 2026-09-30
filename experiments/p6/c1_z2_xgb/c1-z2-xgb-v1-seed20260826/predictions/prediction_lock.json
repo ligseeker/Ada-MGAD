@@ -1,0 +1,22 @@
+{
+  "all_episodes": 4214,
+  "comparator": "C1-v2 Arm C Conditional Logit on detected Test anchor",
+  "illegal_context": 1,
+  "label_free_inputs_sha256": {
+    "experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/predictions/completion_manifest.json": "19777b7f4656f3e8b360e1ecb618dc5d0dc8a0e63a15df59596a1d87be746216",
+    "experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/predictions/feature_inputs.npy": "0fc6e1a6e9f9417dbe81c6f4df002c99d162795665d179e7a3256bff8fdce40d",
+    "experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/predictions/feature_valid.npy": "f44a2219f6506514830eee4514dbf3c82666c31171592bd50f1be411b7f5d5cd",
+    "experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/predictions/prediction_lock.json": "ee9500730e7b982557de31d9fd138c13e09e5af397b11354e88b305f0233c967",
+    "experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/predictions/scope_rankings.csv": "b444a4d92c601430b79a3fee5e6fcddc97c3a8573cd20bd0c16a828d5bf6a650",
+    "experiments/p6/system_event_trigger/test_episodes.csv": "30bacbeecbee4b9f738fc6330fa9d8df5c1adc08e37fb1ee8476f1b47735399b"
+  },
+  "legal_ranked": 4213,
+  "missing_ranking_policy": "zero correctness; never remove from denominator",
+  "model_sha256": "55a264a0aeedb47d5d5d3cc34090c2ce294419a6006d63b44e86436d063c52ee",
+  "new_model": "detected Train anchor 68D + frozen XGBRanker on detected Test anchor",
+  "protocol_id": "P6-C1-Z2-XGB-v1",
+  "run_id": "c1-z2-xgb-v1-seed20260826",
+  "schema_version": "p6_c1_xgb_prediction_lock_v1",
+  "scope_rankings_sha256": "57c28dab60f49ce94c029125fb3ec08c1bd135651f9388187588dbbfccb0c740",
+  "test_gt_or_matching_read": false
+}
