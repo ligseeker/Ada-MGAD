@@ -20,6 +20,8 @@ from __future__ import annotations
 
 from typing import Mapping
 
+import math
+
 import torch
 import torch.nn as nn
 from torch_geometric.utils import dense_to_sparse
@@ -30,6 +32,21 @@ from .protocol import GAIA_SERVICES
 
 
 DEFAULT_HEAD_HIDDEN = 32
+
+
+def metric_temporal_drift(metric_window: torch.Tensor) -> torch.Tensor:
+    """Causal one-scalar Metric change from a ten-bin detector window.
+
+    The first eight bins form a pre-onset reference for any onset in the final
+    60 seconds. The statistic does not use a service identity or future bin.
+    """
+
+    if metric_window.ndim != 4 or metric_window.shape[1:] != (10, len(GAIA_SERVICES), 48):
+        raise ValueError("Metric drift expects (batch, 10 bins, 10 services, 48 features)")
+    ordered = metric_window[:, :8].sort(dim=1).values
+    reference = (ordered[:, 3] + ordered[:, 4]) * 0.5
+    per_bin = (metric_window[:, 8:] - reference[:, None]).abs().mean(dim=(2, 3))
+    return per_bin.amax(dim=1)
 
 
 def pool_service_representations(h: torch.Tensor) -> torch.Tensor:
@@ -110,6 +127,21 @@ class SystemEventTrigger(nn.Module):
             nn.LeakyReLU(inplace=True),
             nn.Linear(head_hidden, 1),
         )
+        self.metric_drift_residual = bool(args.get("metric_drift_residual", False))
+        if self.metric_drift_residual:
+            # Register after the original head: the extra branch consumes no RNG
+            # and zero alpha preserves the C0 initial logits exactly.
+            self.metric_drift_alpha = nn.Parameter(torch.zeros(()))
+            self.register_buffer("metric_drift_center", torch.zeros(()))
+            self.register_buffer("metric_drift_iqr", torch.ones(()))
+
+    def set_metric_drift_stats(self, center: float, iqr: float) -> None:
+        if not self.metric_drift_residual:
+            raise ValueError("Metric drift branch is disabled")
+        if not math.isfinite(float(center)) or not math.isfinite(float(iqr)) or iqr <= 0:
+            raise ValueError("Fit Metric drift center/IQR must be finite and IQR positive")
+        self.metric_drift_center.fill_(float(center))
+        self.metric_drift_iqr.fill_(float(iqr))
 
     # -- inference interface -------------------------------------------------
 
@@ -134,7 +166,12 @@ class SystemEventTrigger(nn.Module):
 
     def forward(self, batch: Mapping[str, torch.Tensor], global_step=None):
         representations, graph_reg_loss = self.encode(batch)
-        return self.system_logits(representations), graph_reg_loss
+        logits = self.system_logits(representations)
+        if self.metric_drift_residual:
+            drift = metric_temporal_drift(batch["data_node"])
+            standardized = (drift - self.metric_drift_center) / self.metric_drift_iqr
+            logits = logits + self.metric_drift_alpha * standardized
+        return logits, graph_reg_loss
 
     @torch.no_grad()
     def system_scores(self, batch: Mapping[str, torch.Tensor]) -> torch.Tensor:

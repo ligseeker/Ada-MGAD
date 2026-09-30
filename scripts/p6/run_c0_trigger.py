@@ -110,7 +110,7 @@ REQUIRED_TRIGGER_CONFIG = {
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("audit", "train", "evaluate", "all", "smoke"))
+    parser.add_argument("action", choices=("audit", "train", "develop", "evaluate", "all", "smoke"))
     parser.add_argument("--config", default=DEFAULT_TRIGGER_CONFIG)
     parser.add_argument("--base-config", default=DEFAULT_BASE_CONFIG)
     parser.add_argument("--output-dir", default=None)
@@ -153,6 +153,11 @@ def resolve_trigger_config(path: Path) -> Mapping[str, object]:
             raise ValueError("trigger config is missing {}".format(key))
     if data["threshold"]["objective"] != "validation_event_f1":
         raise ValueError("P6-C0 pre-registers a Validation event-F1 threshold objective")
+    if bool(data["model"].get("metric_drift_residual", False)):
+        if data["protocol_id"] != "P6-C0-METRIC-DRIFT-V1":
+            raise ValueError("Metric drift variant needs its distinct protocol ID")
+        if data["model"].get("metric_drift_formula") != "median_first8_max_mean_abs_last2":
+            raise ValueError("Metric drift formula is not the frozen v1 definition")
     if str(data["evaluation"]["prediction_time"]) != "t_hat = prediction_available_time = target_bin_end":
         raise ValueError("P6-C0 must reuse the frozen prediction-available-time anchor")
     gate = data["evaluation"].get("gate", {})
@@ -529,7 +534,7 @@ def build_model_args(trigger_config, base_config, manifest, seed: int, gpu: bool
     ad_model = base_config["ad_model"]
     args = {key: ad_model[key] for key in MODEL_ARG_KEYS}
     args.update({
-        "main_model": "P6-C0-SystemEventTrigger",
+        "main_model": "P6-C0-MetricDrift" if trigger_config["model"].get("metric_drift_residual") else "P6-C0-SystemEventTrigger",
         "random_seed": int(seed),
         "gpu": bool(gpu),
         "window": DEFAULT_WINDOW_BINS,
@@ -540,8 +545,32 @@ def build_model_args(trigger_config, base_config, manifest, seed: int, gpu: bool
         "raw_edge": int(manifest["dimensions"]["raw_edge"]),
         "batch_size": int(trigger_config["training"]["batch_size"]),
         "head_hidden": int(trigger_config["model"].get("head_hidden", 32)),
+        "metric_drift_residual": bool(trigger_config["model"].get("metric_drift_residual", False)),
     })
     return args
+
+
+def fit_metric_drift_stats(dataset: TriggerWindowDataset) -> Mapping[str, float]:
+    """Fit-only robust scale for the fixed ten-bin Metric change statistic."""
+
+    if dataset.split != "fit":
+        raise ValueError("Metric drift normalization must use Detector-Fit only")
+    values = np.empty(len(dataset), dtype=np.float64)
+    indices = dataset.sample_indices
+    for begin in range(0, len(dataset), 256):
+        selected = indices[begin:begin + 256]
+        windows = np.stack([dataset.metric[int(i):int(i) + 10] for i in selected]).astype(np.float32)
+        reference = np.median(windows[:, :8], axis=1)
+        per_bin = np.abs(windows[:, 8:] - reference[:, None]).mean(axis=(2, 3))
+        values[begin:begin + len(selected)] = per_bin.max(axis=1)
+    if not np.isfinite(values).all():
+        raise ValueError("Fit Metric drift values are non-finite")
+    center = float(np.median(values))
+    q25, q75 = np.quantile(values, [0.25, 0.75])
+    iqr = float(q75 - q25)
+    if not np.isfinite(center) or not np.isfinite(iqr) or iqr <= 0:
+        raise ValueError("Fit Metric drift IQR must be positive and finite")
+    return {"fit_windows": int(len(values)), "median": center, "iqr": iqr}
 
 
 def move_to_device(batch: Mapping[str, torch.Tensor], device: torch.device) -> Mapping[str, torch.Tensor]:
@@ -670,6 +699,10 @@ def run_training(state: ProtocolState, output_dir: Path, model_args, training, m
 
     fit_dataset = state.build_dataset("fit")
     validation_dataset = state.build_dataset("validation")
+    drift_stats = None
+    if model.metric_drift_residual:
+        drift_stats = fit_metric_drift_stats(fit_dataset)
+        model.set_metric_drift_stats(drift_stats["median"], drift_stats["iqr"])
     fit_loader = build_trigger_loader(
         fit_dataset, batch_size=int(training["batch_size"]), num_workers=int(training["num_workers"])
     )
@@ -815,6 +848,8 @@ def run_training(state: ProtocolState, output_dir: Path, model_args, training, m
         "checkpoint_tie_break": "event_f1, then recall, then threshold",
         "threshold_tie_break": "highest threshold among equal Validation event F1",
         "test_used_for_selection": False,
+        "metric_drift_stats": drift_stats,
+        "metric_drift_alpha": float(best["state"]["metric_drift_alpha"].item()) if drift_stats else None,
         "history": history,
         "data_manifest": {"path": str(manifest_path.resolve()), "sha256": manifest_sha},
     }
@@ -828,6 +863,26 @@ def run_training(state: ProtocolState, output_dir: Path, model_args, training, m
         "history": history,
         "stop_reason": stop_reason,
     }))
+    if drift_stats is not None:
+        model.load_state_dict(best["state"])
+        validation_output = score_dataset(
+            model, validation_dataset, int(training["batch_size"]), int(training["num_workers"]),
+            device, "validation",
+        )
+        validation_frame = system_score_frame(
+            "validation", validation_output["prediction_available_time"], validation_output["system_score"]
+        )
+        episodes, matching, replay = evaluate_system_threshold(
+            validation_frame, validation_gt, float(best["threshold"]),
+            grid_seconds=state.grid_seconds, tolerance_seconds=state.tolerance_seconds,
+        )
+        if any(not _close(replay[key], best["metrics"][key]) for key in
+               ("true_positive_events", "false_positive_events", "false_negative_events", "event_f1")):
+            raise ValueError("Metric drift Validation prediction replay differs from selected checkpoint")
+        write_predictions(output_dir / "validation_predictions.csv", validation_dataset,
+                          validation_output, float(best["threshold"]))
+        episodes.to_csv(output_dir / "validation_episodes.csv", index=False, lineterminator="\n")
+        matching.to_csv(output_dir / "validation_matching.csv", index=False, lineterminator="\n")
     return selection_record
 
 
@@ -1147,6 +1202,8 @@ def main():
     registry_path = Path(args.registry).resolve() if args.registry else None
     output_dir = (PROJECT_ROOT / (args.output_dir or trigger_config["output_root"])).resolve()
     guard_output_root(output_dir, base_config)
+    if trigger_config["model"].get("metric_drift_residual") and args.action == "develop" and output_dir.exists():
+        raise FileExistsError("Metric drift development run directory already exists")
     setup_logging(output_dir)
 
     manifest_path = artifact_root / "ad_data_manifest.json"
@@ -1176,7 +1233,7 @@ def main():
     logging.info("P6-C0 %s starting; output=%s", args.action, output_dir)
 
     result: Mapping[str, object] = {"action": args.action, "output_dir": str(output_dir)}
-    if args.action in ("audit", "all"):
+    if args.action in ("audit", "develop", "all"):
         audit = run_audit(state, output_dir, provenance)
         result["audit"] = {
             "structural_checks": audit["structural_checks"],
@@ -1191,7 +1248,7 @@ def main():
             }), sort_keys=True))
             sys.exit(2)
         logging.info("P6-C0 split audit PASSED: %s", audit["structural_checks"]["checks"])
-    if args.action in ("train", "all"):
+    if args.action in ("train", "develop", "all"):
         model_args = build_model_args(
             trigger_config, base_config, manifest, int(trigger_config["seed"]), bool(args.gpu)
         )
@@ -1205,6 +1262,19 @@ def main():
             "checkpoint": selection["checkpoint"],
             "metrics": selection["selected_validation_metrics"],
         }
+        if args.action == "develop" and model_args.get("metric_drift_residual"):
+            files = ("split_audit.json", "split_manifest.json", "validation_selection.json",
+                     "training_log.json", "validation_predictions.csv", "validation_episodes.csv",
+                     "validation_matching.csv", "checkpoint/best_validation_event_f1.pt")
+            write_json(output_dir / "development_manifest.json", {
+                "schema_version": "p6_c0_metric_drift_development_v1",
+                "status": "COMPLETE_DEVELOPMENT_ONLY", "test_inference_run": False,
+                "execution_commit": git_head(),
+                "config_sha256": sha256_file(trigger_config_path),
+                "base_config_sha256": sha256_file(base_config_path),
+                "source_artifacts": provenance["source_artifacts"],
+                "files": {name: sha256_file(output_dir / name) for name in files},
+            })
     if args.action in ("evaluate", "all"):
         model_args = build_model_args(
             trigger_config, base_config, manifest, int(trigger_config["seed"]), bool(args.gpu)
