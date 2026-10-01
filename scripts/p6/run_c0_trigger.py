@@ -544,6 +544,7 @@ def build_model_args(trigger_config, base_config, manifest, seed: int, gpu: bool
         "raw_edge": int(manifest["dimensions"]["raw_edge"]),
         "batch_size": int(trigger_config["training"]["batch_size"]),
         "head_hidden": int(trigger_config["model"].get("head_hidden", 32)),
+        "graph_batch_scope": str(trigger_config["model"].get("graph_batch_scope", "batch")),
     })
     return args
 
