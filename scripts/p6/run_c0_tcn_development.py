@@ -72,6 +72,13 @@ def main():
     onset_report = json.loads(onset_report_path.read_text())
     baseline = json.loads((baseline_dir / "validation_selection.json").read_text())
     margins = config["development_gate"]
+    gate_names = {"precision_floor", "recall_gain", "f1_gain", "single_onset_recall_decline_limit"}
+    if (set(onset_report["gates"]) != gate_names
+            or set(e2["gates"]) != {"onset_bins_fixed_threshold", "onset_bins_validation_selected"}
+            or any(set(gates) != gate_names for gates in e2["gates"].values())
+            or e2["test_read"] or e2["gt_denominator"] != 2901
+            or onset_report["status"] != "NO_GO_DEVELOPMENT"):
+        raise ValueError("incomplete or invalid E1/E2 decision")
     if (onset_report["test_read"] or onset_report["gt_denominator"] != 2901
             or onset_report["gate_margins"] != margins
             or onset_report["results"]["candidate"]["completion_sha256"] != sha256_file(reference_dir / "completion_manifest.json")

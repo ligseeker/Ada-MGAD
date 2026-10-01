@@ -7,10 +7,15 @@
 **当前用户授权的新研究（先于下方旧Freeze建议）：**按最小修改逐步实施检测优化。
 E1在独立`Ada-MGAD-e2e-v2-c0onset`/`experiment/p6-c0-onset30`运行，execution
 commit`ac94227`，目录`experiments/p6/c0_onset_development/onset30-v1-seed42`，
-截至本记录仍RUNNING，44项目标/边界/匹配测试通过，尚无最终结果。
+已完成：10epoch选epoch1，Val2057/131/844、P/R/F1 .940128/.709066/.808410，
+44项目标/边界/匹配测试和真实窗口batch独立gate通过，E1为NO-GO。
 保持输入/模型/训练/decoder，仅改为半开30s bin起点目标，IGNORE掩码不变。
-本TCN工作树仅准备条件性编码器候选，两项模型测试和training-factory-only AST
-检查通过，未启动训练；E1/E2均NO-GO才允许启动。见[起点协议](P6_C0_ONSET_DEVELOPMENT_PROTOCOL.md)、
+E2固定阈值独立bin为2320/3484/581、F1 .533027；预声明Val重选阈值为
+2369/3554/532、F1 .536945；均NO-GO。61/5804阳性bin属于IGNORE，3373属于
+已有负监督，未执行IGNORE消融。完整结果见[首轮报告](P6_ONSET_FIRST_RESULTS_20261001.md)。
+本TCN工作树已准备下一编码器候选，两项模型测试和training-factory-only AST
+检查通过；E1/E2均NO-GO的启动条件已满足。训练实际状态以新run进程/完成清单
+为准。见[起点协议](P6_C0_ONSET_DEVELOPMENT_PROTOCOL.md)、
 [TCN协议](P6_C0_TCN_DEVELOPMENT_PROTOCOL.md)、[半监督可行性](P6_NORMAL_PREDICTION_FEASIBILITY.md)。
 继续时必须核验PID/exec session或completion manifest，不从RUNNING文档推断进程存活。
 
