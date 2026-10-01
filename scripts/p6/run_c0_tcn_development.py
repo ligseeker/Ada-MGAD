@@ -16,6 +16,7 @@ from scripts.p6.analyze_c0_causal_development import verify_completion
 from scripts.p6.run_c0_onset_development import check_ablation
 from scripts.p6.run_c0_trigger import build_model_args, git_head, run_training, setup_logging
 from scripts.p6.run_c0_window_causal import real_window_causality_gate, source_bindings
+from scripts.p6.tcn_replication import replication_bindings
 from src.e2e.onset_trigger import OnsetDevelopmentState
 from src.e2e.protocol import load_config, sha256_file, write_json
 from src.e2e.system_trigger import to_builtin
@@ -53,12 +54,14 @@ def main():
     parser.add_argument("--gpu", action="store_true")
     parser.add_argument("--threads", type=int, default=8)
     parser.add_argument("--threshold-workers", type=int, default=8)
+    parser.add_argument("--replication-seed", type=int, choices=(17, 2026))
     args = parser.parse_args()
     if args.output_dir.exists():
         raise FileExistsError(args.output_dir)
     if args.gpu and not torch.cuda.is_available():
         raise RuntimeError("CUDA requested but unavailable")
     config = json.loads(args.config.read_text())
+    effective_seed, replication_sources = replication_bindings(config, args.replication_seed, ROOT)
     if config["tcn_spec"] != TCN_SPEC:
         raise ValueError("fixed TCN architecture differs from its protocol")
     baseline_dir = Path(config["baseline_run"])
@@ -96,8 +99,8 @@ def main():
     identity, baseline_selection = check_ablation(state, config, baseline_dir)
     manifest_path = args.artifact_root / "ad_data_manifest.json"
     manifest = json.loads(manifest_path.read_text())
-    model_args = build_model_args(config, base, manifest, int(config["seed"]), args.gpu)
-    if model_args != dict(e1["model_args"], gpu=bool(args.gpu)):
+    model_args = build_model_args(config, base, manifest, effective_seed, args.gpu)
+    if model_args != dict(e1["model_args"], gpu=bool(args.gpu), random_seed=effective_seed):
         raise ValueError("embedding, graph, head or input arguments changed")
     old_lock = json.loads((baseline_dir / "development_input_lock.json").read_text())
     for split in ("fit", "validation"):
@@ -107,6 +110,8 @@ def main():
                                   if path.endswith("/scripts/p6/run_c0_trigger.py"))
     verify_training_factory_only(ROOT / "scripts/p6/run_c0_trigger.py", frozen_path, frozen_sha)
     bindings = source_bindings(args.config, args.data_root, args.artifact_root, args.registry)
+    bindings.update(replication_sources)
+    bindings[str((ROOT / "scripts/p6/tcn_replication.py").resolve())] = sha256_file(ROOT / "scripts/p6/tcn_replication.py")
     for path in (Path(__file__), base_path, ROOT / "src/e2e/system_trigger_tcn.py",
                  ROOT / "src/e2e/onset_trigger.py", ROOT / "scripts/p6/run_c0_onset_development.py",
                  ROOT / "docs/P6_C0_TCN_DEVELOPMENT_PROTOCOL.md", reference_dir / "completion_manifest.json",
@@ -132,6 +137,10 @@ def main():
         "protocol_id": config["protocol_id"], "tcn_spec": TCN_SPEC,
         "model_class": "WindowCausalTCNTrigger", "training_factory_only_verified": True,
         "test_arrays_read": False, "test_trigger_labels_built": False,
+        "effective_seed": effective_seed, "reference_seed": 42,
+        "replication_changes": ["random_seed"] if replication_sources else [],
+        "registry_interval_read": "global interval/domain columns for split routing; no Test service/fault annotations",
+        "preprocessing_grade": "frozen 70 percent Train includes Detector-Validation",
     })
     for split in ("fit", "validation"):
         state.gt_events(split).to_csv(args.output_dir / (split + "_gt.csv"), index=False)
@@ -139,12 +148,15 @@ def main():
                           sha256_file(manifest_path), args.threshold_workers, "spawn",
                           model_class=WindowCausalTCNTrigger)
     result.update({"formal_result": False, "development_only": True, "protocol_id": config["protocol_id"],
-                   "target": config["trigger_label"], "model_class": "WindowCausalTCNTrigger", "tcn_spec": TCN_SPEC})
+                   "target": config["trigger_label"], "model_class": "WindowCausalTCNTrigger", "tcn_spec": TCN_SPEC,
+                   "effective_seed": effective_seed})
     write_json(args.output_dir / "validation_selection.json", to_builtin(result))
     device = torch.device("cuda" if args.gpu else "cpu")
     weights = torch.load(result["checkpoint"]["path"], map_location=device)
-    write_json(args.output_dir / "real_window_causality_gate.json",
-               real_window_causality_gate(state, model_args, weights, device, WindowCausalTCNTrigger))
+    real_gate = real_window_causality_gate(state, model_args, weights, device, WindowCausalTCNTrigger)
+    write_json(args.output_dir / "real_window_causality_gate.json", real_gate)
+    if real_gate.get("passed") is not True:
+        raise ValueError("actual-window independence gate failed; keep run incomplete")
     if git_head() != execution_commit or any(sha256_file(Path(path)) != sha for path, sha in bindings.items()):
         raise ValueError("source/input drift; run remains incomplete")
     write_json(args.output_dir / "completion_manifest.json", {

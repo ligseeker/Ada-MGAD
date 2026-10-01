@@ -4,6 +4,15 @@
 
 更新时间：2026-10-01（Asia/Shanghai；本独立全流程研究分支）
 
+**本复制工作树增量：**`experiment/p6-c0-onset-tcn-replication`已冻结
+[复制协议](P6_TCN_REPLICATION_PROTOCOL_20261001.md)，新增seeds17/2026，
+只改初始化；各自沿用merged选择规则并冻结阈值做bin主结果，不挑最佳seed。
+全部三seed的原全局门槛及Validation前后半段R增益≥.03都通过才进入
+新的window-independent Fit-OOS anchors与68D+XGB完整Validation E2E。
+训练是否已启动/完成以独立run进程和completion manifest为准。
+旧analysis的test_read:false不可解读为从未扫描任何Test路由metadata；
+全局registry interval/domain列用于路由，未使用Test遥测、预测或指标。
+
 **本正常预测/分析工作树增量：**TCN训练已在独立`c0onsettcn`完成，固定run
 `tcn-v1-seed42`，Val2127/6/774、P/R/F1 .997187/.733195/.845054。
 本树三个分析完成且封存；固定TCN阈值的独立bin输出为2577/14/324，
