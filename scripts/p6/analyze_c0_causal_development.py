@@ -16,6 +16,7 @@ from src.e2e.system_trigger import (evaluate_system_threshold, onset_density,
                                     system_score_frame, to_builtin)
 from src.e2e.system_trigger_failure_audit import build_failure_ledger, stratified_summary
 from src.e2e.trigger_development import TriggerDevelopmentState
+from src.e2e.onset_trigger import OnsetDevelopmentState
 
 
 def verify_completion(directory):
@@ -49,6 +50,9 @@ def main():
     parser.add_argument("--data-root", type=Path, required=True)
     parser.add_argument("--registry", type=Path, required=True)
     parser.add_argument("--archived-validation-matching", type=Path, required=True)
+    parser.add_argument("--candidate-trigger-target", choices=("recent_onset60", "onset30"),
+                        default="recent_onset60")
+    parser.add_argument("--gate-config", type=Path)
     args = parser.parse_args()
     if args.output_dir.exists():
         raise FileExistsError(args.output_dir)
@@ -56,6 +60,8 @@ def main():
     if sha256_file(args.registry) != config["event_registry"]["sha256"]:
         raise ValueError("registry drift")
     state = TriggerDevelopmentState(config, args.data_root, args.registry)
+    candidate_state = (OnsetDevelopmentState(config, args.data_root, args.registry)
+                       if args.candidate_trigger_target == "onset30" else state)
     gt = state.gt_events("validation").set_index("case_id", drop=False)
     ids = sorted(gt.index)
     if len(ids) != 2901 or not gt.index.is_unique:
@@ -77,11 +83,12 @@ def main():
             raise ValueError("baseline graph is not window independent")
         scores = pd.read_csv(directory / "validation_predictions.csv", float_precision="round_trip")
         indices = scores.sample_index.to_numpy(dtype=np.int64)
+        label_state = state if name == "baseline" else candidate_state
         if (not np.array_equal(indices, state.sample_indices("validation"))
                 or not np.array_equal(scores.prediction_available_time,
                                        state.timestamps["train"][indices + 9] + 30_000)
                 or not np.array_equal(scores.trigger_label,
-                                       state.labels["train"][scores.sample_index.to_numpy() + 9])):
+                                       label_state.labels["train"][scores.sample_index.to_numpy() + 9])):
             raise ValueError("Validation windows/labels drift")
         threshold = float(selection["selected_validation_threshold"])
         frame = system_score_frame("validation", scores.prediction_available_time, scores.system_trigger_score)
@@ -123,18 +130,32 @@ def main():
     by_service = {service: paired_table(gt.index[gt.service.eq(service)], hits["baseline"], hits["candidate"])
                   for service in config["services"]}
     base, candidate = (results[name]["metrics"] for name in ("baseline", "candidate"))
-    gates = {"recall_gain_at_least_0_02": candidate["event_recall"] - base["event_recall"] >= .02,
-             "f1_gain_at_least_0_005": candidate["event_f1"] - base["event_f1"] >= .005,
-             "precision_at_least_0_90": candidate["event_precision"] >= .90,
-             "single_onset_recall_decline_at_most_0_03": paired["single_onset"]["delta_recall"] >= -.03}
+    if args.gate_config:
+        margins = json.loads(args.gate_config.read_text())["development_gate"]
+        gates = {"recall_gain": candidate["event_recall"] - base["event_recall"] >= margins["recall_gain"],
+                 "f1_gain": candidate["event_f1"] - base["event_f1"] >= margins["f1_gain"],
+                 "precision_floor": candidate["event_precision"] >= margins["precision_floor"],
+                 "single_onset_recall_decline_limit": paired["single_onset"]["delta_recall"] >= -margins["single_onset_recall_decline_limit"]}
+    else:
+        margins = {"recall_gain": .02, "f1_gain": .005, "precision_floor": .90,
+                   "single_onset_recall_decline_limit": .03}
+        gates = {"recall_gain_at_least_0_02": candidate["event_recall"] - base["event_recall"] >= .02,
+                 "f1_gain_at_least_0_005": candidate["event_f1"] - base["event_f1"] >= .005,
+                 "precision_at_least_0_90": candidate["event_precision"] >= .90,
+                 "single_onset_recall_decline_at_most_0_03": paired["single_onset"]["delta_recall"] >= -.03}
     report = {"status": "GO_TO_E2E_DEVELOPMENT" if all(gates.values()) else "NO_GO_DEVELOPMENT",
               "test_read": False, "full_e2e_run": False, "gt_denominator": len(ids),
               "results": results, "paired": paired, "by_fault": by_fault, "by_service": by_service,
-              "gates": gates, "limitations": ["reused Validation development screening",
+              "gates": gates, "gate_margins": margins,
+              "candidate_trigger_target": args.candidate_trigger_target,
+              "limitations": ["reused Validation development screening",
               "70 percent Train preprocessing includes detector Validation inputs",
               "window graph independence does not certify online trace-parent availability"],
               "source_sha256": {str(path.resolve()): sha256_file(path) for path in
-                                (Path(__file__), args.base_config, args.registry, args.archived_validation_matching)}}
+                                (Path(__file__), ROOT / "src/e2e/onset_trigger.py", args.base_config,
+                                 args.registry, args.archived_validation_matching)}}
+    if args.gate_config:
+        report["source_sha256"][str(args.gate_config.resolve())] = sha256_file(args.gate_config)
     write_json(args.output_dir / "comparison.json", to_builtin(report))
     print(json.dumps({"status": report["status"], "gates": gates,
                       "metrics": {name: row["metrics"] for name, row in results.items()}}, sort_keys=True))

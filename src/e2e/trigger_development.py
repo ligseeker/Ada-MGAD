@@ -7,7 +7,7 @@ import pandas as pd
 
 from .system_trigger import (assign_legal_events, build_trigger_labels,
                              prediction_time_grid, trigger_temporal_blocks,
-                             window_split_assignment)
+                             window_split_assignment, TRIGGER_IGNORE)
 from .system_trigger_data import TriggerWindowDataset
 
 
@@ -41,7 +41,13 @@ class TriggerDevelopmentState:
         timestamps = np.load(self.data_root / "train" / "timestamps.npy", mmap_mode="r")
         self.timestamps = {"train": np.asarray(timestamps, dtype=np.int64)}
         grid = prediction_time_grid(self.timestamps["train"])
-        self.labels = {"train": build_trigger_labels(grid, self.legal_events)}
+        # The final Train-array bin predicts exactly at the Test boundary.
+        # It is purged by window assignment and must not be rasterized as a
+        # Test-owned target. Retain an unconsumed sentinel for array alignment.
+        owned = grid < boundary
+        labels = np.full(grid.shape, TRIGGER_IGNORE, dtype=np.int8)
+        labels[owned] = build_trigger_labels(grid[owned], self.legal_events)
+        self.labels = {"train": labels}
         self.assignments = {"train": window_split_assignment(self.timestamps["train"], self.blocks)}
 
     def gt_events(self, split):

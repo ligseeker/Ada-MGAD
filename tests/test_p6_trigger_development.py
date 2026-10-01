@@ -8,9 +8,11 @@ import pytest
 
 from src.e2e.system_trigger import build_trigger_labels, prediction_time_grid
 from src.e2e.trigger_development import TriggerDevelopmentState
+from src.e2e.onset_trigger import OnsetDevelopmentState
 
 
-def test_development_loader_preserves_state_across_boundaries(tmp_path, monkeypatch):
+@pytest.mark.parametrize("state_class", [TriggerDevelopmentState, OnsetDevelopmentState])
+def test_development_loader_preserves_state_across_boundaries(tmp_path, monkeypatch, state_class):
     # The complete timeline is 100 bins, with Fit/Validation ending at 50/70.
     config = {"split": {"absolute_start_ms": 0, "absolute_end_ms": 3_000_000,
                         "boundary_ms": 2_100_000}, "ad": {"grid_seconds": 30}}
@@ -34,6 +36,7 @@ def test_development_loader_preserves_state_across_boundaries(tmp_path, monkeypa
     registry_path = tmp_path / "registry.csv"
     registry.to_csv(registry_path, index=False)
     original_load, original_read = np.load, pd.read_csv
+    original_builder = build_trigger_labels
     opened, parsed = [], []
 
     def guarded_load(path, *args, **kwargs):
@@ -49,11 +52,24 @@ def test_development_loader_preserves_state_across_boundaries(tmp_path, monkeypa
         assert not any(frame.astype(str).eq("FORBIDDEN_TEST_FAULT").any())
         return frame
 
+    def guarded_builder(times, *args, **kwargs):
+        assert np.max(times) < 2_100_000
+        return original_builder(times, *args, **kwargs)
+
     monkeypatch.setattr(np, "load", guarded_load)
     monkeypatch.setattr(pd, "read_csv", guarded_read)
-    state = TriggerDevelopmentState(config, train.parent, registry_path)
+    monkeypatch.setattr("src.e2e.trigger_development.build_trigger_labels", guarded_builder)
+    state = state_class(config, train.parent, registry_path)
     expected = build_trigger_labels(prediction_time_grid(timestamps), registry.loc[registry.detector_domain])
-    np.testing.assert_array_equal(state.labels["train"], expected)
+    if state_class is TriggerDevelopmentState:
+        np.testing.assert_array_equal(state.labels["train"][:-1], expected[:-1])
+    else:
+        np.testing.assert_array_equal(state.baseline_labels[:-1], expected[:-1])
+        np.testing.assert_array_equal(state.labels["train"] == 2,
+                                      np.r_[expected[:-1] == 2, True])
+        assert state.labels["train"][30] == 1
+        assert state.labels["train"][29] == 0
+    assert state.labels["train"][-1] == 2  # Test-owned boundary sentinel, never a target
     assert set(state.gt_events("fit").case_id) == {"fit"}
     assert set(state.gt_events("validation").case_id) == {"validation"}
     assert set(state.purged_events.case_id) == {"cross-fit-val", "cross-val-test"}
