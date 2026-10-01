@@ -30,6 +30,22 @@ def current_head():
     return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
 
 
+def validate_config(config):
+    training = {"epochs": 20, "batch_size": 256, "num_workers": 2,
+                "optimizer": "AdamW", "learning_rate": .001, "weight_decay": .0001,
+                "huber_delta": 1., "grad_clip_norm": 10., "checkpoint": "last_epoch",
+                "shuffle_normal_training": True}
+    gates = {"precision_floor": .9, "recall_floor": .6, "f1_floor": .72,
+             "f1_gain_vs_persistence": .02, "normal_holdout_positive_fraction_limit": .01}
+    if (config["protocol_id"] != "P6-NORMAL-FORECAST-FIT-SCREEN-V1"
+            or config["base_config"] != "configs/e2e/gaia_p5_v3_preprocessing_v2.json"
+            or config["seed"] != 42 or config["model_spec"] != FORECAST_SPEC
+            or config["training"] != training or config["screen_gate"] != gates
+            or config["normal_quantile"] != .995 or config["min_normal_windows"] != 512
+            or config["min_clean_memory_cases"] != 30):
+        raise ValueError("configuration differs from the frozen Fit screen protocol")
+
+
 def input_bindings(args, config):
     files = [Path(__file__), args.config, ROOT / config["base_config"], args.registry,
              ROOT / "docs/P6_NORMAL_FORECAST_FIT_SCREEN_PROTOCOL.md",
@@ -47,6 +63,7 @@ def validate_start_condition(config):
     for directory in refs.values():
         verify_completion(directory)
     tcn = json.loads((refs["tcn_run"] / "validation_selection.json").read_text())
+    tcn_lock = json.loads((refs["tcn_run"] / "development_input_lock.json").read_text())
     total = json.loads((refs["tcn_total_comparison"] / "comparison.json").read_text())
     decoder = json.loads((refs["tcn_decoder_comparison"] / "decoder_comparison.json").read_text())
     names = {"precision_floor", "recall_gain", "f1_gain", "single_onset_recall_decline_limit"}
@@ -56,11 +73,14 @@ def validate_start_condition(config):
             or total["comparison_role"] != "development_gate" or total["gate_margins"] != margins
             or total["baseline_trigger_target"] != "recent_onset60" or total["candidate_trigger_target"] != "onset30"
             or all(total["gates"].values()) or total["test_read"]
+            or total["gt_denominator"] != 2901
+            or tcn_lock["test_arrays_read"] is not False or tcn_lock["test_trigger_labels_built"] is not False
             or total["results"]["candidate"]["completion_sha256"] != sha256_file(refs["tcn_run"] / "completion_manifest.json")
             or tcn.get("model_class") != "WindowCausalTCNTrigger"
             or set(decoder["gates"]) != {"onset_bins_fixed_threshold", "onset_bins_validation_selected"}
             or any(set(gates) != names or all(gates.values()) for gates in decoder["gates"].values())
             or decoder["gate_margins"] != margins or decoder["test_read"] or decoder["gt_denominator"] != 2901
+            or decoder["protocol_id"] != tcn["protocol_id"]
             or decoder["model_completion_sha256"] != sha256_file(refs["tcn_run"] / "completion_manifest.json")):
         raise ValueError("TCN/decoder has not completed a valid NO-GO decision")
     candidate_scores = refs["tcn_run"] / "validation_predictions.csv"
@@ -70,7 +90,8 @@ def validate_start_condition(config):
     for directory in refs.values():
         files.extend(directory / name for name in ("completion_manifest.json",))
     files.extend([refs["tcn_total_comparison"] / "comparison.json",
-                  refs["tcn_decoder_comparison"] / "decoder_comparison.json", candidate_scores])
+                  refs["tcn_decoder_comparison"] / "decoder_comparison.json", candidate_scores,
+                  refs["tcn_run"] / "development_input_lock.json"])
     return {str(path.resolve()): sha256_file(path) for path in files}
 
 
@@ -136,16 +157,21 @@ def real_prediction_gate(model, state, device):
 
 
 def screen_results(output, state, calibration, holdout, config, summary):
-    gt = state.gt_events("event_holdout")
-    normal_indices = set(state.indices("event_holdout", True).tolist())
-    holdout = holdout.copy()
-    holdout["normal_window"] = holdout.sample_index.isin(normal_indices)
     thresholds = {name: float(np.quantile(calibration[name + "_score"], config["normal_quantile"], interpolation="linear"))
                   for name in ("forecast", "persistence")}
-    write_json(output / "prediction_lock.json", {"checkpoint_sha256": sha256_file(output / "checkpoint/final.pt"),
+    write_json(output / "prediction_lock.json", {"execution_commit": current_head(),
+               "scope_lock_sha256": sha256_file(output / "scope_lock.json"),
+               "checkpoint_sha256": sha256_file(output / "checkpoint/final.pt"),
                "thresholds": thresholds, "normal_quantile": config["normal_quantile"],
                "calibration_scores_sha256": sha256_file(output / "calibration_scores.csv"),
                "holdout_scores_sha256": sha256_file(output / "holdout_scores.csv"), "test_read": False})
+    # Holdout labels have already served the preregistered cohort/normal-scope
+    # eligibility audit. No metric or score-to-label join precedes this lock.
+    gt = state.gt_events("event_holdout")
+    gt.to_csv(output / "event_holdout_gt.csv", index=False)
+    normal_indices = set(state.indices("event_holdout", True).tolist())
+    holdout = holdout.copy()
+    holdout["normal_window"] = holdout.sample_index.isin(normal_indices)
     results = {}
     for name, threshold in thresholds.items():
         frame = system_score_frame("event_holdout", holdout.prediction_available_time, holdout[name + "_score"])
@@ -200,14 +226,19 @@ def main():
     if args.output_dir.exists():
         raise FileExistsError(args.output_dir)
     config = json.loads(args.config.read_text())
-    if config["model_spec"] != FORECAST_SPEC or config["training"]["checkpoint"] != "last_epoch":
-        raise ValueError("frozen normal predictor differs from protocol")
+    validate_config(config)
     base = load_config(ROOT / config["base_config"])
     if sha256_file(args.registry) != base["event_registry"]["sha256"]:
         raise ValueError("registry drift")
     bindings = input_bindings(args, config)
     if args.action == "train":
         bindings.update(validate_start_condition(config))
+        frozen_inputs = json.loads((Path(config["references"]["tcn_run"]) / "development_input_lock.json").read_text())["source_sha256"]
+        for path in (args.data_root / "train/timestamps.npy", args.data_root / "train/metric.npy",
+                     args.artifact_root / "ad_data_manifest.json"):
+            name = str(path.resolve())
+            if frozen_inputs.get(name) != bindings[name]:
+                raise ValueError("forecast input differs from frozen detector: " + name)
     state = NormalForecastState(base, args.data_root, args.registry)
     summary = cohort_summary(state, config)
     if not np.isfinite(state.metric[state.timestamps < state.fit_end_ms]).all():
@@ -221,7 +252,8 @@ def main():
     state.windows.to_csv(args.output_dir / "window_cohort.csv", index=False)
     state.purged_events.to_csv(args.output_dir / "purged_events.csv", index=False)
     for block in state.blocks:
-        state.gt_events(block.name).to_csv(args.output_dir / (block.name + "_gt.csv"), index=False)
+        if args.action == "check" or block.name != "event_holdout":
+            state.gt_events(block.name).to_csv(args.output_dir / (block.name + "_gt.csv"), index=False)
     write_json(args.output_dir / "cohort_summary.json", to_builtin(summary))
     if args.action == "train":
         if not summary["normal_support_passed"]:

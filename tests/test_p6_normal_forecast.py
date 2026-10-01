@@ -1,4 +1,7 @@
 import numpy as np
+import copy
+import json
+from pathlib import Path
 import pandas as pd
 import pytest
 import torch
@@ -6,6 +9,7 @@ import torch
 from src.e2e.normal_forecast import (MetricForecastDataset, NormalMetricForecaster,
                                      NormalForecastState, event_free_windows)
 from scripts.p6.analyze_c0_causal_development import verify_gt_identity, verify_target
+from scripts.p6.run_normal_forecast_fit_screen import validate_config
 
 
 def test_normal_windows_keep_crossing_events_and_half_open_edges():
@@ -83,3 +87,18 @@ def test_fit_state_excludes_boundary_targets_and_later_annotations(tmp_path):
         state.indices("validation")
     with pytest.raises(ValueError):
         MetricForecastDataset(state, [140])  # its target is exactly original FitEnd
+
+
+def test_frozen_training_and_calibration_parameters_cannot_silently_drift():
+    path = Path(__file__).resolve().parents[1] / "configs/e2e/gaia_p6_normal_forecast_fit_screen_v1.json"
+    config = json.loads(path.read_text())
+    validate_config(config)
+    for key, value in (("seed", 43), ("normal_quantile", .99)):
+        altered = copy.deepcopy(config)
+        altered[key] = value
+        with pytest.raises(ValueError):
+            validate_config(altered)
+    altered = copy.deepcopy(config)
+    altered["training"]["epochs"] = 10
+    with pytest.raises(ValueError):
+        validate_config(altered)
