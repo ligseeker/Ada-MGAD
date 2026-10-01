@@ -12,7 +12,7 @@ from scripts.p6.run_c0_trigger import write_predictions
 
 def test_exported_margin_fulfills_shared_csv_interface(tmp_path):
     root = Path(__file__).resolve().parents[1]
-    original = Path('/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb')
+    original = root
     config = original / 'configs/e2e/gaia_p6_c0_flat_xgb_v1.json'
     python = json.loads(config.read_text())['xgb_python']
     rng = np.random.RandomState(42)
@@ -32,6 +32,9 @@ def test_exported_margin_fulfills_shared_csv_interface(tmp_path):
     assert np.isfinite(logits).all()
 
     class Dataset:
+        def __len__(self):
+            return len(scores)
+
         def metadata(self, position):
             end = (position + 10) * 30000
             return SimpleNamespace(split='validation', sample_index=position, window_start_time=position * 30000,

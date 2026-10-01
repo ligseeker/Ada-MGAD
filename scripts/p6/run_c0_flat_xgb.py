@@ -83,14 +83,17 @@ def main():
                     "--run-dir", str(args.output_dir.resolve()), "--config", str(args.config.resolve())],
                    env=environment, check=True)
     report = json.loads((args.output_dir / "fit_report.json").read_text())
-    for name, key in (("trigger.ubj", "model_sha256"), ("validation_scores.npy", "prediction_sha256")):
+    for name, key in (("trigger.ubj", "model_sha256"), ("validation_scores.npy", "prediction_sha256"),
+                      ("validation_logits.npy", "logit_sha256")):
         if sha256_file(args.output_dir / name) != report[key]:
             raise ValueError("worker model/prediction digest drift")
     write_json(args.output_dir / "validation_prediction_lock.json", {
         "execution_commit": execution_commit, "config_sha256": sha256_file(args.config),
         "model_sha256": report["model_sha256"], "score_sha256": report["prediction_sha256"],
+        "logit_sha256": report["logit_sha256"],
         "validation_threshold_selected": False, "test_prediction_run": False})
     scores = np.load(args.output_dir / "validation_scores.npy", allow_pickle=False)
+    logits = np.load(args.output_dir / "validation_logits.npy", allow_pickle=False)
     times = validation.prediction_times()
     ground_truth = state.gt_events("validation")
     ground_truth.to_csv(args.output_dir / "validation_gt.csv", index=False)
@@ -99,7 +102,7 @@ def main():
     episodes, matching, metrics = evaluate_system_threshold(frame, ground_truth, selected.threshold)
     write_predictions(args.output_dir / "validation_predictions.csv", validation,
                        {"sample_index": validation.sample_indices, "prediction_available_time": times,
-                        "system_score": scores}, selected.threshold)
+                        "system_score": scores, "logits": logits}, selected.threshold)
     episodes.to_csv(args.output_dir / "validation_episodes.csv", index=False)
     matching.to_csv(args.output_dir / "validation_matching.csv", index=False)
     write_json(args.output_dir / "validation_selection.json", to_builtin({

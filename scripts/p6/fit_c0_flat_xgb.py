@@ -54,6 +54,10 @@ def main():
     if len(scores) != len(validation) or not np.isfinite(scores).all():
         raise ValueError("invalid Validation scores")
     np.save(args.run_dir / "validation_scores.npy", scores, allow_pickle=False)
+    logits = model.predict(validation, output_margin=True)
+    if len(logits) != len(scores) or not np.isfinite(logits).all():
+        raise ValueError("invalid Validation logits")
+    np.save(args.run_dir / "validation_logits.npy", logits, allow_pickle=False)
     positions = np.linspace(0, len(validation) - 1, 32, dtype=int)
     rows = np.asarray(validation[positions]).copy()
     original = model.predict_proba(rows)[:, 1]
@@ -77,6 +81,7 @@ def main():
                               "PYTHONHASHSEED": os.environ.get("PYTHONHASHSEED"),
                               "xgboost_build": xgb.build_info()},
               "prediction_sha256": digest(args.run_dir / "validation_scores.npy"),
+              "logit_sha256": digest(args.run_dir / "validation_logits.npy"),
               "model_sha256": digest(model_path)}
     (args.run_dir / "fit_report.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
     print(json.dumps({"status": "FIT_COMPLETE", "elapsed_seconds": result["elapsed_seconds"]}), flush=True)

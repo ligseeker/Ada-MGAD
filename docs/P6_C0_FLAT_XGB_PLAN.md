@@ -2,6 +2,8 @@
 
 2026-10-01，模型运行前冻结。用户授权探索全流程，预处理全量不执行。此候选仅替换检测模型；不修改共享输入、原三态标签、60s onset目标、episode decoder或matching。
 
+导出更正：初次执行commit `3ade981` 的worker已成功完成固定Fit，但driver未传公共CSV所需的logits，原目录保留为INCOMPLETE。集成分支补齐margin导出；`finalize_c0_flat_xgb.py`校验原source/features/model/probability锁后，在新目录完成相同模型的Validation导出和评价，不重新fit、不改参数。初次原工作树保持不变。本文件的模型设置与GO门槛保持原预声明。
+
 ## 假设与 Material Passport
 
 问题：逐窗口因果修复后，固定历史输入是否仍有神经网络难以学到的onset边界？假设浅树对已有数值的非线性阈值划分能改善事件召回。反证是相同输入/标签下XGB仍不能提高开发事件指标；不能据此证明原始telemetry完全不可辨识。
@@ -22,7 +24,7 @@
 ## 命令
 
 ```bash
-cd /home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb
+cd /home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask
 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 \
   /home/zhangll24/miniconda3/envs/DAG/bin/python scripts/p6/run_c0_flat_xgb.py \
   --config configs/e2e/gaia_p6_c0_flat_xgb_v1.json \
