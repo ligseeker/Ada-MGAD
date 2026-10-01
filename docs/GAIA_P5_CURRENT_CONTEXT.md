@@ -4,6 +4,16 @@
 
 更新时间：2026-10-01（Asia/Shanghai；本独立全流程研究分支）
 
+**当前用户授权的新研究（先于下方旧Freeze建议）：**按最小修改逐步实施检测优化。
+E1在独立`Ada-MGAD-e2e-v2-c0onset`/`experiment/p6-c0-onset30`运行，execution
+commit`ac94227`，目录`experiments/p6/c0_onset_development/onset30-v1-seed42`，
+截至本记录仍RUNNING，44项目标/边界/匹配测试通过，尚无最终结果。
+保持输入/模型/训练/decoder，仅改为半开30s bin起点目标，IGNORE掩码不变。
+本TCN工作树仅准备条件性编码器候选，两项模型测试和training-factory-only AST
+检查通过，未启动训练；E1/E2均NO-GO才允许启动。见[起点协议](P6_C0_ONSET_DEVELOPMENT_PROTOCOL.md)、
+[TCN协议](P6_C0_TCN_DEVELOPMENT_PROTOCOL.md)、[半监督可行性](P6_NORMAL_PREDICTION_FEASIBILITY.md)。
+继续时必须核验PID/exec session或completion manifest，不从RUNNING文档推断进程存活。
+
 **最新更正优先：旧P5/C0/C1-v2动态图沿batch求均值，顺序batch32最早窗口可使用其后930s输入。在线时刻、延迟与因果OOS anchor声明须限制为batch-conditioned retrospective；固定scores的指标算术可保留。见[更正](P6_BATCH_GRAPH_CAUSALITY_CORRECTION.md)。**
 
 **新开发实验完成：逐窗口C0重训Val TP/FP/FN=2103/19/798，P/R/F1=.991046/.724922/.837348；固定16000D历史窗口XGB=1999/4/902，.998003/.689073/.815253，paired新增54/丢失158，NO_GO_DEVELOPMENT。81项测试通过；未重跑Test、OOS anchors、RCA或E2E。共享70% Train preprocessing包含detector Validation；Trace parent可用性待证明。详见[结果与决定](P6_CAUSAL_REPAIR_AND_FLAT_XGB_RESULTS_20261001.md)。**

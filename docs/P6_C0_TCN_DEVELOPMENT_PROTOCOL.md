@@ -41,6 +41,9 @@ Trace按冻结非零边数量归一化聚合；已预乘原动态图权重，不
 - 使用已冻结效果门槛：对原修复后NN Recall+.05、F1+.02、P>=.98，
   single-onset R下降<=.03。报告fault/root macro、memory和多事件、完整逐案失败。
 - 初步GO后才seed/时间复核和全GT E2E开发；不在本候选上追加hidden/depth/dropout搜索。
+- TCN模型和分数封存后，可单独重用E2独立bin decoder：固定阈值和Validation
+  重选阈值分开报告，比较TCN merged→TCN bins。不能因为E1的decoder失败就
+  假定它与新encoder的组合也必然失败；此阶段仍只改变decoder，不重训TCN。
 - 两项模型测试覆盖时间前视、同行扰动、batch-size、非encoder初始化与graph正则
   精确一致；正式run还须真实32窗order/batch1/2/32 gate，atol1e-5。
 
