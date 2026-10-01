@@ -709,12 +709,13 @@ def _selection_key(metrics: Mapping[str, object], threshold: float) -> Tuple[flo
 
 
 def run_training(state: ProtocolState, output_dir: Path, model_args, training, manifest_path: Path,
-                 manifest_sha: str, threshold_workers: int, start_method: str) -> Mapping[str, object]:
+                 manifest_sha: str, threshold_workers: int, start_method: str,
+                 model_class=SystemEventTrigger) -> Mapping[str, object]:
     device = torch.device("cuda" if model_args["gpu"] and torch.cuda.is_available() else "cpu")
     seed_everything(int(model_args["random_seed"]))
     torch.manual_seed(int(model_args["random_seed"]))
     graph = np.load(state.data_root / "graph.npy", allow_pickle=False)
-    model = SystemEventTrigger(graph, **model_args).to(device)
+    model = model_class(graph, **model_args).to(device)
     parameter_count = int(sum(p.numel() for p in model.parameters()))
     logging.info("P6-C0 system trigger: %d parameters", parameter_count)
 

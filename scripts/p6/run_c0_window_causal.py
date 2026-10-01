@@ -22,7 +22,7 @@ from src.e2e.system_trigger_model import SystemEventTrigger
 from src.e2e.trigger_development import TriggerDevelopmentState
 
 
-def real_window_causality_gate(state, model_args, weights, device):
+def real_window_causality_gate(state, model_args, weights, device, model_class=SystemEventTrigger):
     """Check real Validation inputs before accepting the new inference contract."""
     dataset = state.build_dataset("validation")
     positions = np.linspace(0, len(dataset) - 1, 32, dtype=int)
@@ -31,7 +31,7 @@ def real_window_causality_gate(state, model_args, weights, device):
              for key in ("data_node", "data_log", "data_edge")}
     args = dict(model_args, graph_batch_scope="window", batch_size=32)
     graph = np.load(state.data_root / "graph.npy", allow_pickle=False)
-    model = SystemEventTrigger(graph, **args).to(device).eval()
+    model = model_class(graph, **args).to(device).eval()
     model.load_state_dict(weights)
     changed = {key: value.clone() for key, value in batch.items()}
     for value in changed.values():
@@ -44,7 +44,7 @@ def real_window_causality_gate(state, model_args, weights, device):
         reordered = model({key: value[permutation] for key, value in batch.items()})[0]
         errors["reordered_batch"] = float((reference - reordered[permutation]).abs().max())
         for size in (1, 2):
-            local = SystemEventTrigger(graph, **dict(args, batch_size=size)).to(device).eval()
+            local = model_class(graph, **dict(args, batch_size=size)).to(device).eval()
             local.load_state_dict(weights)
             outputs = [local({key: value[start:start + size] for key, value in batch.items()})[0]
                        for start in range(0, 32, size)]
