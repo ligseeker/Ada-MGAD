@@ -4,6 +4,27 @@
 
 更新时间：2026-10-01（Asia/Shanghai；本独立全流程研究分支）
 
+**最新稳定性决定优先：**三seed复制已完成并封存，`stability-v1`为
+`STABILITY_NO_GO`。seed42/17/2026的fixed-bin P/R/F1分别为
+.994597/.888314/.938456、.862868/.897966/.880068、
+.423417/.857635/.566936；不能挑seed42当稳定提升。
+此树的TCN Fit-OOS/RCA/Validation E2E入口关闭，尚未实施或运行。
+正常预测在独立`c0normalfallback`的V2入口完成固定20epoch Fit-only筛查：
+GT1536，18/64/1518、P/R/F1 .219512/.011719/.022250，
+相对Persistence F1 -.039398，`NO_GO_FIT_SCREEN`。21个输出、84个source/input
+hash与实际prediction gate均通过，固定阈值/episode/指标只读重放一致。
+本轮候选扩展停止，Scientific Freeze；未运行新TCN Fit-OOS、RCA或完整E2E。
+此树整理[稳定性结果与研究方向](P6_DETECTOR_STABILITY_AND_RESEARCH_DIRECTIONS_20261001.md)。
+后续selector/mask方向是下一轮独立方案；下方初步GO是复制前历史。
+
+**本E2E准备工作树身份：**`experiment/p6-c0-tcn-xgb-development`，从已提交
+复制协议`2e16c8e`分出；实际两个复制训练在相邻`c0replica`工作树执行。
+本树只准备新的Fit-OOS与68D+XGB Validation E2E协议/接口，尚未运行该阶段。
+必须先等复制的三seed全局及时间门槛全部通过；不变更运行中复制源或配置。
+新的E2E比较须使用同一冻结XGB scorer评分两种Val锚点，避免RCA配方与检测器
+同时变化；旧batch-conditioned C1 anchors/cohort/weights不复用。
+Validation标签已用于detector选择，完整E2E也是开发结果；不得描述为独立确认。
+
 **本复制工作树增量：**`experiment/p6-c0-onset-tcn-replication`已冻结
 [复制协议](P6_TCN_REPLICATION_PROTOCOL_20261001.md)，新增seeds17/2026，
 只改初始化；各自沿用merged选择规则并冻结阈值做bin主结果，不挑最佳seed。
