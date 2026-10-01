@@ -1,0 +1,1070 @@
+{
+  "arm": "prefix_control",
+  "checkpoint": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed2026-prefix-budget-v1-20261002/epochs/epoch-01/model_state.pt",
+    "sha256": "119d5b1410eb07ae24e3c8a4dff7ede736d51bdd0370a5d3311e5f1211abb9c2"
+  },
+  "control_kind": "patience8 prefix of the same realised stochastic training trajectory",
+  "development_only": true,
+  "effective_seed": 2026,
+  "epochs_completed": 10,
+  "execution_commit": "fd25bffe1bccdbe54309fceb7f0ecf1454bb3a03",
+  "history": [
+    {
+      "checkpoint_sha256": "26db9030f6dc12d1a326fb11d1c0e1e49b1590257860bff9e100fd6ff3d5433c",
+      "diagnostics": {
+        "bin_metrics_at_merged_threshold": {
+          "event_f1": 0.33809375970195593,
+          "event_precision": 0.2181708905138736,
+          "event_recall": 0.750775594622544,
+          "false_negative_events": 723,
+          "false_positive_events": 7805,
+          "gt_events": 2901,
+          "predicted_events": 9983,
+          "true_positive_events": 2178
+        },
+        "high_score_by_target": {
+          "IGNORE": {
+            "bins": 1676,
+            "high_bins": 908,
+            "high_fraction": 0.5417661097852029
+          },
+          "NEG": {
+            "bins": 13029,
+            "high_bins": 7289,
+            "high_fraction": 0.5594443165246757
+          },
+          "POS": {
+            "bins": 2709,
+            "high_bins": 1786,
+            "high_fraction": 0.6592838685861941
+          }
+        },
+        "high_score_segments": {
+          "count": 1531,
+          "max_seconds": 124380,
+          "total_seconds": 299490
+        }
+      },
+      "epoch": 0,
+      "fit_consumed_labels": {
+        "effective_bins": 38870,
+        "ignore": 4682,
+        "loss_aggregation": "unweighted mean of each usable batch's masked mean loss",
+        "negative": 31843,
+        "padded_windows": 43552,
+        "positive": 7027,
+        "unique_windows": 43550,
+        "usable_batches": 1361
+      },
+      "historical_trajectory_comparison": {
+        "applicable": true,
+        "loss_absolute_errors": {
+          "train_bce": 0.00033600079846873854,
+          "train_graph_regularization": 5.365296832883211e-06,
+          "train_loss": 0.000341366179982705
+        },
+        "losses_exact": false,
+        "merged_metrics_exact": false,
+        "passed": false,
+        "selection_key_exact": false,
+        "threshold_exact": false
+      },
+      "learning_rates_next_epoch": [
+        0.001
+      ],
+      "learning_rates_used": [
+        0.001
+      ],
+      "observer_rng_unchanged": true,
+      "selection_key": [
+        0.4097472924187725,
+        0.3129955187866253,
+        0.5118093490600586
+      ],
+      "train_bce": 1.1633219210476142,
+      "train_graph_regularization": 0.00034862939732557764,
+      "train_loss": 1.1636705497535689,
+      "validation_candidate_count": 13817,
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 908,
+          "mean_seconds": 22.909264317180618,
+          "median_seconds": 22.753500000000003,
+          "p90_seconds": 36.758700000000005,
+          "p95_seconds": 39.06965
+        },
+        "event_f1": 0.4097472924187725,
+        "event_precision": 0.5930764206401045,
+        "event_recall": 0.3129955187866253,
+        "false_negative_events": 1993,
+        "false_positive_events": 623,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 1531,
+        "true_positive_events": 908
+      },
+      "validation_outputs_sha256": "5d558e1bc0d45a62c97971e19e3aa8032400ad4c827686ba14c56eec594495d7",
+      "validation_threshold": 0.5118093490600586
+    },
+    {
+      "checkpoint_sha256": "119d5b1410eb07ae24e3c8a4dff7ede736d51bdd0370a5d3311e5f1211abb9c2",
+      "diagnostics": {
+        "bin_metrics_at_merged_threshold": {
+          "event_f1": 0.8540685944855414,
+          "event_precision": 0.8336068263866098,
+          "event_recall": 0.8755601516718373,
+          "false_negative_events": 361,
+          "false_positive_events": 507,
+          "gt_events": 2901,
+          "predicted_events": 3047,
+          "true_positive_events": 2540
+        },
+        "high_score_by_target": {
+          "IGNORE": {
+            "bins": 1676,
+            "high_bins": 76,
+            "high_fraction": 0.045346062052505964
+          },
+          "NEG": {
+            "bins": 13029,
+            "high_bins": 1193,
+            "high_fraction": 0.09156497045053343
+          },
+          "POS": {
+            "bins": 2709,
+            "high_bins": 1778,
+            "high_fraction": 0.6563307493540051
+          }
+        },
+        "high_score_segments": {
+          "count": 2153,
+          "max_seconds": 2820,
+          "total_seconds": 91410
+        }
+      },
+      "epoch": 1,
+      "fit_consumed_labels": {
+        "effective_bins": 38870,
+        "ignore": 4682,
+        "loss_aggregation": "unweighted mean of each usable batch's masked mean loss",
+        "negative": 31843,
+        "padded_windows": 43552,
+        "positive": 7027,
+        "unique_windows": 43550,
+        "usable_batches": 1361
+      },
+      "historical_trajectory_comparison": {
+        "applicable": true,
+        "loss_absolute_errors": {
+          "train_bce": 0.024093243499436312,
+          "train_graph_regularization": 4.1815412503138207e-05,
+          "train_loss": 0.0240514258485256
+        },
+        "losses_exact": false,
+        "merged_metrics_exact": false,
+        "passed": false,
+        "selection_key_exact": false,
+        "threshold_exact": false
+      },
+      "learning_rates_next_epoch": [
+        0.001
+      ],
+      "learning_rates_used": [
+        0.001
+      ],
+      "observer_rng_unchanged": true,
+      "selection_key": [
+        0.8318163830629204,
+        0.724577731816615,
+        0.6998756527900696
+      ],
+      "train_bce": 1.1157320519521954,
+      "train_graph_regularization": 0.0003807059512114389,
+      "train_loss": 1.1161127596502354,
+      "validation_candidate_count": 16790,
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2102,
+          "mean_seconds": 23.88227354900095,
+          "median_seconds": 23.959,
+          "p90_seconds": 37.0504,
+          "p95_seconds": 39.03855
+        },
+        "event_f1": 0.8318163830629204,
+        "event_precision": 0.9763121226196005,
+        "event_recall": 0.724577731816615,
+        "false_negative_events": 799,
+        "false_positive_events": 51,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2153,
+        "true_positive_events": 2102
+      },
+      "validation_outputs_sha256": "ec41951de536d55d3f8985d14508ba9811f4404e1d4f85200238ba7197a7db8d",
+      "validation_threshold": 0.6998756527900696
+    },
+    {
+      "checkpoint_sha256": "a8fef36af50cec754ade4ae1a4dfbf0fe5c66e3327e8a8815920abeb8069b1ed",
+      "diagnostics": {
+        "bin_metrics_at_merged_threshold": {
+          "event_f1": 0.571009918845807,
+          "event_precision": 0.42421704907050745,
+          "event_recall": 0.8731471906239228,
+          "false_negative_events": 368,
+          "false_positive_events": 3438,
+          "gt_events": 2901,
+          "predicted_events": 5971,
+          "true_positive_events": 2533
+        },
+        "high_score_by_target": {
+          "IGNORE": {
+            "bins": 1676,
+            "high_bins": 74,
+            "high_fraction": 0.0441527446300716
+          },
+          "NEG": {
+            "bins": 13029,
+            "high_bins": 4050,
+            "high_fraction": 0.31084503799217134
+          },
+          "POS": {
+            "bins": 2709,
+            "high_bins": 1847,
+            "high_fraction": 0.6818014027316353
+          }
+        },
+        "high_score_segments": {
+          "count": 2192,
+          "max_seconds": 99630,
+          "total_seconds": 179130
+        }
+      },
+      "epoch": 2,
+      "fit_consumed_labels": {
+        "effective_bins": 38870,
+        "ignore": 4682,
+        "loss_aggregation": "unweighted mean of each usable batch's masked mean loss",
+        "negative": 31843,
+        "padded_windows": 43552,
+        "positive": 7027,
+        "unique_windows": 43550,
+        "usable_batches": 1361
+      },
+      "historical_trajectory_comparison": {
+        "applicable": true,
+        "loss_absolute_errors": {
+          "train_bce": 0.005128054924084857,
+          "train_graph_regularization": 6.0734515263809164e-05,
+          "train_loss": 0.0050673207800499
+        },
+        "losses_exact": false,
+        "merged_metrics_exact": false,
+        "passed": false,
+        "selected_logits_exact": false,
+        "selected_weight_max_abs_error": 1.165091872215271,
+        "selected_weights_exact": false,
+        "selection_key_exact": false,
+        "threshold_exact": false
+      },
+      "learning_rates_next_epoch": [
+        0.001
+      ],
+      "learning_rates_used": [
+        0.001
+      ],
+      "observer_rng_unchanged": true,
+      "selection_key": [
+        0.8301590418221089,
+        0.7287142364701827,
+        0.5015449523925781
+      ],
+      "train_bce": 0.7896716608381902,
+      "train_graph_regularization": 0.0004690206033320691,
+      "train_loss": 0.7901406809742357,
+      "validation_candidate_count": 16805,
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2114,
+          "mean_seconds": 23.16942336802271,
+          "median_seconds": 23.1095,
+          "p90_seconds": 36.283300000000004,
+          "p95_seconds": 38.24144999999999
+        },
+        "event_f1": 0.8301590418221089,
+        "event_precision": 0.9644160583941606,
+        "event_recall": 0.7287142364701827,
+        "false_negative_events": 787,
+        "false_positive_events": 78,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2192,
+        "true_positive_events": 2114
+      },
+      "validation_outputs_sha256": "7b930c9b77b18671a246664ad19893e7e3203485f57d40ea7dbbadb125cf43b7",
+      "validation_threshold": 0.5015449523925781
+    },
+    {
+      "checkpoint_sha256": "abb9f7ee30c36898a73127100978eee1833cc9fa9b080580e293235db0f1a85a",
+      "diagnostics": {
+        "bin_metrics_at_merged_threshold": {
+          "event_f1": 0.545308740978348,
+          "event_precision": 0.40837336993822926,
+          "event_recall": 0.8204067562909342,
+          "false_negative_events": 521,
+          "false_positive_events": 3448,
+          "gt_events": 2901,
+          "predicted_events": 5828,
+          "true_positive_events": 2380
+        },
+        "high_score_by_target": {
+          "IGNORE": {
+            "bins": 1676,
+            "high_bins": 68,
+            "high_fraction": 0.0405727923627685
+          },
+          "NEG": {
+            "bins": 13029,
+            "high_bins": 3896,
+            "high_fraction": 0.29902525136234553
+          },
+          "POS": {
+            "bins": 2709,
+            "high_bins": 1864,
+            "high_fraction": 0.6880767811000369
+          }
+        },
+        "high_score_segments": {
+          "count": 2137,
+          "max_seconds": 99630,
+          "total_seconds": 174840
+        }
+      },
+      "epoch": 3,
+      "fit_consumed_labels": {
+        "effective_bins": 38870,
+        "ignore": 4682,
+        "loss_aggregation": "unweighted mean of each usable batch's masked mean loss",
+        "negative": 31843,
+        "padded_windows": 43552,
+        "positive": 7027,
+        "unique_windows": 43550,
+        "usable_batches": 1361
+      },
+      "historical_trajectory_comparison": {
+        "applicable": true,
+        "loss_absolute_errors": {
+          "train_bce": 0.005956710797298759,
+          "train_graph_regularization": 1.838724133606471e-05,
+          "train_loss": 0.005938323486998742
+        },
+        "losses_exact": false,
+        "merged_metrics_exact": false,
+        "passed": false,
+        "selection_key_exact": false,
+        "threshold_exact": false
+      },
+      "learning_rates_next_epoch": [
+        0.001
+      ],
+      "learning_rates_used": [
+        0.001
+      ],
+      "observer_rng_unchanged": true,
+      "selection_key": [
+        0.8066693132195316,
+        0.7004481213374698,
+        0.5321301221847534
+      ],
+      "train_bce": 0.7549258429915654,
+      "train_graph_regularization": 0.0004753376100262631,
+      "train_loss": 0.7554011801688834,
+      "validation_candidate_count": 16823,
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2032,
+          "mean_seconds": 21.899725885826772,
+          "median_seconds": 21.539499999999997,
+          "p90_seconds": 34.4967,
+          "p95_seconds": 36.47785
+        },
+        "event_f1": 0.8066693132195316,
+        "event_precision": 0.9508656995788488,
+        "event_recall": 0.7004481213374698,
+        "false_negative_events": 869,
+        "false_positive_events": 105,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2137,
+        "true_positive_events": 2032
+      },
+      "validation_outputs_sha256": "1b008592f39eb5d5ebe8742bd321723e93b68969016c65ba95e9cc68cd0a0ad1",
+      "validation_threshold": 0.5321301221847534
+    },
+    {
+      "checkpoint_sha256": "aad13ef029dce58090e5e5862f5ba1378c0158c72f0239a8674a4efa557d9eaa",
+      "diagnostics": {
+        "bin_metrics_at_merged_threshold": {
+          "event_f1": 0.5262064188409143,
+          "event_precision": 0.3955910432216629,
+          "event_recall": 0.7855911754567391,
+          "false_negative_events": 622,
+          "false_positive_events": 3482,
+          "gt_events": 2901,
+          "predicted_events": 5761,
+          "true_positive_events": 2279
+        },
+        "high_score_by_target": {
+          "IGNORE": {
+            "bins": 1676,
+            "high_bins": 94,
+            "high_fraction": 0.05608591885441527
+          },
+          "NEG": {
+            "bins": 13029,
+            "high_bins": 3805,
+            "high_fraction": 0.2920408319901758
+          },
+          "POS": {
+            "bins": 2709,
+            "high_bins": 1862,
+            "high_fraction": 0.6873385012919897
+          }
+        },
+        "high_score_segments": {
+          "count": 2087,
+          "max_seconds": 99600,
+          "total_seconds": 172830
+        }
+      },
+      "epoch": 4,
+      "fit_consumed_labels": {
+        "effective_bins": 38870,
+        "ignore": 4682,
+        "loss_aggregation": "unweighted mean of each usable batch's masked mean loss",
+        "negative": 31843,
+        "padded_windows": 43552,
+        "positive": 7027,
+        "unique_windows": 43550,
+        "usable_batches": 1361
+      },
+      "historical_trajectory_comparison": {
+        "applicable": true,
+        "loss_absolute_errors": {
+          "train_bce": 0.013629626479987889,
+          "train_graph_regularization": 2.0486189145355364e-05,
+          "train_loss": 0.013609142009166075
+        },
+        "losses_exact": false,
+        "merged_metrics_exact": false,
+        "passed": false,
+        "selection_key_exact": false,
+        "threshold_exact": false
+      },
+      "learning_rates_next_epoch": [
+        0.001
+      ],
+      "learning_rates_used": [
+        0.001
+      ],
+      "observer_rng_unchanged": true,
+      "selection_key": [
+        0.7802726543704892,
+        0.6708031713202344,
+        0.5610396265983582
+      ],
+      "train_bce": 0.7254722994217796,
+      "train_graph_regularization": 0.0004884528284569112,
+      "train_loss": 0.7259607517176214,
+      "validation_candidate_count": 16832,
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 1946,
+          "mean_seconds": 21.02300102774923,
+          "median_seconds": 20.676,
+          "p90_seconds": 32.9875,
+          "p95_seconds": 35.190250000000006
+        },
+        "event_f1": 0.7802726543704892,
+        "event_precision": 0.9324389075227599,
+        "event_recall": 0.6708031713202344,
+        "false_negative_events": 955,
+        "false_positive_events": 141,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2087,
+        "true_positive_events": 1946
+      },
+      "validation_outputs_sha256": "37112fec42b921fec4e08f2fb54e96be46ef5414d8b2d5dc5d32e789ea0658fa",
+      "validation_threshold": 0.5610396265983582
+    },
+    {
+      "checkpoint_sha256": "6b72e395399e83cbcfead55f2f119678e5eafd6df61c31fbbef7065f519ec3b1",
+      "diagnostics": {
+        "bin_metrics_at_merged_threshold": {
+          "event_f1": 0.5242852221839477,
+          "event_precision": 0.3930785123966942,
+          "event_recall": 0.7869700103412617,
+          "false_negative_events": 618,
+          "false_positive_events": 3525,
+          "gt_events": 2901,
+          "predicted_events": 5808,
+          "true_positive_events": 2283
+        },
+        "high_score_by_target": {
+          "IGNORE": {
+            "bins": 1676,
+            "high_bins": 103,
+            "high_fraction": 0.06145584725536993
+          },
+          "NEG": {
+            "bins": 13029,
+            "high_bins": 3830,
+            "high_fraction": 0.2939596285209916
+          },
+          "POS": {
+            "bins": 2709,
+            "high_bins": 1875,
+            "high_fraction": 0.6921373200442967
+          }
+        },
+        "high_score_segments": {
+          "count": 2102,
+          "max_seconds": 99600,
+          "total_seconds": 174240
+        }
+      },
+      "epoch": 5,
+      "fit_consumed_labels": {
+        "effective_bins": 38870,
+        "ignore": 4682,
+        "loss_aggregation": "unweighted mean of each usable batch's masked mean loss",
+        "negative": 31843,
+        "padded_windows": 43552,
+        "positive": 7027,
+        "unique_windows": 43550,
+        "usable_batches": 1361
+      },
+      "historical_trajectory_comparison": {
+        "applicable": true,
+        "loss_absolute_errors": {
+          "train_bce": 0.008881671640209032,
+          "train_graph_regularization": 3.6632491712418e-05,
+          "train_loss": 0.008845037650002219
+        },
+        "losses_exact": false,
+        "merged_metrics_exact": false,
+        "passed": false,
+        "selection_key_exact": false,
+        "threshold_exact": false
+      },
+      "learning_rates_next_epoch": [
+        0.001
+      ],
+      "learning_rates_used": [
+        0.001
+      ],
+      "observer_rng_unchanged": true,
+      "selection_key": [
+        0.7735358784729162,
+        0.6670113753877973,
+        0.5412822365760803
+      ],
+      "train_bce": 0.7180139592504519,
+      "train_graph_regularization": 0.0005040744818535939,
+      "train_loss": 0.7185180348827942,
+      "validation_candidate_count": 16839,
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 1935,
+          "mean_seconds": 20.885280620155037,
+          "median_seconds": 20.557,
+          "p90_seconds": 32.8538,
+          "p95_seconds": 35.1063
+        },
+        "event_f1": 0.7735358784729162,
+        "event_precision": 0.9205518553758325,
+        "event_recall": 0.6670113753877973,
+        "false_negative_events": 966,
+        "false_positive_events": 167,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2102,
+        "true_positive_events": 1935
+      },
+      "validation_outputs_sha256": "e01c621c252172e3c825da2b3381938bc231b6d19a80a61ae2b35e24c29096ce",
+      "validation_threshold": 0.5412822365760803
+    },
+    {
+      "checkpoint_sha256": "6340ce8ab72965a1b9e9331416ee2aa44a9a7e9d82cfdc9fe8e49c518f5d7a6b",
+      "diagnostics": {
+        "bin_metrics_at_merged_threshold": {
+          "event_f1": 0.7685408761641945,
+          "event_precision": 0.7690714532274767,
+          "event_recall": 0.7680110306790762,
+          "false_negative_events": 673,
+          "false_positive_events": 669,
+          "gt_events": 2901,
+          "predicted_events": 2897,
+          "true_positive_events": 2228
+        },
+        "high_score_by_target": {
+          "IGNORE": {
+            "bins": 1676,
+            "high_bins": 104,
+            "high_fraction": 0.06205250596658711
+          },
+          "NEG": {
+            "bins": 13029,
+            "high_bins": 929,
+            "high_fraction": 0.07130247908511782
+          },
+          "POS": {
+            "bins": 2709,
+            "high_bins": 1864,
+            "high_fraction": 0.6880767811000369
+          }
+        },
+        "high_score_segments": {
+          "count": 2096,
+          "max_seconds": 7560,
+          "total_seconds": 86910
+        }
+      },
+      "epoch": 6,
+      "fit_consumed_labels": {
+        "effective_bins": 38870,
+        "ignore": 4682,
+        "loss_aggregation": "unweighted mean of each usable batch's masked mean loss",
+        "negative": 31843,
+        "padded_windows": 43552,
+        "positive": 7027,
+        "unique_windows": 43550,
+        "usable_batches": 1361
+      },
+      "historical_trajectory_comparison": {
+        "applicable": true,
+        "loss_absolute_errors": {
+          "train_bce": 0.006682288413490944,
+          "train_graph_regularization": 7.238148990556636e-05,
+          "train_loss": 0.0066099076324487305
+        },
+        "losses_exact": false,
+        "merged_metrics_exact": false,
+        "passed": false,
+        "selection_key_exact": false,
+        "threshold_exact": false
+      },
+      "learning_rates_next_epoch": [
+        0.001
+      ],
+      "learning_rates_used": [
+        0.001
+      ],
+      "observer_rng_unchanged": true,
+      "selection_key": [
+        0.7624574744846909,
+        0.656670113753878,
+        0.5629775524139404
+      ],
+      "train_bce": 0.7083643497153296,
+      "train_graph_regularization": 0.0005203407925365781,
+      "train_loss": 0.7088846904906518,
+      "validation_candidate_count": 16832,
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 1905,
+          "mean_seconds": 20.536461942257223,
+          "median_seconds": 20.218,
+          "p90_seconds": 32.424200000000006,
+          "p95_seconds": 34.595
+        },
+        "event_f1": 0.7624574744846909,
+        "event_precision": 0.9088740458015268,
+        "event_recall": 0.656670113753878,
+        "false_negative_events": 996,
+        "false_positive_events": 191,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2096,
+        "true_positive_events": 1905
+      },
+      "validation_outputs_sha256": "d7ade31550622a2e114f5931251d480b49fb42e33089104e347a827d7a77f2b7",
+      "validation_threshold": 0.5629775524139404
+    },
+    {
+      "checkpoint_sha256": "2b82ae489fc7b4aa6cad5ad58bb31959f2200ac18af37514da13b1d7bc3afd05",
+      "diagnostics": {
+        "bin_metrics_at_merged_threshold": {
+          "event_f1": 0.786846937072275,
+          "event_precision": 0.7627831715210356,
+          "event_recall": 0.8124784557049294,
+          "false_negative_events": 544,
+          "false_positive_events": 733,
+          "gt_events": 2901,
+          "predicted_events": 3090,
+          "true_positive_events": 2357
+        },
+        "high_score_by_target": {
+          "IGNORE": {
+            "bins": 1676,
+            "high_bins": 129,
+            "high_fraction": 0.07696897374701671
+          },
+          "NEG": {
+            "bins": 13029,
+            "high_bins": 1031,
+            "high_fraction": 0.07913116893084657
+          },
+          "POS": {
+            "bins": 2709,
+            "high_bins": 1930,
+            "high_fraction": 0.7124400147655962
+          }
+        },
+        "high_score_segments": {
+          "count": 2185,
+          "max_seconds": 7560,
+          "total_seconds": 92700
+        }
+      },
+      "epoch": 7,
+      "fit_consumed_labels": {
+        "effective_bins": 38870,
+        "ignore": 4682,
+        "loss_aggregation": "unweighted mean of each usable batch's masked mean loss",
+        "negative": 31843,
+        "padded_windows": 43552,
+        "positive": 7027,
+        "unique_windows": 43550,
+        "usable_batches": 1361
+      },
+      "historical_trajectory_comparison": {
+        "applicable": true,
+        "loss_absolute_errors": {
+          "train_bce": 0.00263484107011569,
+          "train_graph_regularization": 9.27361744729026e-05,
+          "train_loss": 0.002542105686086482
+        },
+        "losses_exact": false,
+        "merged_metrics_exact": false,
+        "passed": false,
+        "selection_key_exact": false,
+        "threshold_exact": false
+      },
+      "learning_rates_next_epoch": [
+        0.001
+      ],
+      "learning_rates_used": [
+        0.001
+      ],
+      "observer_rng_unchanged": true,
+      "selection_key": [
+        0.7707432166732207,
+        0.6756290934160635,
+        0.5018301010131836
+      ],
+      "train_bce": 0.7041741942139691,
+      "train_graph_regularization": 0.0005409680324660315,
+      "train_loss": 0.7047151613660283,
+      "validation_candidate_count": 16837,
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 1960,
+          "mean_seconds": 20.77997806122449,
+          "median_seconds": 20.5185,
+          "p90_seconds": 32.849799999999995,
+          "p95_seconds": 35.1731
+        },
+        "event_f1": 0.7707432166732207,
+        "event_precision": 0.897025171624714,
+        "event_recall": 0.6756290934160635,
+        "false_negative_events": 941,
+        "false_positive_events": 225,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2185,
+        "true_positive_events": 1960
+      },
+      "validation_outputs_sha256": "78695b03f6e735619474a912831e04e73bd9699b08c081f399a88d7adb0fd0a3",
+      "validation_threshold": 0.5018301010131836
+    },
+    {
+      "checkpoint_sha256": "ac36381ec6fb6837e9d85074af05e0dbd146d161448b50e33dffaa999d70604f",
+      "diagnostics": {
+        "bin_metrics_at_merged_threshold": {
+          "event_f1": 0.7825501094829038,
+          "event_precision": 0.7651515151515151,
+          "event_recall": 0.8007583591864874,
+          "false_negative_events": 578,
+          "false_positive_events": 713,
+          "gt_events": 2901,
+          "predicted_events": 3036,
+          "true_positive_events": 2323
+        },
+        "high_score_by_target": {
+          "IGNORE": {
+            "bins": 1676,
+            "high_bins": 158,
+            "high_fraction": 0.09427207637231504
+          },
+          "NEG": {
+            "bins": 13029,
+            "high_bins": 965,
+            "high_fraction": 0.07406554608949267
+          },
+          "POS": {
+            "bins": 2709,
+            "high_bins": 1913,
+            "high_fraction": 0.7061646363971945
+          }
+        },
+        "high_score_segments": {
+          "count": 2130,
+          "max_seconds": 3780,
+          "total_seconds": 91080
+        }
+      },
+      "epoch": 8,
+      "fit_consumed_labels": {
+        "effective_bins": 38870,
+        "ignore": 4682,
+        "loss_aggregation": "unweighted mean of each usable batch's masked mean loss",
+        "negative": 31843,
+        "padded_windows": 43552,
+        "positive": 7027,
+        "unique_windows": 43550,
+        "usable_batches": 1361
+      },
+      "historical_trajectory_comparison": {
+        "applicable": true,
+        "loss_absolute_errors": {
+          "train_bce": 7.450238997930292e-05,
+          "train_graph_regularization": 9.620213773102259e-05,
+          "train_loss": 2.1699139907127574e-05
+        },
+        "losses_exact": false,
+        "merged_metrics_exact": false,
+        "passed": false,
+        "selection_key_exact": false,
+        "threshold_exact": false
+      },
+      "learning_rates_next_epoch": [
+        0.001
+      ],
+      "learning_rates_used": [
+        0.001
+      ],
+      "observer_rng_unchanged": true,
+      "selection_key": [
+        0.7628702047306698,
+        0.661496035849707,
+        0.5798283219337463
+      ],
+      "train_bce": 0.6968739939953456,
+      "train_graph_regularization": 0.0005541610611528419,
+      "train_loss": 0.6974281544723903,
+      "validation_candidate_count": 16839,
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 1919,
+          "mean_seconds": 20.713135487232933,
+          "median_seconds": 20.488,
+          "p90_seconds": 32.6672,
+          "p95_seconds": 34.87039999999999
+        },
+        "event_f1": 0.7628702047306698,
+        "event_precision": 0.9009389671361502,
+        "event_recall": 0.661496035849707,
+        "false_negative_events": 982,
+        "false_positive_events": 211,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2130,
+        "true_positive_events": 1919
+      },
+      "validation_outputs_sha256": "3f6fcdd7c4f8c138fa8ac25605850582627eeee9ed44b87861914ca5215e40c1",
+      "validation_threshold": 0.5798283219337463
+    },
+    {
+      "checkpoint_sha256": "c0732d7abf818c5fdd0fe2694c1c1ab9dfb77eeb3b181a19dc1194f7bf78fedb",
+      "diagnostics": {
+        "bin_metrics_at_merged_threshold": {
+          "event_f1": 0.7806287170773152,
+          "event_precision": 0.7697721179624665,
+          "event_recall": 0.7917959324370907,
+          "false_negative_events": 604,
+          "false_positive_events": 687,
+          "gt_events": 2901,
+          "predicted_events": 2984,
+          "true_positive_events": 2297
+        },
+        "high_score_by_target": {
+          "IGNORE": {
+            "bins": 1676,
+            "high_bins": 121,
+            "high_fraction": 0.07219570405727924
+          },
+          "NEG": {
+            "bins": 13029,
+            "high_bins": 931,
+            "high_fraction": 0.07145598280758308
+          },
+          "POS": {
+            "bins": 2709,
+            "high_bins": 1932,
+            "high_fraction": 0.7131782945736435
+          }
+        },
+        "high_score_segments": {
+          "count": 2220,
+          "max_seconds": 840,
+          "total_seconds": 89520
+        }
+      },
+      "epoch": 9,
+      "fit_consumed_labels": {
+        "effective_bins": 38870,
+        "ignore": 4682,
+        "loss_aggregation": "unweighted mean of each usable batch's masked mean loss",
+        "negative": 31843,
+        "padded_windows": 43552,
+        "positive": 7027,
+        "unique_windows": 43550,
+        "usable_batches": 1361
+      },
+      "historical_trajectory_comparison": {
+        "applicable": true,
+        "loss_absolute_errors": {
+          "train_bce": 0.0040928246747650165,
+          "train_graph_regularization": 0.0001044413545088532,
+          "train_loss": 0.003988382939596802
+        },
+        "losses_exact": false,
+        "merged_metrics_exact": false,
+        "passed": false,
+        "selection_key_exact": false,
+        "threshold_exact": false
+      },
+      "learning_rates_next_epoch": [
+        0.0005
+      ],
+      "learning_rates_used": [
+        0.001
+      ],
+      "observer_rng_unchanged": true,
+      "selection_key": [
+        0.7518062878344074,
+        0.6635642881764908,
+        0.4995729327201843
+      ],
+      "train_bce": 0.6880997559117272,
+      "train_graph_regularization": 0.0005721442607252993,
+      "train_loss": 0.6886719001633643,
+      "validation_candidate_count": 16835,
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 1925,
+          "mean_seconds": 20.23439116883117,
+          "median_seconds": 19.951,
+          "p90_seconds": 32.3462,
+          "p95_seconds": 34.538599999999995
+        },
+        "event_f1": 0.7518062878344074,
+        "event_precision": 0.8671171171171171,
+        "event_recall": 0.6635642881764908,
+        "false_negative_events": 976,
+        "false_positive_events": 295,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2220,
+        "true_positive_events": 1925
+      },
+      "validation_outputs_sha256": "d06f3ce0ce89e74535c05739c877efc8035d54c1f6b5448d4c67aa8910c9293a",
+      "validation_threshold": 0.4995729327201843
+    }
+  ],
+  "independent_training_run": false,
+  "model_args": {
+    "batch_size": 32,
+    "dropout": 0.2,
+    "feature_edge": 4,
+    "feature_log": 8,
+    "feature_node": 16,
+    "gpu": true,
+    "graph_batch_scope": "window",
+    "graph_hidden": 16,
+    "graph_sparse_weight": 0.001,
+    "graph_summary_mode": "last",
+    "head_hidden": 32,
+    "log_len": 32,
+    "main_model": "P6-C0-SystemEventTrigger",
+    "num_heads_e2n": 2,
+    "num_heads_edge": 4,
+    "num_heads_log": 4,
+    "num_heads_n2e": 4,
+    "num_heads_node": 4,
+    "num_layer": 2,
+    "num_nodes": 10,
+    "random_seed": 2026,
+    "raw_edge": 8,
+    "raw_node": 48,
+    "step": 1,
+    "window": 10
+  },
+  "protocol_id": "P6-C0-COMMON-TRAJECTORY-BUDGET-V1",
+  "selected_epoch": 1,
+  "selected_validation_metrics": {
+    "detection_delay": {
+      "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+      "matched_delay_count": 2102,
+      "mean_seconds": 23.88227354900095,
+      "median_seconds": 23.959,
+      "p90_seconds": 37.0504,
+      "p95_seconds": 39.03855
+    },
+    "event_f1": 0.8318163830629204,
+    "event_precision": 0.9763121226196005,
+    "event_recall": 0.724577731816615,
+    "false_negative_events": 799,
+    "false_positive_events": 51,
+    "ground_truth_event_count": 2901,
+    "predicted_episode_count": 2153,
+    "true_positive_events": 2102
+  },
+  "selected_validation_threshold": 0.6998756527900696,
+  "stop_reason": "validation_event_f1_patience",
+  "training": {
+    "auxiliary_terms": [
+      "label_free dynamic-graph sparsity regularizer (graph_sparse_weight=0.001, depends only on encoder inputs and the static service graph)"
+    ],
+    "batch_size": 32,
+    "development_capture_validation": true,
+    "eval_interval": 1,
+    "forbidden_terms": [
+      "focal loss",
+      "fault-type weighting",
+      "service weighting",
+      "duration weighting",
+      "test-tuned class weights"
+    ],
+    "grad_clip_norm": 10.0,
+    "ignore_bins_loss_mask": 0.0,
+    "learning_rate": 0.001,
+    "long_onset_weighting": false,
+    "loss": "masked_BCEWithLogitsLoss",
+    "max_epochs": 30,
+    "num_workers": 2,
+    "optimizer": "AdaBelief",
+    "patience": 8,
+    "pos_weight": "fit_negative_bins / fit_positive_bins (Detector-Fit only)",
+    "scheduler": "StepLR",
+    "scheduler_gamma": 0.5,
+    "scheduler_step": 10,
+    "weight_decay": 0.0005
+  },
+  "validation_outputs": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed2026-prefix-budget-v1-20261002/epochs/epoch-01/validation_outputs.npz",
+    "sha256": "ec41951de536d55d3f8985d14508ba9811f4404e1d4f85200238ba7197a7db8d"
+  }
+}

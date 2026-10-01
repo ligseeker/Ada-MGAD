@@ -1,0 +1,86 @@
+{
+  "choices": {
+    "17": {
+      "budget": 2,
+      "control": 2,
+      "selector_candidate": 1
+    },
+    "2026": {
+      "budget": 1,
+      "control": 1,
+      "selector_candidate": 1
+    },
+    "42": {
+      "budget": 1,
+      "control": 1,
+      "selector_candidate": 9
+    }
+  },
+  "execution_commit": "e3ff9fac84d067bb6d517b6a3eb456c089c1a434",
+  "source_sha256": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/completion_manifest.json": "81e6a162ba74a59492a1020406ca10e0038bd8897f2ffc22b2cf507e5b9d6b1e",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/development_input_lock.json": "d10d5c46604aa5fcfb520b30a1d52ed2065097c817237918ca830a9e7c88f0e2",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/epoch_progress.json": "174c7a0bb210f724b899ceb88b1b1a3b95457707203505c232678c90f97c96d7",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/epochs/epoch-01/epoch_audit.json": "5e97036cad200dfc2eec4140275745dda1dfe7f3f26c64f34384d5f984ea24a8",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/epochs/epoch-01/model_state.pt": "a186c654e2c5568fcad601298e58ed0165329a86d4ccf4de2b8d7778da27a423",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/epochs/epoch-01/validation_outputs.npz": "e75782d668734b56740b56752e572cbc18a365581e30c151e93063b50fe1ccbb",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/epochs/epoch-02/epoch_audit.json": "00de083e34755126d57075de11d4f1c1301da315b56b576ad2e2988916b12327",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/epochs/epoch-02/model_state.pt": "b63bc967a5a6dd245e36f4698ad4bd10999dc2ac9798141f409dec277975d0e4",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/epochs/epoch-02/validation_outputs.npz": "91058ddad7badb798777f137d848261dac454a54db88ab654f4c6c99b50cc64f",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/prefix_control_selection.json": "c13c37cb0672a0fd8929bc1806c3750c5cac43d08b70d29dec4b6d1ff7b968a0",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/validation_selection.json": "7738766814a04e195214748ef405019fe28f531fb5bbf72ed091c36ab5096310",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed2026-prefix-budget-v1-20261002/completion_manifest.json": "b52edee9a32df50e302b2026dc4cca8429124f7c77ff5e9462f380a48fb3c4e2",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed2026-prefix-budget-v1-20261002/development_input_lock.json": "9628c540a6d045bb67f0df82ec98ce4a3b1cb3e6e836195819c7954c173ed7ab",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed2026-prefix-budget-v1-20261002/epoch_progress.json": "f1ec3528e791064b73a5e178edb9d72c4d57313cc99f959225c661f5b7a831fa",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed2026-prefix-budget-v1-20261002/epochs/epoch-01/epoch_audit.json": "75115bcf0b732acbe1dfe21b8065b71076c74db50e0a350e67b7ebd8fee4d7e9",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed2026-prefix-budget-v1-20261002/epochs/epoch-01/model_state.pt": "119d5b1410eb07ae24e3c8a4dff7ede736d51bdd0370a5d3311e5f1211abb9c2",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed2026-prefix-budget-v1-20261002/epochs/epoch-01/validation_outputs.npz": "ec41951de536d55d3f8985d14508ba9811f4404e1d4f85200238ba7197a7db8d",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed2026-prefix-budget-v1-20261002/prefix_control_selection.json": "d3d51d8a9caecc6360dae916731f3c00724ca606848220aebaaa48b04e42f87a",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed2026-prefix-budget-v1-20261002/validation_selection.json": "8408feb3ad4474d75e3fb5e638b910a22d4cf169cd10a672dcdad5e91199887f",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/completion_manifest.json": "3714844941b27078a70753e74b4ad73e72748f17fe635be8a241046af067c732",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/development_input_lock.json": "e29fc64b006d3621d4f1dbd0aeeabdb654a0cb09d3e5a1d9aa0cfb9add66e203",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/epoch_progress.json": "54c9ff00d53495174ea013f3346233ec7cfa2d37bdc39e19e24a1cce9604dcfd",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/epochs/epoch-01/epoch_audit.json": "e306afca31daa58326c580d897a35198372809cee17639433422729885a30afd",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/epochs/epoch-01/model_state.pt": "9d07c4a07b27695f57dca5dfadea40f7aa857afa3a4acc6a5199ddf2ebaf655a",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/epochs/epoch-01/validation_outputs.npz": "84e4faad6e6908a52a0f9237f849a076e7caa8ce23791a9b95d87b0a9fce57c2",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/epochs/epoch-09/epoch_audit.json": "a50f556d7454f88a7f9cdada66f8e63a9e18ebb0ff337184b6c01dd5191ce7f6",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/epochs/epoch-09/model_state.pt": "ef5a0e5d854a7f8b4e6688da9334bf23a81a503d670b1bb66e172bd06530c78c",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/epochs/epoch-09/validation_outputs.npz": "ede7fcb35c4eb93f1d3b06fa688963ef14e76a1e7c374c0158026711c646603f",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/prefix_control_selection.json": "6df13e14da9e4307803fb02421bda11c304a1747885c18522609ee6353018b37",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/validation_selection.json": "7147d13089f77e063ff0e2f0aa2609a0b21b5d4b86089077152ed5e9b7acda72",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetreview/configs/e2e/gaia_p5_v3_preprocessing_v2.json": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetreview/configs/e2e/gaia_p6_c0_budget_prefix_v1.json": "f063634358d1e5803a0fd6c0e8d93d980807eb18b8ce2df5ee5b4f85620cc302",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetreview/docs/P6_DETERMINISTIC_PAIRED_BUDGET_PROTOCOL.md": "f1eb3523c9411a17d1cb5123606f477c063d28ed8b86ab8445b59664186d7d4a",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetreview/docs/P6_TCN_BUDGET_SELECTOR_ANALYSIS_PROTOCOL.md": "32fb6e957343e0194f50945cefe7e81b7287b3e207360cd17a0c9e531e426ba4",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetreview/scripts/p6/analyze_c0_training_budget.py": "0441f709fccbf5b278f8b09061c108076aed118839fa05b5aa2d35f2598d2b29",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetreview/src/e2e/bin_trigger_decoder.py": "155f3de35143560539a7c277bdc10fe0114bbfa617f5782f34deec69c3a41e25",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetreview/src/e2e/event_detection.py": "115819a5e8162f116da109dfbb584b755b12dc508d51dba7449d43b0734d837a",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetreview/src/e2e/system_trigger_failure_audit.py": "42cc6a728421f2d13a6a593cf8c01ab36da9173c59d35aeb05eb0098dea106bf",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42/completion_manifest.json": "05ed46d33516b5b58fb5ed02f29dadfc965c5b1efb5083455578a3ac3279d43c",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42/validation_predictions.csv": "393b221f73f3025ffd253c1ace8a419fdadae22d56ed54f5553fa7c841874bad",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42/validation_selection.json": "196582641cbbba0234ab18e6f96d2ca1d2b297646ce884888b4bb809f768a133",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b"
+  },
+  "test_read": false,
+  "trajectory_control_gate": {
+    "17": {
+      "design": "same realised stochastic trajectory prefix",
+      "independent_control_run": false,
+      "prefix_rule_exact": true,
+      "selected_artifacts_bound": true
+    },
+    "2026": {
+      "design": "same realised stochastic trajectory prefix",
+      "independent_control_run": false,
+      "prefix_rule_exact": true,
+      "selected_artifacts_bound": true
+    },
+    "42": {
+      "design": "same realised stochastic trajectory prefix",
+      "independent_control_run": false,
+      "prefix_rule_exact": true,
+      "selected_artifacts_bound": true
+    }
+  },
+  "validation_reused_for_selection": true
+}

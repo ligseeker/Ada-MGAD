@@ -1,0 +1,108 @@
+{
+  "status": "ARCHIVED_INCOMPLETE_DIAGNOSTIC_ATTEMPTS",
+  "created_at_utc": "2026-10-01T19:42:43.068122+00:00",
+  "test_inference_run": false,
+  "original_files_modified": false,
+  "counts_as_model_no_go": false,
+  "historical_archive": {
+    "path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budget/experiments/p6/c0_training_budget/early-replay-failure-archive-v1/failure_archive.json",
+    "sha256": "2458b339a07921bc39a3389e689f6aa34960b1837014135eac91d9a3da2bc7f7"
+  },
+  "runs": [
+    {
+      "directory": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budget/experiments/p6/c0_training_budget/seed42-patience30-v1-20261002",
+      "seed": 42,
+      "status": "INCOMPLETE_EARLY_REPLAY_FAIL",
+      "exit_code": 1,
+      "completed_audit_epochs": 1,
+      "completion_manifest_exists": false,
+      "numerical_performance_verdict": null,
+      "files": {
+        "development_input_lock.json": "2b956e24811a68f06a0a01d40dca08e8ef9ddad99e63e2f19ce303e2fe067626",
+        "epoch_progress.json": "e0852f14f6cfa46996b046a8f64312ea5070f8f12efc67167706db2e2f891624",
+        "epochs/epoch-00/epoch_audit.json": "cdd775e51c74b8435b27ced2d3eb643f9150d36eb1d19d8cc939f576057d1402",
+        "epochs/epoch-00/model_state.pt": "60def309b79fd68ceecd4b3454e5ec327b11dad13d6b164057a8395a764474c7",
+        "epochs/epoch-00/validation_outputs.npz": "dbae0ab4bdfda78f87656a1b88559ece4b1f46fb83b8dffda2bbf3e7f60d643c",
+        "fit_gt.csv": "dd366f9246ef30c38963833535b251051975de023809905e2d087d230ac1b3c2",
+        "p6_c0.log": "9b238608a52c0c6248b105aa6d9f80b99378683640eafbe710a603b5edcecd27",
+        "validation_gt.csv": "c522cd913b07508598bc0506ff7111ce9ffdb22a7704227f924f06d2dbd1b7bc"
+      }
+    },
+    {
+      "directory": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budget/experiments/p6/c0_training_budget/seed17-patience30-v1-20261002",
+      "seed": 17,
+      "status": "INCOMPLETE_EARLY_REPLAY_FAIL",
+      "exit_code": 1,
+      "completed_audit_epochs": 1,
+      "completion_manifest_exists": false,
+      "numerical_performance_verdict": null,
+      "files": {
+        "development_input_lock.json": "cef10bf38823053299497445ec010fc18f65e9997cccdcde33429f3f4c25016e",
+        "epoch_progress.json": "cf0d81a7684a2c1f2b5ec8c7abe469f7f476534487373d6eb0d850f6b62114aa",
+        "epochs/epoch-00/epoch_audit.json": "616789add3d2475e3f36a1d5bee09c34f44bc114936598b08bace769bb10e558",
+        "epochs/epoch-00/model_state.pt": "3f6b9ac16a60549958673a4c2bc9ce0e2d67b7f0999d5ec6f4af7eb95c806bb8",
+        "epochs/epoch-00/validation_outputs.npz": "3499c5d8674a88ff9978c8ec9c243f74570114773226bd2c1a1b7707f35ee03a",
+        "fit_gt.csv": "dd366f9246ef30c38963833535b251051975de023809905e2d087d230ac1b3c2",
+        "p6_c0.log": "80744557ba0346617506d54acca4e6c4fe2c8a6a8454c7c267b182e7ade81622",
+        "validation_gt.csv": "c522cd913b07508598bc0506ff7111ce9ffdb22a7704227f924f06d2dbd1b7bc"
+      }
+    },
+    {
+      "directory": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budget/experiments/p6/c0_training_budget/seed2026-patience30-v1-20261002",
+      "seed": 2026,
+      "status": "INCOMPLETE_EARLY_REPLAY_FAIL",
+      "exit_code": 1,
+      "completed_audit_epochs": 1,
+      "completion_manifest_exists": false,
+      "numerical_performance_verdict": null,
+      "files": {
+        "development_input_lock.json": "3a7d16d0208b2c45395a95253eaba5b9d21db90147b7d44adfcedf8ed506670a",
+        "epoch_progress.json": "99110d037acfbe27122fcac3218cfaee852e610e7573e82b4091a817b1d10744",
+        "epochs/epoch-00/epoch_audit.json": "75f06a9596efb6d9111d6eacb72c2e0af21662969d30e0b9be9fdba97866cb61",
+        "epochs/epoch-00/model_state.pt": "4e2c852ec6527eb250a4a0aee93a09f96a74cd3879b96ebf42bf08c6a9fc8aaa",
+        "epochs/epoch-00/validation_outputs.npz": "c26397f110e45bb5084d1b9c70ab10f1a12291cc991d9f8abef8f235cd42f0d5",
+        "fit_gt.csv": "dd366f9246ef30c38963833535b251051975de023809905e2d087d230ac1b3c2",
+        "p6_c0.log": "17c05e52614c99cece8cfd91e56b8627b5ba9018e38386c190b7eced4950ad43",
+        "validation_gt.csv": "c522cd913b07508598bc0506ff7111ce9ffdb22a7704227f924f06d2dbd1b7bc"
+      }
+    },
+    {
+      "directory": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budget/experiments/p6/c0_training_budget/seed17-control-deterministic-v1-20261002",
+      "seed": 17,
+      "arm": "control",
+      "status": "INCOMPLETE_CANCELLED_FOR_RUNTIME",
+      "exit_code": 143,
+      "exit_evidence": "root tool sessions 83404/62159 returned exit143 after operator TERM",
+      "cancellation_reason": "deterministic backend runtime regression; no complete epoch",
+      "cancellation_reason_source": "session execution record; not inferred from directory logs",
+      "completed_audit_epochs": 0,
+      "completion_manifest_exists": false,
+      "numerical_performance_verdict": null,
+      "files": {
+        "development_input_lock.json": "60d39c1792df378b8760f2d8ee70992ae803d46c6e63b2e526f3540317113975",
+        "fit_gt.csv": "dd366f9246ef30c38963833535b251051975de023809905e2d087d230ac1b3c2",
+        "p6_c0.log": "e1bdcadc80d7a145584147b8d8256c828a91cb09465ac4cdde794da4279816c2",
+        "validation_gt.csv": "c522cd913b07508598bc0506ff7111ce9ffdb22a7704227f924f06d2dbd1b7bc"
+      }
+    },
+    {
+      "directory": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budget/experiments/p6/c0_training_budget/seed17-budget-deterministic-v1-20261002",
+      "seed": 17,
+      "arm": "budget",
+      "status": "INCOMPLETE_CANCELLED_FOR_RUNTIME",
+      "exit_code": 143,
+      "exit_evidence": "root tool sessions 83404/62159 returned exit143 after operator TERM",
+      "cancellation_reason": "deterministic backend runtime regression; no complete epoch",
+      "cancellation_reason_source": "session execution record; not inferred from directory logs",
+      "completed_audit_epochs": 0,
+      "completion_manifest_exists": false,
+      "numerical_performance_verdict": null,
+      "files": {
+        "development_input_lock.json": "513cf46e40ec760fd22e7e65856adb94315683a394d9a45a8416424dbb74971f",
+        "fit_gt.csv": "dd366f9246ef30c38963833535b251051975de023809905e2d087d230ac1b3c2",
+        "p6_c0.log": "7f8730ff009ee6a414970406995ae59ce3cebf2de12e18d473bd18b029bc5564",
+        "validation_gt.csv": "c522cd913b07508598bc0506ff7111ce9ffdb22a7704227f924f06d2dbd1b7bc"
+      }
+    }
+  ]
+}

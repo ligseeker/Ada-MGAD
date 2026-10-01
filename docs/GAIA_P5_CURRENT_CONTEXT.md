@@ -2,14 +2,20 @@
 
 > 本文件是给新的 code-agent CLI 的单一入口。它只保留当前有效的背景、状态、约束和下一步；完整审计与实现细节继续放在现有文档中，不在这里复制。
 
-更新时间：2026-10-01（Asia/Shanghai；本独立全流程研究分支）
+更新时间：2026-10-02（Asia/Shanghai；本独立训练预算复盘分析分支）
 
 **本分析工作树（2026-10-02）：** `analysis/p6-tcn-training-budget`，从budget初始源f987a1b分出，当前分析对照fd25bff的同一轨迹prefix预算实验。
 仅实现预算复盘和条件selector分析，不修改正在运行的budget树。
 详见 [分析协议](P6_TCN_BUDGET_SELECTOR_ANALYSIS_PROTOCOL.md)。
-本树的指标必须等三个30epoch budget run全部封存且原patience8前缀规则重放通过后生成。
+本树的分析已完整执行并封存：三个seed均30epoch、exit0，原patience8前缀规则逐字段重放通过。
+正式分析run为`experiments/p6/c0_training_budget_analysis/budget-selector-prefix-v1-20261002/`，
+执行commit`e3ff9fa`；预算三个late recovery均False，budget/selector all-seed gate均False。
+bin selector Val P/R/F1依seed42/17/2026为.848578/.761117/.802471、
+.979386/.835229/.901581、.833607/.875560/.854069；完整GT2901。
+本轮无Test推理、native Fit-OOS RCA或新完整E2E；建议Scientific Freeze。
+详见[最终复盘](P6_TRAINING_BUDGET_FINAL_RESULTS_20261002.md)；此前Test全面比较单独保留。
 
-**本工作树当前任务（2026-10-02）：**用户已授权继续研究，优先验证三个seed是否过早停止。
+**历史预算实施方案（2026-10-02；最终执行与判定见上方）：**用户已授权继续研究，优先验证三个seed是否过早停止。
 独立分支 `experiment/p6-tcn-training-budget` 仅改patience8→30，max_epochs仍30，
 seeds42/17/2026全执行；Train/Validation-only，Test冻结。
 源/协议/config先提交，每轮保存权重、Val原始分数、实际LR并检验旧早期轨迹。

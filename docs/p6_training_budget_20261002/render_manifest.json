@@ -1,0 +1,23 @@
+{
+  "status": "COMPLETE_REPORT_RENDER",
+  "test_read": false,
+  "inputs_sha256": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/epoch_progress.json": "54c9ff00d53495174ea013f3346233ec7cfa2d37bdc39e19e24a1cce9604dcfd",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/prefix_control_selection.json": "6df13e14da9e4307803fb02421bda11c304a1747885c18522609ee6353018b37",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed42-prefix-budget-v1-20261002/completion_manifest.json": "3714844941b27078a70753e74b4ad73e72748f17fe635be8a241046af067c732",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/epoch_progress.json": "174c7a0bb210f724b899ceb88b1b1a3b95457707203505c232678c90f97c96d7",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/prefix_control_selection.json": "c13c37cb0672a0fd8929bc1806c3750c5cac43d08b70d29dec4b6d1ff7b968a0",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed17-prefix-budget-v1-20261002/completion_manifest.json": "81e6a162ba74a59492a1020406ca10e0038bd8897f2ffc22b2cf507e5b9d6b1e",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed2026-prefix-budget-v1-20261002/epoch_progress.json": "f1ec3528e791064b73a5e178edb9d72c4d57313cc99f959225c661f5b7a831fa",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed2026-prefix-budget-v1-20261002/prefix_control_selection.json": "d3d51d8a9caecc6360dae916731f3c00724ca606848220aebaaa48b04e42f87a",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix/experiments/p6/c0_training_budget/seed2026-prefix-budget-v1-20261002/completion_manifest.json": "b52edee9a32df50e302b2026dc4cca8429124f7c77ff5e9462f380a48fb3c4e2",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetreview/experiments/p6/c0_training_budget_analysis/budget-selector-prefix-v1-20261002/completion_manifest.json": "54dd588b90dd93d9c1efe3dc72eb4dd8128719f4d5624b56a02b985a3626ecdb",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetreview/scripts/p6/render_c0_budget_curves.py": "4d100dc3532fdce6c03ffeb1d1177551cfa4536e868eeac045966ef07c294919"
+  },
+  "files_sha256": {
+    "epoch_history.csv": "b7bc3dbb64525ae0d21dd8ebcb13fb676c39fde7aac1417ed73298952ca4b315",
+    "selected_bin_results.csv": "256bdd5f42f2b5349cb57e46c904339c3acb93ebd33a49168b6533c5394fab55",
+    "training_budget_curves.png": "6c3fb41897cef696fcafa8bc26333cf7d5f6c669c67fb5f5a3eccb788243978a",
+    "training_budget_curves.svg": "2b719d4cf442ab46cd471cf1752b86ddff40cb224e39851285261a4882e63c1a"
+  }
+}
