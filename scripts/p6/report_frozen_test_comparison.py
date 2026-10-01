@@ -87,6 +87,66 @@ def training_curves(output):
     return receipts
 
 
+def historical_tables(output):
+    xgb = BASE / 'Ada-MGAD-e2e-v2-xgb/experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/evaluation'
+    back = BASE / 'Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate_eval_correction/c1-anchor-backdate-eval-v1'
+    pairs = [('C1-B', 'C1-C', C1/'evaluation/c1_results.json', C1/'evaluation/c2_full_diagnosis.json'),
+        ('C1-C', 'XGB-original', xgb/'c1_paired_results.json', xgb/'c2_full_diagnosis.json'),
+        ('XGB-original', 'XGB-backdate', back/'c1_paired_results.json', back/'c2_full_diagnosis.json')]
+    metrics, e2e, paired, receipts = {}, {}, [], {}
+    for left, right, paired_path, e2e_path in pairs:
+        v = read(paired_path); details = pd.DataFrame(v['case_details']); full = read(e2e_path)
+        for path in (paired_path, e2e_path): receipts[str(path)] = sha(path)
+        if len(details) != 4197 or not details.case_id.is_unique:
+            raise ValueError('historical paired population drift')
+        paired.append(dict(comparison=right+' minus '+left, **v['primary']))
+        for name, suffix in [(left, 'b'), (right, 'c')]:
+            record = dict(method=name, legal_matched_n=4197,
+                **{key:float(details[key+'_'+suffix].mean()) for key in ('AC@1','AC@3','AC@5','MRR')})
+            if name in metrics:
+                for key in ('AC@1','AC@3','AC@5','MRR'): same(record[key], metrics[name][key])
+            metrics[name] = record
+            for k in (1,3,5):
+                key=(name,k); item=full['arms'][suffix]['metrics']['@'+str(k)]
+                tp=int(details['AC@'+str(k)+'_'+suffix].sum())
+                if tp != item['diagnosis_true_positive'] or item['diagnosis_recall_denominator']!=5787 or item['diagnosis_precision_denominator']!=4214:
+                    raise ValueError('historical E2E count drift')
+                e2e[key]=dict(method=name,k=k,TP=tp,FP=4214-tp,FN=5787-tp,
+                    gt_n=5787,predictions=4214,P=item['precision'],R=item['recall'],F1=item['f1'])
+    oracle_path=C1/'evaluation/oracle_a_diagnostic.json'; oracle=read(oracle_path)
+    receipts[str(oracle_path)]=sha(oracle_path)
+    metrics['C1-A']=dict(method='C1-A',legal_matched_n=4197,diagnostic_only=True,
+        **{key:oracle[key] for key in ('AC@1','AC@3','AC@5','MRR')})
+    p5=MAIN/'experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440'
+    p5_rca=p5/'rca/rca_metrics.json'; p5_e2e=p5/'rca/e2e_diagnosis_metrics.json'
+    pv, pe=read(p5_rca),read(p5_e2e)
+    for path in (p5_rca,p5_e2e):receipts[str(path)]=sha(path)
+    for name,key in [('P5-detected','detected_anchor_matched_test'),('P5-oracle','oracle_anchor_matched_test'),
+            ('P5-detector-only','detector_only_matched_test'),('P5-root-frequency','root_frequency_matched_test')]:
+        item=pv[key]['overall']; metrics[name]=dict(method=name,legal_matched_n=item['case_count'],
+            **{key:item[key] for key in ('AC@1','AC@3','AC@5','MRR')})
+    for k in (1,3,5):
+        item=pe['metrics']['@'+str(k)]
+        e2e[('P5-detected',k)]=dict(method='P5-detected',k=k,TP=item['diagnosis_true_positive'],
+            FP=item['diagnosis_false_positive'],FN=item['diagnosis_false_negative'],gt_n=5781,predictions=3767,
+            P=item['precision'],R=item['recall'],F1=item['f1'])
+    matching_path=C1/'train_cohort/matching.csv'; cohort_path=C1/'train_cohort/cases.csv'
+    matching=pd.read_csv(matching_path); cohort=pd.read_csv(cohort_path)
+    for path in (matching_path,cohort_path):receipts[str(path)]=sha(path)
+    rows=[]
+    for fold in (1,2,3):
+        group=matching.loc[matching.fold.eq(fold)]
+        tp=int(group.match_status.eq('matched').sum());fp=int(group.match_status.eq('false_alarm').sum());fn=int(group.match_status.eq('miss').sum())
+        rows.append(dict(fold=fold,GT=tp+fn,predictions=tp+fp,TP=tp,FP=fp,FN=fn,
+            P=tp/(tp+fp),R=tp/(tp+fn),F1=2*tp/(2*tp+fp+fn),common_train_cases=int(cohort.fold.eq(fold).sum())))
+    if len(cohort)!=3225:raise ValueError('historical common Train cohort drift')
+    pd.DataFrame(rows).to_csv(output/'c1_oos_3fold.csv',index=False)
+    pd.DataFrame(metrics.values()).to_csv(output/'historical_rca.csv',index=False)
+    pd.DataFrame(e2e.values()).to_csv(output/'historical_e2e.csv',index=False)
+    (output/'historical_paired.json').write_text(json.dumps(paired,indent=2)+'\n')
+    return receipts
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--output-dir', type=Path, required=True)
@@ -226,9 +286,11 @@ def main():
         R/'scope_lock.json', R/'predictions/global_prediction_lock.json', R/'evaluation/completion_manifest.json',
         Path(config['detector_audit_dir'])/'audit.json', RCA/'configs/e2e/gaia_p6_frozen_rca_test_review_v1.json']
     train_receipts = training_curves(a.output_dir)
+    historical_receipts = historical_tables(a.output_dir)
     result = dict(status='PASS', independent_detector_integer_replays=19,
         independent_rca_ranking_metric_ledger_replays=40, full_gt=5787,
         source_receipts={str(path):sha(path) for path in receipts}, train_log_receipts=train_receipts,
+        historical_receipts=historical_receipts,
         detector_execution_commit=ds['execution_commit'], rca_execution_commit=rs['execution_commit'],
         report_generator_sha256=sha(Path(__file__)), reused_test=True, test_selection_performed=False)
     (a.output_dir/'audit.json').write_text(json.dumps(result, indent=2)+'\n')
