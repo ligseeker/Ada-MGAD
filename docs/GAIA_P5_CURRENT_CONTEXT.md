@@ -4,6 +4,14 @@
 
 更新时间：2026-10-01（Asia/Shanghai；本独立全流程研究分支）
 
+**本正常预测/分析工作树增量：**TCN训练已在独立`c0onsettcn`完成，固定run
+`tcn-v1-seed42`，Val2127/6/774、P/R/F1 .997187/.733195/.845054。
+本树补充同目标encoder归因/累计门槛比较及封存接口；实际决定以新分析run为准。
+另准备[正常预测Fit筛查协议](P6_NORMAL_FORECAST_FIT_SCREEN_PROTOCOL.md)：原Fit内
+60/20/20、正常训练固定20epoch最后checkpoint、99.5%正常分位阈值；尚未运行。
+预测器训练须等TCN和两个decoder变体完成且均NO-GO；Fit只读计数预检可先执行。
+此树不改变TCN已封存源/HEAD；不打开Test数组，不重建全量预处理，不运行RCA。
+
 **当前用户授权的新研究（先于下方旧Freeze建议）：**按最小修改逐步实施检测优化。
 E1在独立`Ada-MGAD-e2e-v2-c0onset`/`experiment/p6-c0-onset30`运行，execution
 commit`ac94227`，目录`experiments/p6/c0_onset_development/onset30-v1-seed42`，

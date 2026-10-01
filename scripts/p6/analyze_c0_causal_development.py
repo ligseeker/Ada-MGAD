@@ -4,6 +4,7 @@
 import argparse
 import json
 from pathlib import Path
+import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -41,6 +42,54 @@ def paired_table(ids, baseline_hits, candidate_hits):
             "delta_recall": (len(gained) - len(lost)) / len(ids) if ids else None}
 
 
+def development_bindings(directory):
+    """Bind archived scores, metadata and the Train inputs they actually used."""
+    paths = [directory / name for name in ("completion_manifest.json", "validation_selection.json",
+             "validation_predictions.csv", "development_input_lock.json", "validation_gt.csv")]
+    bindings = {str(path.resolve()): sha256_file(path) for path in paths}
+    lock = json.loads((directory / "development_input_lock.json").read_text())
+    for path, expected in lock["source_sha256"].items():
+        if ("/train/" in path or path.endswith("/graph.npy") or path.endswith("/ad_data_manifest.json")
+                or ("/configs/" in path and path.endswith(".json"))):
+            if sha256_file(Path(path)) != expected:
+                raise ValueError("archived Train input drift: " + path)
+            bindings[str(Path(path).resolve())] = expected
+    return bindings
+
+
+def verify_target(selection, target, directory=None):
+    recorded = selection.get("target", {}).get("target")
+    expected = "one_bin_onset_frozen_ignore" if target == "onset30" else "recent_onset60"
+    if recorded is None:
+        if target != "recent_onset60" or directory is None:
+            raise ValueError("archived target missing without a bound legacy configuration")
+        lock = json.loads((directory / "development_input_lock.json").read_text())
+        labels = []
+        for path, digest in lock["source_sha256"].items():
+            if "/configs/" in path and path.endswith(".json"):
+                if sha256_file(Path(path)) != digest:
+                    raise ValueError("legacy target configuration drift")
+                config = json.loads(Path(path).read_text())
+                if "trigger_label" in config:
+                    labels.append(config["trigger_label"])
+        if (len(labels) != 1 or labels[0].get("target") != "recent_onset_trigger"
+                or labels[0].get("positive_window_seconds") != 60):
+            raise ValueError("legacy target is not the frozen recent-onset60 task")
+        recorded = expected
+    if recorded != expected:
+        raise ValueError("declared trigger target differs from archived selection")
+
+
+def verify_gt_identity(recorded, current):
+    columns = ["case_id", "source_index", "service", "fault_type", "start_ms", "end_ms"]
+    if not recorded.case_id.is_unique or set(recorded.case_id) != set(current.case_id):
+        raise ValueError("archived GT denominator/identity mismatch")
+    left = recorded.sort_values("case_id")[columns].reset_index(drop=True)
+    right = current.sort_values("case_id")[columns].reset_index(drop=True)
+    if not left.equals(right):
+        raise ValueError("archived GT annotations differ")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--baseline-run", type=Path, required=True)
@@ -52,6 +101,10 @@ def main():
     parser.add_argument("--archived-validation-matching", type=Path, required=True)
     parser.add_argument("--candidate-trigger-target", choices=("recent_onset60", "onset30"),
                         default="recent_onset60")
+    parser.add_argument("--baseline-trigger-target", choices=("recent_onset60", "onset30"),
+                        default="recent_onset60")
+    parser.add_argument("--comparison-role", choices=("development_gate", "encoder_attribution"),
+                        default="development_gate")
     parser.add_argument("--gate-config", type=Path)
     args = parser.parse_args()
     if args.output_dir.exists():
@@ -59,9 +112,12 @@ def main():
     config = load_config(args.base_config)
     if sha256_file(args.registry) != config["event_registry"]["sha256"]:
         raise ValueError("registry drift")
-    state = TriggerDevelopmentState(config, args.data_root, args.registry)
+    state = (OnsetDevelopmentState(config, args.data_root, args.registry)
+             if args.baseline_trigger_target == "onset30"
+             else TriggerDevelopmentState(config, args.data_root, args.registry))
     candidate_state = (OnsetDevelopmentState(config, args.data_root, args.registry)
-                       if args.candidate_trigger_target == "onset30" else state)
+                       if args.candidate_trigger_target == "onset30"
+                       else TriggerDevelopmentState(config, args.data_root, args.registry))
     gt = state.gt_events("validation").set_index("case_id", drop=False)
     ids = sorted(gt.index)
     if len(ids) != 2901 or not gt.index.is_unique:
@@ -74,11 +130,49 @@ def main():
                      ("start_ms", "gt_start_ms"), ("end_ms", "gt_end_ms")):
         if gt.loc[ids, new].tolist() != historical.loc[ids, old].tolist():
             raise ValueError("archived event metadata mismatch: " + new)
+    execution_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    sources = [Path(__file__), ROOT / "src/e2e/onset_trigger.py", ROOT / "src/e2e/trigger_development.py",
+               ROOT / "src/e2e/system_trigger.py", ROOT / "src/e2e/system_trigger_data.py",
+               ROOT / "src/e2e/event_detection.py", ROOT / "src/e2e/system_trigger_failure_audit.py",
+               args.base_config, args.registry, args.archived_validation_matching]
+    if args.gate_config:
+        sources.append(args.gate_config)
+    bindings = {str(path.resolve()): sha256_file(path) for path in sources}
+    selections = {}
+    for name, directory, target in (("baseline", args.baseline_run, args.baseline_trigger_target),
+                                    ("candidate", args.candidate_run, args.candidate_trigger_target)):
+        verify_completion(directory)
+        selections[name] = json.loads((directory / "validation_selection.json").read_text())
+        verify_target(selections[name], target, directory)
+        verify_gt_identity(pd.read_csv(directory / "validation_gt.csv"), gt.reset_index(drop=True))
+        bindings.update(development_bindings(directory))
+    if args.comparison_role == "encoder_attribution":
+        from src.e2e.system_trigger_tcn import TCN_SPEC
+        baseline, successor = selections["baseline"], selections["candidate"]
+        lock = json.loads((args.candidate_run / "development_input_lock.json").read_text())
+        real_gate_path = args.candidate_run / "real_window_causality_gate.json"
+        real_gate = json.loads(real_gate_path.read_text())
+        if (args.baseline_trigger_target != "onset30" or args.candidate_trigger_target != "onset30"
+                or baseline["model_args"] != successor["model_args"]
+                or baseline["training"] != successor["training"]
+                or baseline["target"] != successor["target"]
+                or successor.get("model_class") != "WindowCausalTCNTrigger"
+                or lock.get("model_class") != "WindowCausalTCNTrigger"
+                or successor.get("tcn_spec") != TCN_SPEC or lock.get("tcn_spec") != TCN_SPEC
+                or not lock.get("training_factory_only_verified")):
+            raise ValueError("encoder attribution changes more than the declared encoder package")
+        # The training completion manifest covers this actual-input gate.
+        if real_gate.get("passed") is not True:
+            raise ValueError("candidate actual-window independence gate failed")
+        bindings[str(real_gate_path.resolve())] = sha256_file(real_gate_path)
+        bindings[str((ROOT / "src/e2e/system_trigger_tcn.py").resolve())] = sha256_file(ROOT / "src/e2e/system_trigger_tcn.py")
     args.output_dir.mkdir(parents=True)
+    write_json(args.output_dir / "analysis_input_lock.json", {"execution_commit": execution_commit,
+               "source_sha256": bindings, "test_read": False, "comparison_role": args.comparison_role})
     results, hits = {}, {}
     for name, directory in (("baseline", args.baseline_run), ("candidate", args.candidate_run)):
         completion = verify_completion(directory)
-        selection = json.loads((directory / "validation_selection.json").read_text())
+        selection = selections[name]
         if name == "baseline" and selection["model_args"].get("graph_batch_scope") != "window":
             raise ValueError("baseline graph is not window independent")
         scores = pd.read_csv(directory / "validation_predictions.csv", float_precision="round_trip")
@@ -143,20 +237,31 @@ def main():
                  "f1_gain_at_least_0_005": candidate["event_f1"] - base["event_f1"] >= .005,
                  "precision_at_least_0_90": candidate["event_precision"] >= .90,
                  "single_onset_recall_decline_at_most_0_03": paired["single_onset"]["delta_recall"] >= -.03}
-    report = {"status": "GO_TO_E2E_DEVELOPMENT" if all(gates.values()) else "NO_GO_DEVELOPMENT",
+    status = ("ENCODER_ATTRIBUTION_COMPLETE" if args.comparison_role == "encoder_attribution" else
+              ("GO_TO_E2E_DEVELOPMENT" if all(gates.values()) else "NO_GO_DEVELOPMENT"))
+    if args.comparison_role == "encoder_attribution":
+        gates = {}
+    report = {"status": status, "execution_commit": execution_commit,
               "test_read": False, "full_e2e_run": False, "gt_denominator": len(ids),
               "results": results, "paired": paired, "by_fault": by_fault, "by_service": by_service,
               "gates": gates, "gate_margins": margins,
               "candidate_trigger_target": args.candidate_trigger_target,
+              "baseline_trigger_target": args.baseline_trigger_target,
+              "comparison_role": args.comparison_role,
               "limitations": ["reused Validation development screening",
               "70 percent Train preprocessing includes detector Validation inputs",
               "window graph independence does not certify online trace-parent availability"],
-              "source_sha256": {str(path.resolve()): sha256_file(path) for path in
-                                (Path(__file__), ROOT / "src/e2e/onset_trigger.py", args.base_config,
-                                 args.registry, args.archived_validation_matching)}}
-    if args.gate_config:
-        report["source_sha256"][str(args.gate_config.resolve())] = sha256_file(args.gate_config)
+              "source_sha256": bindings}
     write_json(args.output_dir / "comparison.json", to_builtin(report))
+    if (subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip() != execution_commit
+            or any(sha256_file(Path(path)) != sha for path, sha in bindings.items())):
+        raise ValueError("source/input drift; comparison remains incomplete")
+    write_json(args.output_dir / "completion_manifest.json", {
+        "status": "COMPLETE_DEVELOPMENT_ONLY", "execution_commit": execution_commit,
+        "test_inference_run": False,
+        "files": {str(path.relative_to(args.output_dir)): sha256_file(path)
+                  for path in args.output_dir.rglob("*") if path.is_file()},
+    })
     print(json.dumps({"status": report["status"], "gates": gates,
                       "metrics": {name: row["metrics"] for name, row in results.items()}}, sort_keys=True))
 

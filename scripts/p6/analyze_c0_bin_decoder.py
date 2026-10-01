@@ -4,6 +4,7 @@
 import argparse
 import json
 from pathlib import Path
+import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -12,12 +13,14 @@ sys.path.insert(0, str(ROOT))
 import numpy as np
 import pandas as pd
 
-from scripts.p6.analyze_c0_causal_development import paired_table, verify_completion
+from scripts.p6.analyze_c0_causal_development import (development_bindings, paired_table,
+                                                     verify_completion, verify_gt_identity, verify_target)
 from src.e2e.bin_trigger_decoder import evaluate_bin_threshold, select_bin_threshold
 from src.e2e.onset_trigger import OnsetDevelopmentState
 from src.e2e.protocol import load_config, sha256_file, write_json
 from src.e2e.system_trigger import evaluate_system_threshold, onset_density, system_score_frame, to_builtin
 from src.e2e.system_trigger_failure_audit import build_failure_ledger, stratified_summary
+from src.e2e.trigger_development import TriggerDevelopmentState
 
 
 def main():
@@ -35,6 +38,7 @@ def main():
     for directory in (baseline_dir, args.onset_run):
         verify_completion(directory)
     selection = json.loads((args.onset_run / "validation_selection.json").read_text())
+    verify_target(selection, "onset30", args.onset_run)
     if selection["protocol_id"] != config["protocol_id"]:
         raise ValueError("onset model protocol mismatch")
     base_path = ROOT / config["base_config"]
@@ -42,7 +46,10 @@ def main():
     if sha256_file(args.registry) != base["event_registry"]["sha256"]:
         raise ValueError("registry digest drift")
     state = OnsetDevelopmentState(base, args.data_root, args.registry)
+    baseline_state = TriggerDevelopmentState(base, args.data_root, args.registry)
     gt = state.gt_events("validation")
+    for directory in (baseline_dir, args.onset_run):
+        verify_gt_identity(pd.read_csv(directory / "validation_gt.csv"), gt)
     scores = pd.read_csv(args.onset_run / "validation_predictions.csv", float_precision="round_trip")
     dataset = state.build_dataset("validation")
     if (len(gt) != config["expected_cohort"]["validation_events"]
@@ -59,18 +66,25 @@ def main():
                baseline_dir / "completion_manifest.json", baseline_dir / "validation_predictions.csv",
                baseline_dir / "validation_selection.json")
     bindings = {str(path.resolve()): sha256_file(path) for path in sources}
+    for directory in (baseline_dir, args.onset_run):
+        bindings.update(development_bindings(directory))
+    execution_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     args.output_dir.mkdir(parents=True)
-    write_json(args.output_dir / "analysis_input_lock.json", {"source_sha256": bindings,
+    write_json(args.output_dir / "analysis_input_lock.json", {"execution_commit": execution_commit,
+               "source_sha256": bindings,
                "test_read": False, "candidate_rule": "one independent candidate per positive bin"})
     frame = system_score_frame("validation", scores.prediction_available_time, scores.system_trigger_score)
     fixed_threshold = float(selection["selected_validation_threshold"])
     best_threshold, candidate_count = select_bin_threshold(frame, gt)
     results, hits = {}, {}
     baseline_selection = json.loads((baseline_dir / "validation_selection.json").read_text())
+    verify_target(baseline_selection, "recent_onset60", baseline_dir)
     baseline_scores = pd.read_csv(baseline_dir / "validation_predictions.csv", float_precision="round_trip")
     if (not np.array_equal(baseline_scores.sample_index, dataset.sample_indices)
-            or not np.array_equal(baseline_scores.prediction_available_time, dataset.prediction_times())):
-        raise ValueError("baseline window/time mismatch")
+            or not np.array_equal(baseline_scores.prediction_available_time, dataset.prediction_times())
+            or not np.array_equal(baseline_scores.trigger_label,
+                                   baseline_state.labels["train"][baseline_scores.sample_index.to_numpy() + 9])):
+        raise ValueError("baseline window/time/label mismatch")
     baseline_frame = system_score_frame("validation", baseline_scores.prediction_available_time,
                                         baseline_scores.system_trigger_score)
     variants = (("baseline_merged", baseline_frame, float(baseline_selection["selected_validation_threshold"]), False),
@@ -121,16 +135,21 @@ def main():
                        "recall_gain": metrics["event_recall"] - baseline["event_recall"] >= margins["recall_gain"],
                        "f1_gain": metrics["event_f1"] - baseline["event_f1"] >= margins["f1_gain"],
                        "single_onset_recall_decline_limit": single["delta_recall"] >= -margins["single_onset_recall_decline_limit"]}
-    report = {"status": "DEVELOPMENT_ANALYSIS_COMPLETE", "test_read": False, "full_e2e_run": False,
+    report = {"status": "DEVELOPMENT_ANALYSIS_COMPLETE", "execution_commit": execution_commit,
+              "test_read": False, "full_e2e_run": False,
               "gt_denominator": len(gt), "results": results, "paired": pairs, "gates": gates,
+              "gate_margins": margins, "protocol_id": config["protocol_id"],
+              "model_completion_sha256": sha256_file(args.onset_run / "completion_manifest.json"),
               "threshold_candidate_count": candidate_count, "source_sha256": bindings,
               "controlled_contrast": "fixed threshold: only the decoder changes",
               "operating_point_contrast": "Validation-selected: decoder and its derived threshold; reused Validation"}
     write_json(args.output_dir / "decoder_comparison.json", to_builtin(report))
-    if any(sha256_file(Path(path)) != sha for path, sha in bindings.items()):
+    if (subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip() != execution_commit
+            or any(sha256_file(Path(path)) != sha for path, sha in bindings.items())):
         raise ValueError("source/input drift during analysis")
     write_json(args.output_dir / "completion_manifest.json", {
-        "status": "COMPLETE_DEVELOPMENT_ONLY", "test_inference_run": False,
+        "status": "COMPLETE_DEVELOPMENT_ONLY", "execution_commit": execution_commit,
+        "test_inference_run": False,
         "files": {str(path.relative_to(args.output_dir)): sha256_file(path)
                   for path in args.output_dir.rglob("*") if path.is_file()},
     })
