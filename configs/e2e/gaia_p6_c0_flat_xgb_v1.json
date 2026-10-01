@@ -1,0 +1,125 @@
+{
+  "schema_version": "p6_c0_trigger_v1",
+  "protocol_id": "P6-C0-FLAT-XGB-V1",
+  "base_config": "configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+  "data_root": "data/p5/v3_preprocessing_v2/ad",
+  "artifact_root": "artifacts/p5/v3_preprocessing_v2/ad",
+  "output_root": "experiments/p6/c0_flat_xgb/fixed-v1-seed42",
+  "seed": 42,
+  "task": {
+    "name": "System-level Event Trigger",
+    "outputs": [
+      "system trigger score",
+      "predicted event episode",
+      "detected t_hat"
+    ],
+    "forbidden_outputs": [
+      "root service",
+      "service ranking",
+      "10-service classification result"
+    ],
+    "stage2_rca_separate": true
+  },
+  "split_mode": "chronological_50_20_30",
+  "split": {
+    "fit_fraction": [
+      5,
+      10
+    ],
+    "validation_cumulative_fraction": [
+      7,
+      10
+    ],
+    "test_definition": "identical to the frozen P5 Test block [boundary_ms, absolute_end_ms)",
+    "random_split": false,
+    "purge_history_seconds": 300,
+    "purge_rule": "keep a window only if [t-history, t) lies inside the block owning t; keep a GT event as a metric case only if it is complete inside one block"
+  },
+  "trigger_label": {
+    "target": "recent_onset_trigger",
+    "positive_window_seconds": 60,
+    "long_event_ignore": true,
+    "service_specific_supervision": false,
+    "positive_rule": "0 <= prediction_available_time - gt_start_ms <= 60000",
+    "ignore_rule": "gt_start_ms + 60000 < prediction_available_time < gt_end_ms and not positive",
+    "negative_rule": "neither positive nor ignore",
+    "overlapping_events": "collapse to a single system-level positive",
+    "label_source": "every GT event inside the frozen metric detector timeline"
+  },
+  "model": {
+    "architecture": "XGBClassifier on independently flattened causal windows",
+    "feature_dimension": 16000,
+    "graph_learner": null,
+    "root_service_label_consumed": false,
+    "node_anomaly_label_consumed": false,
+    "loads_ada_mgad_checkpoint": false
+  },
+  "training": {
+    "fit_only": true,
+    "ignored_fit_rows_excluded": true,
+    "scale_pos_weight": "Fit negative bins / Fit positive bins",
+    "boosting_rounds": 200,
+    "early_stopping": false,
+    "validation_eval_set": false,
+    "hyperparameter_search": false
+  },
+  "threshold_selection": "validation_only_exact_unique_scores",
+  "threshold": {
+    "objective": "validation_event_f1",
+    "tie_break": "highest_threshold_among_equal_f1",
+    "checkpoint_tie_break": [
+      "one fixed 200-round model; no checkpoint selection"
+    ],
+    "test_used": false,
+    "frozen_after_selection": true
+  },
+  "matching_semantics": "causal_max_cardinality_minimum_delay",
+  "evaluation": {
+    "grid_seconds": 30,
+    "window_bins": 10,
+    "history_seconds": 300,
+    "tolerance_seconds": 60,
+    "prediction_time": "t_hat = prediction_available_time = target_bin_end",
+    "duration_strata_seconds": [
+      15,
+      30,
+      60,
+      300
+    ],
+    "gate": {
+      "precision": 0.9,
+      "recall": 0.6,
+      "f1": 0.72
+    },
+    "gate_kind": "pre-registered engineering acceptance margins, not statistical significance"
+  },
+  "historical_reference": {
+    "source": "P5 formal fused Ada-MGAD trigger (node-supervised)",
+    "precision": 0.9827,
+    "recall": 0.6399,
+    "f1": 0.7751,
+    "note": "historical reference only; different supervision target and split, not a controlled equal-protocol SOTA comparison; the historical batch-shared graph is retrospective and is not a valid causal online comparator"
+  },
+  "cohort_reference": {
+    "fit": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/scores/fit.csv",
+    "validation": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/gpu-control-v1-seed42/validation_predictions.csv"
+  },
+  "expected_cohort": {
+    "fit_events": 7443,
+    "validation_events": 2901
+  },
+  "xgb_python": "/home/zhangll24/.venvs/ada-rca-supervised-baselines/bin/python",
+  "expected_xgboost_version": "2.1.4",
+  "xgb_parameters": {
+    "objective": "binary:logistic",
+    "n_estimators": 200,
+    "max_depth": 3,
+    "learning_rate": 0.05,
+    "subsample": 1.0,
+    "colsample_bytree": 1.0,
+    "reg_lambda": 1.0,
+    "random_state": 42,
+    "n_jobs": 1,
+    "tree_method": "hist"
+  }
+}
