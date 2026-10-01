@@ -2,7 +2,17 @@
 
 > 本文件是给新的 code-agent CLI 的单一入口。它只保留当前有效的背景、状态、约束和下一步；完整审计与实现细节继续放在现有文档中，不在这里复制。
 
-更新时间：2026-10-01（Asia/Shanghai；本独立全流程研究分支）
+更新时间：2026-10-01（Asia/Shanghai；独立冻结RCA Test比较）
+
+**本工作树最新用户授权：**`experiment/p6-frozen-rca-test-review`完成19个已有
+冻结detector臂与原/Train固定回溯XGB的38组scorer transfer，并对no_metric/
+no_all_magnitude两个Train前推正向消融各固定拟合一次Train模型后做旧episode Test。
+协议见[P6_FROZEN_RCA_TEST_REVIEW_PROTOCOL.md](P6_FROZEN_RCA_TEST_REVIEW_PROTOCOL.md)。
+本树从c0e2e归档HEAD分出，不运行新TCN Fit-OOS或新native RCA；下方旧Freeze/
+Test关闭约束属于历史开发协议，不取消用户对本次冻结观察的明确授权。源/权重/
+阈值/feature masks先冻结，全部排名先锁，再GT join；不根据Test选择配置。
+实际完成状态须以独立新run及锁/manifest为准，本文不预先宣称结果。
+
 
 **最新稳定性决定优先：**三seed复制已完成并封存，`stability-v1`为
 `STABILITY_NO_GO`。seed42/17/2026的fixed-bin P/R/F1分别为
