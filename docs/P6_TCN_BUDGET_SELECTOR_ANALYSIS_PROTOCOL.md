@@ -4,7 +4,7 @@
 
 - Mode: experiment-agent run/validate；development-only。
 - Scope: 三seed冻结Train/Validation轨迹；不读取Test数组、分数或指标。
-- Budget source: `fd25bff`（同一实测轨迹前缀对照；f987a1b历史复现失败、4c1abff性能回退取消均保留），独立`c0budget`树。
+- Budget source: `fd25bff`（同一实测轨迹前缀对照；f987a1b历史复现失败、4c1abff性能回退取消均保留），独立`c0budgetprefix`树；早先两个诊断位于`c0budget`树。
 - 本协议在完整预算结果可用前冻结；预算源码/HEAD保持不变。
 
 ## 顺序与对照
