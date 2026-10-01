@@ -4,6 +4,12 @@
 
 更新时间：2026-10-01（Asia/Shanghai；本独立全流程研究分支）
 
+**本前缀预算工作树当前状态（2026-10-02）：** `experiment/p6-tcn-budget-prefix`，
+保留原backend算法，三个seed分别跑30epoch，以同一轨迹patience8前缀作受控预算对照。
+不声称精确复现旧run，也不声称两个独立训练arm。原确定性配对由于性能回退已取消，
+该诊断目录保留为INCOMPLETE。详见 [当前协议](P6_COMMON_TRAJECTORY_BUDGET_PROTOCOL.md)。
+Test冻结，完整结果以新run manifest为准；尚未执行native Fit-OOS RCA。
+
 **最新复现修正（2026-10-02）：**`f987a1b`的三个budget run在epoch0历史复现FAIL后停止，
 保持INCOMPLETE；同seed真实Fit mini-probe确认默认GPU训练存在微小非确定性。
 确定性probe逐步权重/分数精确一致。新的control(patience8)/budget(patience30)配对

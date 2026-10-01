@@ -25,6 +25,7 @@ from src.e2e.protocol import load_config, sha256_file, write_json
 from src.e2e.system_trigger import to_builtin
 from src.e2e.system_trigger_tcn import TCN_SPEC, WindowCausalTCNTrigger
 from src.e2e.training_budget_audit import EpochAudit, padded_fit_counts
+from src.e2e.budget_prefix_control import prefix_control
 
 
 def verify_observer_only(current_path, frozen_path, frozen_sha):
@@ -59,7 +60,7 @@ def main():
     parser.add_argument("action", choices=("check", "train"))
     parser.add_argument("--config", required=True, type=Path)
     parser.add_argument("--seed", required=True, type=int, choices=(42, 17, 2026))
-    parser.add_argument("--arm", choices=("legacy_replay", "control", "budget"), default="legacy_replay")
+    parser.add_argument("--arm", choices=("legacy_replay", "control", "budget", "prefix_budget"), default="legacy_replay")
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--gpu", action="store_true")
     args = parser.parse_args()
@@ -70,13 +71,18 @@ def main():
     if args.gpu and not torch.cuda.is_available():
         raise RuntimeError("requested GPU is unavailable")
     config = json.loads(args.config.read_text())
-    if args.arm != "legacy_replay":
+    if args.arm in ("control", "budget"):
         if (config.get("paired_budget", {}).get("deterministic_algorithms") is not True
                 or os.environ.get("CUBLAS_WORKSPACE_CONFIG") != ":4096:8"):
             raise ValueError("matched deterministic protocol/workspace missing")
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
         torch.use_deterministic_algorithms(True)
+    if args.arm == "prefix_budget":
+        if config.get("prefix_control", {}).get("patience") != 8:
+            raise ValueError("common-trajectory prefix protocol missing")
+        if torch.backends.cudnn.deterministic or torch.backends.cudnn.benchmark or torch.are_deterministic_algorithms_enabled():
+            raise ValueError("original backend defaults changed")
     if config["tcn_spec"] != TCN_SPEC or config["training"]["patience"] != 30:
         raise ValueError("budget/TCN specification drift")
     old_run = Path(config["budget"]["old_runs"][str(args.seed)])
@@ -131,8 +137,11 @@ def main():
              ROOT / "src/e2e/training_budget_audit.py", ROOT / "src/e2e/bin_trigger_decoder.py",
              ROOT / "docs/P6_TRAIN_BUDGET_DIAGNOSTIC_PLAN_20261002.md",
              ROOT / "docs/GAIA_P5_CURRENT_CONTEXT.md"]
-    if args.arm != "legacy_replay":
+    if args.arm in ("control", "budget"):
         paths.append(ROOT / "docs/P6_DETERMINISTIC_PAIRED_BUDGET_PROTOCOL.md")
+    if args.arm == "prefix_budget":
+        paths += [ROOT / "docs/P6_COMMON_TRAJECTORY_BUDGET_PROTOCOL.md",
+                  ROOT / "src/e2e/budget_prefix_control.py"]
     paths += [old_run / name for name in ("completion_manifest.json", "development_input_lock.json",
                                          "training_log.json", "validation_selection.json", "validation_predictions.csv")]
     paths += [Path(old_selection["checkpoint"]["path"])]
@@ -151,6 +160,7 @@ def main():
         "protocol_id": config["protocol_id"], "effective_seed": args.seed,
         "changes": ["patience:8->30"] if args.arm != "control" else [], "observer_ast_gate": True,
         "arm": args.arm, "historical_replay_required": args.arm == "legacy_replay",
+        "control_kind": "same realised trajectory prefix" if args.arm == "prefix_budget" else "separate run",
         "test_arrays_read": False, "test_trigger_labels_built": False,
         "registry_interval_read": "global interval/domain routing only; Test annotations excluded",
         "preprocessing_grade": "frozen 70 percent Train includes Detector-Validation",
@@ -184,6 +194,17 @@ def main():
                        "model_class": "WindowCausalTCNTrigger", "tcn_spec": TCN_SPEC,
                        "effective_seed": args.seed, "arm": args.arm})
         write_json(args.output_dir / "validation_selection.json", to_builtin(result))
+        if args.arm == "prefix_budget":
+            control = prefix_control(observer.records)
+            folder = args.output_dir / "epochs" / "epoch-{:02d}".format(control["selected_epoch"])
+            control.update({"execution_commit": execution_commit, "protocol_id": config["protocol_id"],
+                            "model_args": model_args, "training": dict(config["training"], patience=8),
+                            "effective_seed": args.seed, "arm": "prefix_control", "development_only": True,
+                            "checkpoint": {"path": str((folder / "model_state.pt").resolve()),
+                                           "sha256": sha256_file(folder / "model_state.pt")},
+                            "validation_outputs": {"path": str((folder / "validation_outputs.npz").resolve()),
+                                                   "sha256": sha256_file(folder / "validation_outputs.npz")}})
+            write_json(args.output_dir / "prefix_control_selection.json", to_builtin(control))
         device = torch.device("cuda" if args.gpu else "cpu")
         weights = torch.load(result["checkpoint"]["path"], map_location=device)
         write_json(args.output_dir / "real_window_causality_gate.json",
