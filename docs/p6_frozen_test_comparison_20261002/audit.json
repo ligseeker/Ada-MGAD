@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "independent_detector_integer_replays": 19,
+  "independent_rca_ranking_metric_ledger_replays": 40,
+  "full_gt": 5787,
+  "source_receipts": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001/scope_lock.json": "094ae888fa59df1e794140fd61b9d481cce4574dd8567fec3a1222e880344819",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001/global_prediction_lock.json": "3e8a9a8e94763ad7be25491a9e53339cc5e18da4b4e1ac86a8dca9250f9e9116",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001/evaluation/completion_manifest.json": "62559bd7d73775185a50af64fe445fb6f2c8e810dcb8ebeb7e418628edd3a7c2",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-rcatestreview/experiments/p6/frozen_rca_test_review/frozen-candidates-v1-20261002/scope_lock.json": "73314227e8e699893c0c8bda9505ae77fcf16c0259b69a19fc2795487e1734a8",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-rcatestreview/experiments/p6/frozen_rca_test_review/frozen-candidates-v1-20261002/predictions/global_prediction_lock.json": "4bb32d1a229263e1b9e07297ddf15035b189dff851625e8de5afc54c6e0a2608",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-rcatestreview/experiments/p6/frozen_rca_test_review/frozen-candidates-v1-20261002/evaluation/completion_manifest.json": "f251475fa04be0b24cacb14aad7682fe329bed204ba5ab618b54b1fc0c317b78",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-rcatestreview/experiments/p6/frozen_detector_test_audit/frozen-candidates-v1-20261002/audit.json": "8f526f3b6a25bbc993d6b0ca5eb9c81101afe19c78a79a0f316a88861b134e3b",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-rcatestreview/configs/e2e/gaia_p6_frozen_rca_test_review_v1.json": "0e5be6ffa1018bf62b9a9648141089c90be38db984fb3a4036ab0d50eaf5275d"
+  },
+  "train_log_receipts": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onsettcn/experiments/p6/c0_onset_tcn/tcn-v1-seed42/training_log.json": "8fcf7bd58a8a03d7b456a8ad7be56b4135094970a0a560ecbba263ab040f1838",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onsettcn/experiments/p6/c0_onset_tcn/tcn-v1-seed42/validation_selection.json": "9a850ec7e5959c3dc492730264804d89899471c71911dd557ed8ecc06566e979",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed17-v1/training_log.json": "46d3c8a0663bdf7c7f9043ef2623e77d23a86657971e2e1ba9cf16b98b240618",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed17-v1/validation_selection.json": "12d8c82689e030ebcac8ad6e8e1ab4c942055c55de3734c74236acc81a86a076",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed2026-v1/training_log.json": "635f8d9ad0ed9133256c6221a48c5ee544057db46765d24edbba0161fc69e8d9",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed2026-v1/validation_selection.json": "1bda8d4d29574b3f8f28412f63f5c020ba0db5ebf5fc5b4d7a7ea5cfe6a28706"
+  },
+  "historical_receipts": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/evaluation/c1_results.json": "d94b67c6631229c8994b491156d616a29062537fda6955bb9a44908609786b6c",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/evaluation/c2_full_diagnosis.json": "3b6635e497916cc0be7ba06f466772d1d884544d5819fa519714e3b1e2157beb",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-xgb/experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/evaluation/c1_paired_results.json": "1601223246380736d98fbdd96bafbe87b7a41e8786874870647ead037c38052e",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-xgb/experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/evaluation/c2_full_diagnosis.json": "ed31ee5dc67605d122bf2d9eaf98bafe8ee01a8a3254ba1f3fb59d1c9583720d",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate_eval_correction/c1-anchor-backdate-eval-v1/c1_paired_results.json": "062aebf6ff13a8ea623695bdd3a1a56c7a492ae2ae6e1b720f550e5a21204028",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate_eval_correction/c1-anchor-backdate-eval-v1/c2_full_diagnosis.json": "3544ead1d290f252f06182b3a768f677b0f1c8ff2bb392f738895bfb6d6e4c07",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/evaluation/oracle_a_diagnostic.json": "d1838b5efefa11087fbbb6ecc9949740d6fbb0ece02316ec243e06cb1e4dc1ae",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/rca_metrics.json": "11023f87d74d2651a69bf949e20c0883080424a3783027ccad2d5e706ee54028",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/rca/e2e_diagnosis_metrics.json": "33acd44ad105be384f88a31e8c05b2ca107990c9f5f5e2d9bf190dc1bb10c1c7",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/matching.csv": "5c3aa3085f03c2061af4e89e06f6a2f138e0bf69395e2deba438a61a643d8db4",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/cases.csv": "83ee698981272bfb1f89d1c2d9b1c2c622b63c419a08c251abde2bf7965821dd"
+  },
+  "detector_execution_commit": "1b0efe92e43b81ded698239387571de73f6fe185",
+  "rca_execution_commit": "e4b80ef2067d5e74c5c2b8343faaead4894da3f2",
+  "report_generator_sha256": "e09f42055e139746312fd466807d19dd09f53bddfd8c7f88b2fb26965431e0a0",
+  "reused_test": true,
+  "test_selection_performed": false
+}

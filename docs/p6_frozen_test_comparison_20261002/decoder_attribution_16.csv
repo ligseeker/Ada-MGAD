@@ -1,0 +1,17 @@
+model,scorer,baseline,candidate,common_matched,newly_matched,lost_matches,new_match_top1,lost_match_top1,common_top1_gain,common_top1_loss,total_top1_change
+onset,original,onset_merged,onset_bin,4080,377,0,250,0,4,5,249
+onset,original,onset_merged,onset_aux,4080,485,0,321,0,5,7,319
+onset,backdate,onset_merged,onset_bin,4080,377,0,337,0,16,1,352
+onset,backdate,onset_merged,onset_aux,4080,485,0,422,0,19,1,440
+tcn42,original,tcn42_merged,tcn42_bin,4178,916,0,637,0,28,21,644
+tcn42,original,tcn42_merged,tcn42_aux,4178,943,0,652,0,28,22,658
+tcn42,backdate,tcn42_merged,tcn42_bin,4178,916,0,821,0,63,21,863
+tcn42,backdate,tcn42_merged,tcn42_aux,4178,943,0,843,0,64,21,886
+tcn17,original,tcn17_merged,tcn17_bin,4221,967,0,665,0,30,23,672
+tcn17,original,tcn17_merged,tcn17_aux,4185,858,36,592,25,26,19,574
+tcn17,backdate,tcn17_merged,tcn17_bin,4221,967,0,868,0,68,24,912
+tcn17,backdate,tcn17_merged,tcn17_aux,4185,858,36,774,25,52,18,783
+tcn2026,original,tcn2026_merged,tcn2026_bin,4088,740,0,509,0,17,12,514
+tcn2026,original,tcn2026_merged,tcn2026_aux,4088,961,0,661,0,25,19,667
+tcn2026,backdate,tcn2026_merged,tcn2026_bin,4088,740,0,672,0,43,8,707
+tcn2026,backdate,tcn2026_merged,tcn2026_aux,4088,961,0,856,0,62,12,906

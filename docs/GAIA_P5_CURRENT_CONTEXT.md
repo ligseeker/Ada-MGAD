@@ -2,7 +2,20 @@
 
 > 本文件是给新的 code-agent CLI 的单一入口。它只保留当前有效的背景、状态、约束和下一步；完整审计与实现细节继续放在现有文档中，不在这里复制。
 
-更新时间：2026-10-01（Asia/Shanghai；独立冻结RCA Test比较）
+更新时间：2026-10-02（Asia/Shanghai；独立报告工作树）
+
+**本报告工作树最新状态：**`analysis/p6-test-comparison-20261002`归档已完成的
+10个模型/19个detector臂、38组冻结XGB scorer transfer和2个Train固定拟合消融。
+detector执行HEAD=`1b0efe92e43b81ded698239387571de73f6fe185`，RCA执行HEAD=
+`e4b80ef2067d5e74c5c2b8343faaead4894da3f2`；两个执行进程均正常结束。
+独立19套检测整数和40套ranking/指标/failure重放均PASS，完整GT=5787。
+主TCN bin三seed Test event F1=.934936/.937816/.899153；接入冻结回溯XGB后
+Full E2E F1@1=.839497/.842191/.816463。原Validation STABILITY_NO_GO保留，
+当前Test冻结，不选择best seed。详见
+[完整A–G复盘](P6_FROZEN_TEST_COMPARISON_RESULTS_20261002.md)。
+当前没有启动新detector训练或新preprocessing；后续仅有可审查的
+[30epoch训练预算诊断方案](P6_TRAIN_BUDGET_DIAGNOSTIC_PLAN_20261002.md)，尚未执行。
+本树只写报告；实际run留在相邻testreview/rcatestreview工作树，不改变它们的HEAD。
 
 **本工作树最新用户授权：**`experiment/p6-frozen-rca-test-review`完成19个已有
 冻结detector臂与原/Train固定回溯XGB的38组scorer transfer，并对no_metric/

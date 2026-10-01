@@ -1,0 +1,6441 @@
+{
+  "native_baseline_replay": {
+    "complete_gt": 5787,
+    "e2e": {
+      "@1": {
+        "f1": 0.6185381461853815,
+        "fn": 2694,
+        "fp": 1121,
+        "precision": 0.7339819648789748,
+        "recall": 0.5344738206324521,
+        "tp": 3093
+      },
+      "@3": {
+        "f1": 0.8377162283771623,
+        "fn": 1598,
+        "fp": 25,
+        "precision": 0.9940673943996203,
+        "recall": 0.7238638327285295,
+        "tp": 4189
+      },
+      "@5": {
+        "f1": 0.8387161283871613,
+        "fn": 1593,
+        "fp": 20,
+        "precision": 0.9952539155196962,
+        "recall": 0.7247278382581649,
+        "tp": 4194
+      }
+    },
+    "failure": {
+      "EVENT_FALSE_ALARM": 16,
+      "EVENT_MISSED": 1589,
+      "RCA_CONTEXT_INVALID": 1,
+      "ROOT_OUTSIDE_TOP1": 1096,
+      "ROOT_OUTSIDE_TOP3": 5,
+      "ROOT_OUTSIDE_TOP5": 3,
+      "SUCCESS_TOP1": 3093
+    },
+    "illegal_matched": 1,
+    "legal_matched": 4197,
+    "matched": 4198,
+    "matched_rca": {
+      "AC@1": 0.7369549678341673,
+      "AC@3": 0.9980938765785085,
+      "AC@5": 0.9992852037169406,
+      "MRR": 0.8664561988722103,
+      "n": 4197
+    },
+    "predictions": 4214,
+    "strata": [
+      {
+        "dimension": "gt_service",
+        "group": "dbservice1",
+        "n": 33,
+        "recall_at_1": 0.0
+      },
+      {
+        "dimension": "gt_service",
+        "group": "dbservice2",
+        "n": 32,
+        "recall_at_1": 0.0
+      },
+      {
+        "dimension": "gt_service",
+        "group": "logservice1",
+        "n": 18,
+        "recall_at_1": 0.0
+      },
+      {
+        "dimension": "gt_service",
+        "group": "logservice2",
+        "n": 20,
+        "recall_at_1": 0.0
+      },
+      {
+        "dimension": "gt_service",
+        "group": "mobservice1",
+        "n": 2799,
+        "recall_at_1": 0.5448374419435512
+      },
+      {
+        "dimension": "gt_service",
+        "group": "mobservice2",
+        "n": 2787,
+        "recall_at_1": 0.5626121277359167
+      },
+      {
+        "dimension": "gt_service",
+        "group": "redisservice1",
+        "n": 20,
+        "recall_at_1": 0.0
+      },
+      {
+        "dimension": "gt_service",
+        "group": "redisservice2",
+        "n": 18,
+        "recall_at_1": 0.0
+      },
+      {
+        "dimension": "gt_service",
+        "group": "webservice1",
+        "n": 30,
+        "recall_at_1": 0.0
+      },
+      {
+        "dimension": "gt_service",
+        "group": "webservice2",
+        "n": 30,
+        "recall_at_1": 0.0
+      },
+      {
+        "dimension": "fault_type",
+        "group": "access_permission_denied",
+        "n": 5,
+        "recall_at_1": 0.0
+      },
+      {
+        "dimension": "fault_type",
+        "group": "cpu_anomalies",
+        "n": 12,
+        "recall_at_1": 0.0
+      },
+      {
+        "dimension": "fault_type",
+        "group": "file_moving",
+        "n": 16,
+        "recall_at_1": 0.0
+      },
+      {
+        "dimension": "fault_type",
+        "group": "login_failure",
+        "n": 5546,
+        "recall_at_1": 0.5569780021637216
+      },
+      {
+        "dimension": "fault_type",
+        "group": "memory_anomalies",
+        "n": 204,
+        "recall_at_1": 0.0196078431372549
+      },
+      {
+        "dimension": "fault_type",
+        "group": "normal_memory_freed",
+        "n": 4,
+        "recall_at_1": 0.0
+      }
+    ]
+  },
+  "prediction_lock_sha256": "4bb32d1a229263e1b9e07297ddf15035b189dff851625e8de5afc54c6e0a2608",
+  "results": {
+    "causal_merged__backdate": {
+      "arm": {
+        "detector_arm": "causal_merged",
+        "id": "causal_merged__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.7406886858749122,
+          "fn": 2098,
+          "fp": 485,
+          "precision": 0.8838045040728318,
+          "recall": 0.6374632797649905,
+          "tp": 3689
+        },
+        "@3": {
+          "f1": 0.8322457584579861,
+          "fn": 1642,
+          "fp": 29,
+          "precision": 0.9930522280785817,
+          "recall": 0.7162605840677381,
+          "tp": 4145
+        },
+        "@5": {
+          "f1": 0.8326473245658067,
+          "fn": 1640,
+          "fp": 27,
+          "precision": 0.9935313847628174,
+          "recall": 0.7166061862795922,
+          "tp": 4147
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 23,
+        "EVENT_MISSED": 1636,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 456,
+        "ROOT_OUTSIDE_TOP3": 2,
+        "ROOT_OUTSIDE_TOP5": 3,
+        "SUCCESS_TOP1": 3689
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4150,
+      "matched": 4151,
+      "matched_rca": {
+        "AC@1": 0.8889156626506024,
+        "AC@3": 0.9987951807228915,
+        "AC@5": 0.999277108433735,
+        "MRR": 0.9432275769745648,
+        "n": 4150
+      },
+      "paired_common_legal": {
+        "backdate_only": 860,
+        "both": 2829,
+        "delta_ac1": 0.1491566265060241,
+        "n": 4150,
+        "neither": 220,
+        "original_only": 241
+      },
+      "predictions": 4174,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.03125
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.6555912826009289
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6648726228919986
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6644428416877028
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "causal_merged__original": {
+      "arm": {
+        "detector_arm": "causal_merged",
+        "id": "causal_merged__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6164039755044675,
+          "fn": 2717,
+          "fp": 1104,
+          "precision": 0.7355055103018687,
+          "recall": 0.5304993951961292,
+          "tp": 3070
+        },
+        "@3": {
+          "f1": 0.8316434092962554,
+          "fn": 1645,
+          "fp": 32,
+          "precision": 0.9923334930522281,
+          "recall": 0.7157421807499568,
+          "tp": 4142
+        },
+        "@5": {
+          "f1": 0.8324465415118963,
+          "fn": 1641,
+          "fp": 28,
+          "precision": 0.9932918064206996,
+          "recall": 0.7164333851736651,
+          "tp": 4146
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 23,
+        "EVENT_MISSED": 1636,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1072,
+        "ROOT_OUTSIDE_TOP3": 4,
+        "ROOT_OUTSIDE_TOP5": 4,
+        "SUCCESS_TOP1": 3070
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4150,
+      "matched": 4151,
+      "matched_rca": {
+        "AC@1": 0.7397590361445783,
+        "AC@3": 0.9980722891566265,
+        "AC@5": 0.9990361445783132,
+        "MRR": 0.8678898450946644,
+        "n": 4150
+      },
+      "predictions": 4174,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5355484101464809
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.563329745245784
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0625
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5526505589614137
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "control_merged__backdate": {
+      "arm": {
+        "detector_arm": "control_merged",
+        "id": "control_merged__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.7471758472458262,
+          "fn": 2050,
+          "fp": 479,
+          "precision": 0.8863851992409867,
+          "recall": 0.6457577328494902,
+          "tp": 3737
+        },
+        "@3": {
+          "f1": 0.841147655703289,
+          "fn": 1580,
+          "fp": 9,
+          "precision": 0.997865275142315,
+          "recall": 0.7269742526352169,
+          "tp": 4207
+        },
+        "@5": {
+          "f1": 0.8415475357392782,
+          "fn": 1578,
+          "fp": 7,
+          "precision": 0.9983396584440227,
+          "recall": 0.7273198548470711,
+          "tp": 4209
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 2,
+        "EVENT_MISSED": 1573,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 470,
+        "ROOT_OUTSIDE_TOP3": 2,
+        "ROOT_OUTSIDE_TOP5": 4,
+        "SUCCESS_TOP1": 3737
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4213,
+      "matched": 4214,
+      "matched_rca": {
+        "AC@1": 0.8870163778779967,
+        "AC@3": 0.9985758366959412,
+        "AC@5": 0.9990505577972941,
+        "MRR": 0.9422013872405517,
+        "n": 4213
+      },
+      "paired_common_legal": {
+        "backdate_only": 861,
+        "both": 2876,
+        "delta_ac1": 0.14573937811535723,
+        "n": 4213,
+        "neither": 229,
+        "original_only": 247
+      },
+      "predictions": 4216,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.03125
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.6659521257591997
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6713311804808038
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.2
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0625
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6727371078254598
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "control_merged__original": {
+      "arm": {
+        "detector_arm": "control_merged",
+        "id": "control_merged__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6244126761971408,
+          "fn": 2664,
+          "fp": 1093,
+          "precision": 0.7407495256166983,
+          "recall": 0.5396578538102644,
+          "tp": 3123
+        },
+        "@3": {
+          "f1": 0.8403478956313106,
+          "fn": 1584,
+          "fp": 13,
+          "precision": 0.9969165085388995,
+          "recall": 0.7262830482115086,
+          "tp": 4203
+        },
+        "@5": {
+          "f1": 0.8415475357392782,
+          "fn": 1578,
+          "fp": 7,
+          "precision": 0.9983396584440227,
+          "recall": 0.7273198548470711,
+          "tp": 4209
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 2,
+        "EVENT_MISSED": 1573,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1080,
+        "ROOT_OUTSIDE_TOP3": 6,
+        "ROOT_OUTSIDE_TOP5": 4,
+        "SUCCESS_TOP1": 3123
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4213,
+      "matched": 4214,
+      "matched_rca": {
+        "AC@1": 0.7412769997626395,
+        "AC@3": 0.9976263944932352,
+        "AC@5": 0.9990505577972941,
+        "MRR": 0.8685994597221752,
+        "n": 4213
+      },
+      "predictions": 4216,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5469810646659521
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.57086472909939
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0625
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5620266858997476
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.024509803921568627
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "flat_merged__backdate": {
+      "arm": {
+        "detector_arm": "flat_merged",
+        "id": "flat_merged__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.7422016502314349,
+          "fn": 2099,
+          "fp": 463,
+          "precision": 0.8884606119007468,
+          "recall": 0.6372904786590634,
+          "tp": 3688
+        },
+        "@3": {
+          "f1": 0.8337693700945864,
+          "fn": 1644,
+          "fp": 8,
+          "precision": 0.9980727535533607,
+          "recall": 0.7159149818558839,
+          "tp": 4143
+        },
+        "@5": {
+          "f1": 0.8341718655665123,
+          "fn": 1642,
+          "fp": 6,
+          "precision": 0.9985545651650205,
+          "recall": 0.7162605840677381,
+          "tp": 4145
+        }
+      },
+      "failure": {
+        "EVENT_MISSED": 1636,
+        "RCA_CONTEXT_INVALID": 2,
+        "ROOT_OUTSIDE_TOP1": 455,
+        "ROOT_OUTSIDE_TOP3": 2,
+        "ROOT_OUTSIDE_TOP5": 4,
+        "SUCCESS_TOP1": 3688
+      },
+      "illegal_matched": 2,
+      "legal_matched": 4149,
+      "matched": 4151,
+      "matched_rca": {
+        "AC@1": 0.8888888888888888,
+        "AC@3": 0.9985538684020245,
+        "AC@5": 0.9990359122680164,
+        "MRR": 0.9431978254465601,
+        "n": 4149
+      },
+      "paired_common_legal": {
+        "backdate_only": 843,
+        "both": 2845,
+        "delta_ac1": 0.1455772475295252,
+        "n": 4149,
+        "neither": 222,
+        "original_only": 239
+      },
+      "predictions": 4151,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.6591639871382636
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6612845353426624
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6642625315542734
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "flat_merged__original": {
+      "arm": {
+        "detector_arm": "flat_merged",
+        "id": "flat_merged__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6208492654457637,
+          "fn": 2702,
+          "fp": 1066,
+          "precision": 0.7431944109853047,
+          "recall": 0.5330914117850354,
+          "tp": 3085
+        },
+        "@3": {
+          "f1": 0.8337693700945864,
+          "fn": 1644,
+          "fp": 8,
+          "precision": 0.9980727535533607,
+          "recall": 0.7159149818558839,
+          "tp": 4143
+        },
+        "@5": {
+          "f1": 0.8347756087744013,
+          "fn": 1639,
+          "fp": 3,
+          "precision": 0.9992772825825103,
+          "recall": 0.7167789873855193,
+          "tp": 4148
+        }
+      },
+      "failure": {
+        "EVENT_MISSED": 1636,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1058,
+        "ROOT_OUTSIDE_TOP3": 5,
+        "ROOT_OUTSIDE_TOP5": 2,
+        "SUCCESS_TOP1": 3085
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4150,
+      "matched": 4151,
+      "matched_rca": {
+        "AC@1": 0.7433734939759036,
+        "AC@3": 0.9983132530120482,
+        "AC@5": 0.9995180722891567,
+        "MRR": 0.8698433734939759,
+        "n": 4150
+      },
+      "predictions": 4151,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5394783851375491
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.5651237890204521
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5553552109628561
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.024509803921568627
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "legacy_merged__backdate": {
+      "arm": {
+        "detector_arm": "legacy_merged",
+        "id": "legacy_merged__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.7469253074692531,
+          "fn": 2052,
+          "fp": 479,
+          "precision": 0.8863312766967252,
+          "recall": 0.645412130637636,
+          "tp": 3735
+        },
+        "@3": {
+          "f1": 0.8381161883811619,
+          "fn": 1596,
+          "fp": 23,
+          "precision": 0.9945420028476507,
+          "recall": 0.7242094349403836,
+          "tp": 4191
+        },
+        "@5": {
+          "f1": 0.8385161483851615,
+          "fn": 1594,
+          "fp": 21,
+          "precision": 0.9950166112956811,
+          "recall": 0.7245550371522378,
+          "tp": 4193
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 16,
+        "EVENT_MISSED": 1589,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 456,
+        "ROOT_OUTSIDE_TOP3": 2,
+        "ROOT_OUTSIDE_TOP5": 4,
+        "SUCCESS_TOP1": 3735
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4197,
+      "matched": 4198,
+      "matched_rca": {
+        "AC@1": 0.8899213724088635,
+        "AC@3": 0.9985704074338814,
+        "AC@5": 0.9990469382892543,
+        "MRR": 0.9437283244645646,
+        "n": 4197
+      },
+      "paired_common_legal": {
+        "backdate_only": 880,
+        "both": 2855,
+        "delta_ac1": 0.1529664045746962,
+        "n": 4197,
+        "neither": 224,
+        "original_only": 238
+      },
+      "predictions": 4214,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.6673812075741337
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6698959454610692
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6729174179588893
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.014705882352941176
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "legacy_merged__original": {
+      "arm": {
+        "detector_arm": "legacy_merged",
+        "id": "legacy_merged__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6185381461853815,
+          "fn": 2694,
+          "fp": 1121,
+          "precision": 0.7339819648789748,
+          "recall": 0.5344738206324521,
+          "tp": 3093
+        },
+        "@3": {
+          "f1": 0.8377162283771623,
+          "fn": 1598,
+          "fp": 25,
+          "precision": 0.9940673943996203,
+          "recall": 0.7238638327285295,
+          "tp": 4189
+        },
+        "@5": {
+          "f1": 0.8387161283871613,
+          "fn": 1593,
+          "fp": 20,
+          "precision": 0.9952539155196962,
+          "recall": 0.7247278382581649,
+          "tp": 4194
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 16,
+        "EVENT_MISSED": 1589,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1096,
+        "ROOT_OUTSIDE_TOP3": 5,
+        "ROOT_OUTSIDE_TOP5": 3,
+        "SUCCESS_TOP1": 3093
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4197,
+      "matched": 4198,
+      "matched_rca": {
+        "AC@1": 0.7369549678341673,
+        "AC@3": 0.9980938765785085,
+        "AC@5": 0.9992852037169406,
+        "MRR": 0.8664561988722103,
+        "n": 4197
+      },
+      "predictions": 4214,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5448374419435512
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.5626121277359167
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5569780021637216
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "legacy_rise__backdate": {
+      "arm": {
+        "detector_arm": "legacy_rise",
+        "id": "legacy_rise__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.7697413372376769,
+          "fn": 1844,
+          "fp": 515,
+          "precision": 0.8844773441004935,
+          "recall": 0.6813547606704683,
+          "tp": 3943
+        },
+        "@3": {
+          "f1": 0.8620790629575402,
+          "fn": 1371,
+          "fp": 42,
+          "precision": 0.990578734858681,
+          "recall": 0.7630896837739761,
+          "tp": 4416
+        },
+        "@5": {
+          "f1": 0.8624694973157638,
+          "fn": 1369,
+          "fp": 40,
+          "precision": 0.9910273665320771,
+          "recall": 0.7634352859858303,
+          "tp": 4418
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 35,
+        "EVENT_MISSED": 1364,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 473,
+        "ROOT_OUTSIDE_TOP3": 2,
+        "ROOT_OUTSIDE_TOP5": 4,
+        "SUCCESS_TOP1": 3943
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4422,
+      "matched": 4423,
+      "matched_rca": {
+        "AC@1": 0.891677973767526,
+        "AC@3": 0.9986431478968792,
+        "AC@5": 0.9990954319312528,
+        "MRR": 0.9446316397808934,
+        "n": 4422
+      },
+      "paired_common_legal": {
+        "backdate_only": 937,
+        "both": 3006,
+        "delta_ac1": 0.1558118498417006,
+        "n": 4422,
+        "neither": 231,
+        "original_only": 248
+      },
+      "predictions": 4458,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.7077527688460165
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.7039827771797632
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.7104219257122251
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.014705882352941176
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "legacy_rise__original": {
+      "arm": {
+        "detector_arm": "legacy_rise",
+        "id": "legacy_rise__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.635236700829673,
+          "fn": 2533,
+          "fp": 1204,
+          "precision": 0.7299237326155227,
+          "recall": 0.5622947986867116,
+          "tp": 3254
+        },
+        "@3": {
+          "f1": 0.8616886285993167,
+          "fn": 1373,
+          "fp": 44,
+          "precision": 0.9901301031852848,
+          "recall": 0.762744081562122,
+          "tp": 4414
+        },
+        "@5": {
+          "f1": 0.8626647144948756,
+          "fn": 1368,
+          "fp": 39,
+          "precision": 0.9912516823687753,
+          "recall": 0.7636080870917574,
+          "tp": 4419
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 35,
+        "EVENT_MISSED": 1364,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1160,
+        "ROOT_OUTSIDE_TOP3": 5,
+        "ROOT_OUTSIDE_TOP5": 3,
+        "SUCCESS_TOP1": 3254
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4422,
+      "matched": 4423,
+      "matched_rca": {
+        "AC@1": 0.7358661239258254,
+        "AC@3": 0.9981908638625057,
+        "AC@5": 0.9993215739484396,
+        "MRR": 0.865976933514247,
+        "n": 4422
+      },
+      "predictions": 4458,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5744908896034298
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.5905992106207392
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5860079336458709
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "metric_merged__backdate": {
+      "arm": {
+        "detector_arm": "metric_merged",
+        "id": "metric_merged__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.739515888036657,
+          "fn": 2075,
+          "fp": 540,
+          "precision": 0.8730009407337723,
+          "recall": 0.6414377052013133,
+          "tp": 3712
+        },
+        "@3": {
+          "f1": 0.8317561510110569,
+          "fn": 1612,
+          "fp": 77,
+          "precision": 0.9818908748824082,
+          "recall": 0.7214446172455504,
+          "tp": 4175
+        },
+        "@5": {
+          "f1": 0.8323538201016037,
+          "fn": 1609,
+          "fp": 74,
+          "precision": 0.9825964252116651,
+          "recall": 0.7219630205633316,
+          "tp": 4178
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 69,
+        "EVENT_MISSED": 1604,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 463,
+        "ROOT_OUTSIDE_TOP3": 3,
+        "ROOT_OUTSIDE_TOP5": 4,
+        "SUCCESS_TOP1": 3712
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4182,
+      "matched": 4183,
+      "matched_rca": {
+        "AC@1": 0.8876135820181731,
+        "AC@3": 0.9983261597321855,
+        "AC@5": 0.9990435198469632,
+        "MRR": 0.9424584196822361,
+        "n": 4182
+      },
+      "paired_common_legal": {
+        "backdate_only": 854,
+        "both": 2858,
+        "delta_ac1": 0.14634146341463414,
+        "n": 4182,
+        "neither": 228,
+        "original_only": 242
+      },
+      "predictions": 4252,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.661664880314398
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6670254754216003
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0625
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6684096646231518
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "metric_merged__original": {
+      "arm": {
+        "detector_arm": "metric_merged",
+        "id": "metric_merged__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6175913935650962,
+          "fn": 2687,
+          "fp": 1152,
+          "precision": 0.729068673565381,
+          "recall": 0.5356834283739416,
+          "tp": 3100
+        },
+        "@3": {
+          "f1": 0.8315569279808745,
+          "fn": 1613,
+          "fp": 78,
+          "precision": 0.9816556914393226,
+          "recall": 0.7212718161396233,
+          "tp": 4174
+        },
+        "@5": {
+          "f1": 0.832553043131786,
+          "fn": 1608,
+          "fp": 73,
+          "precision": 0.9828316086547507,
+          "recall": 0.7221358216692587,
+          "tp": 4179
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 69,
+        "EVENT_MISSED": 1604,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1074,
+        "ROOT_OUTSIDE_TOP3": 5,
+        "ROOT_OUTSIDE_TOP5": 3,
+        "SUCCESS_TOP1": 3100
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4182,
+      "matched": 4183,
+      "matched_rca": {
+        "AC@1": 0.741272118603539,
+        "AC@3": 0.9980870396939263,
+        "AC@5": 0.9992826398852224,
+        "MRR": 0.8686473776502471,
+        "n": 4182
+      },
+      "predictions": 4252,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.54162200785995
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.5679942590599211
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0625
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5580598629642985
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "native__no_all_magnitude": {
+      "arm": {
+        "detector_arm": "legacy_native",
+        "id": "native__no_all_magnitude",
+        "native": true,
+        "scorer": "no_all_magnitude"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6121387861213878,
+          "fn": 2726,
+          "fp": 1153,
+          "precision": 0.7263882297104889,
+          "recall": 0.5289441852427855,
+          "tp": 3061
+        },
+        "@3": {
+          "f1": 0.8377162283771623,
+          "fn": 1598,
+          "fp": 25,
+          "precision": 0.9940673943996203,
+          "recall": 0.7238638327285295,
+          "tp": 4189
+        },
+        "@5": {
+          "f1": 0.8383161683831617,
+          "fn": 1595,
+          "fp": 22,
+          "precision": 0.9947793070716658,
+          "recall": 0.7243822360463107,
+          "tp": 4192
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 16,
+        "EVENT_MISSED": 1589,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1128,
+        "ROOT_OUTSIDE_TOP3": 3,
+        "ROOT_OUTSIDE_TOP5": 5,
+        "SUCCESS_TOP1": 3061
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4197,
+      "matched": 4198,
+      "matched_rca": {
+        "AC@1": 0.7293304741482011,
+        "AC@3": 0.9980938765785085,
+        "AC@5": 0.9988086728615678,
+        "MRR": 0.8621260083733279,
+        "n": 4197
+      },
+      "paired_vs_original": {
+        "both": 2938,
+        "candidate_only": 123,
+        "delta_ac1": -0.007624493685966166,
+        "n": 4197,
+        "neither": 981,
+        "original_only": 155
+      },
+      "predictions": 4214,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5323329760628795
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.5636885540007176
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5512080778939776
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "native__no_metric": {
+      "arm": {
+        "detector_arm": "legacy_native",
+        "id": "native__no_metric",
+        "native": true,
+        "scorer": "no_metric"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6183381661833817,
+          "fn": 2695,
+          "fp": 1122,
+          "precision": 0.7337446606549597,
+          "recall": 0.534301019526525,
+          "tp": 3092
+        },
+        "@3": {
+          "f1": 0.8349165083491651,
+          "fn": 1612,
+          "fp": 39,
+          "precision": 0.9907451352634077,
+          "recall": 0.7214446172455504,
+          "tp": 4175
+        },
+        "@5": {
+          "f1": 0.8351164883511649,
+          "fn": 1611,
+          "fp": 38,
+          "precision": 0.9909824394874229,
+          "recall": 0.7216174183514774,
+          "tp": 4176
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 16,
+        "EVENT_MISSED": 1589,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1083,
+        "ROOT_OUTSIDE_TOP3": 1,
+        "ROOT_OUTSIDE_TOP5": 21,
+        "SUCCESS_TOP1": 3092
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4197,
+      "matched": 4198,
+      "matched_rca": {
+        "AC@1": 0.7367167024064808,
+        "AC@3": 0.9947581605908983,
+        "AC@5": 0.9949964260185847,
+        "MRR": 0.8655704565997633,
+        "n": 4197
+      },
+      "paired_vs_original": {
+        "both": 2972,
+        "candidate_only": 120,
+        "delta_ac1": -0.0002382654276864427,
+        "n": 4197,
+        "neither": 984,
+        "original_only": 121
+      },
+      "predictions": 4214,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5512683101107538
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.555794761392178
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5566173818968626
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.024509803921568627
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "onset_aux__backdate": {
+      "arm": {
+        "detector_arm": "onset_aux",
+        "id": "onset_aux__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.7768969422423556,
+          "fn": 1671,
+          "fp": 693,
+          "precision": 0.8558951965065502,
+          "recall": 0.7112493519958528,
+          "tp": 4116
+        },
+        "@3": {
+          "f1": 0.8593808984522461,
+          "fn": 1234,
+          "fp": 256,
+          "precision": 0.9467664795175712,
+          "recall": 0.7867634352859858,
+          "tp": 4553
+        },
+        "@5": {
+          "f1": 0.8605134012835032,
+          "fn": 1228,
+          "fp": 250,
+          "precision": 0.9480141401538782,
+          "recall": 0.7878002419215483,
+          "tp": 4559
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 244,
+        "EVENT_MISSED": 1222,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 437,
+        "ROOT_OUTSIDE_TOP3": 6,
+        "ROOT_OUTSIDE_TOP5": 5,
+        "SUCCESS_TOP1": 4116
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4564,
+      "matched": 4565,
+      "matched_rca": {
+        "AC@1": 0.901840490797546,
+        "AC@3": 0.997589833479404,
+        "AC@5": 0.9989044697633654,
+        "MRR": 0.9493417254427332,
+        "n": 4564
+      },
+      "paired_common_legal": {
+        "backdate_only": 1010,
+        "both": 3106,
+        "delta_ac1": 0.17177914110429449,
+        "n": 4564,
+        "neither": 222,
+        "original_only": 226
+      },
+      "predictions": 4809,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.03125
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.7399071096820293
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.731611051309652
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.13333333333333333
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.2
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.3125
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.7403534078615218
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "onset_aux__original": {
+      "arm": {
+        "detector_arm": "onset_aux",
+        "id": "onset_aux__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6289165722914307,
+          "fn": 2455,
+          "fp": 1477,
+          "precision": 0.6928675400291121,
+          "recall": 0.5757732849490237,
+          "tp": 3332
+        },
+        "@3": {
+          "f1": 0.8590033975084937,
+          "fn": 1236,
+          "fp": 258,
+          "precision": 0.9463505926388023,
+          "recall": 0.7864178330741317,
+          "tp": 4551
+        },
+        "@5": {
+          "f1": 0.8599471498678747,
+          "fn": 1231,
+          "fp": 253,
+          "precision": 0.9473903098357247,
+          "recall": 0.7872818386037671,
+          "tp": 4556
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 244,
+        "EVENT_MISSED": 1222,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1219,
+        "ROOT_OUTSIDE_TOP3": 5,
+        "ROOT_OUTSIDE_TOP5": 8,
+        "SUCCESS_TOP1": 3332
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4564,
+      "matched": 4565,
+      "matched_rca": {
+        "AC@1": 0.7300613496932515,
+        "AC@3": 0.9971516213847502,
+        "AC@5": 0.9982471516213848,
+        "MRR": 0.8626396366317487,
+        "n": 4564
+      },
+      "predictions": 4809,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5880671668453019
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6038751345532831
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.06666666666666667
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.1875
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5993508835196538
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.024509803921568627
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "onset_bin__backdate": {
+      "arm": {
+        "detector_arm": "onset_bin",
+        "id": "onset_bin__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.7780567896465134,
+          "fn": 1759,
+          "fp": 539,
+          "precision": 0.881979417560762,
+          "recall": 0.69604285467427,
+          "tp": 4028
+        },
+        "@3": {
+          "f1": 0.8595711802202047,
+          "fn": 1337,
+          "fp": 117,
+          "precision": 0.9743814320122619,
+          "recall": 0.7689649213754968,
+          "tp": 4450
+        },
+        "@5": {
+          "f1": 0.8601506664091173,
+          "fn": 1334,
+          "fp": 114,
+          "precision": 0.9750383183709218,
+          "recall": 0.7694833246932781,
+          "tp": 4453
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 110,
+        "EVENT_MISSED": 1330,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 422,
+        "ROOT_OUTSIDE_TOP3": 3,
+        "ROOT_OUTSIDE_TOP5": 3,
+        "SUCCESS_TOP1": 4028
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4456,
+      "matched": 4457,
+      "matched_rca": {
+        "AC@1": 0.9039497307001796,
+        "AC@3": 0.998653500897666,
+        "AC@5": 0.999326750448833,
+        "MRR": 0.9507991721524037,
+        "n": 4456
+      },
+      "paired_common_legal": {
+        "backdate_only": 981,
+        "both": 3047,
+        "delta_ac1": 0.17190305206463197,
+        "n": 4456,
+        "neither": 213,
+        "original_only": 215
+      },
+      "predictions": 4567,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.03125
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.7234726688102894
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.7168998923573735
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.1
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.2
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.25
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.7246664262531555
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "onset_bin__original": {
+      "arm": {
+        "detector_arm": "onset_bin",
+        "id": "onset_bin__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6300946494108557,
+          "fn": 2525,
+          "fp": 1305,
+          "precision": 0.714254433982921,
+          "recall": 0.5636772075341282,
+          "tp": 3262
+        },
+        "@3": {
+          "f1": 0.8595711802202047,
+          "fn": 1337,
+          "fp": 117,
+          "precision": 0.9743814320122619,
+          "recall": 0.7689649213754968,
+          "tp": 4450
+        },
+        "@5": {
+          "f1": 0.8601506664091173,
+          "fn": 1334,
+          "fp": 114,
+          "precision": 0.9750383183709218,
+          "recall": 0.7694833246932781,
+          "tp": 4453
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 110,
+        "EVENT_MISSED": 1330,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1188,
+        "ROOT_OUTSIDE_TOP3": 3,
+        "ROOT_OUTSIDE_TOP5": 3,
+        "SUCCESS_TOP1": 3262
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4456,
+      "matched": 4457,
+      "matched_rca": {
+        "AC@1": 0.7320466786355476,
+        "AC@3": 0.998653500897666,
+        "AC@5": 0.999326750448833,
+        "MRR": 0.8641569419509276,
+        "n": 4456
+      },
+      "predictions": 4567,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5748481600571633
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.5920344456404736
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.06666666666666667
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.1875
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5867291741795889
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.024509803921568627
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "onset_merged__backdate": {
+      "arm": {
+        "detector_arm": "onset_merged",
+        "id": "onset_merged__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.7431517234408167,
+          "fn": 2111,
+          "fp": 430,
+          "precision": 0.8952752070141257,
+          "recall": 0.6352168653879385,
+          "tp": 3676
+        },
+        "@3": {
+          "f1": 0.8234104922672597,
+          "fn": 1714,
+          "fp": 33,
+          "precision": 0.9919629810034096,
+          "recall": 0.7038189044409884,
+          "tp": 4073
+        },
+        "@5": {
+          "f1": 0.8240169817042353,
+          "fn": 1711,
+          "fp": 30,
+          "precision": 0.9926936190940088,
+          "recall": 0.7043373077587697,
+          "tp": 4076
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 26,
+        "EVENT_MISSED": 1707,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 397,
+        "ROOT_OUTSIDE_TOP3": 3,
+        "ROOT_OUTSIDE_TOP5": 3,
+        "SUCCESS_TOP1": 3676
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4079,
+      "matched": 4080,
+      "matched_rca": {
+        "AC@1": 0.9012012748222603,
+        "AC@3": 0.9985290512380486,
+        "AC@5": 0.9992645256190242,
+        "MRR": 0.9494388602871073,
+        "n": 4079
+      },
+      "paired_common_legal": {
+        "backdate_only": 866,
+        "both": 2810,
+        "delta_ac1": 0.1625398381956362,
+        "n": 4079,
+        "neither": 200,
+        "original_only": 203
+      },
+      "predictions": 4106,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.03125
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.654876741693462
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6598493003229279
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.06666666666666667
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.2
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.1875
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6613775694194014
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "onset_merged__original": {
+      "arm": {
+        "detector_arm": "onset_merged",
+        "id": "onset_merged__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6091175578692004,
+          "fn": 2774,
+          "fp": 1093,
+          "precision": 0.7338041889917194,
+          "recall": 0.5206497321582858,
+          "tp": 3013
+        },
+        "@3": {
+          "f1": 0.8238148185585767,
+          "fn": 1712,
+          "fp": 31,
+          "precision": 0.9924500730638091,
+          "recall": 0.7041645066528426,
+          "tp": 4075
+        },
+        "@5": {
+          "f1": 0.8240169817042353,
+          "fn": 1711,
+          "fp": 30,
+          "precision": 0.9926936190940088,
+          "recall": 0.7043373077587697,
+          "tp": 4076
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 26,
+        "EVENT_MISSED": 1707,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1062,
+        "ROOT_OUTSIDE_TOP3": 1,
+        "ROOT_OUTSIDE_TOP5": 3,
+        "SUCCESS_TOP1": 3013
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4079,
+      "matched": 4080,
+      "matched_rca": {
+        "AC@1": 0.7386614366266242,
+        "AC@3": 0.9990193674920324,
+        "AC@5": 0.9992645256190242,
+        "MRR": 0.8675083762360055,
+        "n": 4079
+      },
+      "predictions": 4106,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5309038942479457
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.5475421600287047
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0625
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5421925712225028
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.024509803921568627
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn17_aux__backdate": {
+      "arm": {
+        "detector_arm": "tcn17_aux",
+        "id": "tcn17_aux__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.8329502620207778,
+          "fn": 1257,
+          "fp": 560,
+          "precision": 0.8899803536345776,
+          "recall": 0.782789009849663,
+          "tp": 4530
+        },
+        "@3": {
+          "f1": 0.9250712512641354,
+          "fn": 756,
+          "fp": 59,
+          "precision": 0.9884086444007859,
+          "recall": 0.8693623639191291,
+          "tp": 5031
+        },
+        "@5": {
+          "f1": 0.925806748184242,
+          "fn": 752,
+          "fp": 55,
+          "precision": 0.9891944990176817,
+          "recall": 0.8700535683428374,
+          "tp": 5035
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 47,
+        "EVENT_MISSED": 744,
+        "RCA_CONTEXT_INVALID": 2,
+        "ROOT_OUTSIDE_TOP1": 501,
+        "ROOT_OUTSIDE_TOP3": 4,
+        "ROOT_OUTSIDE_TOP5": 6,
+        "SUCCESS_TOP1": 4530
+      },
+      "illegal_matched": 2,
+      "legal_matched": 5041,
+      "matched": 5043,
+      "matched_rca": {
+        "AC@1": 0.8986312239634993,
+        "AC@3": 0.9980162666137671,
+        "AC@5": 0.9988097599682603,
+        "MRR": 0.9477889244701384,
+        "n": 5041
+      },
+      "paired_common_legal": {
+        "backdate_only": 1105,
+        "both": 3425,
+        "delta_ac1": 0.16603848442769292,
+        "n": 5041,
+        "neither": 243,
+        "original_only": 268
+      },
+      "predictions": 5090,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.030303030303030304
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0625
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.8152911754197928
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.8030139935414424
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.13333333333333333
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.1
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.6
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.4375
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.8142805625676163
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn17_aux__original": {
+      "arm": {
+        "detector_arm": "tcn17_aux",
+        "id": "tcn17_aux__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6790475314884619,
+          "fn": 2094,
+          "fp": 1397,
+          "precision": 0.7255402750491159,
+          "recall": 0.6381544841886988,
+          "tp": 3693
+        },
+        "@3": {
+          "f1": 0.9245196285740553,
+          "fn": 759,
+          "fp": 62,
+          "precision": 0.9878192534381139,
+          "recall": 0.8688439606013478,
+          "tp": 5028
+        },
+        "@5": {
+          "f1": 0.925806748184242,
+          "fn": 752,
+          "fp": 55,
+          "precision": 0.9891944990176817,
+          "recall": 0.8700535683428374,
+          "tp": 5035
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 47,
+        "EVENT_MISSED": 744,
+        "RCA_CONTEXT_INVALID": 2,
+        "ROOT_OUTSIDE_TOP1": 1335,
+        "ROOT_OUTSIDE_TOP3": 7,
+        "ROOT_OUTSIDE_TOP5": 6,
+        "SUCCESS_TOP1": 3693
+      },
+      "illegal_matched": 2,
+      "legal_matched": 5041,
+      "matched": 5043,
+      "matched_rca": {
+        "AC@1": 0.7325927395358064,
+        "AC@3": 0.9974211465978973,
+        "AC@5": 0.9988097599682603,
+        "MRR": 0.8639282486782981,
+        "n": 5041
+      },
+      "predictions": 5090,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.654162200785995
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6670254754216003
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.06666666666666667
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.1875
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6644428416877028
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.024509803921568627
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn17_bin__backdate": {
+      "arm": {
+        "detector_arm": "tcn17_bin",
+        "id": "tcn17_bin__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.8421908893709328,
+          "fn": 1128,
+          "fp": 618,
+          "precision": 0.8828880045480386,
+          "recall": 0.8050803525142561,
+          "tp": 4659
+        },
+        "@3": {
+          "f1": 0.9352856109906001,
+          "fn": 613,
+          "fp": 103,
+          "precision": 0.9804813340913398,
+          "recall": 0.8940729220667012,
+          "tp": 5174
+        },
+        "@5": {
+          "f1": 0.9361894432393347,
+          "fn": 608,
+          "fp": 98,
+          "precision": 0.9814288421451582,
+          "recall": 0.8949369275963366,
+          "tp": 5179
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 89,
+        "EVENT_MISSED": 599,
+        "RCA_CONTEXT_INVALID": 3,
+        "ROOT_OUTSIDE_TOP1": 515,
+        "ROOT_OUTSIDE_TOP3": 5,
+        "ROOT_OUTSIDE_TOP5": 6,
+        "SUCCESS_TOP1": 4659
+      },
+      "illegal_matched": 3,
+      "legal_matched": 5185,
+      "matched": 5188,
+      "matched_rca": {
+        "AC@1": 0.8985535197685631,
+        "AC@3": 0.9978784956605593,
+        "AC@5": 0.9988428158148506,
+        "MRR": 0.9477024689657285,
+        "n": 5185
+      },
+      "paired_common_legal": {
+        "backdate_only": 1149,
+        "both": 3510,
+        "delta_ac1": 0.1674059787849566,
+        "n": 5185,
+        "neither": 245,
+        "original_only": 281
+      },
+      "predictions": 5277,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.030303030303030304
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0625
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.8381564844587353
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.8263365626121277
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.13333333333333333
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.1
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.6
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.4375
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.8375405697800217
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn17_bin__original": {
+      "arm": {
+        "detector_arm": "tcn17_bin",
+        "id": "tcn17_bin__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6852856109906001,
+          "fn": 1996,
+          "fp": 1486,
+          "precision": 0.7184006064051545,
+          "recall": 0.6550889925695524,
+          "tp": 3791
+        },
+        "@3": {
+          "f1": 0.9345625451916124,
+          "fn": 617,
+          "fp": 107,
+          "precision": 0.979723327648285,
+          "recall": 0.8933817176429929,
+          "tp": 5170
+        },
+        "@5": {
+          "f1": 0.9361894432393347,
+          "fn": 608,
+          "fp": 98,
+          "precision": 0.9814288421451582,
+          "recall": 0.8949369275963366,
+          "tp": 5179
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 89,
+        "EVENT_MISSED": 599,
+        "RCA_CONTEXT_INVALID": 3,
+        "ROOT_OUTSIDE_TOP1": 1379,
+        "ROOT_OUTSIDE_TOP3": 9,
+        "ROOT_OUTSIDE_TOP5": 6,
+        "SUCCESS_TOP1": 3791
+      },
+      "illegal_matched": 3,
+      "legal_matched": 5185,
+      "matched": 5188,
+      "matched_rca": {
+        "AC@1": 0.7311475409836066,
+        "AC@3": 0.9971070395371263,
+        "AC@5": 0.9988428158148506,
+        "MRR": 0.8632296306500743,
+        "n": 5185
+      },
+      "predictions": 5277,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.6738120757413362
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.682454251883746
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.06666666666666667
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.1875
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6821132347637937
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.024509803921568627
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn17_merged__backdate": {
+      "arm": {
+        "detector_arm": "tcn17_merged",
+        "id": "tcn17_merged__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.7472330242297338,
+          "fn": 2040,
+          "fp": 495,
+          "precision": 0.8833097595473833,
+          "recall": 0.647485743908761,
+          "tp": 3747
+        },
+        "@3": {
+          "f1": 0.8401635257752518,
+          "fn": 1574,
+          "fp": 29,
+          "precision": 0.9931636020744932,
+          "recall": 0.7280110592707794,
+          "tp": 4213
+        },
+        "@5": {
+          "f1": 0.8407617908066607,
+          "fn": 1571,
+          "fp": 26,
+          "precision": 0.9938708156529938,
+          "recall": 0.7285294625885606,
+          "tp": 4216
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 21,
+        "EVENT_MISSED": 1566,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 466,
+        "ROOT_OUTSIDE_TOP3": 3,
+        "ROOT_OUTSIDE_TOP5": 4,
+        "SUCCESS_TOP1": 3747
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4220,
+      "matched": 4221,
+      "matched_rca": {
+        "AC@1": 0.887914691943128,
+        "AC@3": 0.9983412322274882,
+        "AC@5": 0.9990521327014218,
+        "MRR": 0.9425816219062665,
+        "n": 4220
+      },
+      "paired_common_legal": {
+        "backdate_only": 871,
+        "both": 2876,
+        "delta_ac1": 0.14881516587677726,
+        "n": 4220,
+        "neither": 230,
+        "original_only": 243
+      },
+      "predictions": 4242,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.030303030303030304
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.03125
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.668453018935334
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6706135629709364
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.06666666666666667
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.1
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.4
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.3125
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6736386584926073
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn17_merged__original": {
+      "arm": {
+        "detector_arm": "tcn17_merged",
+        "id": "tcn17_merged__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6219962109881344,
+          "fn": 2668,
+          "fp": 1123,
+          "precision": 0.7352663837812352,
+          "recall": 0.538966649386556,
+          "tp": 3119
+        },
+        "@3": {
+          "f1": 0.8397646824209791,
+          "fn": 1576,
+          "fp": 31,
+          "precision": 0.9926921263554926,
+          "recall": 0.7276654570589252,
+          "tp": 4211
+        },
+        "@5": {
+          "f1": 0.840961212483797,
+          "fn": 1570,
+          "fp": 25,
+          "precision": 0.9941065535124941,
+          "recall": 0.7287022636944877,
+          "tp": 4217
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 21,
+        "EVENT_MISSED": 1566,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1092,
+        "ROOT_OUTSIDE_TOP3": 6,
+        "ROOT_OUTSIDE_TOP5": 3,
+        "SUCCESS_TOP1": 3119
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4220,
+      "matched": 4221,
+      "matched_rca": {
+        "AC@1": 0.7390995260663508,
+        "AC@3": 0.997867298578199,
+        "AC@5": 0.9992890995260664,
+        "MRR": 0.8674407582938389,
+        "n": 4220
+      },
+      "predictions": 4242,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5469810646659521
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.5694294940796556
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0625
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5614857554994591
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn2026_aux__backdate": {
+      "arm": {
+        "detector_arm": "tcn2026_aux",
+        "id": "tcn2026_aux__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.8296524257784215,
+          "fn": 1204,
+          "fp": 678,
+          "precision": 0.871127162136476,
+          "recall": 0.7919474684637982,
+          "tp": 4583
+        },
+        "@3": {
+          "f1": 0.9118392469225199,
+          "fn": 750,
+          "fp": 224,
+          "precision": 0.9574225432427296,
+          "recall": 0.8703991705546915,
+          "tp": 5037
+        },
+        "@5": {
+          "f1": 0.9127443881245474,
+          "fn": 745,
+          "fp": 219,
+          "precision": 0.95837293290249,
+          "recall": 0.8712631760843269,
+          "tp": 5042
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 212,
+        "EVENT_MISSED": 738,
+        "RCA_CONTEXT_INVALID": 2,
+        "ROOT_OUTSIDE_TOP1": 454,
+        "ROOT_OUTSIDE_TOP3": 5,
+        "ROOT_OUTSIDE_TOP5": 5,
+        "SUCCESS_TOP1": 4583
+      },
+      "illegal_matched": 2,
+      "legal_matched": 5047,
+      "matched": 5049,
+      "matched_rca": {
+        "AC@1": 0.9080641965524073,
+        "AC@3": 0.9980186249256985,
+        "AC@5": 0.9990093124628492,
+        "MRR": 0.9525848295860185,
+        "n": 5047
+      },
+      "paired_common_legal": {
+        "backdate_only": 1150,
+        "both": 3433,
+        "delta_ac1": 0.17990885674658214,
+        "n": 5047,
+        "neither": 222,
+        "original_only": 242
+      },
+      "predictions": 5261,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.03125
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.8295819935691319
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.8098313598851812
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.1
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.2
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.1875
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.8249188604399568
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn2026_aux__original": {
+      "arm": {
+        "detector_arm": "tcn2026_aux",
+        "id": "tcn2026_aux__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6652787834902245,
+          "fn": 2112,
+          "fp": 1586,
+          "precision": 0.6985363999239689,
+          "recall": 0.6350440642820114,
+          "tp": 3675
+        },
+        "@3": {
+          "f1": 0.9112961622013034,
+          "fn": 753,
+          "fp": 227,
+          "precision": 0.9568523094468733,
+          "recall": 0.8698807672369103,
+          "tp": 5034
+        },
+        "@5": {
+          "f1": 0.912563359884142,
+          "fn": 746,
+          "fp": 220,
+          "precision": 0.9581828549705379,
+          "recall": 0.8710903749783999,
+          "tp": 5041
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 212,
+        "EVENT_MISSED": 738,
+        "RCA_CONTEXT_INVALID": 2,
+        "ROOT_OUTSIDE_TOP1": 1359,
+        "ROOT_OUTSIDE_TOP3": 7,
+        "ROOT_OUTSIDE_TOP5": 6,
+        "SUCCESS_TOP1": 3675
+      },
+      "illegal_matched": 2,
+      "legal_matched": 5047,
+      "matched": 5049,
+      "matched_rca": {
+        "AC@1": 0.7281553398058253,
+        "AC@3": 0.997424212403408,
+        "AC@5": 0.998811174955419,
+        "MRR": 0.8618774786844928,
+        "n": 5047
+      },
+      "predictions": 5261,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.6566630939621293
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6580552565482598
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.06666666666666667
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.1875
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6611972592859718
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.024509803921568627
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn2026_bin__backdate": {
+      "arm": {
+        "detector_arm": "tcn2026_bin",
+        "id": "tcn2026_bin__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.8164633578545488,
+          "fn": 1403,
+          "fp": 568,
+          "precision": 0.8852988691437803,
+          "recall": 0.7575600483843097,
+          "tp": 4384
+        },
+        "@3": {
+          "f1": 0.8976627246484775,
+          "fn": 967,
+          "fp": 132,
+          "precision": 0.9733441033925686,
+          "recall": 0.8329013305685157,
+          "tp": 4820
+        },
+        "@5": {
+          "f1": 0.8982214358878853,
+          "fn": 964,
+          "fp": 129,
+          "precision": 0.9739499192245558,
+          "recall": 0.8334197338862969,
+          "tp": 4823
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 124,
+        "EVENT_MISSED": 959,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 436,
+        "ROOT_OUTSIDE_TOP3": 3,
+        "ROOT_OUTSIDE_TOP5": 4,
+        "SUCCESS_TOP1": 4384
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4827,
+      "matched": 4828,
+      "matched_rca": {
+        "AC@1": 0.9082245701263725,
+        "AC@3": 0.9985498239071887,
+        "AC@5": 0.999171327946965,
+        "MRR": 0.9527803262731788,
+        "n": 4827
+      },
+      "paired_common_legal": {
+        "backdate_only": 1092,
+        "both": 3292,
+        "delta_ac1": 0.17857882742904496,
+        "n": 4827,
+        "neither": 213,
+        "original_only": 230
+      },
+      "predictions": 4952,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.03125
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.7952840300107181
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.7728740581270183
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.1
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.2
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.1875
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.7890371438874865
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn2026_bin__original": {
+      "arm": {
+        "detector_arm": "tcn2026_bin",
+        "id": "tcn2026_bin__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6559269950647174,
+          "fn": 2265,
+          "fp": 1430,
+          "precision": 0.7112277867528272,
+          "recall": 0.6086054950751685,
+          "tp": 3522
+        },
+        "@3": {
+          "f1": 0.8969177763292672,
+          "fn": 971,
+          "fp": 136,
+          "precision": 0.9725363489499192,
+          "recall": 0.8322101261448073,
+          "tp": 4816
+        },
+        "@5": {
+          "f1": 0.8980351988080827,
+          "fn": 965,
+          "fp": 130,
+          "precision": 0.9737479806138933,
+          "recall": 0.8332469327803698,
+          "tp": 4822
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 124,
+        "EVENT_MISSED": 959,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1294,
+        "ROOT_OUTSIDE_TOP3": 6,
+        "ROOT_OUTSIDE_TOP5": 5,
+        "SUCCESS_TOP1": 3522
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4827,
+      "matched": 4828,
+      "matched_rca": {
+        "AC@1": 0.7296457426973275,
+        "AC@3": 0.9977211518541537,
+        "AC@5": 0.9989641599337062,
+        "MRR": 0.8626892874406857,
+        "n": 4827
+      },
+      "predictions": 4952,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.6291532690246516
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6307857911733046
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.06666666666666667
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.1875
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6336098088712586
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.024509803921568627
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn2026_merged__backdate": {
+      "arm": {
+        "detector_arm": "tcn2026_merged",
+        "id": "tcn2026_merged__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.7426782468188244,
+          "fn": 2110,
+          "fp": 438,
+          "precision": 0.8935601458080195,
+          "recall": 0.6353896664938655,
+          "tp": 3677
+        },
+        "@3": {
+          "f1": 0.8242779236517875,
+          "fn": 1706,
+          "fp": 34,
+          "precision": 0.991737545565006,
+          "recall": 0.7052013132884051,
+          "tp": 4081
+        },
+        "@5": {
+          "f1": 0.8248838618460917,
+          "fn": 1703,
+          "fp": 31,
+          "precision": 0.9924665856622115,
+          "recall": 0.7057197166061863,
+          "tp": 4084
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 27,
+        "EVENT_MISSED": 1699,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 404,
+        "ROOT_OUTSIDE_TOP3": 3,
+        "ROOT_OUTSIDE_TOP5": 3,
+        "SUCCESS_TOP1": 3677
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4087,
+      "matched": 4088,
+      "matched_rca": {
+        "AC@1": 0.8996819182774651,
+        "AC@3": 0.9985319305113776,
+        "AC@5": 0.9992659652556888,
+        "MRR": 0.9486814561074409,
+        "n": 4087
+      },
+      "paired_common_legal": {
+        "backdate_only": 878,
+        "both": 2799,
+        "delta_ac1": 0.16368974798140445,
+        "n": 4087,
+        "neither": 201,
+        "original_only": 209
+      },
+      "predictions": 4115,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.03125
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.6598785280457307
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6555435952637244
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.2
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.125
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6617381896862604
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn2026_merged__original": {
+      "arm": {
+        "detector_arm": "tcn2026_merged",
+        "id": "tcn2026_merged__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6075540294889922,
+          "fn": 2779,
+          "fp": 1107,
+          "precision": 0.7309842041312272,
+          "recall": 0.5197857266286504,
+          "tp": 3008
+        },
+        "@3": {
+          "f1": 0.8242779236517875,
+          "fn": 1706,
+          "fp": 34,
+          "precision": 0.991737545565006,
+          "recall": 0.7052013132884051,
+          "tp": 4081
+        },
+        "@5": {
+          "f1": 0.8248838618460917,
+          "fn": 1703,
+          "fp": 31,
+          "precision": 0.9924665856622115,
+          "recall": 0.7057197166061863,
+          "tp": 4084
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 27,
+        "EVENT_MISSED": 1699,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1073,
+        "ROOT_OUTSIDE_TOP3": 3,
+        "ROOT_OUTSIDE_TOP5": 3,
+        "SUCCESS_TOP1": 3008
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4087,
+      "matched": 4088,
+      "matched_rca": {
+        "AC@1": 0.7359921702960607,
+        "AC@3": 0.9985319305113776,
+        "AC@5": 0.9992659652556888,
+        "MRR": 0.8661365304624419,
+        "n": 4087
+      },
+      "predictions": 4115,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5309038942479457
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.5457481162540366
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0625
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5412910205553552
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.024509803921568627
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn42_aux__backdate": {
+      "arm": {
+        "detector_arm": "tcn42_aux",
+        "id": "tcn42_aux__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.8415560640732266,
+          "fn": 1190,
+          "fp": 541,
+          "precision": 0.8947061113273648,
+          "recall": 0.7943666839467772,
+          "tp": 4597
+        },
+        "@3": {
+          "f1": 0.9352860411899313,
+          "fn": 678,
+          "fp": 29,
+          "precision": 0.9943557804593227,
+          "recall": 0.8828408501814412,
+          "tp": 5109
+        },
+        "@5": {
+          "f1": 0.9362013729977117,
+          "fn": 673,
+          "fp": 24,
+          "precision": 0.9953289217594394,
+          "recall": 0.8837048557110766,
+          "tp": 5114
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 17,
+        "EVENT_MISSED": 666,
+        "RCA_CONTEXT_INVALID": 2,
+        "ROOT_OUTSIDE_TOP1": 512,
+        "ROOT_OUTSIDE_TOP3": 5,
+        "ROOT_OUTSIDE_TOP5": 5,
+        "SUCCESS_TOP1": 4597
+      },
+      "illegal_matched": 2,
+      "legal_matched": 5119,
+      "matched": 5121,
+      "matched_rca": {
+        "AC@1": 0.8980269583903107,
+        "AC@3": 0.998046493455753,
+        "AC@5": 0.9990232467278766,
+        "MRR": 0.9475165660455758,
+        "n": 5119
+      },
+      "paired_common_legal": {
+        "backdate_only": 1128,
+        "both": 3469,
+        "delta_ac1": 0.16643875756983786,
+        "n": 5119,
+        "neither": 246,
+        "original_only": 276
+      },
+      "predictions": 5138,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.03125
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.8292247231153984
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.8144958736993183
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.13333333333333333
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.2
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.3125
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.8270825820411107
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn42_aux__original": {
+      "arm": {
+        "detector_arm": "tcn42_aux",
+        "id": "tcn42_aux__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6855835240274599,
+          "fn": 2042,
+          "fp": 1393,
+          "precision": 0.728882833787466,
+          "recall": 0.6471401416969068,
+          "tp": 3745
+        },
+        "@3": {
+          "f1": 0.9347368421052632,
+          "fn": 681,
+          "fp": 32,
+          "precision": 0.9937718956792526,
+          "recall": 0.8823224468636599,
+          "tp": 5106
+        },
+        "@5": {
+          "f1": 0.9362013729977117,
+          "fn": 673,
+          "fp": 24,
+          "precision": 0.9953289217594394,
+          "recall": 0.8837048557110766,
+          "tp": 5114
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 17,
+        "EVENT_MISSED": 666,
+        "RCA_CONTEXT_INVALID": 2,
+        "ROOT_OUTSIDE_TOP1": 1361,
+        "ROOT_OUTSIDE_TOP3": 8,
+        "ROOT_OUTSIDE_TOP5": 5,
+        "SUCCESS_TOP1": 3745
+      },
+      "illegal_matched": 2,
+      "legal_matched": 5119,
+      "matched": 5121,
+      "matched_rca": {
+        "AC@1": 0.7315882008204727,
+        "AC@3": 0.997460441492479,
+        "AC@5": 0.9990232467278766,
+        "MRR": 0.8636519874603483,
+        "n": 5119
+      },
+      "predictions": 5138,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.6663093962129332
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6734840330104055
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.06666666666666667
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.1875
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6738189686260367
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.024509803921568627
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn42_bin__backdate": {
+      "arm": {
+        "detector_arm": "tcn42_bin",
+        "id": "tcn42_bin__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.8394971092961365,
+          "fn": 1213,
+          "fp": 536,
+          "precision": 0.8951076320939335,
+          "recall": 0.7903922585104545,
+          "tp": 4574
+        },
+        "@3": {
+          "f1": 0.9327337799394328,
+          "fn": 705,
+          "fp": 28,
+          "precision": 0.9945205479452055,
+          "recall": 0.87817522032141,
+          "tp": 5082
+        },
+        "@5": {
+          "f1": 0.933651463705607,
+          "fn": 700,
+          "fp": 23,
+          "precision": 0.9954990215264188,
+          "recall": 0.8790392258510454,
+          "tp": 5087
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 16,
+        "EVENT_MISSED": 693,
+        "RCA_CONTEXT_INVALID": 2,
+        "ROOT_OUTSIDE_TOP1": 508,
+        "ROOT_OUTSIDE_TOP3": 5,
+        "ROOT_OUTSIDE_TOP5": 5,
+        "SUCCESS_TOP1": 4574
+      },
+      "illegal_matched": 2,
+      "legal_matched": 5092,
+      "matched": 5094,
+      "matched_rca": {
+        "AC@1": 0.8982717989002357,
+        "AC@3": 0.9980361351139042,
+        "AC@5": 0.9990180675569521,
+        "MRR": 0.9476310490155738,
+        "n": 5092
+      },
+      "paired_common_legal": {
+        "backdate_only": 1119,
+        "both": 3455,
+        "delta_ac1": 0.16555380989787902,
+        "n": 5092,
+        "neither": 242,
+        "original_only": 276
+      },
+      "predictions": 5110,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.03125
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.8249374776705967
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.810907786149982
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.13333333333333333
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.2
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.25
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.8231157591056617
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn42_bin__original": {
+      "arm": {
+        "detector_arm": "tcn42_bin",
+        "id": "tcn42_bin__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6847756263191704,
+          "fn": 2056,
+          "fp": 1379,
+          "precision": 0.7301369863013699,
+          "recall": 0.6447209262139277,
+          "tp": 3731
+        },
+        "@3": {
+          "f1": 0.9321831696797284,
+          "fn": 708,
+          "fp": 31,
+          "precision": 0.9939334637964775,
+          "recall": 0.8776568170036289,
+          "tp": 5079
+        },
+        "@5": {
+          "f1": 0.933651463705607,
+          "fn": 700,
+          "fp": 23,
+          "precision": 0.9954990215264188,
+          "recall": 0.8790392258510454,
+          "tp": 5087
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 16,
+        "EVENT_MISSED": 693,
+        "RCA_CONTEXT_INVALID": 2,
+        "ROOT_OUTSIDE_TOP1": 1348,
+        "ROOT_OUTSIDE_TOP3": 8,
+        "ROOT_OUTSIDE_TOP5": 5,
+        "SUCCESS_TOP1": 3731
+      },
+      "illegal_matched": 2,
+      "legal_matched": 5092,
+      "matched": 5094,
+      "matched_rca": {
+        "AC@1": 0.7327179890023566,
+        "AC@3": 0.9974469756480754,
+        "AC@5": 0.9990180675569521,
+        "MRR": 0.8642055231361986,
+        "n": 5092
+      },
+      "predictions": 5110,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.6641657734905323
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6706135629709364
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.06666666666666667
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.1875
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6712946267580238
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.024509803921568627
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn42_merged__backdate": {
+      "arm": {
+        "detector_arm": "tcn42_merged",
+        "id": "tcn42_merged__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.7440601503759399,
+          "fn": 2076,
+          "fp": 477,
+          "precision": 0.8861031518624641,
+          "recall": 0.6412649040953862,
+          "tp": 3711
+        },
+        "@3": {
+          "f1": 0.8360902255639098,
+          "fn": 1617,
+          "fp": 18,
+          "precision": 0.995702005730659,
+          "recall": 0.720580611715915,
+          "tp": 4170
+        },
+        "@5": {
+          "f1": 0.8366917293233083,
+          "fn": 1614,
+          "fp": 15,
+          "precision": 0.9964183381088825,
+          "recall": 0.7210990150336962,
+          "tp": 4173
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 10,
+        "EVENT_MISSED": 1609,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 459,
+        "ROOT_OUTSIDE_TOP3": 3,
+        "ROOT_OUTSIDE_TOP5": 4,
+        "SUCCESS_TOP1": 3711
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4177,
+      "matched": 4178,
+      "matched_rca": {
+        "AC@1": 0.8884366770409384,
+        "AC@3": 0.9983241560928896,
+        "AC@5": 0.9990423749102226,
+        "MRR": 0.9428683531508526,
+        "n": 4177
+      },
+      "paired_common_legal": {
+        "backdate_only": 862,
+        "both": 2849,
+        "delta_ac1": 0.14938951400526693,
+        "n": 4177,
+        "neither": 228,
+        "original_only": 238
+      },
+      "predictions": 4188,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.03125
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.6627366916755985
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6645138141370649
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.06666666666666667
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.2
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.1875
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6676884240894339
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "tcn42_merged__original": {
+      "arm": {
+        "detector_arm": "tcn42_merged",
+        "id": "tcn42_merged__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6189473684210526,
+          "fn": 2700,
+          "fp": 1101,
+          "precision": 0.7371060171919771,
+          "recall": 0.5334370139968896,
+          "tp": 3087
+        },
+        "@3": {
+          "f1": 0.8356892230576441,
+          "fn": 1619,
+          "fp": 20,
+          "precision": 0.9952244508118434,
+          "recall": 0.7202350095040608,
+          "tp": 4168
+        },
+        "@5": {
+          "f1": 0.8368922305764411,
+          "fn": 1613,
+          "fp": 14,
+          "precision": 0.9966571155682904,
+          "recall": 0.7212718161396233,
+          "tp": 4174
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 10,
+        "EVENT_MISSED": 1609,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1081,
+        "ROOT_OUTSIDE_TOP3": 6,
+        "ROOT_OUTSIDE_TOP5": 3,
+        "SUCCESS_TOP1": 3087
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4177,
+      "matched": 4178,
+      "matched_rca": {
+        "AC@1": 0.7390471630356715,
+        "AC@3": 0.9978453435480009,
+        "AC@5": 0.999281781182667,
+        "MRR": 0.8675524698747108,
+        "n": 4177
+      },
+      "predictions": 4188,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5423365487674169
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.5626121277359167
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0625
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5557158312297151
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "weighted_merged__backdate": {
+      "arm": {
+        "detector_arm": "weighted_merged",
+        "id": "weighted_merged__backdate",
+        "native": false,
+        "scorer": "backdate"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.746074607460746,
+          "fn": 2057,
+          "fp": 482,
+          "precision": 0.8855650522317189,
+          "recall": 0.6445481251080006,
+          "tp": 3730
+        },
+        "@3": {
+          "f1": 0.8394839483948395,
+          "fn": 1590,
+          "fp": 15,
+          "precision": 0.9964387464387464,
+          "recall": 0.7252462415759461,
+          "tp": 4197
+        },
+        "@5": {
+          "f1": 0.8400840084008401,
+          "fn": 1587,
+          "fp": 12,
+          "precision": 0.9971509971509972,
+          "recall": 0.7257646448937273,
+          "tp": 4200
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 7,
+        "EVENT_MISSED": 1582,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 467,
+        "ROOT_OUTSIDE_TOP3": 3,
+        "ROOT_OUTSIDE_TOP5": 4,
+        "SUCCESS_TOP1": 3730
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4204,
+      "matched": 4205,
+      "matched_rca": {
+        "AC@1": 0.8872502378686965,
+        "AC@3": 0.9983349191246432,
+        "AC@5": 0.9990485252140818,
+        "MRR": 0.9422441590020086,
+        "n": 4204
+      },
+      "paired_common_legal": {
+        "backdate_only": 868,
+        "both": 2862,
+        "delta_ac1": 0.14843006660323502,
+        "n": 4204,
+        "neither": 230,
+        "original_only": 244
+      },
+      "predictions": 4212,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.030303030303030304
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.03125
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.6652375848517328
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.6677430929314675
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.06666666666666667
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.1
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.4
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.3125
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.6705733862243058
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    },
+    "weighted_merged__original": {
+      "arm": {
+        "detector_arm": "weighted_merged",
+        "id": "weighted_merged__original",
+        "native": false,
+        "scorer": "original"
+      },
+      "complete_gt": 5787,
+      "e2e": {
+        "@1": {
+          "f1": 0.6212621262126212,
+          "fn": 2681,
+          "fp": 1106,
+          "precision": 0.7374169040835707,
+          "recall": 0.536720235009504,
+          "tp": 3106
+        },
+        "@3": {
+          "f1": 0.8390839083908391,
+          "fn": 1592,
+          "fp": 17,
+          "precision": 0.9959639126305793,
+          "recall": 0.7249006393640919,
+          "tp": 4195
+        },
+        "@5": {
+          "f1": 0.8402840284028403,
+          "fn": 1586,
+          "fp": 11,
+          "precision": 0.9973884140550807,
+          "recall": 0.7259374459996544,
+          "tp": 4201
+        }
+      },
+      "failure": {
+        "EVENT_FALSE_ALARM": 7,
+        "EVENT_MISSED": 1582,
+        "RCA_CONTEXT_INVALID": 1,
+        "ROOT_OUTSIDE_TOP1": 1089,
+        "ROOT_OUTSIDE_TOP3": 6,
+        "ROOT_OUTSIDE_TOP5": 3,
+        "SUCCESS_TOP1": 3106
+      },
+      "illegal_matched": 1,
+      "legal_matched": 4204,
+      "matched": 4205,
+      "matched_rca": {
+        "AC@1": 0.7388201712654615,
+        "AC@3": 0.9978591817316841,
+        "AC@5": 0.9992863939105614,
+        "MRR": 0.8672930542340629,
+        "n": 4204
+      },
+      "predictions": 4212,
+      "strata": [
+        {
+          "dimension": "gt_service",
+          "group": "dbservice1",
+          "n": 33,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "dbservice2",
+          "n": 32,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice1",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "logservice2",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice1",
+          "n": 2799,
+          "recall_at_1": 0.5437656305823508
+        },
+        {
+          "dimension": "gt_service",
+          "group": "mobservice2",
+          "n": 2787,
+          "recall_at_1": 0.5679942590599211
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice1",
+          "n": 20,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "redisservice2",
+          "n": 18,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice1",
+          "n": 30,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "gt_service",
+          "group": "webservice2",
+          "n": 30,
+          "recall_at_1": 0.03333333333333333
+        },
+        {
+          "dimension": "fault_type",
+          "group": "access_permission_denied",
+          "n": 5,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "cpu_anomalies",
+          "n": 12,
+          "recall_at_1": 0.0
+        },
+        {
+          "dimension": "fault_type",
+          "group": "file_moving",
+          "n": 16,
+          "recall_at_1": 0.0625
+        },
+        {
+          "dimension": "fault_type",
+          "group": "login_failure",
+          "n": 5546,
+          "recall_at_1": 0.5591417237648756
+        },
+        {
+          "dimension": "fault_type",
+          "group": "memory_anomalies",
+          "n": 204,
+          "recall_at_1": 0.0196078431372549
+        },
+        {
+          "dimension": "fault_type",
+          "group": "normal_memory_freed",
+          "n": 4,
+          "recall_at_1": 0.0
+        }
+      ]
+    }
+  },
+  "reused_test": true,
+  "status": "COMPLETE",
+  "test_used_for_selection": false
+}
