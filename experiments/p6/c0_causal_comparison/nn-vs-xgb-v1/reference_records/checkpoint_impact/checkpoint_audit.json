@@ -1,0 +1,67 @@
+{
+  "checkpoint_sha256": "c320dc8724d17d5fbe4e7d1e5ce1e98c163dba7a92f32fd5a80a2c24bcaa1aab",
+  "legacy_selection_sha256": "888d68732bfdb086a0536e6321b8420ad1d4fba11921eb63f2a9577be73b0928",
+  "scopes": {
+    "batch": {
+      "fixed_threshold_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2103,
+          "mean_seconds": 24.105422729434142,
+          "median_seconds": 24.216,
+          "p90_seconds": 37.2754,
+          "p95_seconds": 39.3786
+        },
+        "event_f1": 0.8400239664469742,
+        "event_precision": 0.9985754985754985,
+        "event_recall": 0.7249224405377456,
+        "false_negative_events": 798,
+        "false_positive_events": 3,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2106,
+        "true_positive_events": 2103
+      },
+      "legacy_threshold": 0.9986969828605652
+    },
+    "window": {
+      "fixed_threshold_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2097,
+          "mean_seconds": 24.087309966618978,
+          "median_seconds": 24.2,
+          "p90_seconds": 37.2722,
+          "p95_seconds": 39.3758
+        },
+        "event_f1": 0.8386322735452909,
+        "event_precision": 0.9985714285714286,
+        "event_recall": 0.7228541882109617,
+        "false_negative_events": 804,
+        "false_positive_events": 3,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2100,
+        "true_positive_events": 2097
+      },
+      "legacy_threshold": 0.9986969828605652,
+      "validation_selected_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2098,
+          "mean_seconds": 24.092915157292662,
+          "median_seconds": 24.198999999999998,
+          "p90_seconds": 37.244099999999996,
+          "p95_seconds": 39.35375
+        },
+        "event_f1": 0.8388644542183127,
+        "event_precision": 0.9985721085197525,
+        "event_recall": 0.7231988969320924,
+        "false_negative_events": 803,
+        "false_positive_events": 3,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2101,
+        "true_positive_events": 2098
+      },
+      "validation_selected_threshold": 0.9987336993217468
+    }
+  }
+}

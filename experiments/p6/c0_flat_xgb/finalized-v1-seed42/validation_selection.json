@@ -1,0 +1,131 @@
+{
+  "cohort": {
+    "fit": {
+      "gt_events": 7443,
+      "labels": {
+        "counts": {
+          "ignore": 4682,
+          "negative": 25971,
+          "positive": 12897
+        },
+        "fractions": {
+          "ignore": 0.10750861079219289,
+          "negative": 0.5963490241102182,
+          "positive": 0.29614236509758896
+        },
+        "ignore_region_count": 950,
+        "positive_region_count": 4922,
+        "total": 43550
+      },
+      "reference": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/scores/fit.csv",
+      "reference_sha256": "140c58508263cd5c5fca280cac284c6d3e52798275eb40b36c8921f9a797687b",
+      "windows": 43550
+    },
+    "validation": {
+      "gt_events": 2901,
+      "labels": {
+        "counts": {
+          "ignore": 1676,
+          "negative": 10851,
+          "positive": 4887
+        },
+        "fractions": {
+          "ignore": 0.0962444010566211,
+          "negative": 0.6231193292752958,
+          "positive": 0.28063626966808314
+        },
+        "ignore_region_count": 375,
+        "positive_region_count": 1744,
+        "total": 17414
+      },
+      "reference": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/gpu-control-v1-seed42/validation_predictions.csv",
+      "reference_sha256": "dfbd8ff19fb3fe171a117ee062ae05a080ff47e69f8b845b173b00ea9ede27a7",
+      "windows": 17414
+    }
+  },
+  "execution_commit": "ae7e7a870acadeb1da55b1e074980a3709fc9121",
+  "fit_execution_commit": "3ade981427b017d1bcaec83dfcbf93d16f20c1e4",
+  "fixed_boosting_rounds": 200,
+  "formal_result": false,
+  "model": {
+    "causality_gate": {
+      "atol_probability": 0,
+      "errors": {
+        "companion_perturbation": 0.0,
+        "reordered": 0.0,
+        "singletons": 0.0
+      }
+    },
+    "early_stopping_used": false,
+    "elapsed_seconds": 645.6366948219948,
+    "environment": {
+      "PYTHONHASHSEED": "42",
+      "executable": "/home/zhangll24/.venvs/ada-rca-supervised-baselines/bin/python",
+      "numpy": "1.24.1",
+      "python": "3.8.20",
+      "scipy": "1.10.1",
+      "sklearn": "1.2.1",
+      "xgboost": "2.1.4",
+      "xgboost_build": {
+        "BUILTIN_PREFETCH_PRESENT": true,
+        "DEBUG": false,
+        "GCC_VERSION": [
+          10,
+          2,
+          1
+        ],
+        "MM_PREFETCH_PRESENT": true,
+        "USE_CUDA": false,
+        "USE_DLOPEN_NCCL": false,
+        "USE_FEDERATED": false,
+        "USE_NCCL": false,
+        "USE_OPENMP": true,
+        "USE_RMM": false,
+        "libxgboost": "/home/zhangll24/.venvs/ada-rca-supervised-baselines/lib/python3.8/site-packages/xgboost/lib/libxgboost.so"
+      }
+    },
+    "eval_set_used": false,
+    "features": 16000,
+    "fit_rows": 38868,
+    "model_sha256": "54463e621db95de628be8b0fc8a4a8a04a4c6d511f0c936d40f2606a850ac251",
+    "parameters": {
+      "colsample_bytree": 1.0,
+      "learning_rate": 0.05,
+      "max_depth": 3,
+      "n_estimators": 200,
+      "n_jobs": 1,
+      "objective": "binary:logistic",
+      "random_state": 42,
+      "reg_lambda": 1.0,
+      "scale_pos_weight": 2.0137241218888113,
+      "subsample": 1.0,
+      "tree_method": "hist"
+    },
+    "prediction_sha256": "3be510d0012001260b49796039a5bcdbf1fa90a47fe1c3fa6538915bb09ad716",
+    "test_read": false,
+    "validation_labels_read": false,
+    "validation_rows": 17414
+  },
+  "refit_run": false,
+  "selected_validation_metrics": {
+    "detection_delay": {
+      "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+      "matched_delay_count": 1999,
+      "mean_seconds": 23.825253626813407,
+      "median_seconds": 23.861,
+      "p90_seconds": 37.063,
+      "p95_seconds": 39.1962
+    },
+    "event_f1": 0.815252854812398,
+    "event_precision": 0.9980029955067399,
+    "event_recall": 0.6890727335401585,
+    "false_negative_events": 902,
+    "false_positive_events": 4,
+    "ground_truth_event_count": 2901,
+    "predicted_episode_count": 2003,
+    "true_positive_events": 1999
+  },
+  "selected_validation_threshold": 0.9253149032592773,
+  "stage": "detector_development",
+  "test_used_for_selection": false
+}

@@ -1,0 +1,59 @@
+{
+  "causality_gate": {
+    "atol_probability": 0,
+    "errors": {
+      "companion_perturbation": 0.0,
+      "reordered": 0.0,
+      "singletons": 0.0
+    }
+  },
+  "early_stopping_used": false,
+  "elapsed_seconds": 645.6366948219948,
+  "environment": {
+    "PYTHONHASHSEED": "42",
+    "executable": "/home/zhangll24/.venvs/ada-rca-supervised-baselines/bin/python",
+    "numpy": "1.24.1",
+    "python": "3.8.20",
+    "scipy": "1.10.1",
+    "sklearn": "1.2.1",
+    "xgboost": "2.1.4",
+    "xgboost_build": {
+      "BUILTIN_PREFETCH_PRESENT": true,
+      "DEBUG": false,
+      "GCC_VERSION": [
+        10,
+        2,
+        1
+      ],
+      "MM_PREFETCH_PRESENT": true,
+      "USE_CUDA": false,
+      "USE_DLOPEN_NCCL": false,
+      "USE_FEDERATED": false,
+      "USE_NCCL": false,
+      "USE_OPENMP": true,
+      "USE_RMM": false,
+      "libxgboost": "/home/zhangll24/.venvs/ada-rca-supervised-baselines/lib/python3.8/site-packages/xgboost/lib/libxgboost.so"
+    }
+  },
+  "eval_set_used": false,
+  "features": 16000,
+  "fit_rows": 38868,
+  "model_sha256": "54463e621db95de628be8b0fc8a4a8a04a4c6d511f0c936d40f2606a850ac251",
+  "parameters": {
+    "colsample_bytree": 1.0,
+    "learning_rate": 0.05,
+    "max_depth": 3,
+    "n_estimators": 200,
+    "n_jobs": 1,
+    "objective": "binary:logistic",
+    "random_state": 42,
+    "reg_lambda": 1.0,
+    "scale_pos_weight": 2.0137241218888113,
+    "subsample": 1.0,
+    "tree_method": "hist"
+  },
+  "prediction_sha256": "3be510d0012001260b49796039a5bcdbf1fa90a47fe1c3fa6538915bb09ad716",
+  "test_read": false,
+  "validation_labels_read": false,
+  "validation_rows": 17414
+}

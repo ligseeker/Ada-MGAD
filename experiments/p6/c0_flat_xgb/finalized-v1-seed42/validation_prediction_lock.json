@@ -1,0 +1,8 @@
+{
+  "logit_sha256": "93d4090f4fba6e9cec48a6b11ae8261ed3234117c217b5d76f5f9b1a554c222c",
+  "model_sha256": "54463e621db95de628be8b0fc8a4a8a04a4c6d511f0c936d40f2606a850ac251",
+  "refit_run": false,
+  "score_sha256": "3be510d0012001260b49796039a5bcdbf1fa90a47fe1c3fa6538915bb09ad716",
+  "test_prediction_run": false,
+  "threshold_selected": false
+}

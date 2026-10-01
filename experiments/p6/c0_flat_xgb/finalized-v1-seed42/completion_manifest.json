@@ -1,0 +1,20 @@
+{
+  "execution_commit": "ae7e7a870acadeb1da55b1e074980a3709fc9121",
+  "files": {
+    "finalization_input_lock.json": "83443fac0726f04910c4e1a889f463f4f23b2111154f9af0179708e69c4af4a0",
+    "fit_report.json": "2f658dfff15c1639efdceef7616a1468ffc54dfda0a0e26ef1f6be7bed8fd118",
+    "trigger.ubj": "54463e621db95de628be8b0fc8a4a8a04a4c6d511f0c936d40f2606a850ac251",
+    "validation_episodes.csv": "9ffc32b6f0208054f9d2fdb8f2eb51353707b117ddc38d0e7ae7e9a20f582e3b",
+    "validation_gt.csv": "c522cd913b07508598bc0506ff7111ce9ffdb22a7704227f924f06d2dbd1b7bc",
+    "validation_logits.npy": "93d4090f4fba6e9cec48a6b11ae8261ed3234117c217b5d76f5f9b1a554c222c",
+    "validation_matching.csv": "d01d892b3cf52c31b6fa6bacf2357f635b9706f93106ab5b104f61964de68091",
+    "validation_prediction_lock.json": "5c3bce054f7113128eb55410a19c23f2be4a51a23a37928e44d47344931321af",
+    "validation_predictions.csv": "a746f0919ec17c0b0d84ecec2052d9ac5f151c755b57cbb016fff8804e83bb3c",
+    "validation_scores.npy": "3be510d0012001260b49796039a5bcdbf1fa90a47fe1c3fa6538915bb09ad716",
+    "validation_selection.json": "98363249a2b7a755b3622947b03c13b5b12f80fa01de7a6268bcb18be357261d"
+  },
+  "fit_execution_commit": "3ade981427b017d1bcaec83dfcbf93d16f20c1e4",
+  "refit_run": false,
+  "status": "COMPLETE_DEVELOPMENT_ONLY",
+  "test_inference_run": false
+}

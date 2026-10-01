@@ -1,0 +1,69 @@
+{
+  "aggregate_copy_bindings": {
+    "reference_records/checkpoint_impact/checkpoint_audit.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/checkpoint-impact-v1/checkpoint_audit.json",
+      "sha256": "1ec753291ba1387a8faaeefa27be1d3082661d5b4e5afd46093170cb34f65192"
+    },
+    "reference_records/checkpoint_impact/completion_manifest.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/checkpoint-impact-v1/completion_manifest.json",
+      "sha256": "b64a4afa2cfba8899a96445a5cbf8715caccdeab08f812746cddfeb0dc35e031"
+    },
+    "reference_records/checkpoint_impact/development_input_lock.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/checkpoint-impact-v1/development_input_lock.json",
+      "sha256": "4cba75bf00e68482994c91109659f1b62143b26451ee5147acb6a520c795175b"
+    },
+    "reference_records/checkpoint_impact/real_window_causality_gate.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/checkpoint-impact-v1/real_window_causality_gate.json",
+      "sha256": "5cfcd0a8bed2684db3ab472a3c706e278b531a0514ba4da61bb0a6f8dc9ad309"
+    },
+    "reference_records/nn/completion_manifest.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42/completion_manifest.json",
+      "sha256": "05ed46d33516b5b58fb5ed02f29dadfc965c5b1efb5083455578a3ac3279d43c"
+    },
+    "reference_records/nn/development_input_lock.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42/development_input_lock.json",
+      "sha256": "4cba75bf00e68482994c91109659f1b62143b26451ee5147acb6a520c795175b"
+    },
+    "reference_records/nn/real_window_causality_gate.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42/real_window_causality_gate.json",
+      "sha256": "3e7d3504ec2ef49fd6b359bced1312e177b04cf07d663cd9ce3fb675ef54e231"
+    },
+    "reference_records/nn/training_log.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42/training_log.json",
+      "sha256": "df3dc210652c2a2eecc2bdf9162db6d5c4a2b13f748ac5b212137bc6e001b840"
+    },
+    "reference_records/nn/validation_selection.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42/validation_selection.json",
+      "sha256": "196582641cbbba0234ab18e6f96d2ca1d2b297646ce884888b4bb809f768a133"
+    },
+    "reference_records/xgb_original_fit/development_input_lock.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/experiments/p6/c0_flat_xgb/fixed-v1-seed42/development_input_lock.json",
+      "sha256": "1031cfb1ba9801b837744d055a4fbe967ceb4cc372f90dd0616876456c708629"
+    },
+    "reference_records/xgb_original_fit/failure_record.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/experiments/p6/c0_flat_xgb/fixed-v1-seed42/failure_record.json",
+      "sha256": "da36a5d1ce1c57fcdf8706ccaa714cb4ae7c936bfba1d9c02175728e801dac2d"
+    },
+    "reference_records/xgb_original_fit/feature_lock.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/experiments/p6/c0_flat_xgb/fixed-v1-seed42/feature_lock.json",
+      "sha256": "692a85d45b08e4024da5622cf4a7b81cac2a475440a889ced0bdc086a231875f"
+    },
+    "reference_records/xgb_original_fit/fit_report.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/experiments/p6/c0_flat_xgb/fixed-v1-seed42/fit_report.json",
+      "sha256": "2f658dfff15c1639efdceef7616a1468ffc54dfda0a0e26ef1f6be7bed8fd118"
+    },
+    "reference_records/xgb_original_fit/validation_prediction_lock.json": {
+      "original_path": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/experiments/p6/c0_flat_xgb/fixed-v1-seed42/validation_prediction_lock.json",
+      "sha256": "7ffd8934c8023941444523263c1489009da8c8f056440d777bca665e1d946717"
+    }
+  },
+  "full_preprocessing_run": false,
+  "generated_at_utc": "2026-10-01T08:52:31.784230+00:00",
+  "large_artifacts": "original local run directories retained; aggregate copies are not standalone replay datasets",
+  "status": "SEALED_DEVELOPMENT_RESEARCH",
+  "test_inference_run": false,
+  "tests": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 python -m pytest -q [12 scoped test files]",
+    "passed": 81
+  }
+}

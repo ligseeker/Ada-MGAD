@@ -1,0 +1,22 @@
+{
+  "files": {
+    "fit_features.npy": "c22efe2cc4b2b8ceaae1487ac651cdb0d91e5d2b08bf32b0a76859fa4f693aa8",
+    "fit_targets.npy": "0a33ec826c38f57ae9ba9413a5e79c172fd6a9ed92650c318eee191aa79c6e87",
+    "validation_features.npy": "2ecda1fd835f08b8784e14234c7b4abc1f0d34358e92b7a15df0bcac762da225"
+  },
+  "geometry": {
+    "fit": {
+      "columns": 16000,
+      "float32_bytes": 2487552000,
+      "rows": 38868
+    },
+    "validation": {
+      "columns": 16000,
+      "float32_bytes": 1114496000,
+      "rows": 17414
+    }
+  },
+  "layout": "metric[L,N,48],log[L,N,32],trace[L,N,N,8]; C order",
+  "test_read": false,
+  "validation_labels_available_to_fit_worker": false
+}

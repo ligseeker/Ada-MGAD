@@ -1,0 +1,10 @@
+{
+  "status": "INCOMPLETE_EXPORT_ERROR",
+  "execution_commit": "3ade981",
+  "generated_at_utc": "2026-10-01T08:31:17.423024+00:00",
+  "error": "KeyError: logits in shared write_predictions export",
+  "fit_and_probability_scoring_completed": true,
+  "test_inference_run": false,
+  "outputs_retained": true,
+  "next_step": "independent locked finalization; no refit"
+}

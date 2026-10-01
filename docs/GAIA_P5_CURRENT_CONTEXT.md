@@ -2,7 +2,13 @@
 
 > 本文件是给新的 code-agent CLI 的单一入口。它只保留当前有效的背景、状态、约束和下一步；完整审计与实现细节继续放在现有文档中，不在这里复制。
 
-更新时间：2026-09-30（Asia/Shanghai；本独立 C0R2 开发工作树）
+更新时间：2026-10-01（Asia/Shanghai；本独立全流程研究分支）
+
+**最新更正优先：旧P5/C0/C1-v2动态图沿batch求均值，顺序batch32最早窗口可使用其后930s输入。在线时刻、延迟与因果OOS anchor声明须限制为batch-conditioned retrospective；固定scores的指标算术可保留。见[更正](P6_BATCH_GRAPH_CAUSALITY_CORRECTION.md)。**
+
+**新开发实验完成：逐窗口C0重训Val TP/FP/FN=2103/19/798，P/R/F1=.991046/.724922/.837348；固定16000D历史窗口XGB=1999/4/902，.998003/.689073/.815253，paired新增54/丢失158，NO_GO_DEVELOPMENT。81项测试通过；未重跑Test、OOS anchors、RCA或E2E。共享70% Train preprocessing包含detector Validation；Trace parent可用性待证明。详见[结果与决定](P6_CAUSAL_REPAIR_AND_FLAT_XGB_RESULTS_20261001.md)。**
+
+**raw-observability修复/独立配置/Train数组gate已准备，只提供[完整手动命令](P6_RAWOBS_MASK_MANUAL_PLAN.md)，全量预处理未执行。主工作树e2e-v2保持8d69eba及用户已有修改；代码在experiment/p6-c0-window-causal、experiment/p6-c0-flat-xgb及集成分支experiment/p6-c0-rawobs-mask。以下历史结果按上述更正范围阅读。**
 
 **本工作树增量：** 用户授权的检测阶段 Fit/Validation 研究已归档为
 `COMPLETE_DEVELOPMENT_ONLY`，见[协议](P6_C0R2_TRAINVAL_DEV_PROTOCOL.md)

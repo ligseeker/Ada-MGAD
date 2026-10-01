@@ -1,0 +1,85 @@
+{
+  "cohort": {
+    "fit": {
+      "gt_events": 7443,
+      "labels": {
+        "counts": {
+          "ignore": 4682,
+          "negative": 25971,
+          "positive": 12897
+        },
+        "fractions": {
+          "ignore": 0.10750861079219289,
+          "negative": 0.5963490241102182,
+          "positive": 0.29614236509758896
+        },
+        "ignore_region_count": 950,
+        "positive_region_count": 4922,
+        "total": 43550
+      },
+      "reference": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/scores/fit.csv",
+      "reference_sha256": "140c58508263cd5c5fca280cac284c6d3e52798275eb40b36c8921f9a797687b",
+      "windows": 43550
+    },
+    "validation": {
+      "gt_events": 2901,
+      "labels": {
+        "counts": {
+          "ignore": 1676,
+          "negative": 10851,
+          "positive": 4887
+        },
+        "fractions": {
+          "ignore": 0.0962444010566211,
+          "negative": 0.6231193292752958,
+          "positive": 0.28063626966808314
+        },
+        "ignore_region_count": 375,
+        "positive_region_count": 1744,
+        "total": 17414
+      },
+      "reference": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/gpu-control-v1-seed42/validation_predictions.csv",
+      "reference_sha256": "dfbd8ff19fb3fe171a117ee062ae05a080ff47e69f8b845b173b00ea9ede27a7",
+      "windows": 17414
+    }
+  },
+  "correction": "initial driver omitted mandatory raw-logit CSV field; export-only correction",
+  "execution_commit": "ae7e7a870acadeb1da55b1e074980a3709fc9121",
+  "feature_lock_sha256": "692a85d45b08e4024da5622cf4a7b81cac2a475440a889ced0bdc086a231875f",
+  "fit_execution_commit": "3ade981427b017d1bcaec83dfcbf93d16f20c1e4",
+  "fit_report_sha256": "2f658dfff15c1639efdceef7616a1468ffc54dfda0a0e26ef1f6be7bed8fd118",
+  "fitted_run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/experiments/p6/c0_flat_xgb/fixed-v1-seed42",
+  "original_input_lock_sha256": "1031cfb1ba9801b837744d055a4fbe967ceb4cc372f90dd0616876456c708629",
+  "refit_run": false,
+  "source_sha256": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/configs/e2e/gaia_p5_v3_preprocessing_v2.json": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/configs/e2e/gaia_p6_c0_flat_xgb_v1.json": "99d1eb64c986b08e3bd62b40cbd3c4effa9b9ad5d5c2be6b112db2db67b384ca",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/scripts/p6/fit_c0_flat_xgb.py": "96d8cd4bacd314964406f93a0d3eedb907d2fdc638297b929919474700f67d75",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/scripts/p6/run_c0_flat_xgb.py": "f20e0ad4eb0f1bdd703fed8e0af9942ac94c3b50fe4416b7115e2b1d28057b10",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/scripts/p6/run_c0_trigger.py": "79fd7849e1fa8ec9b15e72081971bba6e7c823f58ba6f31147e361417ec450e8",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/scripts/p6/run_c0_window_causal.py": "005ad68b41721f0c30791af123ac0a4c8917ee551f167a40bc0b29fda4134f9e",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/src/e2e/event_detection.py": "115819a5e8162f116da109dfbb584b755b12dc508d51dba7449d43b0734d837a",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/src/e2e/flat_trigger_features.py": "caa14147d34912d3f03c30ee3aebf26594feb94e1ff3d1dc0932fcd4609ee875",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/src/e2e/system_trigger.py": "89cb54355cfebe54147c9788eda0822de659bed7db2f9fba03cc15ebc59102f0",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/src/e2e/system_trigger_data.py": "14c6c7986884af9b06ec99c3e5aac024f4a3c92cda02ebbf44bf2e8f731bef2a",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/src/e2e/system_trigger_model.py": "99aba472905e3b578551c88071b186cb687f479d29eb33e254113763368e8237",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/src/e2e/trigger_development.py": "2369dfe13546c761a429b6f77046ecfbc34683ab70d7137c5e89e9ca0d762b56",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/src/e2e/window_dynamic_graph.py": "ada416900eccdb9143491679c0029284215321f4b7740bd783bb27dafd00e3d0",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb/src/model_util.py": "39401ae1bfc326fa776fbac66854662c1fa51613e2ef901c65d697fe20c25faa",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask/scripts/p6/export_c0_xgb_logits.py": "9a97d44564ab313edb29cb1b2057ec8b90ce0a34517a07ae2aa1df681d258a89",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask/scripts/p6/finalize_c0_flat_xgb.py": "939dead366748deb26f1eaa51b5d200874c6ac2252a183c26ab7903ad833d339",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask/scripts/p6/run_c0_trigger.py": "79fd7849e1fa8ec9b15e72081971bba6e7c823f58ba6f31147e361417ec450e8",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask/src/e2e/event_detection.py": "115819a5e8162f116da109dfbb584b755b12dc508d51dba7449d43b0734d837a",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask/src/e2e/system_trigger.py": "89cb54355cfebe54147c9788eda0822de659bed7db2f9fba03cc15ebc59102f0",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask/src/e2e/system_trigger_data.py": "14c6c7986884af9b06ec99c3e5aac024f4a3c92cda02ebbf44bf2e8f731bef2a",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask/src/e2e/trigger_development.py": "2369dfe13546c761a429b6f77046ecfbc34683ab70d7137c5e89e9ca0d762b56",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json": "3b228061fd66b659bfa1f7564d4b9ffe5129be06b702b58573f67003d61634c2",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/graph.npy": "04cf2a6bdbd4a2137cafe8140794750875c690b210f1d1f8347a14a34804a809",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/train/log.npy": "02af8ad63423cfaebadc336f122c984a0a6b7c718db4674c62a6ddd40f9ff9dc",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/train/metric.npy": "8fb92322f56007f59007b102f6eb07b0cad6496b44b4292f63ced0d797956ee0",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/train/timestamps.npy": "ed06402501a887099df16b0353ef4825beda2f24a74d6dae6c38b7d34de91735",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad/train/trace.npy": "fd49c42223e5dd99420bb5e13432b72c801e6c86e5562620e938599f74d628f2"
+  },
+  "test_read": false
+}

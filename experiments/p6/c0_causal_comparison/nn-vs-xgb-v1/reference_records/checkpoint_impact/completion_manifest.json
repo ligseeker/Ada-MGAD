@@ -1,0 +1,20 @@
+{
+  "action": "audit",
+  "execution_commit": "37eed5c21a6ed472ba51d5fad8d017fc2035b273",
+  "files": {
+    "batch_fixed_threshold_matching.csv": "237468e82ffcadf6274816bed371477cff3e7c50f2a81b8a4bb347ed96945a97",
+    "batch_predictions.csv": "01d8a77760f6624f5e2a6011354262feaf3b8d93a1cff78d7ccd2661d1555618",
+    "checkpoint_audit.json": "1ec753291ba1387a8faaeefa27be1d3082661d5b4e5afd46093170cb34f65192",
+    "development_input_lock.json": "4cba75bf00e68482994c91109659f1b62143b26451ee5147acb6a520c795175b",
+    "development_registry.csv": "40f058f202c2dda2bc1067cee895a9f2b5cf5fea2577acf05ff422a2e79e9fbc",
+    "fit_gt.csv": "dd366f9246ef30c38963833535b251051975de023809905e2d087d230ac1b3c2",
+    "p6_c0.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "real_window_causality_gate.json": "5cfcd0a8bed2684db3ab472a3c706e278b531a0514ba4da61bb0a6f8dc9ad309",
+    "validation_gt.csv": "c522cd913b07508598bc0506ff7111ce9ffdb22a7704227f924f06d2dbd1b7bc",
+    "window_fixed_threshold_matching.csv": "7fe0f3462697fc699cb350f7b8822e01991af015aaa23b99ddbb601a590c9d94",
+    "window_predictions.csv": "58e59d23c5c8e11d54cd0a2eef1d8356080746f3596f155861c32e6fab90e435",
+    "window_validation_selected_matching.csv": "58baae6d540d11cad336d767b6c3a1692c609bfd4c7a67bbd29bb74ee10f08d9"
+  },
+  "status": "COMPLETE_DEVELOPMENT_ONLY",
+  "test_inference_run": false
+}

@@ -1,0 +1,20 @@
+{
+  "action": "train",
+  "execution_commit": "37eed5c21a6ed472ba51d5fad8d017fc2035b273",
+  "files": {
+    "checkpoint/best_validation_event_f1.pt": "d4f0460649fe2bc586fa4d79f141fe939a2cf16bb1127b27603b7dc0d1ad3f0e",
+    "development_input_lock.json": "4cba75bf00e68482994c91109659f1b62143b26451ee5147acb6a520c795175b",
+    "development_registry.csv": "40f058f202c2dda2bc1067cee895a9f2b5cf5fea2577acf05ff422a2e79e9fbc",
+    "fit_gt.csv": "dd366f9246ef30c38963833535b251051975de023809905e2d087d230ac1b3c2",
+    "p6_c0.log": "a337c88195292845db7c41de7ead90c02d840fbc224e7dfc8daa8ef5c45ccbca",
+    "real_window_causality_gate.json": "3e7d3504ec2ef49fd6b359bced1312e177b04cf07d663cd9ce3fb675ef54e231",
+    "training_log.json": "df3dc210652c2a2eecc2bdf9162db6d5c4a2b13f748ac5b212137bc6e001b840",
+    "validation_episodes.csv": "48ec17de8437e0ea01ea490df414af4c8f3e3c3a08f881bd8724bb2696eb20a6",
+    "validation_gt.csv": "c522cd913b07508598bc0506ff7111ce9ffdb22a7704227f924f06d2dbd1b7bc",
+    "validation_matching.csv": "d00d02f31f35fc3540f097449542d52e9c31ee3a068a9d1570fddcc54a3665af",
+    "validation_predictions.csv": "393b221f73f3025ffd253c1ace8a419fdadae22d56ed54f5553fa7c841874bad",
+    "validation_selection.json": "196582641cbbba0234ab18e6f96d2ca1d2b297646ce884888b4bb809f768a133"
+  },
+  "status": "COMPLETE_DEVELOPMENT_ONLY",
+  "test_inference_run": false
+}
