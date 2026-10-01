@@ -75,7 +75,7 @@ class EpochAudit:
     This numerical tolerance is an integrity gate, not a performance gate.
     """
 
-    def __init__(self, output_dir, old_run, gt, fit_counts):
+    def __init__(self, output_dir, old_run, gt, fit_counts, enforce_historical_replay=True):
         self.directory = Path(output_dir) / "epochs"
         self.directory.mkdir()
         self.old_run = Path(old_run)
@@ -85,6 +85,7 @@ class EpochAudit:
         self.gt = gt
         self.fit_counts = fit_counts
         self.records = []
+        self.enforce_historical_replay = enforce_historical_replay
 
     def __call__(self, model, output, entry, learning_rates, next_learning_rates):
         before = rng_snapshot()
@@ -121,7 +122,8 @@ class EpochAudit:
         record = {**entry, "learning_rates_used": learning_rates,
                   "learning_rates_next_epoch": next_learning_rates,
                   "fit_consumed_labels": self.fit_counts,
-                  "early_trajectory_replay": replay,
+                  ("early_trajectory_replay" if self.enforce_historical_replay
+                   else "historical_trajectory_comparison"): replay,
                   "diagnostics": score_diagnostics(output, self.gt, entry["validation_threshold"]),
                   "checkpoint_sha256": sha256_file(directory / "model_state.pt"),
                   "validation_outputs_sha256": sha256_file(directory / "validation_outputs.npz")}
@@ -131,8 +133,8 @@ class EpochAudit:
         self.records.append(record)
         write_json(self.directory.parent / "epoch_progress.json", to_builtin({"history": self.records}))
         bin_metrics = record["diagnostics"]["bin_metrics_at_merged_threshold"]
-        logging.info("budget audit epoch %d: lr=%s bin TP/FP/FN=%d/%d/%d early_replay=%s", epoch,
+        logging.info("budget audit epoch %d: lr=%s bin TP/FP/FN=%d/%d/%d historical_match=%s", epoch,
                      learning_rates, bin_metrics["true_positive_events"], bin_metrics["false_positive_events"],
                      bin_metrics["false_negative_events"], replay["passed"])
-        if not replay["passed"]:
+        if self.enforce_historical_replay and not replay["passed"]:
             raise ValueError("archived early trajectory did not replay at epoch {}: {}".format(epoch, replay))

@@ -4,6 +4,12 @@
 
 更新时间：2026-10-01（Asia/Shanghai；本独立全流程研究分支）
 
+**最新复现修正（2026-10-02）：**`f987a1b`的三个budget run在epoch0历史复现FAIL后停止，
+保持INCOMPLETE；同seed真实Fit mini-probe确认默认GPU训练存在微小非确定性。
+确定性probe逐步权重/分数精确一致。新的control(patience8)/budget(patience30)配对
+在同一固定确定性环境运行，原run仅为历史参考；不从新旧差异推断预算收益。
+见 [新配对协议](P6_DETERMINISTIC_PAIRED_BUDGET_PROTOCOL.md)。完成以新run manifest为准。
+
 **本工作树当前任务（2026-10-02）：**用户已授权继续研究，优先验证三个seed是否过早停止。
 独立分支 `experiment/p6-tcn-training-budget` 仅改patience8→30，max_epochs仍30，
 seeds42/17/2026全执行；Train/Validation-only，Test冻结。
