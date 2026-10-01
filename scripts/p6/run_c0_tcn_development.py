@@ -93,6 +93,9 @@ def main():
     if model_args != dict(e1["model_args"], gpu=bool(args.gpu)):
         raise ValueError("embedding, graph, head or input arguments changed")
     old_lock = json.loads((baseline_dir / "development_input_lock.json").read_text())
+    for split in ("fit", "validation"):
+        if identity[split]["reference_sha256"] != old_lock["cohort"][split]["reference_sha256"]:
+            raise ValueError("archived cohort reference drift: " + split)
     frozen_path, frozen_sha = next((Path(path), sha) for path, sha in old_lock["source_sha256"].items()
                                   if path.endswith("/scripts/p6/run_c0_trigger.py"))
     verify_training_factory_only(ROOT / "scripts/p6/run_c0_trigger.py", frozen_path, frozen_sha)
