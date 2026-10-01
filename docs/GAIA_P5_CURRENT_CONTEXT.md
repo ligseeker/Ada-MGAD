@@ -4,6 +4,14 @@
 
 更新时间：2026-10-01（Asia/Shanghai；本独立全流程研究分支）
 
+**本工作树当前任务（2026-10-02）：**用户已授权继续研究，优先验证三个seed是否过早停止。
+独立分支 `experiment/p6-tcn-training-budget` 仅改patience8→30，max_epochs仍30，
+seeds42/17/2026全执行；Train/Validation-only，Test冻结。
+源/协议/config先提交，每轮保存权重、Val原始分数、实际LR并检验旧早期轨迹。
+详见 [实施方案](P6_TRAIN_BUDGET_DIAGNOSTIC_PLAN_20261002.md)。
+新run使用 `experiments/p6/c0_training_budget/` 唯一目录；完成以manifest为准。
+旧稳定性NO-GO和既有Test评估不追溯更改；只有三seed全门槛通过才打开新的native E2E。
+
 **本复制工作树增量：**`experiment/p6-c0-onset-tcn-replication`已冻结
 [复制协议](P6_TCN_REPLICATION_PROTOCOL_20261001.md)，新增seeds17/2026，
 只改初始化；各自沿用merged选择规则并冻结阈值做bin主结果，不挑最佳seed。

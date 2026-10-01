@@ -710,7 +710,7 @@ def _selection_key(metrics: Mapping[str, object], threshold: float) -> Tuple[flo
 
 def run_training(state: ProtocolState, output_dir: Path, model_args, training, manifest_path: Path,
                  manifest_sha: str, threshold_workers: int, start_method: str,
-                 model_class=SystemEventTrigger) -> Mapping[str, object]:
+                 model_class=SystemEventTrigger, epoch_observer=None) -> Mapping[str, object]:
     device = torch.device("cuda" if model_args["gpu"] and torch.cuda.is_available() else "cpu")
     seed_everything(int(model_args["random_seed"]))
     torch.manual_seed(int(model_args["random_seed"]))
@@ -772,6 +772,7 @@ def run_training(state: ProtocolState, output_dir: Path, model_args, training, m
     stop_reason = "max_epochs"
 
     for epoch in range(max_epochs):
+        learning_rates = [float(group["lr"]) for group in optimizer.param_groups]
         model.train()
         sums = {"total": 0.0, "bce": 0.0, "graph": 0.0}
         batches = 0
@@ -846,6 +847,9 @@ def run_training(state: ProtocolState, output_dir: Path, model_args, training, m
             worse_count = 0
         else:
             worse_count += 1
+        if epoch_observer is not None:
+            epoch_observer(model, validation_output, entry, learning_rates,
+                           [float(group["lr"]) for group in optimizer.param_groups])
         if patience > 0 and worse_count >= patience:
             stop_reason = "validation_event_f1_patience"
             break
