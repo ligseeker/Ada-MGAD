@@ -1,0 +1,56 @@
+{
+  "protocol_id": "P6-NORMAL-FORECAST-FIT-SCREEN-STABILITY-V2",
+  "base_config": "configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+  "seed": 42,
+  "model_spec": {
+    "hidden_channels": 32,
+    "kernel_size": 3,
+    "dilations": [
+      1,
+      2
+    ],
+    "convolutions_per_block": 2,
+    "dropout": 0.2,
+    "history_bins": 9,
+    "target_bins": 1,
+    "numeric_slots": 45,
+    "mask_slots": 3,
+    "services": 10
+  },
+  "training": {
+    "epochs": 20,
+    "batch_size": 256,
+    "num_workers": 2,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "huber_delta": 1.0,
+    "grad_clip_norm": 10.0,
+    "checkpoint": "last_epoch",
+    "shuffle_normal_training": true
+  },
+  "normal_quantile": 0.995,
+  "min_normal_windows": 512,
+  "min_clean_memory_cases": 30,
+  "screen_gate": {
+    "precision_floor": 0.9,
+    "recall_floor": 0.6,
+    "f1_floor": 0.72,
+    "f1_gain_vs_persistence": 0.02,
+    "normal_holdout_positive_fraction_limit": 0.01
+  },
+  "references": {
+    "tcn_run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onsettcn/experiments/p6/c0_onset_tcn/tcn-v1-seed42",
+    "tcn_total_comparison": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0normal/experiments/p6/c0_onset_tcn/total-vs-baseline-v1",
+    "tcn_decoder_comparison": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0normal/experiments/p6/c0_onset_tcn/bin-decoder-v1"
+  },
+  "scope": "Fit-only gradient updates/calibration/effect screen on frozen filled-series; registry interval columns scanned solely for routing; no Test arrays or Test service/fault annotations",
+  "start_condition": "Completed initialization STABILITY_NO_GO; both seed17/2026 fixed and auxiliary bin variants NO-GO; preserve original forecast recipe",
+  "stability_fallback": {
+    "run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/stability-v1",
+    "completion_sha256": "b09e308a4086386d3a4bf6ea0b52d7dcc47121a63209c5240005202fddb72a41",
+    "report_sha256": "ef5bd2fef8301f58703ff17040ed699b9da647ad1f2b030907c9984d886cabfe",
+    "reference_config": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0normal/configs/e2e/gaia_p6_normal_forecast_fit_screen_v1.json",
+    "reference_runner": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0normal/scripts/p6/run_normal_forecast_fit_screen.py"
+  }
+}
