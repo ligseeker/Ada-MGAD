@@ -1,0 +1,679 @@
+{
+  "protocol_id": "P6-FROZEN-TEST-REVIEW-V1",
+  "candidate_rule": "completed model/decoder with Validation F1 >= .80 OR prespecified overall/group improvement; include all preregistered family seeds and primary/auxiliary decoders; original NO-GO retained",
+  "data_root": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad",
+  "ad_manifest": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3_preprocessing_v2/ad/ad_data_manifest.json",
+  "registry": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv",
+  "base_config": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+  "models": [
+    {
+      "id": "legacy",
+      "kind": "historical",
+      "source_tree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2",
+      "run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger",
+      "selection": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/validation_selection.json",
+      "seed": 42,
+      "checkpoint": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/checkpoint/best_validation_event_f1.pt",
+      "checkpoint_sha256": "6a4317d6414774e1ca6be4e418ed3d47d678adfab1f0155e96e04aa3fa9981f5",
+      "score_reference": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_predictions.csv"
+    },
+    {
+      "id": "causal",
+      "kind": "nn",
+      "source_tree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal",
+      "run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42",
+      "selection": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42/validation_selection.json",
+      "seed": 42,
+      "completion": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42/completion_manifest.json",
+      "checkpoint": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42/checkpoint/best_validation_event_f1.pt",
+      "checkpoint_sha256": "d4f0460649fe2bc586fa4d79f141fe939a2cf16bb1127b27603b7dc0d1ad3f0e"
+    },
+    {
+      "id": "control",
+      "kind": "nn",
+      "source_tree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight",
+      "run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/gpu-control-v1-seed42",
+      "selection": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/gpu-control-v1-seed42/validation_selection.json",
+      "seed": 42,
+      "completion": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/gpu-control-v1-seed42/development_manifest.json",
+      "checkpoint": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/gpu-control-v1-seed42/checkpoint/best_validation_event_f1.pt",
+      "checkpoint_sha256": "c320dc8724d17d5fbe4e7d1e5ce1e98c163dba7a92f32fd5a80a2c24bcaa1aab"
+    },
+    {
+      "id": "weighted",
+      "kind": "nn",
+      "source_tree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight",
+      "run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/weighted-v1-seed42",
+      "selection": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/weighted-v1-seed42/validation_selection.json",
+      "seed": 42,
+      "completion": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/weighted-v1-seed42/development_manifest.json",
+      "checkpoint": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/weighted-v1-seed42/checkpoint/best_validation_event_f1.pt",
+      "checkpoint_sha256": "e568f2acb3d8f5b6a3b2121e43befef08008ad99510602b8a55490861b55dc69"
+    },
+    {
+      "id": "metric",
+      "kind": "metric",
+      "source_tree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0metric",
+      "run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0metric/experiments/p6/c0_metric_drift/c0-metric-drift-v1-seed42",
+      "selection": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0metric/experiments/p6/c0_metric_drift/c0-metric-drift-v1-seed42/validation_selection.json",
+      "seed": 42,
+      "completion": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0metric/experiments/p6/c0_metric_drift/c0-metric-drift-v1-seed42/development_manifest.json",
+      "checkpoint": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0metric/experiments/p6/c0_metric_drift/c0-metric-drift-v1-seed42/checkpoint/best_validation_event_f1.pt",
+      "checkpoint_sha256": "d7e78391ec28c4f4610bec7145e663f7c2195cf58c6b1c69ea4260e6b3c9a06d"
+    },
+    {
+      "id": "flat",
+      "kind": "flat",
+      "source_tree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb",
+      "run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask/experiments/p6/c0_flat_xgb/finalized-v1-seed42",
+      "selection": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask/experiments/p6/c0_flat_xgb/finalized-v1-seed42/validation_selection.json",
+      "seed": 42,
+      "completion": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask/experiments/p6/c0_flat_xgb/finalized-v1-seed42/completion_manifest.json",
+      "checkpoint": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask/experiments/p6/c0_flat_xgb/finalized-v1-seed42/trigger.ubj",
+      "checkpoint_sha256": "54463e621db95de628be8b0fc8a4a8a04a4c6d511f0c936d40f2606a850ac251",
+      "python": "/home/zhangll24/.venvs/ada-rca-supervised-baselines/bin/python",
+      "xgboost_version": "2.1.4"
+    },
+    {
+      "id": "onset",
+      "kind": "nn",
+      "source_tree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onset",
+      "run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onset/experiments/p6/c0_onset_development/onset30-v1-seed42",
+      "selection": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onset/experiments/p6/c0_onset_development/onset30-v1-seed42/validation_selection.json",
+      "seed": 42,
+      "completion": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onset/experiments/p6/c0_onset_development/onset30-v1-seed42/completion_manifest.json",
+      "checkpoint": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onset/experiments/p6/c0_onset_development/onset30-v1-seed42/checkpoint/best_validation_event_f1.pt",
+      "checkpoint_sha256": "e55bb0ad37ccb30abf681b96eba83663ec0d76b1a00ba66e9de460b3e0351dc1"
+    },
+    {
+      "id": "tcn42",
+      "kind": "tcn",
+      "source_tree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onsettcn",
+      "run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onsettcn/experiments/p6/c0_onset_tcn/tcn-v1-seed42",
+      "selection": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onsettcn/experiments/p6/c0_onset_tcn/tcn-v1-seed42/validation_selection.json",
+      "seed": 42,
+      "completion": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onsettcn/experiments/p6/c0_onset_tcn/tcn-v1-seed42/completion_manifest.json",
+      "checkpoint": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onsettcn/experiments/p6/c0_onset_tcn/tcn-v1-seed42/checkpoint/best_validation_event_f1.pt",
+      "checkpoint_sha256": "ae5d64e53125031f634b57de569f212ba77a4d6981ff5d8414223fe44085d924"
+    },
+    {
+      "id": "tcn17",
+      "kind": "tcn",
+      "source_tree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica",
+      "run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed17-v1",
+      "selection": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed17-v1/validation_selection.json",
+      "seed": 17,
+      "completion": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed17-v1/completion_manifest.json",
+      "checkpoint": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed17-v1/checkpoint/best_validation_event_f1.pt",
+      "checkpoint_sha256": "fe4dcb8557630efb58ec90b0213a57c88080ef155683fc5dd70295e68120ebc6"
+    },
+    {
+      "id": "tcn2026",
+      "kind": "tcn",
+      "source_tree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica",
+      "run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed2026-v1",
+      "selection": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed2026-v1/validation_selection.json",
+      "seed": 2026,
+      "completion": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed2026-v1/completion_manifest.json",
+      "checkpoint": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed2026-v1/checkpoint/best_validation_event_f1.pt",
+      "checkpoint_sha256": "eb8433242afec6b655a8711f6a0c2f0845f774270bb22c5dd41d62e85c718677"
+    }
+  ],
+  "arms": [
+    {
+      "id": "legacy_merged",
+      "model_id": "legacy",
+      "decoder": "merged",
+      "threshold": 0.9998264908790588,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/validation_selection.json",
+      "threshold_key": "selected_validation_threshold",
+      "graph_scope": "batch",
+      "role": "registered",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2124,
+          "mean_seconds": 23.942804143126178,
+          "median_seconds": 23.995,
+          "p90_seconds": 37.0805,
+          "p95_seconds": 39.17674999999999
+        },
+        "event_f1": 0.8431917427550616,
+        "event_precision": 0.9939167056621432,
+        "event_recall": 0.7321613236814891,
+        "false_negative_events": 777,
+        "false_positive_events": 13,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2137,
+        "true_positive_events": 2124
+      }
+    },
+    {
+      "id": "causal_merged",
+      "model_id": "causal",
+      "decoder": "merged",
+      "threshold": 0.9995630383491516,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42/validation_selection.json",
+      "threshold_key": "selected_validation_threshold",
+      "graph_scope": "window",
+      "role": "registered",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2103,
+          "mean_seconds": 24.05918735140276,
+          "median_seconds": 24.177,
+          "p90_seconds": 37.2126,
+          "p95_seconds": 39.3235
+        },
+        "event_f1": 0.8373481982878758,
+        "event_precision": 0.9910461828463714,
+        "event_recall": 0.7249224405377456,
+        "false_negative_events": 798,
+        "false_positive_events": 19,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2122,
+        "true_positive_events": 2103
+      }
+    },
+    {
+      "id": "control_merged",
+      "model_id": "control",
+      "decoder": "merged",
+      "threshold": 0.9986969828605652,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/gpu-control-v1-seed42/validation_selection.json",
+      "threshold_key": "selected_validation_threshold",
+      "graph_scope": "batch",
+      "role": "registered",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2103,
+          "mean_seconds": 24.105422729434142,
+          "median_seconds": 24.216,
+          "p90_seconds": 37.2754,
+          "p95_seconds": 39.3786
+        },
+        "event_f1": 0.8400239664469742,
+        "event_precision": 0.9985754985754985,
+        "event_recall": 0.7249224405377456,
+        "false_negative_events": 798,
+        "false_positive_events": 3,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2106,
+        "true_positive_events": 2103
+      }
+    },
+    {
+      "id": "weighted_merged",
+      "model_id": "weighted",
+      "decoder": "merged",
+      "threshold": 0.9988443851470947,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/weighted-v1-seed42/validation_selection.json",
+      "threshold_key": "selected_validation_threshold",
+      "graph_scope": "batch",
+      "role": "registered",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2105,
+          "mean_seconds": 24.09996294536817,
+          "median_seconds": 24.242,
+          "p90_seconds": 37.231,
+          "p95_seconds": 39.322
+        },
+        "event_f1": 0.8396489828480256,
+        "event_precision": 0.9962139138665405,
+        "event_recall": 0.7256118579800069,
+        "false_negative_events": 796,
+        "false_positive_events": 8,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2113,
+        "true_positive_events": 2105
+      }
+    },
+    {
+      "id": "metric_merged",
+      "model_id": "metric",
+      "decoder": "merged",
+      "threshold": 0.9964967370033264,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0metric/experiments/p6/c0_metric_drift/c0-metric-drift-v1-seed42/validation_selection.json",
+      "threshold_key": "selected_validation_threshold",
+      "graph_scope": "batch",
+      "role": "registered",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2071,
+          "mean_seconds": 24.117125060357314,
+          "median_seconds": 24.269,
+          "p90_seconds": 37.219,
+          "p95_seconds": 39.305
+        },
+        "event_f1": 0.8164794007490636,
+        "event_precision": 0.9534990791896869,
+        "event_recall": 0.713891761461565,
+        "false_negative_events": 830,
+        "false_positive_events": 101,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2172,
+        "true_positive_events": 2071
+      }
+    },
+    {
+      "id": "flat_merged",
+      "model_id": "flat",
+      "decoder": "merged",
+      "threshold": 0.9253149032592773,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask/experiments/p6/c0_flat_xgb/finalized-v1-seed42/validation_selection.json",
+      "threshold_key": "selected_validation_threshold",
+      "graph_scope": "window",
+      "role": "registered",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 1999,
+          "mean_seconds": 23.825253626813407,
+          "median_seconds": 23.861,
+          "p90_seconds": 37.063,
+          "p95_seconds": 39.1962
+        },
+        "event_f1": 0.815252854812398,
+        "event_precision": 0.9980029955067399,
+        "event_recall": 0.6890727335401585,
+        "false_negative_events": 902,
+        "false_positive_events": 4,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2003,
+        "true_positive_events": 1999
+      }
+    },
+    {
+      "id": "onset_merged",
+      "model_id": "onset",
+      "decoder": "merged",
+      "threshold": 0.2392304241657257,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onset/experiments/p6/c0_onset_development/onset30-v1-seed42/validation_selection.json",
+      "threshold_key": "selected_validation_threshold",
+      "graph_scope": "window",
+      "role": "registered",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2057,
+          "mean_seconds": 22.86959455517744,
+          "median_seconds": 22.747,
+          "p90_seconds": 35.906,
+          "p95_seconds": 37.9352
+        },
+        "event_f1": 0.8084102967184122,
+        "event_precision": 0.9401279707495429,
+        "event_recall": 0.709065839365736,
+        "false_negative_events": 844,
+        "false_positive_events": 131,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2188,
+        "true_positive_events": 2057
+      }
+    },
+    {
+      "id": "tcn42_merged",
+      "model_id": "tcn42",
+      "decoder": "merged",
+      "threshold": 0.9025284051895142,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onsettcn/experiments/p6/c0_onset_tcn/tcn-v1-seed42/validation_selection.json",
+      "threshold_key": "selected_validation_threshold",
+      "graph_scope": "window",
+      "role": "registered",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2127,
+          "mean_seconds": 24.075257639868358,
+          "median_seconds": 24.2,
+          "p90_seconds": 37.2118,
+          "p95_seconds": 39.302499999999995
+        },
+        "event_f1": 0.8450536352800954,
+        "event_precision": 0.9971870604781997,
+        "event_recall": 0.733195449844881,
+        "false_negative_events": 774,
+        "false_positive_events": 6,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2133,
+        "true_positive_events": 2127
+      }
+    },
+    {
+      "id": "tcn17_merged",
+      "model_id": "tcn17",
+      "decoder": "merged",
+      "threshold": 0.8253470063209534,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed17-v1/validation_selection.json",
+      "threshold_key": "selected_validation_threshold",
+      "graph_scope": "window",
+      "role": "registered",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2125,
+          "mean_seconds": 24.080144941176474,
+          "median_seconds": 24.259,
+          "p90_seconds": 37.211,
+          "p95_seconds": 39.2606
+        },
+        "event_f1": 0.8346425765907305,
+        "event_precision": 0.9698767685988133,
+        "event_recall": 0.7325060324026198,
+        "false_negative_events": 776,
+        "false_positive_events": 66,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2191,
+        "true_positive_events": 2125
+      }
+    },
+    {
+      "id": "tcn2026_merged",
+      "model_id": "tcn2026",
+      "decoder": "merged",
+      "threshold": 0.6636671423912048,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed2026-v1/validation_selection.json",
+      "threshold_key": "selected_validation_threshold",
+      "graph_scope": "window",
+      "role": "registered",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2090,
+          "mean_seconds": 23.276237799043063,
+          "median_seconds": 23.2725,
+          "p90_seconds": 36.2719,
+          "p95_seconds": 38.1979
+        },
+        "event_f1": 0.8300238284352661,
+        "event_precision": 0.9789227166276346,
+        "event_recall": 0.7204412271630473,
+        "false_negative_events": 811,
+        "false_positive_events": 45,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2135,
+        "true_positive_events": 2090
+      }
+    },
+    {
+      "id": "legacy_rise",
+      "model_id": "legacy",
+      "decoder": "rise",
+      "threshold": 0.9998264908790588,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/validation_selection.json",
+      "threshold_key": "selected_validation_threshold",
+      "graph_scope": "batch",
+      "role": "fixed_trainval_decoder",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2244,
+          "mean_seconds": 23.92527228163993,
+          "median_seconds": 23.813000000000002,
+          "p90_seconds": 37.0276,
+          "p95_seconds": 39.0832
+        },
+        "event_f1": 0.8697674418604651,
+        "event_precision": 0.9933598937583001,
+        "event_recall": 0.7735263702171665,
+        "false_negative_events": 657,
+        "false_positive_events": 15,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2259,
+        "true_positive_events": 2244
+      }
+    },
+    {
+      "id": "onset_bin",
+      "model_id": "onset",
+      "decoder": "bin",
+      "threshold": 0.2392304241657257,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onset/experiments/p6/c0_onset_development/bin-decoder-v1/decoder_comparison.json",
+      "threshold_key": "results.onset_bins_fixed_threshold.threshold",
+      "graph_scope": "window",
+      "role": "primary_fixed_threshold",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2320,
+          "mean_seconds": 23.024882327586205,
+          "median_seconds": 22.7755,
+          "p90_seconds": 35.7435,
+          "p95_seconds": 37.73524999999998
+        },
+        "event_f1": 0.5330269959793222,
+        "event_precision": 0.39972432804962094,
+        "event_recall": 0.7997242330230955,
+        "false_negative_events": 581,
+        "false_positive_events": 3484,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 5804,
+        "true_positive_events": 2320
+      }
+    },
+    {
+      "id": "onset_aux",
+      "model_id": "onset",
+      "decoder": "bin",
+      "threshold": 0.23088158667087555,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onset/experiments/p6/c0_onset_development/bin-decoder-v1/decoder_comparison.json",
+      "threshold_key": "results.onset_bins_validation_selected.threshold",
+      "graph_scope": "window",
+      "role": "auxiliary_validation_threshold",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2369,
+          "mean_seconds": 23.06250485436893,
+          "median_seconds": 22.78,
+          "p90_seconds": 35.9074,
+          "p95_seconds": 37.937200000000004
+        },
+        "event_f1": 0.5369446962828648,
+        "event_precision": 0.39996623332770553,
+        "event_recall": 0.8166149603584971,
+        "false_negative_events": 532,
+        "false_positive_events": 3554,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 5923,
+        "true_positive_events": 2369
+      }
+    },
+    {
+      "id": "tcn42_bin",
+      "model_id": "tcn42",
+      "decoder": "bin",
+      "threshold": 0.9025284051895142,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0normal/experiments/p6/c0_onset_tcn/bin-decoder-v1/decoder_comparison.json",
+      "threshold_key": "results.onset_bins_fixed_threshold.threshold",
+      "graph_scope": "window",
+      "role": "primary_fixed_threshold",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2577,
+          "mean_seconds": 25.247803647652308,
+          "median_seconds": 25.327,
+          "p90_seconds": 37.3268,
+          "p95_seconds": 39.3878
+        },
+        "event_f1": 0.9384559359067736,
+        "event_precision": 0.994596680818217,
+        "event_recall": 0.8883143743536711,
+        "false_negative_events": 324,
+        "false_positive_events": 14,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2591,
+        "true_positive_events": 2577
+      }
+    },
+    {
+      "id": "tcn42_aux",
+      "model_id": "tcn42",
+      "decoder": "bin",
+      "threshold": 0.8988370299339294,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0normal/experiments/p6/c0_onset_tcn/bin-decoder-v1/decoder_comparison.json",
+      "threshold_key": "results.onset_bins_validation_selected.threshold",
+      "graph_scope": "window",
+      "role": "auxiliary_validation_threshold",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2588,
+          "mean_seconds": 25.30903632148377,
+          "median_seconds": 25.3795,
+          "p90_seconds": 37.336,
+          "p95_seconds": 39.3986
+        },
+        "event_f1": 0.9390420899854862,
+        "event_precision": 0.9911911145155113,
+        "event_recall": 0.8921061702861083,
+        "false_negative_events": 313,
+        "false_positive_events": 23,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2611,
+        "true_positive_events": 2588
+      }
+    },
+    {
+      "id": "tcn17_bin",
+      "model_id": "tcn17",
+      "decoder": "bin",
+      "threshold": 0.8253470063209534,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed17-bin-v1/decoder_comparison.json",
+      "threshold_key": "results.onset_bins_fixed_threshold.threshold",
+      "graph_scope": "window",
+      "role": "primary_fixed_threshold",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2605,
+          "mean_seconds": 25.23925220729367,
+          "median_seconds": 25.356,
+          "p90_seconds": 37.3286,
+          "p95_seconds": 39.3786
+        },
+        "event_f1": 0.8800675675675675,
+        "event_precision": 0.8628684995031467,
+        "event_recall": 0.8979662185453292,
+        "false_negative_events": 296,
+        "false_positive_events": 414,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 3019,
+        "true_positive_events": 2605
+      }
+    },
+    {
+      "id": "tcn17_aux",
+      "model_id": "tcn17",
+      "decoder": "bin",
+      "threshold": 0.8923667669296265,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed17-bin-v1/decoder_comparison.json",
+      "threshold_key": "results.onset_bins_validation_selected.threshold",
+      "graph_scope": "window",
+      "role": "auxiliary_validation_threshold",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2506,
+          "mean_seconds": 24.857909417398243,
+          "median_seconds": 24.8755,
+          "p90_seconds": 37.169,
+          "p95_seconds": 39.30375
+        },
+        "event_f1": 0.895639742673338,
+        "event_precision": 0.9298701298701298,
+        "event_recall": 0.8638400551533953,
+        "false_negative_events": 395,
+        "false_positive_events": 189,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 2695,
+        "true_positive_events": 2506
+      }
+    },
+    {
+      "id": "tcn2026_bin",
+      "model_id": "tcn2026",
+      "decoder": "bin",
+      "threshold": 0.6636671423912048,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed2026-bin-v1/decoder_comparison.json",
+      "threshold_key": "results.onset_bins_fixed_threshold.threshold",
+      "graph_scope": "window",
+      "role": "primary_fixed_threshold",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2488,
+          "mean_seconds": 23.82202813504823,
+          "median_seconds": 23.673000000000002,
+          "p90_seconds": 36.32480000000001,
+          "p95_seconds": 38.254250000000006
+        },
+        "event_f1": 0.5669363108123505,
+        "event_precision": 0.42341729067392786,
+        "event_recall": 0.8576352981730437,
+        "false_negative_events": 413,
+        "false_positive_events": 3388,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 5876,
+        "true_positive_events": 2488
+      }
+    },
+    {
+      "id": "tcn2026_aux",
+      "model_id": "tcn2026",
+      "decoder": "bin",
+      "threshold": 0.5800948739051819,
+      "threshold_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed2026-bin-v1/decoder_comparison.json",
+      "threshold_key": "results.onset_bins_validation_selected.threshold",
+      "graph_scope": "window",
+      "role": "auxiliary_validation_threshold",
+      "validation_metrics": {
+        "detection_delay": {
+          "causal_rule": "0 <= t_hat - gt_start_ms <= tolerance_seconds",
+          "matched_delay_count": 2570,
+          "mean_seconds": 23.986970038910506,
+          "median_seconds": 23.881999999999998,
+          "p90_seconds": 36.4305,
+          "p95_seconds": 38.276399999999995
+        },
+        "event_f1": 0.5748797673638295,
+        "event_precision": 0.42549668874172186,
+        "event_recall": 0.8859014133057567,
+        "false_negative_events": 331,
+        "false_positive_events": 3470,
+        "ground_truth_event_count": 2901,
+        "predicted_episode_count": 6040,
+        "true_positive_events": 2570
+      }
+    }
+  ],
+  "decoder_recipe_source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0r2/experiments/p6/c0r2_trainval_dev/positive-logit-rise-v2/results.json",
+  "rca_candidates": [
+    "original_68d_xgb",
+    "backdate_25621ms_xgb",
+    "no_metric_51d_xgb",
+    "no_all_magnitude_56d_xgb"
+  ],
+  "e2e_transfer": {
+    "detector_arms": 19,
+    "scorers": [
+      "original_68d_xgb",
+      "backdate_25621ms_xgb"
+    ],
+    "comparisons": 38,
+    "evidence_grade": "frozen-scorer transfer; not detector-native Fit-OOS RCA"
+  },
+  "exclusions": [
+    "normal_forecast_and_persistence_failed_fit_screen",
+    "unexecuted_raw_mask_and_bin_checkpoint_selector",
+    "raw_observability_without_model",
+    "mobpair_forward_no_go",
+    "c0r3_64_diagnostic_controls"
+  ]
+}

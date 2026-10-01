@@ -2,7 +2,18 @@
 
 > 本文件是给新的 code-agent CLI 的单一入口。它只保留当前有效的背景、状态、约束和下一步；完整审计与实现细节继续放在现有文档中，不在这里复制。
 
-更新时间：2026-10-01（Asia/Shanghai；本独立全流程研究分支）
+更新时间：2026-10-01（Asia/Shanghai；本独立冻结 Test 比较工作树）
+
+**本工作树最新用户授权：**在 `experiment/p6-frozen-test-review` 对已有候选进行
+冻结 Test 描述性比较。完整 scope 为10个score模型/19个decoder臂，全部预定
+TCN seeds及主/辅助decoder均保留；不训练检测器、不根据Test改参数或选seed。
+具体见[P6_FROZEN_TEST_REVIEW_PROTOCOL.md](P6_FROZEN_TEST_REVIEW_PROTOCOL.md)
+和 `configs/e2e/gaia_p6_frozen_test_review_v1.json`。RCA在独立工作树完成原XGB/
+Train固定25.621s回溯scorer的38组transfer比较，以及两个Train前推正向消融的
+固定最终Train拟合/Test观察。旧NO-GO保留，后面的“Test关闭/Freeze”属于
+前一轮开发协议，不取消这次明确授权的冻结观察。新增结果是否完成以预测锁和
+completion为准；本段只登记scope，不宣称已执行。
+
 
 **最新稳定性决定优先：**三seed复制已完成并封存，`stability-v1`为
 `STABILITY_NO_GO`。seed42/17/2026的fixed-bin P/R/F1分别为
