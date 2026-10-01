@@ -4,6 +4,11 @@
 
 更新时间：2026-10-01（Asia/Shanghai；本独立全流程研究分支）
 
+**本分析工作树（2026-10-02）：** `analysis/p6-tcn-training-budget`，从budget初始源f987a1b分出，当前分析对照fd25bff的同一轨迹prefix预算实验。
+仅实现预算复盘和条件selector分析，不修改正在运行的budget树。
+详见 [分析协议](P6_TCN_BUDGET_SELECTOR_ANALYSIS_PROTOCOL.md)。
+本树的指标必须等三个30epoch budget run全部封存且原patience8前缀规则重放通过后生成。
+
 **本工作树当前任务（2026-10-02）：**用户已授权继续研究，优先验证三个seed是否过早停止。
 独立分支 `experiment/p6-tcn-training-budget` 仅改patience8→30，max_epochs仍30，
 seeds42/17/2026全执行；Train/Validation-only，Test冻结。

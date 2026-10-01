@@ -1,0 +1,204 @@
+{
+  "schema_version": "p6_c0_trigger_v1",
+  "protocol_id": "P6-C0-DETERMINISTIC-PAIRED-BUDGET-V1",
+  "base_config": "configs/e2e/gaia_p5_v3_preprocessing_v2.json",
+  "data_root": "data/p5/v3_preprocessing_v2/ad",
+  "artifact_root": "artifacts/p5/v3_preprocessing_v2/ad",
+  "output_root": "experiments/p6/c0_training_budget",
+  "seed": 42,
+  "task": {
+    "name": "System-level Event Trigger",
+    "outputs": [
+      "system trigger score",
+      "predicted event episode",
+      "detected t_hat"
+    ],
+    "forbidden_outputs": [
+      "root service",
+      "service ranking",
+      "10-service classification result"
+    ],
+    "stage2_rca_separate": true
+  },
+  "split_mode": "chronological_50_20_30",
+  "split": {
+    "fit_fraction": [
+      5,
+      10
+    ],
+    "validation_cumulative_fraction": [
+      7,
+      10
+    ],
+    "test_definition": "identical to the frozen P5 Test block [boundary_ms, absolute_end_ms)",
+    "random_split": false,
+    "purge_history_seconds": 300,
+    "purge_rule": "keep a window only if [t-history, t) lies inside the block owning t; keep a GT event as a metric case only if it is complete inside one block"
+  },
+  "trigger_label": {
+    "target": "one_bin_onset_frozen_ignore",
+    "positive_window_seconds": 30,
+    "positive_rule": "prediction_available_time - 30000 <= gt_start_ms < prediction_available_time",
+    "ignore_rule": "exactly the archived recent-onset60 IGNORE mask",
+    "negative_rule": "no onset in completed bin and not baseline IGNORE, including previous recent-onset positives",
+    "overlapping_events": "one binary positive; count is not an inference input",
+    "service_specific_supervision": false
+  },
+  "model": {
+    "architecture": "existing embeddings/window graph + incoming/outgoing trace aggregation + shared per-service causal TCN + same system head",
+    "pooling": "concat[mean_service(H), max_service(H), std_service(H)]",
+    "pooling_scope": "ten service representations at the target bin (last window step)",
+    "head_hidden": 32,
+    "random_initialization": true,
+    "loads_ada_mgad_checkpoint": false,
+    "node_anomaly_label_consumed": false,
+    "root_service_label_consumed": false,
+    "label_conditioned_reconstruction": false,
+    "node_score_fusion": false,
+    "graph_batch_scope": "window"
+  },
+  "training": {
+    "max_epochs": 30,
+    "patience": 30,
+    "eval_interval": 1,
+    "batch_size": 32,
+    "num_workers": 2,
+    "optimizer": "AdaBelief",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0005,
+    "scheduler": "StepLR",
+    "scheduler_step": 10,
+    "scheduler_gamma": 0.5,
+    "grad_clip_norm": 10.0,
+    "loss": "masked_BCEWithLogitsLoss",
+    "ignore_bins_loss_mask": 0.0,
+    "pos_weight": "fit_negative_bins / fit_positive_bins (Detector-Fit only)",
+    "auxiliary_terms": [
+      "label_free dynamic-graph sparsity regularizer (graph_sparse_weight=0.001, depends only on encoder inputs and the static service graph)"
+    ],
+    "forbidden_terms": [
+      "focal loss",
+      "fault-type weighting",
+      "service weighting",
+      "duration weighting",
+      "test-tuned class weights"
+    ],
+    "development_capture_validation": true,
+    "long_onset_weighting": false
+  },
+  "threshold_selection": "validation_only_exact_unique_scores",
+  "threshold": {
+    "objective": "validation_event_f1",
+    "tie_break": "highest_threshold_among_equal_f1",
+    "checkpoint_tie_break": [
+      "validation_event_f1",
+      "validation_event_recall",
+      "threshold"
+    ],
+    "test_used": false,
+    "frozen_after_selection": true
+  },
+  "matching_semantics": "causal_max_cardinality_minimum_delay",
+  "evaluation": {
+    "grid_seconds": 30,
+    "window_bins": 10,
+    "history_seconds": 300,
+    "tolerance_seconds": 60,
+    "prediction_time": "t_hat = prediction_available_time = target_bin_end",
+    "duration_strata_seconds": [
+      15,
+      30,
+      60,
+      300
+    ],
+    "gate": {
+      "precision": 0.9,
+      "recall": 0.6,
+      "f1": 0.72
+    },
+    "gate_kind": "pre-registered engineering acceptance margins, not statistical significance"
+  },
+  "historical_reference": {
+    "source": "P5 formal fused Ada-MGAD trigger (node-supervised)",
+    "precision": 0.9827,
+    "recall": 0.6399,
+    "f1": 0.7751,
+    "note": "historical reference only; different supervision target and split, not a controlled equal-protocol SOTA comparison; the historical batch-shared graph is retrospective and is not a valid causal online comparator"
+  },
+  "cohort_reference": {
+    "fit": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c0f_failure_audit/c0f-correction-20260923T0755Z/scores/fit.csv",
+    "validation": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/gpu-control-v1-seed42/validation_predictions.csv"
+  },
+  "expected_cohort": {
+    "fit_events": 7443,
+    "validation_events": 2901
+  },
+  "legacy_selection": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight/experiments/p6/c0_long_weight/gpu-control-v1-seed42/validation_selection.json",
+  "baseline_run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal/experiments/p6/c0_window_causal/retrained-v1-seed42",
+  "development_gate": {
+    "recall_gain": 0.05,
+    "f1_gain": 0.02,
+    "precision_floor": 0.98,
+    "single_onset_recall_decline_limit": 0.03,
+    "full_e2e_f1_at_1_gain": 0.02
+  },
+  "study_scope": "Train/Validation-only development; old preprocessing remains fixed; no Test entry point",
+  "encoder_reference_run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onset/experiments/p6/c0_onset_development/onset30-v1-seed42",
+  "decoder_reference_run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onset/experiments/p6/c0_onset_development/bin-decoder-v1",
+  "tcn_spec": {
+    "hidden_channels": 32,
+    "kernel_size": 3,
+    "dilations": [
+      1,
+      2,
+      4
+    ],
+    "convolutions_per_block": 2,
+    "dropout": 0.2,
+    "normalization": "per-time channel LayerNorm",
+    "padding": "left only"
+  },
+  "start_condition": "Completed old three-seed stability NO-GO; user-authorized one-variable budget diagnostic",
+  "onset_reference_report": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onset/experiments/p6/c0_onset_development/onset30-vs-baseline-v1/comparison.json",
+  "budget": {
+    "seeds": [
+      42,
+      17,
+      2026
+    ],
+    "threads_by_seed": {
+      "42": 8,
+      "17": 4,
+      "2026": 4
+    },
+    "threshold_workers_by_seed": {
+      "42": 8,
+      "17": 4,
+      "2026": 4
+    },
+    "old_runs": {
+      "42": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onsettcn/experiments/p6/c0_onset_tcn/tcn-v1-seed42",
+      "17": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed17-v1",
+      "2026": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica/experiments/p6/c0_onset_tcn_replication/seed2026-v1"
+    },
+    "data_root": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3_preprocessing_v2/ad",
+    "artifact_root": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3_preprocessing_v2/ad",
+    "registry": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv",
+    "minimum_half_recall_gain": 0.03,
+    "early_replay_absolute_tolerance": 1e-06,
+    "threshold_and_integer_replay": "exact",
+    "test_used": false
+  },
+  "paired_budget": {
+    "arms": [
+      "control",
+      "budget"
+    ],
+    "control_patience": 8,
+    "budget_patience": 30,
+    "deterministic_algorithms": true,
+    "cublas_workspace_config": ":4096:8",
+    "shared_epoch_replay": "exact",
+    "historical_comparison": "descriptive only; not reproducible control"
+  }
+}
