@@ -35,7 +35,7 @@ def _write_json_atomic(path: Path, payload: Mapping[str, object]) -> None:
     os.replace(str(temporary), str(path))
 
 
-def _raw_train_binding(raw_root: Path, start_ms: int, end_ms: int) -> str:
+def _raw_train_binding(raw_root: Path, start_ms: int, end_ms: int, *, content_sha256: bool = False) -> str:
     digest = hashlib.sha256()
     for relative in ("metric/metric_split/metric", "business/business_split/business", "trace/trace_split/trace"):
         root = raw_root / relative
@@ -45,6 +45,9 @@ def _raw_train_binding(raw_root: Path, start_ms: int, end_ms: int) -> str:
             digest.update(str(path.relative_to(raw_root)).encode("utf-8"))
             digest.update(b"\0")
             digest.update(str(path.stat().st_size).encode("ascii"))
+            if content_sha256:
+                digest.update(b"\0")
+                digest.update(_sha256(path).encode("ascii"))
             digest.update(b"\n")
     digest.update("{}\0{}".format(start_ms, end_ms).encode("ascii"))
     return digest.hexdigest()
@@ -52,7 +55,7 @@ def _raw_train_binding(raw_root: Path, start_ms: int, end_ms: int) -> str:
 
 def _schema_payload(
     config_path, policy_path, raw_train_sha256, preprocessing_config_sha256,
-    metric_fit, log_fit, trace_fit, drain_state_path,
+    metric_fit, log_fit, trace_fit, drain_state_path, observation_mode="filled",
 ):
     return {
         "schema_version": "gaia_ad_preprocessing_v2", "status": "FROZEN", "fit_split": "train",
@@ -70,6 +73,7 @@ def _schema_payload(
                        "targets": list(slot.targets), "source_keys": list(slot.source_keys)} for slot in metric_fit.slots],
             "scalers": {name: scaler.as_dict() for name, scaler in metric_fit.scalers.items()},
             "fill_max_age_ms": metric_fit.fill_max_age_ms,
+            "observation_mode": observation_mode,
         },
         "logs": {"stable_cluster_ids": list(log_fit.stable_cluster_ids), "ordered_slots": list(log_fit.slot_names),
                  "drain_state": log_fit.drain_state, "drain_state_path": str(drain_state_path),
@@ -80,6 +84,18 @@ def _schema_payload(
                    "directed_edges": [list(edge) for edge in trace_fit.directed_edges],
                    "scalers": dict(trace_fit.scalers)},
     }
+
+
+def validate_fitted_schema_identity(frozen, fitted):
+    """Reject equal-dimension refits that differ from the sealed transform."""
+    # Normalize JSON key types. Artifact paths are not transform parameters.
+    frozen, fitted = (json.loads(json.dumps(value)) for value in (frozen, fitted))
+    frozen["metric"].setdefault("observation_mode", "filled")
+    for value in (frozen, fitted):
+        value["logs"].pop("drain_state_path", None)
+    for modality in ("metric", "logs", "traces"):
+        if frozen[modality] != fitted[modality]:
+            raise ValueError("refitted {} differs from frozen schema".format(modality))
 
 
 def validate_transformed_modalities(*, schema, metric: np.ndarray, logs: np.ndarray,
@@ -114,6 +130,10 @@ def materialize_ad_inputs(*, schema_path: Path, config_path: Path, raw_root: Pat
 
     config_path, raw_root = Path(config_path).resolve(), Path(raw_root).resolve()
     data_root, artifact_root, schema_path = Path(data_root).resolve(), Path(artifact_root).resolve(), Path(schema_path).resolve()
+    # Fail before fitting or writing Drain state into an existing artifact root.
+    for destination in (data_root, artifact_root):
+        if destination.exists():
+            raise FileExistsError("refusing to replace existing V2 output root: {}".format(destination))
     config = json.loads(config_path.read_text(encoding="utf-8"))
     preprocessing_config_sha = ad_preprocessing_config_sha256(config)
     policy_path = Path(policy_path or config["ad_preprocessing"]["policy_path"])
@@ -139,7 +159,14 @@ def materialize_ad_inputs(*, schema_path: Path, config_path: Path, raw_root: Pat
     if min(metric_workers, log_workers, trace_workers) < 1 or max(metric_workers, log_workers, trace_workers) > cpu_budget:
         raise ValueError("modality workers must be between one and configured CPU budget {}".format(cpu_budget))
     start_method = str(runtime.get("start_method", "spawn"))
-    raw_binding = _raw_train_binding(raw_root, train.start_ms, train.end_ms)
+    binding_mode = policy.get("raw_binding_mode", "path_size_train_interval")
+    if binding_mode not in ("path_size_train_interval", "file_content_sha256_train_interval"):
+        raise ValueError("unknown raw binding mode")
+    observation_mode = metric_policy.get("observation_mode", "filled")
+    if observation_mode not in ("raw", "filled"):
+        raise ValueError("unknown Metric observation_mode")
+    raw_binding = _raw_train_binding(raw_root, train.start_ms, train.end_ms,
+                                    content_sha256=binding_mode == "file_content_sha256_train_interval")
 
     metric_slots = int(metric_policy.get("base_slots", 45))
     metric_fit = fit_metric(raw_root / "metric/metric_split/metric", train.start_ms, train.end_ms,
@@ -163,19 +190,21 @@ def materialize_ad_inputs(*, schema_path: Path, config_path: Path, raw_root: Pat
                           workers=trace_workers, start_method=start_method)
     drain_state_path = artifact_root / "drain3_train_state.json"
     _write_json_atomic(drain_state_path, {"schema_version": "gaia_ad_preprocessing_v2_drain_state", "state": log_fit.drain_state})
+    fitted_payload = _schema_payload(
+        config_path, policy_path, raw_binding, preprocessing_config_sha,
+        metric_fit, log_fit, trace_fit, drain_state_path, observation_mode,
+    )
     if schema_path.exists():
         schema = load_frozen_preprocessing_schema(schema_path)
         binding = schema.payload["source_binding"]
         expected = {"config_sha256": _sha256(config_path), "policy_sha256": _sha256(policy_path), "raw_train_sha256": raw_binding}
         if any(binding.get(key) != value for key, value in expected.items()):
             raise ValueError("frozen V2 schema source binding differs from current sources")
+        validate_fitted_schema_identity(schema.payload, fitted_payload)
     else:
         _write_json_atomic(
             schema_path,
-            _schema_payload(
-                config_path, policy_path, raw_binding, preprocessing_config_sha,
-                metric_fit, log_fit, trace_fit, drain_state_path,
-            ),
+            fitted_payload,
         )
         schema = load_frozen_preprocessing_schema(schema_path)
     expected_dimensions = {"raw_node": metric_slots + 3, "log_len": len(log_fit.slot_names), "raw_edge": 8}
@@ -188,7 +217,7 @@ def materialize_ad_inputs(*, schema_path: Path, config_path: Path, raw_root: Pat
         raise FileExistsError("staging output already exists: {}".format(staging))
     staging.mkdir(parents=True)
     try:
-        metric_parts = {name: transform_metric_with_observability(metric_fit, raw_root / "metric/metric_split/metric", block.start_ms, block.end_ms, workers=metric_workers, start_method=start_method)[0]
+        metric_parts = {name: transform_metric_with_observability(metric_fit, raw_root / "metric/metric_split/metric", block.start_ms, block.end_ms, workers=metric_workers, start_method=start_method, observation_mode=observation_mode)[0]
                         for name, block in (("train", train), ("test", test))}
         log_parts = {"train": transform_logs(log_fit, raw_root / "business/business_split/business", train.start_ms, train.end_ms, chunk_rows=chunk_rows, workers=log_workers, start_method=start_method),
                      "test": transform_logs(log_fit, raw_root / "business/business_split/business", test.start_ms, test.end_ms, chunk_rows=chunk_rows, workers=log_workers, start_method=start_method)}
@@ -223,6 +252,7 @@ def materialize_ad_inputs(*, schema_path: Path, config_path: Path, raw_root: Pat
                     "generated_at_utc": datetime.now(timezone.utc).isoformat(), "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(config_path.parents[2]), text=True).strip(),
                     "config_sha256": _sha256(config_path), "preprocessing_config_sha256": preprocessing_config_sha,
                     "policy_sha256": _sha256(policy_path), "schema_sha256": _sha256(schema_path), "raw_train_sha256": raw_binding,
+                    "raw_binding_mode": binding_mode, "metric_observation_mode": observation_mode,
                     "decision_inputs": ["train"], "gt_labels_used_for_schema": False, "test_used_for_selection": False, "dimensions": dict(schema.dimensions), "schema_path": str(schema_path),
                     "services": list(GAIA_SERVICES), "split_counts": split_counts, "split_files": split_files,
                     "schema_artifacts": {"preprocessing": {"path": str(schema_path), "sha256": _sha256(schema_path)}, "drain_state": {"path": str(drain_state_path), "sha256": _sha256(drain_state_path)}},

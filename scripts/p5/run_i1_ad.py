@@ -558,7 +558,8 @@ def main():
         if args.preprocess_artifact_root else None,
     )
     checkpoint_dir = (PROJECT_ROOT / args.checkpoint_dir).resolve()
-    artifact_root.mkdir(parents=True, exist_ok=True)
+    if args.action not in ("preprocess", "all"):
+        artifact_root.mkdir(parents=True, exist_ok=True)
     runtime = preprocessing_runtime(
         config, "ad", workers=args.workers, chunk_rows=args.chunk_rows,
         start_method=args.start_method,

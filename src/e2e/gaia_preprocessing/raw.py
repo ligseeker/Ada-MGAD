@@ -218,7 +218,7 @@ def _metric_values(records: Sequence[MetricFile], target: str, grid: np.ndarray,
 
 def _transform_metric_slot_worker(task):
     (slot, records, services, grid_ms, split_start_ms, split_end_ms,
-     fill_max_age_ms, scaler, output_dir) = task
+     fill_max_age_ms, scaler, observation_mode, output_dir) = task
     grid = _grid(split_start_ms, split_end_ms, grid_ms)
     values = np.full((len(grid), len(services)), 0.5, dtype=np.float32)
     observed = np.zeros(values.shape, dtype=bool)
@@ -230,7 +230,7 @@ def _transform_metric_slot_worker(task):
         scaled, _ = apply_metric_scaler(filled, scaler)
         index = service_index[service]
         values[:, index] = np.where(np.isfinite(scaled), scaled, 0.5)
-        observed[:, index] = np.isfinite(filled)
+        observed[:, index] = np.isfinite(raw if observation_mode == "raw" else filled)
     handle = tempfile.NamedTemporaryFile(prefix="metric_slot_", suffix=".npy", dir=str(output_dir), delete=False)
     path = handle.name
     try:
@@ -497,7 +497,9 @@ def transform_metric(metric_fit: MetricFit, metric_dir: Path, split_start_ms: in
 
 
 def _transform_metric_with_masks(metric_fit: MetricFit, metric_dir: Path, split_start_ms: int, split_end_ms: int,
-                                 *, workers: int = 1, start_method: str = "spawn"):
+                                 *, workers: int = 1, start_method: str = "spawn", observation_mode: str = "filled"):
+    if observation_mode not in ("raw", "filled"):
+        raise ValueError("Metric observation_mode must be raw or filled")
     grid = _grid(split_start_ms, split_end_ms, metric_fit.grid_ms)
     result = np.full((len(grid), len(metric_fit.services), len(metric_fit.slots)), metric_fit.neutral_value, dtype=np.float32)
     observed = np.zeros(result.shape, dtype=bool)
@@ -505,7 +507,7 @@ def _transform_metric_with_masks(metric_fit: MetricFit, metric_dir: Path, split_
     tasks = [
         (slot, metric_fit.source_index[slot.source_keys[0]], metric_fit.services,
          metric_fit.grid_ms, split_start_ms, split_end_ms, metric_fit.fill_max_age_ms,
-         metric_fit.scalers[slot.name], None)
+         metric_fit.scalers[slot.name], observation_mode, None)
         for slot in metric_fit.slots
     ]
     temporary = tempfile.mkdtemp(prefix="gaia_metric_transform_")
@@ -535,15 +537,17 @@ def _transform_metric_with_masks(metric_fit: MetricFit, metric_dir: Path, split_
 
 
 def transform_metric_with_observability(metric_fit: MetricFit, metric_dir: Path, split_start_ms: int, split_end_ms: int,
-                                        *, workers: int = 1, start_method: str = "spawn"):
+                                        *, workers: int = 1, start_method: str = "spawn", observation_mode: str = "filled"):
     """Return Metric values plus explicit applicability/observability channels.
 
     The three returned arrays are ``global_observed_fraction``,
     ``host_applicable`` and ``host_observed_fraction``.  They are derived from
-    the frozen slot scopes and raw availability, not from transformed numeric
-    values, so a genuine normalized zero cannot be confused with missingness.
+    frozen slot scopes. Explicit ``observation_mode='raw'`` retains availability
+    before forward fill; ``filled`` reproduces archived V2 behavior. Neither
+    mode infers availability from normalized values. New raw-mask experiments
+    must seal this mode in their preprocessing policy and schema.
     """
-    values, observed = _transform_metric_with_masks(metric_fit, metric_dir, split_start_ms, split_end_ms, workers=workers, start_method=start_method)
+    values, observed = _transform_metric_with_masks(metric_fit, metric_dir, split_start_ms, split_end_ms, workers=workers, start_method=start_method, observation_mode=observation_mode)
     service_index = {service: index for index, service in enumerate(metric_fit.services)}
     global_positions = [index for index, slot in enumerate(metric_fit.slots) if slot.scope == "global"]
     host_positions = [index for index, slot in enumerate(metric_fit.slots) if slot.scope == "host"]
