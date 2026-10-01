@@ -147,6 +147,21 @@ def historical_tables(output):
     return receipts
 
 
+def attribution(baseline, candidate):
+    old_match = baseline.match_status.eq('matched'); new_match = candidate.match_status.eq('matched')
+    old_ok = baseline['rank'].eq(1); new_ok = candidate['rank'].eq(1)
+    common = old_match & new_match
+    record = dict(common_matched=int(common.sum()),
+        newly_matched=int((new_match & ~old_match).sum()), lost_matches=int((old_match & ~new_match).sum()),
+        new_match_top1=int((new_ok & ~old_match).sum()), lost_match_top1=int((old_ok & ~new_match).sum()),
+        common_top1_gain=int((common & new_ok & ~old_ok).sum()),
+        common_top1_loss=int((common & old_ok & ~new_ok).sum()),
+        total_top1_change=int(new_ok.sum()-old_ok.sum()))
+    if record['total_top1_change'] != record['new_match_top1']-record['lost_match_top1']+record['common_top1_gain']-record['common_top1_loss']:
+        raise ValueError('stage attribution does not close')
+    return record
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--output-dir', type=Path, required=True)
@@ -261,23 +276,22 @@ def main():
         baseline = ledgers['causal_merged__' + scorer]
         for arm in dl['arms']:
             candidate = ledgers[arm['id'] + '__' + scorer]
-            old_match = baseline.match_status.eq('matched'); new_match = candidate.match_status.eq('matched')
-            old_ok = baseline['rank'].eq(1); new_ok = candidate['rank'].eq(1)
-            common = old_match & new_match
-            record = dict(arm_id=arm['id'], scorer=scorer, common_matched=int(common.sum()),
-                newly_matched=int((new_match & ~old_match).sum()), lost_matches=int((old_match & ~new_match).sum()),
-                new_match_top1=int((new_ok & ~old_match).sum()), lost_match_top1=int((old_ok & ~new_match).sum()),
-                common_top1_gain=int((common & new_ok & ~old_ok).sum()),
-                common_top1_loss=int((common & old_ok & ~new_ok).sum()),
-                total_top1_change=int(new_ok.sum()-old_ok.sum()))
-            if record['total_top1_change'] != record['new_match_top1']-record['lost_match_top1']+record['common_top1_gain']-record['common_top1_loss']:
-                raise ValueError('stage attribution does not close')
+            record = dict(arm_id=arm['id'], scorer=scorer, **attribution(baseline,candidate))
             decompositions.append(record)
+    decoder_rows = []
+    for model in ('onset','tcn42','tcn17','tcn2026'):
+        for scorer in ('original','backdate'):
+            baseline = ledgers[model+'_merged__'+scorer]
+            for decoder in ('bin','aux'):
+                candidate = ledgers[model+'_'+decoder+'__'+scorer]
+                decoder_rows.append(dict(model=model,scorer=scorer,baseline=model+'_merged',
+                    candidate=model+'_'+decoder,**attribution(baseline,candidate)))
     pd.DataFrame(detector_rows).to_csv(a.output_dir / 'detector_19.csv', index=False)
     pd.DataFrame(family_rows).to_csv(a.output_dir / 'combined_19.csv', index=False)
     pd.DataFrame(failures).fillna(0).to_csv(a.output_dir / 'failure_40.csv', index=False)
     pd.DataFrame(groups).to_csv(a.output_dir / 'strata_40.csv', index=False)
     pd.DataFrame(decompositions).to_csv(a.output_dir / 'stage_attribution_38.csv', index=False)
+    pd.DataFrame(decoder_rows).to_csv(a.output_dir / 'decoder_attribution_16.csv', index=False)
     for name, source in [('detector_results.json', D / 'evaluation/results.json'),
                          ('rca_results.json', R / 'evaluation/results.json'),
                          ('rca_e2e_40.csv', R / 'evaluation/rca_e2e_results.csv')]:
