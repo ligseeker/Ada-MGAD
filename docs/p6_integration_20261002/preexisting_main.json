@@ -1,0 +1,15 @@
+{
+  "original_HEAD": "8d69ebaf3a8942a790768a17edff48954fe7d7b4",
+  "preserved_without_edit": [
+    {
+      "path": "docs/P6_C1_V2_AND_C2_RESULTS.md",
+      "sha256": "edc9031b30b396f31fe14c209038170e21832f8442134029f796c77412b2ac59",
+      "bytes": 12101
+    },
+    {
+      "path": "docs/GAIA_TWO_STAGE_GROUP_MEETING_BRIEF_20260924.md",
+      "sha256": "ecdc1f3e96397439ae4259ad921c881e5b05f81253322309b411ab97827958f9",
+      "bytes": 6772
+    }
+  ]
+}
