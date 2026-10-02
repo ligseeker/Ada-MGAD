@@ -29,7 +29,6 @@ from torch_geometric.utils import dense_to_sparse
 from src.model_util import DynamicGraphLearner, Embed, Encoder
 
 from .protocol import GAIA_SERVICES
-from .window_dynamic_graph import WindowDynamicGraphLearner
 
 
 DEFAULT_HEAD_HIDDEN = 32
@@ -102,13 +101,7 @@ class SystemEventTrigger(nn.Module):
         self.log_emb = Embed(args["log_len"], args["feature_log"], dim=4)
         self.egde_emb = Embed(args["raw_edge"], args["feature_edge"], dim=5)
 
-        self.graph_batch_scope = args.get("graph_batch_scope", "batch")
-        if self.graph_batch_scope not in ("batch", "window"):
-            raise ValueError("dynamic graph scope must be batch or window")
-        # Batch scope exists to reproduce archived runs. New causal protocols
-        # select window scope explicitly so that training and inference agree.
-        graph_learner = WindowDynamicGraphLearner if self.graph_batch_scope == "window" else DynamicGraphLearner
-        self.dynamic_graph_learner = graph_learner(
+        self.dynamic_graph_learner = DynamicGraphLearner(
             node_dim=args["feature_node"],
             log_dim=args["feature_log"],
             hidden_dim=args.get("graph_hidden", 16),
@@ -160,10 +153,7 @@ class SystemEventTrigger(nn.Module):
         x_log, _ = self.log_emb(batch["data_log"])
 
         edge_weights, graph_reg_loss = self.dynamic_graph_learner(x_node, x_log, self.graph)
-        if self.graph_batch_scope == "window":
-            weight_mask = edge_weights.unsqueeze(1).unsqueeze(-1)
-        else:
-            weight_mask = edge_weights.unsqueeze(0).unsqueeze(0).unsqueeze(-1)
+        weight_mask = edge_weights.unsqueeze(0).unsqueeze(0).unsqueeze(-1)
         z_node, _, _ = self.encoder(x_node, x_edge * weight_mask, x_log)
         # The target bin is the last window step, exactly like the frozen
         # Ada-MGAD evaluation path.
