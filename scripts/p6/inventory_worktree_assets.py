@@ -29,7 +29,7 @@ def inventory(repository, destination):
     destination.mkdir(parents=True)
     count = 0
     with (destination / 'asset_catalog.csv').open('w', newline='') as stream:
-        writer = csv.DictWriter(stream, fieldnames=['source_tree', 'source_head', 'source_path', 'bytes', 'sha256'])
+        writer = csv.DictWriter(stream, fieldnames=['source_tree', 'source_head', 'source_path', 'bytes', 'sha256'], lineterminator='\n')
         writer.writeheader()
         for item in sources:
             tree = Path(item['worktree'])

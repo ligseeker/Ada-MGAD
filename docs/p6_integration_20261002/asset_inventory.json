@@ -137,7 +137,7 @@
   "unique_objects": 1083,
   "logical_bytes": 4596824906,
   "status": "INVENTORY_ONLY; BULK_DUPLICATES_REMOVED_AT_USER_REQUEST",
-  "catalog_sha256": "785ee51c39029296d4e189f2277ec9d5715bee8ef5540cff8083f6c3ff3159d2",
+  "catalog_sha256": "da270ee7caf59460ede0743c16fea3bb35c53522307ec27fa47d8b368c49d2a4",
   "historical_manifests_rewritten": false,
   "experiments_executed": false,
   "original_asset_parent": "/home/zhangll24/RCA_project",
