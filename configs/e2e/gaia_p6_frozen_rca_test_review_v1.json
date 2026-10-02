@@ -1,0 +1,83 @@
+{
+  "protocol_id": "P6-FROZEN-RCA-TEST-REVIEW-V1",
+  "detector_run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001",
+  "detector_tree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview",
+  "detector_python": "/home/zhangll24/miniconda3/envs/DAG/bin/python",
+  "model_parameters": {
+    "objective": "rank:pairwise",
+    "n_estimators": 200,
+    "max_depth": 3,
+    "learning_rate": 0.05,
+    "subsample": 1.0,
+    "colsample_bytree": 1.0,
+    "reg_lambda": 1.0,
+    "random_state": 20260826,
+    "n_jobs": 1,
+    "tree_method": "hist"
+  },
+  "test_interval_ms": [
+    1626963120000,
+    1627747200000
+  ],
+  "inputs": {
+    "train_features": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/detected_features.npy",
+    "train_roots": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/root_indices.npy",
+    "train_cases": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/cases.csv",
+    "train_manifest": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/completion_manifest.json",
+    "native_features": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/predictions/feature_inputs.npy",
+    "native_valid": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/predictions/feature_valid.npy",
+    "native_scope": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-xgb/experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/predictions/scope_rankings.csv",
+    "native_matching": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_matching.csv",
+    "native_episodes": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_episodes.csv",
+    "native_prediction_lock": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/predictions/prediction_lock.json",
+    "original_prediction_lock": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-xgb/experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/predictions/prediction_lock.json",
+    "original_run_lock": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-xgb/experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/run_lock.json",
+    "original_train_manifest": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-xgb/experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/train/completion_manifest.json",
+    "backdate_features": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621/predictions/shifted_feature_inputs.npy",
+    "backdate_prediction_lock": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621/predictions/prediction_lock.json",
+    "backdate_run_lock": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621/run_lock.json",
+    "backdate_train_manifest": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621/train/completion_manifest.json",
+    "raw_manifest": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/data/p5/v3/rca_raw_index/index_manifest.json",
+    "ablation_results": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_feature_ablation_dev/c1-feature-ablation-forward-v1/results.json"
+  },
+  "models": {
+    "original": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-xgb/experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/train/model_state.ubj",
+    "backdate": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621/train/model_state.ubj"
+  },
+  "expected_input_sha256": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_xgb_forward_dev/c1-xgb-forward-v1/rankings.csv": "9506cbbc12c76a92fa1266c8cb690831f380d5bd5830e3d1909cf30f98b52eda",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/cases.csv": "83ee698981272bfb1f89d1c2d9b1c2c622b63c419a08c251abde2bf7965821dd",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/detected_features.npy": "b1c043b3ba1480b24a40ddb10646e4f9c7f8cd669de61498be03b7c124f6b4ed",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/root_indices.npy": "c764da9739c7b80a38ba377462eae489ec43984c53c1034da33feb06a5d2283f",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/predictions/feature_inputs.npy": "0fc6e1a6e9f9417dbe81c6f4df002c99d162795665d179e7a3256bff8fdce40d",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/predictions/feature_valid.npy": "f44a2219f6506514830eee4514dbf3c82666c31171592bd50f1be411b7f5d5cd",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_episodes.csv": "30bacbeecbee4b9f738fc6330fa9d8df5c1adc08e37fb1ee8476f1b47735399b",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-xgb/experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/predictions/scope_rankings.csv": "57c28dab60f49ce94c029125fb3ec08c1bd135651f9388187588dbbfccb0c740",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-xgb/experiments/p6/c1_z2_xgb/c1-z2-xgb-v1-seed20260826/train/model_state.ubj": "55a264a0aeedb47d5d5d3cc34090c2ce294419a6006d63b44e86436d063c52ee",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621/train/model_state.ubj": "578b1baf20ff9958a990b95b724a4f8afb83aaa801ce0762ccc56a59d25f0af2",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621/predictions/shifted_feature_inputs.npy": "6872c3e800e4530b7258352ec9859cd8f933a8dad26fde4577e84635f32c4bef"
+  },
+  "expected_feature_source_sha256": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-rcatestreview/src/e2e/c1_common_cohort.py": "872848ff63e7e7a0b915423efe604d5eb421cfd109eecf0a1dfcf7b905e2803e",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-rcatestreview/src/e2e/rca_features.py": "3d13755621121586e8b87b663d3b15a81a74353d7921966496d8181baac49be8",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-rcatestreview/src/e2e/rca_model.py": "d1e7b10ce4e941f3438140bf962533a4a167e766428df7335de8b162e812e1d9",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-rcatestreview/src/e2e/gaia_rca_adapter.py": "657c2bff29c4a07c85b2ea3e01e030bb9344458c0a8b46805593c81c2f9b17c0"
+  },
+  "detector_prediction_lock_sha256": "3e8a9a8e94763ad7be25491a9e53339cc5e18da4b4e1ac86a8dca9250f9e9116",
+  "detector_model_manifest_sha256": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001/models/metric/completion_manifest.json": "b7905fed82e7482d771119990793591372057afc2e07f41e7ae6054b0953ed54",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001/models/tcn2026/completion_manifest.json": "2ffcafb6f483df915f9f0fc373cc0ad7c34aaa844bdb3602b80b3e35e81f2983",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001/models/causal/completion_manifest.json": "baea0b32a93d3b1f81445af58c342e598e5f45ab0b404215b3c6749e00898f13",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001/models/legacy/completion_manifest.json": "78d6453767854b1d10d4f8efd6ca0671bdd76807026c0b45802eede952bcdd81",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001/models/tcn42/completion_manifest.json": "3a86772218057171a9850e9e5f6ce981bb76da42a2adf54bc3209cf11f0ae80b",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001/models/onset/completion_manifest.json": "76fab23f34d34c55dc523b84018c04ff7478baa1863959774bfa1eb984b8ca61",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001/models/tcn17/completion_manifest.json": "ac6aafafc4f7a05714ee78e9eb9d2e8d0575342857075cd4b2aa0bfdf030eb87",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001/models/control/completion_manifest.json": "c3b772d38ee9b812945dd2cf4ead1235156fc0ed2520dcfbb2b21fa9acbb5290",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001/models/flat/completion_manifest.json": "427d0ddc89ced28a37873cbfbddc49d742dbd135bb7792ef80cec8dea9d68f5e",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview/experiments/p6/frozen_test_review/frozen-candidates-v1-20261001/models/weighted/completion_manifest.json": "331e6f6fff57a0727b265a5f375bc2246d306945a243d183323faf831670c1db"
+  },
+  "transfer_comparisons": 38,
+  "native_ablations": 2,
+  "evidence_grade": "frozen-scorer transfer; reused-Test descriptive",
+  "detector_audit_dir": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-rcatestreview/experiments/p6/frozen_detector_test_audit/frozen-candidates-v1-20261002"
+}

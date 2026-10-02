@@ -1,0 +1,30 @@
+{
+  "incoming": "5991f55852073be7743776d48cd889c17fb53551",
+  "active_choice": "budgetreview completed analysis; Test report assets added; canonical context will be rewritten after integration",
+  "snapshots": [
+    {
+      "source_stage": 2,
+      "path": "docs/GAIA_P5_CURRENT_CONTEXT.md",
+      "archive": "docs/p6_integration_20261002/source_variants/first_merge_stage2/docs/GAIA_P5_CURRENT_CONTEXT.md",
+      "sha256": "5eeacecae5cec6c095ca3f0c8d9366122d60022edf46b51f2338db21a99688f9"
+    },
+    {
+      "source_stage": 2,
+      "path": "docs/P6_TRAIN_BUDGET_DIAGNOSTIC_PLAN_20261002.md",
+      "archive": "docs/p6_integration_20261002/source_variants/first_merge_stage2/docs/P6_TRAIN_BUDGET_DIAGNOSTIC_PLAN_20261002.md",
+      "sha256": "30e74b0a9ef2a2222dc0324ee5417091475b4a410e7384a583f54333c4739ed8"
+    },
+    {
+      "source_stage": 3,
+      "path": "docs/GAIA_P5_CURRENT_CONTEXT.md",
+      "archive": "docs/p6_integration_20261002/source_variants/first_merge_stage3/docs/GAIA_P5_CURRENT_CONTEXT.md",
+      "sha256": "719851a6b0aea4924d540a8cfac05fadc01018fa93d272d3cadf1b3c4dc83e34"
+    },
+    {
+      "source_stage": 3,
+      "path": "docs/P6_TRAIN_BUDGET_DIAGNOSTIC_PLAN_20261002.md",
+      "archive": "docs/p6_integration_20261002/source_variants/first_merge_stage3/docs/P6_TRAIN_BUDGET_DIAGNOSTIC_PLAN_20261002.md",
+      "sha256": "96421f4b5d960caf0bfacf5e04aecfec718437628a35cb343af9527c994bb0f3"
+    }
+  ]
+}
