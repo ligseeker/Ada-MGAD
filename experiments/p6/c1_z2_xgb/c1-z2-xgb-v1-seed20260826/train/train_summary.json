@@ -1,0 +1,44 @@
+{
+  "fold_counts": {
+    "1": 935,
+    "2": 1168,
+    "3": 1122
+  },
+  "groups": 3225,
+  "model_parameters": {
+    "colsample_bytree": 1.0,
+    "learning_rate": 0.05,
+    "max_depth": 3,
+    "n_estimators": 200,
+    "n_jobs": 1,
+    "objective": "rank:pairwise",
+    "random_state": 20260826,
+    "reg_lambda": 1.0,
+    "subsample": 1.0,
+    "tree_method": "hist"
+  },
+  "normalization": "none",
+  "positives": 3225,
+  "root_counts": {
+    "dbservice1": 2,
+    "dbservice2": 3,
+    "logservice1": 3,
+    "logservice2": 2,
+    "mobservice1": 1598,
+    "mobservice2": 1606,
+    "redisservice2": 3,
+    "webservice1": 4,
+    "webservice2": 4
+  },
+  "source_inputs_sha256": {
+    "experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/run_lock.json": "0b5a2b649c31305eec88d631f2d57ef2a45a7d4d643d861478b3a11d620c9c56",
+    "experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/cases.csv": "83ee698981272bfb1f89d1c2d9b1c2c622b63c419a08c251abde2bf7965821dd",
+    "experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/completion_manifest.json": "b36dfaa5ba38bc741e318d8cb9e59e5f225324ff9cd3422b6040faff04634550",
+    "experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/detected_features.npy": "b1c043b3ba1480b24a40ddb10646e4f9c7f8cd669de61498be03b7c124f6b4ed",
+    "experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/root_indices.npy": "c764da9739c7b80a38ba377462eae489ec43984c53c1034da33feb06a5d2283f"
+  },
+  "test_features_read": false,
+  "test_ground_truth_read": false,
+  "train_cases": 3225,
+  "train_rows": 32250
+}

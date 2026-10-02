@@ -1,0 +1,21 @@
+{
+  "cases": 3225,
+  "model_parameters": {
+    "colsample_bytree": 1.0,
+    "learning_rate": 0.05,
+    "max_depth": 3,
+    "n_estimators": 200,
+    "n_jobs": 1,
+    "objective": "rank:pairwise",
+    "random_state": 20260826,
+    "reg_lambda": 1.0,
+    "subsample": 1.0,
+    "tree_method": "hist"
+  },
+  "model_sha256": "578b1baf20ff9958a990b95b724a4f8afb83aaa801ce0762ccc56a59d25f0af2",
+  "rows": 32250,
+  "run_lock_sha256": "0e8d6655311060278caafab1d6656bf33e14183f468e694d6aed00fd60f4d838",
+  "stage": "train",
+  "status": "COMPLETE",
+  "test_read": false
+}

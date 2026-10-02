@@ -1,0 +1,28 @@
+{
+  "baseline_case_ranking_replay": "PASS",
+  "baseline_metric_replay": "PASS",
+  "correction": "Read test_matching.csv with pandas default NA handling, identical to prior XGB evaluator; reuse exactly the locked v1 Test predictions",
+  "error_in_original_evaluate": "Test matching read with keep_default_na=False made nullable t_hat strings such as 1626963480000.0; evaluator int64 conversion failed before writing output",
+  "evidence_grade": "exploratory reused Test; not independent confirmation",
+  "git_head": "e1684e69251607cae142b2c85b1c7eb4ce9bcbd2",
+  "independent_test_confirmation": false,
+  "original_prediction_run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621",
+  "original_run_lock_sha256": "0e8d6655311060278caafab1d6656bf33e14183f468e694d6aed00fd60f4d838",
+  "prediction_lock_sha256": "54a1fec6975fca1eee30be9c2c5ffa9c278b72d657292959b308d20428d1c904",
+  "prediction_scope_sha256": "b00877d2287011707b09036f005d67bba66fcf02c4775a06571d622d7feba83f",
+  "source_sha256": {
+    "scripts/p6/evaluate_c1_anchor_backdate_correction.py": "82c7fe998f4c82c66304c95b024f3d537bd866b2afbc915deac6ceea60f1f6b4",
+    "scripts/p6/run_c1_anchor_backdate_test.py": "4d378e7905470ea8126cd361c402f3d92d72350d62d03fbebb279c7d65b0e75a",
+    "src/e2e/c1_evaluation.py": "2b17d43ec4ca981b4337beb3b6986372f2046c30b883614164c8c4ad81cccf49",
+    "src/e2e/c1_v2_c2.py": "39967809ffc1022a90513769b3ccaed8440084b33912403b47ecf1df05941a4c",
+    "src/e2e/event_detection.py": "115819a5e8162f116da109dfbb584b755b12dc508d51dba7449d43b0734d837a",
+    "src/e2e/protocol.py": "5e4ae346db695b1d8059a00df82c22ea3177f66a81a0339f9f9d8318f3a1d86b",
+    "src/e2e/system_trigger.py": "89cb54355cfebe54147c9788eda0822de659bed7db2f9fba03cc15ebc59102f0"
+  },
+  "status": "COMPLETE_CORRECTED_EVALUATION",
+  "test_gt_input_sha256": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p5/v3/protocol/gt_event_registry.csv": "7bc1b8b9c99164d0df004b72f47977b5413070c033834babac33931a27a0324b",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/configs/e2e/gaia_p5_v3_preprocessing_v2.json": "25abf4e8008e90e19a51131f1a2ee7420b337fd275dbfbacf9504c2bc5e2ee35",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/system_event_trigger/test_matching.csv": "011332f3537ee6f7d044e9da23df1d88f617fb71d3a552354343db6fd91c9c77"
+  }
+}

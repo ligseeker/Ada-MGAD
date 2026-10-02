@@ -1,0 +1,94 @@
+{
+  "environment": {
+    "numpy": "1.24.1",
+    "pandas": "1.5.3",
+    "python": "3.8.20",
+    "scikit_learn": "1.2.1",
+    "scipy": "1.10.1",
+    "xgboost": "2.1.4"
+  },
+  "eval_labels_decoded_or_used_in_fit_predict": false,
+  "evidence_grade": "Train-only temporal development; post hoc to reused Test",
+  "fit_summaries": {
+    "f12_to_f3": {
+      "cl_converged": true,
+      "cl_gradient_norm": 1.1311673819847101e-11,
+      "eval_fold": 3,
+      "eval_n": 1122,
+      "model_parameters": {
+        "colsample_bytree": 1.0,
+        "learning_rate": 0.05,
+        "max_depth": 3,
+        "n_estimators": 200,
+        "n_jobs": 1,
+        "objective": "rank:pairwise",
+        "random_state": 20260826,
+        "reg_lambda": 1.0,
+        "subsample": 1.0,
+        "tree_method": "hist"
+      },
+      "train_folds": [
+        1,
+        2
+      ],
+      "train_n": 2103
+    },
+    "f1_to_f2": {
+      "cl_converged": true,
+      "cl_gradient_norm": 3.674838211509268e-12,
+      "eval_fold": 2,
+      "eval_n": 1168,
+      "model_parameters": {
+        "colsample_bytree": 1.0,
+        "learning_rate": 0.05,
+        "max_depth": 3,
+        "n_estimators": 200,
+        "n_jobs": 1,
+        "objective": "rank:pairwise",
+        "random_state": 20260826,
+        "reg_lambda": 1.0,
+        "subsample": 1.0,
+        "tree_method": "hist"
+      },
+      "train_folds": [
+        1
+      ],
+      "train_n": 935
+    }
+  },
+  "git_head": "8ed6d40ba42a6d52735e5df9a486bfbb8ddd699a",
+  "input_sha256": {
+    "cases.csv": "83ee698981272bfb1f89d1c2d9b1c2c622b63c419a08c251abde2bf7965821dd",
+    "completion_manifest.json": "b36dfaa5ba38bc741e318d8cb9e59e5f225324ff9cd3422b6040faff04634550",
+    "detected_features.npy": "b1c043b3ba1480b24a40ddb10646e4f9c7f8cd669de61498be03b7c124f6b4ed",
+    "gt_features.npy": "fdfbdb12eb862bbfa3b93ea6d6e69c503e89b7fec0075577885a3ee7cda9ec68",
+    "root_indices.npy": "c764da9739c7b80a38ba377462eae489ec43984c53c1034da33feb06a5d2283f"
+  },
+  "model_sha256": {
+    "f12_to_f3_cl.json": "0de15f38a8c2beb1091d80c7c75637ff8af2607af370d3bae2e428558178541b",
+    "f12_to_f3_cl.npz": "66a164a4f4054e0abcc5c58b5d2405dc4e7557843ded870a3dd82d0f61b48ed6",
+    "f12_to_f3_xgb.ubj": "b7c11b5cb0d5cf4a5f280e02d058ed89f4279f097301434b714810b6e10c655f",
+    "f1_to_f2_cl.json": "25f29a0a9173a678fcf5901a944a30ea7192364289ab2cb5c640be231786ad25",
+    "f1_to_f2_cl.npz": "410d74dfe36cedae77929ef2725228bfa96c8e568e4973951ede53f7a270f002",
+    "f1_to_f2_xgb.ubj": "e97c207f4b060049c2ee46552e45d503d9dfd12e2d775a53cc35e96b0410aa50"
+  },
+  "preflight": {
+    "chronology": "strict earlier-fold max anchor < later-fold min anchor",
+    "fold_counts": {
+      "1": 935,
+      "2": 1168,
+      "3": 1122
+    },
+    "train_cases": 3225
+  },
+  "rankings_sha256": "9506cbbc12c76a92fa1266c8cb690831f380d5bd5830e3d1909cf30f98b52eda",
+  "schema": "p6_c1_xgb_forward_dev_v1",
+  "source_sha256": {
+    "docs/P6_C1_XGB_FORWARD_DEV_PROTOCOL.md": "83daccb4224738beba0940302afb25ef3fbb0c031de50407f0db0f4b94f4c215",
+    "scripts/p6/run_c1_xgb_forward_dev.py": "6fe6d8fe82d3737e514639dfe5fd11490a2e1c36ed5f3f8c2e07b138903c9743",
+    "src/e2e/c1_xgb_adapter.py": "7595cc1647c13a9b98d153fded95348b28e4ce1b610f6abdb3b4ef973f555b29",
+    "src/e2e/rca_model.py": "d1e7b10ce4e941f3438140bf962533a4a167e766428df7335de8b162e812e1d9"
+  },
+  "status": "FIT_PREDICT_COMPLETE",
+  "test_read": false
+}
