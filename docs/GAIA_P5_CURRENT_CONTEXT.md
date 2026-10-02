@@ -32,6 +32,16 @@ seeds42/17/2026全执行；Train/Validation-only，Test冻结。
 旧analysis的test_read:false不可解读为从未扫描任何Test路由metadata；
 全局registry interval/domain列用于路由，未使用Test遥测、预测或指标。
 
+**本稳定性fallback工作树：**`experiment/p6-c0-normal-forecast-stability-fallback`。
+TCN复制已完整封存，stability-v1为`STABILITY_NO_GO`：seed17固定bin
+2605/414/296，P/R/F1 .862868/.897966/.880068；seed2026为2488/3388/413，
+.423417/.857635/.566936。辅助阈值也均NO-GO，三seed前后半Recall门槛都过，
+但误报/总体收益不稳定。不得把历史seed42初步GO当最终稳定改善。
+新的TCN Fit-OOS/RCA/E2E入口关闭。此树准备[V2正常预测启动协议](P6_NORMAL_FORECAST_STABILITY_FALLBACK_V2.md)，只补充稳定性失败入口；
+预测器/训练/分块/99.5%校准与全部Fit-screen门槛沿用旧冻结方案。
+先核真实run是否已完成，不能从本条推断预测器已经训练。若Fit screen失败，
+停止这个固定候选并进入本轮Scientific Freeze评估。
+
 **本正常预测/分析工作树增量：**TCN训练已在独立`c0onsettcn`完成，固定run
 `tcn-v1-seed42`，Val2127/6/774、P/R/F1 .997187/.733195/.845054。
 本树三个分析完成且封存；固定TCN阈值的独立bin输出为2577/14/324，

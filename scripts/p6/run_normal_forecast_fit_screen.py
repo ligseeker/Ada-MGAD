@@ -19,6 +19,8 @@ from torch.nn import functional as F
 from torch.utils.data import DataLoader
 
 from scripts.p6.analyze_c0_causal_development import verify_completion
+from scripts.p6.normal_forecast_stability_fallback import (
+    PROTOCOL_ID as STABILITY_FALLBACK_PROTOCOL, stability_start_bindings, validate_fallback_config)
 from src.e2e.normal_forecast import (FORECAST_SPEC, MetricForecastDataset,
                                     NormalForecastState, NormalMetricForecaster, residual_score)
 from src.e2e.protocol import load_config, sha256_file, write_json
@@ -37,13 +39,15 @@ def validate_config(config):
                 "shuffle_normal_training": True}
     gates = {"precision_floor": .9, "recall_floor": .6, "f1_floor": .72,
              "f1_gain_vs_persistence": .02, "normal_holdout_positive_fraction_limit": .01}
-    if (config["protocol_id"] != "P6-NORMAL-FORECAST-FIT-SCREEN-V1"
+    if (config["protocol_id"] not in ("P6-NORMAL-FORECAST-FIT-SCREEN-V1", STABILITY_FALLBACK_PROTOCOL)
             or config["base_config"] != "configs/e2e/gaia_p5_v3_preprocessing_v2.json"
             or config["seed"] != 42 or config["model_spec"] != FORECAST_SPEC
             or config["training"] != training or config["screen_gate"] != gates
             or config["normal_quantile"] != .995 or config["min_normal_windows"] != 512
             or config["min_clean_memory_cases"] != 30):
         raise ValueError("configuration differs from the frozen Fit screen protocol")
+    if config["protocol_id"] == STABILITY_FALLBACK_PROTOCOL:
+        validate_fallback_config(config)
 
 
 def input_bindings(args, config):
@@ -55,10 +59,15 @@ def input_bindings(args, config):
              ROOT / "scripts/p6/analyze_c0_causal_development.py",
              args.data_root / "train/timestamps.npy", args.data_root / "train/metric.npy",
              args.artifact_root / "ad_data_manifest.json"]
+    files.append(ROOT / "scripts/p6/normal_forecast_stability_fallback.py")
+    if config["protocol_id"] == STABILITY_FALLBACK_PROTOCOL:
+        files.append(ROOT / "docs/P6_NORMAL_FORECAST_STABILITY_FALLBACK_V2.md")
     return {str(path.resolve()): sha256_file(path) for path in files}
 
 
 def validate_start_condition(config):
+    if config["protocol_id"] == STABILITY_FALLBACK_PROTOCOL:
+        return stability_start_bindings(config, ROOT)
     refs = {name: Path(path) for name, path in config["references"].items()}
     for directory in refs.values():
         verify_completion(directory)
