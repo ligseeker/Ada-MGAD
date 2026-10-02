@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 import pandas as pd
+import numpy as np
 import torch
 
 from scripts.p6.analyze_c0_causal_development import verify_completion
@@ -58,6 +59,7 @@ def main():
     parser.add_argument("action", choices=("check", "train"))
     parser.add_argument("--config", required=True, type=Path)
     parser.add_argument("--seed", required=True, type=int, choices=(42, 17, 2026))
+    parser.add_argument("--arm", choices=("legacy_replay", "control", "budget"), default="legacy_replay")
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--gpu", action="store_true")
     args = parser.parse_args()
@@ -68,6 +70,13 @@ def main():
     if args.gpu and not torch.cuda.is_available():
         raise RuntimeError("requested GPU is unavailable")
     config = json.loads(args.config.read_text())
+    if args.arm != "legacy_replay":
+        if (config.get("paired_budget", {}).get("deterministic_algorithms") is not True
+                or os.environ.get("CUBLAS_WORKSPACE_CONFIG") != ":4096:8"):
+            raise ValueError("matched deterministic protocol/workspace missing")
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+        torch.use_deterministic_algorithms(True)
     if config["tcn_spec"] != TCN_SPEC or config["training"]["patience"] != 30:
         raise ValueError("budget/TCN specification drift")
     old_run = Path(config["budget"]["old_runs"][str(args.seed)])
@@ -122,6 +131,8 @@ def main():
              ROOT / "src/e2e/training_budget_audit.py", ROOT / "src/e2e/bin_trigger_decoder.py",
              ROOT / "docs/P6_TRAIN_BUDGET_DIAGNOSTIC_PLAN_20261002.md",
              ROOT / "docs/GAIA_P5_CURRENT_CONTEXT.md"]
+    if args.arm != "legacy_replay":
+        paths.append(ROOT / "docs/P6_DETERMINISTIC_PAIRED_BUDGET_PROTOCOL.md")
     paths += [old_run / name for name in ("completion_manifest.json", "development_input_lock.json",
                                          "training_log.json", "validation_selection.json", "validation_predictions.csv")]
     paths += [Path(old_selection["checkpoint"]["path"])]
@@ -130,33 +141,48 @@ def main():
     execution_commit = git_head()
     threads = int(config["budget"]["threads_by_seed"][str(args.seed)])
     workers = int(config["budget"]["threshold_workers_by_seed"][str(args.seed)])
+    if args.arm != "legacy_replay" and any(os.environ.get(name) != str(threads)
+            for name in ("OMP_NUM_THREADS", "MKL_NUM_THREADS")):
+        raise ValueError("matched OMP/MKL thread environment missing")
     torch.set_num_threads(threads)
     setup_logging(args.output_dir)
     write_json(args.output_dir / "development_input_lock.json", {
         "execution_commit": execution_commit, "source_sha256": bindings, "cohort": identity,
         "protocol_id": config["protocol_id"], "effective_seed": args.seed,
-        "changes": ["patience:8->30"], "observer_ast_gate": True,
+        "changes": ["patience:8->30"] if args.arm != "control" else [], "observer_ast_gate": True,
+        "arm": args.arm, "historical_replay_required": args.arm == "legacy_replay",
         "test_arrays_read": False, "test_trigger_labels_built": False,
         "registry_interval_read": "global interval/domain routing only; Test annotations excluded",
         "preprocessing_grade": "frozen 70 percent Train includes Detector-Validation",
         "environment": {"executable": sys.executable, "python": platform.python_version(),
                         "torch": torch.__version__, "cuda": torch.version.cuda,
+                        "cudnn": torch.backends.cudnn.version(), "numpy": np.__version__,
+                        "pandas": pd.__version__, "argv": sys.argv,
                         "device": torch.cuda.get_device_name(0) if args.gpu else "cpu",
-                        "torch_num_threads": threads, "threshold_workers": workers},
+                        "torch_num_threads": threads, "threshold_workers": workers,
+                        "cudnn_deterministic": torch.backends.cudnn.deterministic,
+                        "cudnn_benchmark": torch.backends.cudnn.benchmark,
+                        "deterministic_algorithms": torch.are_deterministic_algorithms_enabled(),
+                        "cublas_workspace_config": os.environ.get("CUBLAS_WORKSPACE_CONFIG"),
+                        "omp_num_threads": os.environ.get("OMP_NUM_THREADS"),
+                        "mkl_num_threads": os.environ.get("MKL_NUM_THREADS")},
     })
     for split in ("fit", "validation"):
         state.gt_events(split).to_csv(args.output_dir / (split + "_gt.csv"), index=False)
     if args.action == "train":
         observer = EpochAudit(args.output_dir, old_run, state.gt_events("validation"),
-                              padded_fit_counts(state.build_dataset("fit"), 32))
-        result = run_training(state, args.output_dir, model_args, config["training"], manifest_path,
+                              padded_fit_counts(state.build_dataset("fit"), 32),
+                              enforce_historical_replay=args.arm == "legacy_replay")
+        training = dict(config["training"], patience=8 if args.arm == "control" else 30)
+        result = run_training(state, args.output_dir, model_args, training, manifest_path,
                               sha256_file(manifest_path), workers, "spawn", model_class=WindowCausalTCNTrigger,
                               epoch_observer=observer)
-        if result["epochs_completed"] != 30 or result["stop_reason"] != "max_epochs":
+        if args.arm != "control" and (result["epochs_completed"] != 30 or result["stop_reason"] != "max_epochs"):
             raise ValueError("full frozen 30 epoch trajectory was not completed")
         result.update({"formal_result": False, "development_only": True,
                        "protocol_id": config["protocol_id"], "target": config["trigger_label"],
-                       "model_class": "WindowCausalTCNTrigger", "tcn_spec": TCN_SPEC, "effective_seed": args.seed})
+                       "model_class": "WindowCausalTCNTrigger", "tcn_spec": TCN_SPEC,
+                       "effective_seed": args.seed, "arm": args.arm})
         write_json(args.output_dir / "validation_selection.json", to_builtin(result))
         device = torch.device("cuda" if args.gpu else "cpu")
         weights = torch.load(result["checkpoint"]["path"], map_location=device)
