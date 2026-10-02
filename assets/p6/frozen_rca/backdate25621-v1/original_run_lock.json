@@ -1,0 +1,34 @@
+{
+  "environment": {
+    "numpy": "1.24.1",
+    "pandas": "1.5.3",
+    "python": "3.8.20",
+    "xgboost": "2.1.4"
+  },
+  "evidence_grade": "exploratory reused Test after Train-only forward development",
+  "git_head": "b86a8f0d282480dad837261bb44e9b9b9bb23fef",
+  "offset_ms": 25621,
+  "offset_rule": "fold-1 OOS delay median",
+  "source_sha256": {
+    "scripts/p6/run_c1_anchor_backdate_test.py": "4d378e7905470ea8126cd361c402f3d92d72350d62d03fbebb279c7d65b0e75a",
+    "src/e2e/c1_common_cohort.py": "872848ff63e7e7a0b915423efe604d5eb421cfd109eecf0a1dfcf7b905e2803e",
+    "src/e2e/c1_evaluation.py": "2b17d43ec4ca981b4337beb3b6986372f2046c30b883614164c8c4ad81cccf49",
+    "src/e2e/c1_v2_c2.py": "39967809ffc1022a90513769b3ccaed8440084b33912403b47ecf1df05941a4c",
+    "src/e2e/c1_xgb_adapter.py": "7595cc1647c13a9b98d153fded95348b28e4ce1b610f6abdb3b4ef973f555b29",
+    "src/e2e/event_detection.py": "115819a5e8162f116da109dfbb584b755b12dc508d51dba7449d43b0734d837a",
+    "src/e2e/gaia_rca_adapter.py": "657c2bff29c4a07c85b2ea3e01e030bb9344458c0a8b46805593c81c2f9b17c0",
+    "src/e2e/protocol.py": "5e4ae346db695b1d8059a00df82c22ea3177f66a81a0339f9f9d8318f3a1d86b",
+    "src/e2e/rca_features.py": "3d13755621121586e8b87b663d3b15a81a74353d7921966496d8181baac49be8",
+    "src/e2e/rca_model.py": "d1e7b10ce4e941f3438140bf962533a4a167e766428df7335de8b162e812e1d9"
+  },
+  "status": "RUN_RESERVED",
+  "test_gt_or_matching_read": false,
+  "train_input_sha256": {
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate_dev/c1-anchor-backdate-forward-v1/feature_manifest.json": "aab19265928df43267de3d0b0fc3bdeee896c57fda14fce4c1832284c50f4c6f",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate_dev/c1-anchor-backdate-forward-v1/results.json": "d0cec86eb585beade67f0a7dd92db702c4b6f3bece339c988ea93a47b920ba2d",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate_dev/c1-anchor-backdate-forward-v1/run_lock.json": "0ff717c2a5e86aca688877d4f553dd1b11eee495dc5399a9fef5b24f81af4aa8",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate_dev/c1-anchor-backdate-forward-v1/shifted_features.npy": "18fdba0eae529de6942cb05950be6525be080b31a4e319792770193a41b5c1bc",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/cases.csv": "83ee698981272bfb1f89d1c2d9b1c2c622b63c419a08c251abde2bf7965821dd",
+    "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/c1_supervision_oos/c1-supervision-oos-v1-seed42/train_cohort/root_indices.npy": "c764da9739c7b80a38ba377462eae489ec43984c53c1034da33feb06a5d2283f"
+  }
+}

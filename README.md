@@ -10,20 +10,21 @@ GAIA Metric / Log / Trace
 Train-only 多模态预处理（V2 schema）
         │
         ▼
-Ada-MGAD-G：节点异常分数
+P6：逐窗口动态图＋因果 TCN，系统级 onset30 分数
         │
         ▼
-事件触发、时间匹配与 detected onset
+固定 Validation threshold＋独立 bin 候选、detected onset
         │
         ▼
-Ada-RCA-G：W300-B15 / 68D 表示与服务排序
+Train-derived anchor backdate＋W300-B15 / 68D＋冻结 XGBRanker
         │
         ▼
 检测、RCA、E2E diagnosis 指标
 ~~~
 
-Ada-MGAD 和 Ada-RCA 的核心模型保持冻结；本仓库实现 GAIA 适配、数据预处理、
-事件协议、双阶段编排、RCA 特征生成、基线和结果 provenance。
+当前 P6 接入方法、代码入口和研究边界见
+[核心方法](docs/P6_TWO_STAGE_CORE_METHOD.md)。历史 Ada-MGAD / Ada-RCA baseline
+与所有开发候选继续保留；不能从代码合入推断历史 NO-GO 已成为效果改善。
 
 ## 新 code-agent 的第一入口
 
@@ -38,22 +39,32 @@ GAIA_P5_CURRENT_CONTEXT.md 是当前状态、路径、指标、约束和已知�
 
 ## 当前研究状态
 
-当前代码状态：
+2026-10-02：21 个 P6 派生工作树的代码、配置、文档和来源索引汇入原 `e2e-v2`。
+按用户更新要求不复制大缓存，原实验数据留在原工作树；仅保存必需的小冻结 RCA scorer。
+正常训练 `max_epochs=30、patience=8` 的 seed1–10 手动重复入口已准备，
+**本整理任务没有执行十次训练或 Test**。
+完整命令见 [重复实验协议](docs/P6_TWO_STAGE_REPEATS_PROTOCOL.md)。
+实际 HEAD 用 `git rev-parse HEAD` 核查，当前有效状态以
+[研究上下文](docs/GAIA_P5_CURRENT_CONTEXT.md)为准。
+
+## 历史 P5 完整 baseline
+
+以下为已完成 P5 的执行快照：
 
 ~~~
 repository: /home/zhangll24/RCA_project/Ada-MGAD-e2e-v2
 branch:     e2e-v2
-HEAD:       7dea779fc5196218a43d86a9777b591d290f047b
+P5 execution commit: 7dea779fc5196218a43d86a9777b591d290f047b
 ~~~
 
-最近一次完整 GAIA run：
+历史 P5 完整 GAIA run：
 
 ~~~
 experiments/p5/gaia_v2/gaia-v2-seed42-20260915T181440/
 status: FORMAL_FULL_DATA_COMPLETE
 ~~~
 
-该 run 在前一次进程被杀后续跑完成，当前没有活动训练进程。核心结果如下：
+该 run 在前一次进程被杀后续跑完成。核心结果如下：
 
 | 层级 | 主要结果 |
 |---|---:|
@@ -62,15 +73,18 @@ status: FORMAL_FULL_DATA_COMPLETE
 | Detected-anchor RCA AC@1 / AC@3 / AC@5 | 0.4657 / 0.9214 / 0.9830 |
 | Full diagnosis F1@1 / F1@3 / F1@5 | 0.3611 / 0.7145 / 0.7623 |
 
-当前结论：Ada-MGAD 节点检测较强；事件检测偏保守、漏检较多；Ada-RCA 在
+该 P5 run 的结论：Ada-MGAD 节点检测较强；事件检测偏保守、漏检较多；Ada-RCA 在
 detected anchor 下的 Top-1 定位是主要瓶颈。GT-anchor Ada-RCA 的 AC@1 为
 0.9125，说明不能把问题简单归因于 RCA 优化器未收敛。
 
-上面的状态和数字是当前 run 的快照。新的正式 run 完成后，先更新
+上面的状态和数字是历史 P5 run 的快照。新的正式 run 完成后，先更新
 GAIA_P5_CURRENT_CONTEXT.md 并保留旧 run，再按需更新本节；不要用新结果覆盖
 历史实验目录或历史报告。
 
 ## 方法与数据契约
+
+本节保留 P5 baseline 的契约。当前 P6 的系统级监督、Validation 选择和冻结 XGB
+口径见 [核心方法](docs/P6_TWO_STAGE_CORE_METHOD.md)与[重复协议](docs/P6_TWO_STAGE_REPEATS_PROTOCOL.md)。
 
 ### Ada-MGAD 输入
 

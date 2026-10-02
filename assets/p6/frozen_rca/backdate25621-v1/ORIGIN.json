@@ -1,0 +1,20 @@
+{
+  "model": {
+    "source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621/train/model_state.ubj",
+    "source_sha256": "578b1baf20ff9958a990b95b724a4f8afb83aaa801ce0762ccc56a59d25f0af2",
+    "bytes": 233731,
+    "temporary_copy_path_removed": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p6/development_archive/20261002-v1/trees/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621/train/model_state.ubj"
+  },
+  "train_manifest": {
+    "source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621/train/completion_manifest.json",
+    "source_sha256": "ae14645ccba4cb4b59705a84187d60fdbbe0d7a73fd1a294eecf29750d15abcd",
+    "bytes": 560,
+    "temporary_copy_path_removed": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p6/development_archive/20261002-v1/trees/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621/train/completion_manifest.json"
+  },
+  "run_lock": {
+    "source": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621/run_lock.json",
+    "source_sha256": "0e8d6655311060278caafab1d6656bf33e14183f468e694d6aed00fd60f4d838",
+    "bytes": 2726,
+    "temporary_copy_path_removed": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p6/development_archive/20261002-v1/trees/Ada-MGAD-e2e-v2-mobpair/experiments/p6/c1_anchor_backdate/c1-anchor-backdate-v1-delta25621/run_lock.json"
+  }
+}

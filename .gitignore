@@ -156,6 +156,3 @@ experiments/p6/c1_supervision_oos/**
 !experiments/p6/c1_supervision_oos/**/*.md
 !experiments/p6/c1_supervision_oos/**/*.csv
 experiments/p6/c1_supervision_oos/**/g1_static_FIRST_ATTEMPT_*/
-
-# Central immutable P6 worktree artifact archive; manifests are versioned.
-artifacts/p6/development_archive/

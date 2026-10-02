@@ -1,0 +1,151 @@
+{
+  "integration_head": "712235c793c184b444b79a9e59a9bbea1a13ff1e",
+  "sources": [
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budget",
+      "HEAD": "4c1abff3602dbda3b5f8ead0062e04d131483855",
+      "branch": "refs/heads/experiment/p6-tcn-training-budget",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetprefix",
+      "HEAD": "fd25bffe1bccdbe54309fceb7f0ecf1454bb3a03",
+      "branch": "refs/heads/experiment/p6-tcn-budget-prefix",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0budgetreview",
+      "HEAD": "bf423f9085d3a6eb43e827709492fb7be4edc32a",
+      "branch": "refs/heads/analysis/p6-tcn-training-budget",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0causal",
+      "HEAD": "37eed5c21a6ed472ba51d5fad8d017fc2035b273",
+      "branch": "refs/heads/experiment/p6-c0-window-causal",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0e2e",
+      "HEAD": "7d5af1738adc409a8bcbc123c186b880f269e7cf",
+      "branch": "refs/heads/experiment/p6-c0-tcn-xgb-development",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0flatxgb",
+      "HEAD": "3ade981427b017d1bcaec83dfcbf93d16f20c1e4",
+      "branch": "refs/heads/experiment/p6-c0-flat-xgb",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0metric",
+      "HEAD": "507b3034c78f140be5b37d2d8ac31e2787db2550",
+      "branch": "refs/heads/experiment/p6-c0-metric-drift",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0normal",
+      "HEAD": "815b56803d487b203e7c623de569abda3c269f42",
+      "branch": "refs/heads/experiment/p6-c0-normal-forecast",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0normalfallback",
+      "HEAD": "dcdaeb9937dbfebe9e9f31ffa572c8c2705496e1",
+      "branch": "refs/heads/experiment/p6-c0-normal-forecast-stability-fallback",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onset",
+      "HEAD": "d4bf97184692101eed24c8984f3c6251de5f210e",
+      "branch": "refs/heads/experiment/p6-c0-onset30",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0onsettcn",
+      "HEAD": "6dbc908468d68fec4b671dcb8062a3fd12ea3276",
+      "branch": "refs/heads/experiment/p6-c0-onset-tcn",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0r2",
+      "HEAD": "472820c712a94105e28290a97270369f9d6a48c9",
+      "branch": "refs/heads/experiment/p6-c0r2-trainval",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0raw",
+      "HEAD": "f0f2815c58285a8e62a743cdf5015e7e6d2a8873",
+      "branch": "refs/heads/experiment/p6-c0-raw-observability",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0rawmask",
+      "HEAD": "feb9e6264b284bf6dcc3a3e0ae35fa7609880975",
+      "branch": "refs/heads/experiment/p6-c0-rawobs-mask",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0replica",
+      "HEAD": "2e16c8e1a58c3c4c863986391639a95fed3061d0",
+      "branch": "refs/heads/experiment/p6-c0-onset-tcn-replication",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-c0weight",
+      "HEAD": "f275156cc5bdd43ab4d3649183e3562796d678f0",
+      "branch": "refs/heads/experiment/p6-c0-long-weight",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-mobpair",
+      "HEAD": "72fb67fd661bf42ae2a0ae6818eadc6b05403230",
+      "branch": "refs/heads/experiment/p6-mob-pair",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-rcatestreview",
+      "HEAD": "e4b80ef2067d5e74c5c2b8343faaead4894da3f2",
+      "branch": "refs/heads/experiment/p6-frozen-rca-test-review",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreport",
+      "HEAD": "5991f55852073be7743776d48cd889c17fb53551",
+      "branch": "refs/heads/analysis/p6-test-comparison-20261002",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-testreview",
+      "HEAD": "1b0efe92e43b81ded698239387571de73f6fe185",
+      "branch": "refs/heads/experiment/p6-frozen-test-review",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    },
+    {
+      "worktree": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2-xgb",
+      "HEAD": "31017ecf3359af00d63ebb2b705b84a695a0de4a",
+      "branch": "refs/heads/experiment/p6-z2-xgb",
+      "status": "COMMITTED_SOURCE; run status remains as originally recorded"
+    }
+  ],
+  "excluded": [
+    "thesis-freeze unsealed drafts",
+    "shared preprocessing already in original tree",
+    "Python bytecode"
+  ],
+  "file_count": 4274,
+  "unique_objects": 1083,
+  "logical_bytes": 4596824906,
+  "status": "INVENTORY_ONLY; BULK_DUPLICATES_REMOVED_AT_USER_REQUEST",
+  "catalog_sha256": "785ee51c39029296d4e189f2277ec9d5715bee8ef5540cff8083f6c3ff3159d2",
+  "historical_manifests_rewritten": false,
+  "experiments_executed": false,
+  "original_asset_parent": "/home/zhangll24/RCA_project",
+  "previous_archive_root": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/artifacts/p6/development_archive/20261002-v1",
+  "previous_copy_bytes": 4127748302,
+  "retained_bulk_copy_bytes": 0,
+  "minimal_frozen_rca_package": "assets/p6/frozen_rca/backdate25621-v1",
+  "minimal_package_bytes": 238622,
+  "original_assets_removed": false,
+  "user_scope_update": "code, documents and origin index; no duplicate bulk caches/checkpoints/predictions"
+}
