@@ -110,7 +110,7 @@ by +19.7 points of AC@1 on the same reused Test cohort, with the paired
 transitions dominated by `C only correct` (1,507) over `B only correct` (682).
 No performance gate was imposed; this is the observed sign, not a threshold
 verdict. B is far below A (0.4980 vs 0.9338), so anchor-aligned training closes
-about 44 % of the GT-to-detected anchor gap, not all of it.
+about 45.1 % of the GT-to-detected anchor gap, not all of it.
 
 ## 5. C2 full E2E
 
@@ -127,7 +127,12 @@ frozen verdict: BORDERLINE (gate passed; long-event and memory stratification fa
 
 Identical to section 4 (`AC@1`: A 0.9338, B 0.4980, C 0.6945).
 
-### Layer 3 - full diagnosis over all raw Test GT (denominator 5,787 GT events, 4,214 predicted episodes)
+### Layer 3 - full diagnosis over all complete Test GT (denominator 5,787 GT events, 4,214 predicted episodes)
+
+One additional GT event intersects the Test boundary but is not complete inside
+the frozen Test interval; `c2_failure_summary.json` records 5,788 intersecting
+events and this one boundary exclusion. The full diagnosis retains the frozen
+C0 denominator of 5,787 complete events.
 
 | Arm | P@1 | R@1 | F1@1 | P@3 | R@3 | F1@3 | P@5 | R@5 | F1@5 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -158,9 +163,9 @@ denominators 5,787 (Stage-1 GT population) for both arms.
 | duration `le_15s` | 5,558 | 4,166 | 0.5005 | 0.6985 |
 | duration `15_30s` / `30_60s` / `60_300s` | 0 | 0 | - | - |
 | duration `gt_300s` | 229 | 32 | 0.1563 | 0.1563 |
-| onset multiplicity 1 | 4,966 | 4,166 | 0.4819 | 0.7120 |
-| onset multiplicity 2 | 782 | 782 | 0.6737 | 0.5015 |
-| onset multiplicity 3 | 39 | 39 | 0.8889 | 0.2222 |
+| onset multiplicity 1 | 4,966 | 3,858 | 0.4819 | 0.7120 |
+| onset multiplicity 2 | 782 | 331 | 0.6737 | 0.5015 |
+| onset multiplicity 3 | 39 | 9 | 0.8889 | 0.2222 |
 
 The middle duration strata are empty and kept as `n = 0` rows. Onset
 multiplicity 2 and 3 favor B, a declared limitation rather than a tuned result.
@@ -188,13 +193,16 @@ root-cause diagnosis, never as real-time RCA.
    largely missed; C2 counts those misses in the full-diagnosis denominator.
 4. **GAIA W300 adapter.** The E2E representation is W300-B15 / 40 bins; the
    canonical Ada-RCA form is W600-B15 / 80 bins and was not used.
-5. **30 s Metric grid vs 15 s RCA bins.** The detector grid is 30 s, the RCA
-   context bins are 15 s, so the anchor rounding is 30 s.
+5. **30 s Metric grid vs 15 s RCA bins.** The detector timestamp lies on a 30 s
+   grid while the GT onset retains its raw time; their variable delay changes
+   the 15 s pre/post RCA feature context.
 6. **Class and service imbalance.** login_failure 4,164/4,197 and
    mobservice1+mobservice2 4,171/4,197 of the matched cohort; the other groups
    are descriptive only.
-7. **Multi-onset resolution.** On the 782 two-onset and 39 three-onset cases arm
-   C is worse than B, so same-window multi-event resolution is unresolved.
+7. **Multi-onset resolution.** Among 782 two-onset and 39 three-onset GT events,
+   respectively 331 and 9 were matched and entered the conditional RCA
+   comparison. Arm C is worse than B in both matched groups, so same-window
+   multi-event resolution is unresolved.
 8. **Comparability.** The P5 detected-anchor reference (AC@1 0.4657, diagnosis
    F1@1 0.3611) used a different Stage-1 detector and a 14,045-case Train
    cohort; the numbers here are not a controlled comparison against it.
@@ -203,6 +211,14 @@ root-cause diagnosis, never as real-time RCA.
    events crossing a Generation boundary are excluded from matching.
 10. **Single seed.** Everything runs with seed 42; no seed replication was
     performed, so no bitwise-reproducibility or robustness claim is made.
+11. **C2 root-stratum small-sample marker.** In the sealed
+    `c2_full_diagnosis.json`, `small_n_descriptive_only` for root-service
+    strata was computed from raw GT group size rather than the matched `n`
+    used for AC and MRR. For matched RCA interpretation use `n < 20` directly;
+    six root groups have matched `n < 20` despite a false marker. The numeric
+    scores, cohort and failure ledger are unaffected. This is a 2026-09-30
+    interpretation correction; the sealed JSON and execution source remain
+    unchanged.
 
 ## 7. Artifact map
 
