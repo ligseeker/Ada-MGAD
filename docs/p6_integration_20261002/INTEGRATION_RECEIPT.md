@@ -32,7 +32,8 @@ canonical context另存 `source_variants/`。未删除原工作树或原实验�
 已核当前源码、配置、历史小 manifest、21-source ancestry、模型/feature-source SHA、
 原用户文档 SHA 和独立内容原文件存在/哈希。
 两个实际环境的 import-only 严格版本预检通过（Python3.8.20；DAG Torch1.12.0；
-RCA XGB2.1.4；其余包版本由 config 固定）。Python3.8 AST parse、`--help` 和 diff check 通过。
+RCA XGB2.1.4；其余包版本由 config 固定）。Python3.8 AST parse、`--help` 和新增入口/协议的 diff check 通过。
+历史报告 SVG/CSV 及用户原文备份保留原字节，包含原先的行尾空格/CRLF；没有为样式检查重写封存产物。
 
 合成/单元验证 **65 项通过**，执行命令分环境为：
 
