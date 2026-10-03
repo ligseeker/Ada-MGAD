@@ -1,0 +1,34 @@
+{
+  "status": "ANALYZED",
+  "run": "/home/zhangll24/RCA_project/Ada-MGAD-e2e-v2/experiments/p6/two_stage_repeats/seeds1-10-v1-20261002T213410",
+  "scope_lock_sha256": "fba641dce821704b5ccefbdf8b7c3e5e2540029cc621711baf4bcce554c0f19c",
+  "prediction_lock_sha256": "321bd84f1831d4afee170dd4fdaf8ee9ae2fdadb68d3f1ed42d0eaeac57a2190",
+  "evaluation_manifest_sha256": "110498a9ad58e21795f88673f18dc26ba13f1205cca5f89f4e3807a3ff555104",
+  "summary_manifest_sha256": "35962d15633d14272a4232cfa563ec9183e620c69813c9585e3590eac44ff83f",
+  "files": {
+    "P6_TWO_STAGE_SEEDS1_10_RESULTS_20261003.md": {
+      "bytes": 21618,
+      "sha256": "d61b27dc54ec34b471c7735751d8c6182ba5f3f38b73c2e2c456c725e780b012"
+    },
+    "p6_two_stage_repeats_20261003/audit.json": {
+      "bytes": 17639,
+      "sha256": "b9ab41b24b461f2e99ac91ec9329922bd8680a4cee5d9a663e6a5bcdeb1bd8c4"
+    },
+    "p6_two_stage_repeats_20261003/audit.py": {
+      "bytes": 20213,
+      "sha256": "5623090d23680f2b3f1750420a3bca63e632c1ca2732c8a9f7bda3600a228281"
+    },
+    "p6_two_stage_repeats_20261003/integrity_receipt.json": {
+      "bytes": 576,
+      "sha256": "856557188b352b52a654904de9cd118c9e9b7c373dd7681e5803b195d166c7cc"
+    },
+    "p6_two_stage_repeats_20261003/strata_mean.csv": {
+      "bytes": 1419,
+      "sha256": "14ed3acfa65ecc233413c08c896a88db0855e0fb7ffa887e6c4cd11f2890452c"
+    },
+    "p6_two_stage_repeats_20261003/strata_per_seed.csv": {
+      "bytes": 11941,
+      "sha256": "f76ea04048eccf179fec1a6f7efc8d0c3eb4e83c6b6d294a50feabdddf9a0075"
+    }
+  }
+}

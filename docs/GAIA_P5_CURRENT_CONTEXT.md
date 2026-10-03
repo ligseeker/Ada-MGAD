@@ -1,6 +1,9 @@
 # GAIA P5/P6 当前研究入口
 
-更新时间：2026-10-02（Asia/Shanghai）。本文件是当前有效状态的单一入口。
+更新时间：2026-10-03（Asia/Shanghai）。本文件是当前有效状态的单一入口。
+当前状态：**SCIENTIFIC_FREEZE（用户已确认）**，冻结版本`P6-TWO-STAGE-SCIENTIFIC-FREEZE-V1`。
+正式决定与绑定见[冻结记录](P6_TWO_STAGE_SCIENTIFIC_FREEZE_V1_20261003.md)，
+本地标签`p6-two-stage-scientific-freeze-v1-20261003`。当前停止方法优化和新实验。
 历史各分支入口的原字节保存在 `docs/p6_integration_20261002/source_variants/`，
 不要把其中 RUNNING、待执行或旧主分支 HEAD 当成现在的状态。
 
@@ -17,10 +20,26 @@
 模型 233,731 bytes，来源 metadata 同包保存。先前新复制的约 4.13 GB 副本已撤掉，
 所有原实验文件未删除。数据索引不是数据备份，不能直接删除派生工作树。
 
-当前用户授权：整理完成后提供 **seed 1–10 的完整手动重复命令**。
-用户已选定：每个 seed 重训 detector，接入同一个现有冻结 68D＋XGBoost RCA。
-**本整理任务不运行训练、Test 推理、Test 评价或全量 preprocessing。**
-只执行环境/metadata 预检、源码检查和合成单元测试。不新增图或论文正文。
+用户已手动执行 **seed 1–10 的完整重复命令**，并要求查看、分析结果。
+每个 seed 重训 detector，接入同一个现有冻结 68D＋XGBoost RCA；十次及评价全部完成。
+本次分析只核已有产物、哈希、指标算术和失败分解，不新增训练、模型推理、Test评价或preprocessing。
+不新增图或论文正文。分析开始时HEAD为`98aaf10a8827a9c90f99ba3be4ef975f5876f973`，
+执行源码commit为`3e1fdea2134b1d48dd8d2ef59f64a04f11bc6fcd`。
+
+最新集合：`experiments/p6/two_stage_repeats/seeds1-10-v1-20261002T213410/`。
+20个stage、evaluation/summary全部COMPLETE；130份源码、3803份输入全字节hash和committed lock通过，
+逐case闭合与summary复算一致。完整GT=5787，RCA合法matched n=4750–5212。
+十次mean±sample SD：detector P/R/F1=98.12±1.28 / 87.07±3.08 / 92.25±2.11%；
+matched AC@1/3/5=90.03±.44 / 99.83±.03 / 99.90±.01%，MRR=94.88±.23%；
+full E2E F1@1/3/5=83.01±1.59 / 92.05±2.07 / 92.12±2.09%。
+Top1平均FN=748检测漏检+502.5排名错误+2.2context无效。
+所有seed按正常patience8在10/11epoch停止（max30），selected index1/2。
+Val bin F1范围56.16–93.31%，seed1/5/7有大量FP；选择仍为merged单位，接入为bin单位。
+95.84% Test是login；macro root/fault E2E R@1仅17.95%/22.46%。
+证据是固定scorer transfer、reused-Test描述性结果，不是新native RCA或独立数据确认。
+**用户已确认Scientific Freeze当前版本**；十次复盘中的未来方案当前不执行。
+冻结全部seed及原结论限制，不按Test选择单一最佳checkpoint。后续研究另立协议并取得新的明确授权。
+详见[十次完整复盘](P6_TWO_STAGE_SEEDS1_10_RESULTS_20261003.md)及其独立小型审计附件。
 
 先读：
 
@@ -29,6 +48,8 @@
 3. [重复配置](../configs/e2e/gaia_p6_two_stage_repeats_v1.json)；
 4. [统一编排入口](../scripts/p6/run_two_stage_repeats.py)；
 5. [来源/哈希索引](p6_integration_20261002/asset_inventory.json)。
+6. [已完成十次结果与失败复盘](P6_TWO_STAGE_SEEDS1_10_RESULTS_20261003.md)。
+7. [Scientific Freeze正式记录](P6_TWO_STAGE_SCIENTIFIC_FREEZE_V1_20261003.md)。
 
 ## 2. 当前两阶段接入方案
 
@@ -108,3 +129,4 @@ RCA ±300s 使用 post-anchor context，不能称零延迟在线。GAIA 30s、�
 统一入口另有独立协议、源码/config/input绑定、required文件和 inner-seed核对、提交的预测锁。
 恢复只跳过已封存完整 stage；没有完整 optimizer/RNG state 的 partial stage 不声称精确续训。
 未经用户新的明确授权，不从这里启动训练、重跑Test、全量预处理或增加方法模块。
+当前Scientific Freeze只允许保存和整理已有证据；文档整理不能追溯改变方法、GT或实验状态。

@@ -1,7 +1,9 @@
 # 当前两阶段方法与保存的研究资产
 
-更新时间：2026-10-02。代码与文档统一回原工作树 `Ada-MGAD-e2e-v2` 的 `e2e-v2` 分支。
+更新时间：2026-10-03。代码与文档统一回原工作树 `Ada-MGAD-e2e-v2` 的 `e2e-v2` 分支。
 本文件说明当前可运行的方法，不把历史开发候选或失败实验当成正式改善。
+当前状态：**用户已确认Scientific Freeze v1**；代码、配置、同一冻结scorer和全部seed1–10结果封存。
+见[正式冻结记录](P6_TWO_STAGE_SCIENTIFIC_FREEZE_V1_20261003.md)；暂停当前方法搜索，保留历史NO-GO与限制。
 
 ## 1. 检测阶段
 
@@ -63,7 +65,7 @@ hist、训练 seed 20260826。每个事件的十个服务构成一个 ranking gr
 完整 GT 5,787 的 Diagnosis P/R/F1@1/3/5；detector 和 diagnosis failure ledger；
 服务、故障类型、持续时间、起点重叠分层。
 
-**新 seed 1–10 是冻结 scorer transfer 的初始化稳定性实验。**
+**已完成的 seed 1–10 是冻结 scorer transfer 的初始化稳定性实验。**
 它不追溯修改旧 TCN replication 和训练预算实验的 NO-GO。
 所有十个结果报告均值、样本标准差和范围，不选最佳 seed。GAIA Test 已反复使用，
 这组标准差只描述固定数据上的初始化变化，不能当成独立数据确认或 SOTA 显著性。

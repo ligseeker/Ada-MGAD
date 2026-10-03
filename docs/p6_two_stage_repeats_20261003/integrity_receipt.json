@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "verification": "check_family and verify_seal executed before metric reads; full byte hashes",
+  "source_files": 130,
+  "input_files": 3803,
+  "input_bytes": 3145591293,
+  "stages": 20,
+  "evaluation_files": 42,
+  "summary_files": 2,
+  "execution_commit": "3e1fdea2134b1d48dd8d2ef59f64a04f11bc6fcd",
+  "scope_lock_sha256": "fba641dce821704b5ccefbdf8b7c3e5e2540029cc621711baf4bcce554c0f19c",
+  "prediction_lock_sha256": "321bd84f1831d4afee170dd4fdaf8ee9ae2fdadb68d3f1ed42d0eaeac57a2190",
+  "training_reproduced": false,
+  "new_model_inference": false
+}
